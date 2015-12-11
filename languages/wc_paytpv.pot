@@ -1,0 +1,469 @@
+# Loco Gettext template
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Pasarela de pago para PayTpv\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: Tue Oct 20 2015 12:39:57 GMT+0200 (Hora de verano "
+"romance)\n"
+"POT-Revision-Date: Tue Oct 20 2015 12:40:04 GMT+0200 (Hora de verano "
+"romance)\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#. Name of the plugin
+msgid "Pasarela de pago para PayTpv"
+msgstr ""
+
+#. Description of the plugin
+msgid "La pasarela de pago PayTPV para WooCommerce"
+msgstr ""
+
+#. Author of the plugin
+msgid "Jose Ramón García"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://PayTpv.com"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:25
+msgid "Payment gateway for credit card payment."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:133
+msgid "You must define at least one terminal"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:150
+msgid "PayTpv Payment Gateway"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:152
+msgid ""
+"<a href=\"https://PayTpv.com\">PayTpv Online</a> payment gateway for "
+"Woocommerce enables credit card payment in your shop. Al you need is a "
+"PayTpv.com merchant account and access to <a href=\"https://www.paytpv."
+"com/clientes.php\">customer area</a>"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:155
+msgid ""
+"There you should configure \"Tipo de notificación del cobro:\" as "
+"\"Notificación por URL\" set ther teh following URL:"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:244
+msgid "Enable/Disable"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:245
+msgid "Enable PayTpv gateway"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:251
+msgid "Title"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:253
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:254
+msgid "Credit Card (by PayTpv)"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:257
+msgid "Description"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:260
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:261
+msgid "Pay using your credit card in a secure way"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:264
+msgid "Environment"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:266
+msgid ""
+"Try PayTPV module without the need of an associate PayTPV account. Terminal "
+"number (1,2,3, ... One for each currency) Password: paytpvtest Test Cards: "
+"5325298401138208 / 5540568785541245/5407696658785988 Expiration Date: Month: "
+"5 / Year: 2020CVC2: 123 / 3DSecure: 1234"
+msgstr ""
+
+#: ../inc/woocommerce-paytpv.php:270
+msgid "Live Mode"
+msgstr ""
+
+#: ../inc/woocommerce-paytpv.php:271
+msgid "Test Mode"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:273
+msgid "Client code"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:286
+msgid "Request business password on purchases with stored cards"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:291 /inc/woocommerce-paytpv.php:338
+msgid "No"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:292 /inc/woocommerce-paytpv.php:338
+msgid "Yes"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:319
+msgid "Terminals"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:325
+msgid "Terminal Number"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:326
+msgid "Password"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:327
+msgid "Terminals available"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:328
+msgid "Use 3D Secure"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:329
+msgid "Currency"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:330
+msgid "Use 3D Secure on purchases over"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:337
+msgid "Secure"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:337
+msgid "Non-Secure"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:337
+msgid "Both"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:383
+msgid "+ Add Terminal"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:383
+msgid "- Remove Terminal"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:390
+msgid "Must have at least one terminal configured to process payments."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:391
+msgid "There can be two terminals configured with the same currency."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:480 /inc/woocommerce-paytpv.php:482
+msgid "Invalid commerce password"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:495 /inc/woocommerce-paytpv.php:508 
+#: /inc/woocommerce-paytpv.php:595
+msgid "PayTpv payment completed"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:497
+msgid "Test Mode. Not Real Payment"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:890
+msgid "Thanks for your order, please fill the data below to process the payment."
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:912
+msgid "Card"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:923
+msgid "NEW CARD"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:929
+msgid "Commerce Password"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:935
+msgid "Pay"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:947
+msgid "STREAMLINE YOUR FUTURE PURCHASES!"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:948
+msgid "Yes, remember my card accepting the"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:948 /template/myaccount/my-cards.php:40
+msgid "terms and conditions of the service"
+msgstr ""
+
+#: /inc/woocommerce-paytpv.php:1147
+#, php-format
+msgid "Refunded %s - Refund ID: %s"
+msgstr ""
+
+#: /template/payment_3ds_test.php:19
+msgid "The PIN entered is incorrect"
+msgstr ""
+
+#: /template/payment_3ds_test.php:30
+msgid "Authentication Secure Electronic Commerce"
+msgstr ""
+
+#: /template/payment_3ds_test.php:46
+msgid "Check the details of your operation"
+msgstr ""
+
+#: /template/payment_3ds_test.php:59
+msgid "Commerce"
+msgstr ""
+
+#: /template/payment_3ds_test.php:67
+msgid "Date"
+msgstr ""
+
+#: /template/payment_3ds_test.php:75
+msgid "Hour"
+msgstr ""
+
+#: /template/payment_3ds_test.php:88
+msgid "Enter the PIN of 4 digits of your credit / debit card"
+msgstr ""
+
+#: /template/payment_3ds_test.php:125
+msgid "Confirm purchase"
+msgstr ""
+
+#: /template/payment_3ds_test.php:128 /template/myaccount/my-cards.php:46 
+#: /template/myaccount/my-cards.php:47
+msgid "Cancel"
+msgstr ""
+
+#: /template/payment_test_mode.php:38
+msgid "Name on credit card"
+msgstr ""
+
+#: /template/payment_test_mode.php:44
+msgid "Credit card number"
+msgstr ""
+
+#: /template/payment_test_mode.php:50
+msgid "Expiration date"
+msgstr ""
+
+#: /template/payment_test_mode.php:77
+msgid "CVC2"
+msgstr ""
+
+#: /template/payment_test_mode.php:84
+msgid "The last 3 digits"
+msgstr ""
+
+#: /template/payment_test_mode.php:91
+msgid "Wait"
+msgstr ""
+
+#: /template/payment_test_mode.php:109
+msgid ""
+"It not has been able to successfully perform the operation for the following "
+"reason"
+msgstr ""
+
+#: /template/payment_test_mode.php:110
+msgid "Error"
+msgstr ""
+
+#: /template/payment_test_mode.php:110
+msgid "Unexpected error. Check the data on the card and try again"
+msgstr ""
+
+#: /template/myaccount/conditions.php:9
+msgid "Related Cards"
+msgstr ""
+
+#: /template/myaccount/conditions.php:11
+msgid ""
+"This business does not store or transmit credit card or debit card data. "
+"Data are sent over an encrypted and secure channel to the PayTPV platform."
+msgstr ""
+
+#: /template/myaccount/conditions.php:14
+msgid ""
+"At any time, the user can add or remove data from their linked cards. In the "
+"section My account, they will see a section \"My linked cards\" where stored "
+"cards are displayed and they may be removed."
+msgstr ""
+
+#: /template/myaccount/conditions.php:16
+msgid "Security Policy"
+msgstr ""
+
+#: /template/myaccount/conditions.php:18
+msgid ""
+"All transaction information transmitted between this site and PayTPV systems "
+"is encrypted using 256-bit SSL certificates. All cardholder information is "
+"transmitted encrypted and all messages sent to your servers from PayTPV are "
+"signed using SHA hashing to prevent tampering. The information that is "
+"transmitted to PayTPV servers cannot be examined, scanned, used or modified "
+"by any external party that gains access to confidential information."
+msgstr ""
+
+#: /template/myaccount/conditions.php:20
+msgid "Encryption and Data Storage"
+msgstr ""
+
+#: /template/myaccount/conditions.php:22
+msgid ""
+"Once in the PayTPV systems, confidential information is protected using "
+"standard 1024-bit encryption. Encryption keys are kept in volatile high "
+"security systems with double authentication, which makes their extraction "
+"impossible. Banks, security agents and banking institutions perform regular "
+"audits to ensure data protection."
+msgstr ""
+
+#: /template/myaccount/conditions.php:24
+msgid "System Safety"
+msgstr ""
+
+#: /template/myaccount/conditions.php:26
+msgid ""
+"PAYTPV systems are reviewed quarterly by specific ISO tools, an independent "
+"Qualified Security Assessor (QSA) and a scanning vendor (ASV) approved by "
+"the payment card brands."
+msgstr ""
+
+#: /template/myaccount/conditions.php:29
+msgid ""
+"PAYTPV is also subject to an annual audit according to the standards of data "
+"security of the Payment Card Industry (PCI DSS) and is a fully approved "
+"Level 1 provider of payment services, which is the highest level of "
+"compliance."
+msgstr ""
+
+#: /template/myaccount/conditions.php:31
+msgid "Links to banking institutions"
+msgstr ""
+
+#: /template/myaccount/conditions.php:33
+msgid ""
+"PAYTPV has multiple private links to banking networks that are completely "
+"independent of the Internet and which do not cross any public access network."
+" All the information of the holder sent to banks and all the authorization "
+"messages sent in response are protected and cannot be manipulated."
+msgstr ""
+
+#: /template/myaccount/conditions.php:35
+msgid "Internal security"
+msgstr ""
+
+#: /template/myaccount/conditions.php:37
+msgid ""
+"PAYTPV is audited in access controls to production environments. The CPD "
+"where systems are hosted operate according to the requirements for Tier III "
+"centers. This ensures that safety is not put at risk at any time. It has "
+"sophisticated alarm systems, surveillance by means of closed circuit TV and "
+"security guards 24 hours a day, 7 days a week on site, as well as rigorous "
+"monitoring and maintenance. All the information about transactions and "
+"customer cards is protected even from our own employees."
+msgstr ""
+
+#: /template/myaccount/conditions.php:39
+msgid "Disaster Recovery"
+msgstr ""
+
+#: /template/myaccount/conditions.php:41
+msgid ""
+"PAYTPV has Backup systems hosted in different countries to ensure optimal "
+"safety of the systems and high availability. It also has a complete business "
+"continuity and disaster recovery policy."
+msgstr ""
+
+#: /template/myaccount/my-cards.php:9
+msgid "My Cards"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:17
+msgid "Add a description"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:19
+msgid "Save Description"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:20
+msgid "Remove"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:30
+msgid "You have no active cars."
+msgstr ""
+
+#: /template/myaccount/my-cards.php:35
+msgid "STREAMLINE YOUR FUTURE PURCHASES"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:36
+msgid ""
+"Link a card to your account to be able to make all procedures easily and "
+"quickly."
+msgstr ""
+
+#: /template/myaccount/my-cards.php:40
+msgid "By linking a card you accept the "
+msgstr ""
+
+#: /template/myaccount/my-cards.php:43 /template/myaccount/my-cards.php:44
+msgid "Link card"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:51
+msgid "You must accept the terms and conditions of service"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:52
+msgid "Description stored successfully"
+msgstr ""
+
+#: /template/myaccount/my-cards.php:53
+msgid "Description stored successfully"
+msgstr ""

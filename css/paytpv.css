@@ -1,0 +1,61 @@
+table.wc_input_table td input[type=text], table.wc_input_table td input[type=number], table.wc_tax_rates td input[type=text], table.wc_tax_rates td input[type=number] {
+    width: 100%;
+    padding: 5px 7px;
+    margin: 0;
+    border: 0;
+    background: 0 0;
+}
+
+.tblterminals input, .tblterminals select, .tblterminals textarea {
+    font-size: 10px;
+}
+
+.tblterminals th{
+    font-size: 12px;
+}
+
+.tblterminals .term{
+    width:80px;
+}
+
+.tblterminals .pass{
+    width:150px!important;
+}
+
+#storingStep.box,#storingStepUser.box{
+    border: 1px solid #e5e5e5;
+    padding: 5px 18px 10px;
+    background-color: #F9F9F7;
+    font-size: 80%;
+    margin-top: 10px;
+}
+
+.bankstoreCard{
+	font-size: 80%;
+}
+
+.bankstoreCard hr{
+    margin:5px 0 5px;
+}
+.cc{
+	width:200px;
+	float:left;
+}
+
+
+.woocommerce_paytpv_cards .card_desc{
+	min-width: 200px;
+}
+
+#storingStepUser h4, #storingStep h4{
+	margin: 10px 0px;
+}
+
+#storingStepUser p{
+	margin: 0px 0px 10px;
+}
+
+#saved_cards{
+	padding-bottom: 10px;
+}
+

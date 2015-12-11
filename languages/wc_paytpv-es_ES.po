@@ -1,0 +1,521 @@
+# Pasarela de pago Woocommerce para PayTPV.
+# Copyright (C) 2015 PayTPV
+# This file is distributed under the same license as the woocommerce-paytpv package.
+# PayTPV <info@paytpv.com>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Pasarela de pago Woocommerce para PayTPV\n"
+"POT-Creation-Date: 2015-10-22 12:32+0200\n"
+"PO-Revision-Date: 2015-10-22 12:33+0200\n"
+"Last-Translator: PayTPV <info@paytpv.com>\n"
+"Language-Team: PayTPV <info@paytpv.com>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../inc/woocommerce-paytpv.php:25
+msgid "Payment gateway for credit card payment."
+msgstr "Pasarela de pago para pagos con tarjeta de crédito."
+
+#: ../inc/woocommerce-paytpv.php:135
+msgid "You must define at least one terminal"
+msgstr "Debe definir por lo menos un terminal"
+
+#: ../inc/woocommerce-paytpv.php:152
+msgid "PayTpv Payment Gateway"
+msgstr "Pasarela de pagos PayTPV"
+
+#: ../inc/woocommerce-paytpv.php:154
+msgid ""
+"<a href=\"https://PayTpv.com\">PayTpv Online</a> payment gateway for "
+"Woocommerce enables credit card payment in your shop. Al you need is a "
+"PayTpv.com merchant account and access to <a href=\"https://www.paytpv.com/"
+"clientes.php\">customer area</a>"
+msgstr ""
+"<a href=\"https://PayTpv.com\">PayTpv Online</a> pasarela de pago para "
+"Woocommerce le permitirá dar la opción de pago con tarjeta de crédito o "
+"débito en su comercio. Para ello necesitara un tpv de PayTPV. Conviene que "
+"disponga también de acceso al <a href=\"https://www.paytpv.com/clientes.php"
+"\">Área de clientes</a>"
+
+#: ../inc/woocommerce-paytpv.php:157
+msgid ""
+"There you should configure \"Tipo de notificación del cobro:\" as "
+"\"Notificación por URL\" set ther teh following URL:"
+msgstr ""
+"Allí deberá configurar \"Tipo de notificación del cobro:\" como "
+"\"Notificación por URL\" y configurar ahí la URL:"
+
+#: ../inc/woocommerce-paytpv.php:246
+msgid "Enable/Disable"
+msgstr "Habilitar/Deshabilitar"
+
+#: ../inc/woocommerce-paytpv.php:247
+msgid "Enable PayTpv gateway"
+msgstr "Habilitar Pasarela PayTPV"
+
+#: ../inc/woocommerce-paytpv.php:253
+msgid "Title"
+msgstr "Título"
+
+#: ../inc/woocommerce-paytpv.php:255
+msgid "This controls the title which the user sees during checkout."
+msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
+
+#: ../inc/woocommerce-paytpv.php:256
+msgid "Credit Card (by PayTpv)"
+msgstr "Tarjeta de Crédito (PayTPV)"
+
+#: ../inc/woocommerce-paytpv.php:259
+msgid "Description"
+msgstr "Descripción"
+
+#: ../inc/woocommerce-paytpv.php:262
+msgid "This controls the description which the user sees during checkout."
+msgstr "La descripción que el cliente verá en el proceso de compra"
+
+#: ../inc/woocommerce-paytpv.php:263
+msgid "Pay using your credit card in a secure way"
+msgstr "Pague con tarjeta de crédito de la forma más segura"
+
+#: ../inc/woocommerce-paytpv.php:266
+msgid "Environment"
+msgstr "Entorno"
+
+#: ../inc/woocommerce-paytpv.php:268
+msgid ""
+"Try PayTPV module without the need of an associate PayTPV account. Terminal "
+"number (1,2,3, ... One for each currency) Password: paytpvtest Test Cards: "
+"5325298401138208 / 5540568785541245/5407696658785988 Expiration Date: Month: "
+"5 / Year: 2020CVC2: 123 / 3DSecure: 1234"
+msgstr ""
+"Prueba el módulo PayTPV sin necesidad de una cuenta PayTPV asociada. \n"
+"Número de terminal (1,2,3, ... Una para cada moneda) \n"
+"Contraseña: paytpvtest \n"
+"Tarjetas de Prueba: Fecha 5325298401138208 / 5540568785541245 / "
+"5407696658785988 \n"
+"Caducidad: Mes: 5 / Año: 2020 \n"
+"CVC2: 123 / 3DSecure: 1234"
+
+#: ../inc/woocommerce-paytpv.php:270
+msgid "Live Mode"
+msgstr "Producción"
+
+#: ../inc/woocommerce-paytpv.php:271
+msgid "Test Mode"
+msgstr "Modo Test"
+
+#: ../inc/woocommerce-paytpv.php:275
+msgid "Client code"
+msgstr "Código Cliente"
+
+#: ../inc/woocommerce-paytpv.php:288
+msgid "Request business password on purchases with stored cards"
+msgstr "Solicitar contraseña negocio en compras con tarjetas almacenados"
+
+#: ../inc/woocommerce-paytpv.php:293 ../inc/woocommerce-paytpv.php:340
+msgid "No"
+msgstr "No"
+
+#: ../inc/woocommerce-paytpv.php:294 ../inc/woocommerce-paytpv.php:340
+msgid "Yes"
+msgstr "Si"
+
+#: ../inc/woocommerce-paytpv.php:321
+msgid "Terminals"
+msgstr "Terminales"
+
+#: ../inc/woocommerce-paytpv.php:327
+msgid "Terminal Number"
+msgstr "Número Terminal"
+
+#: ../inc/woocommerce-paytpv.php:328
+msgid "Password"
+msgstr "Contraseña"
+
+#: ../inc/woocommerce-paytpv.php:329
+msgid "Terminals available"
+msgstr "Terminales disponibles"
+
+#: ../inc/woocommerce-paytpv.php:330
+msgid "Use 3D Secure"
+msgstr "Usar 3D Secure"
+
+#: ../inc/woocommerce-paytpv.php:331
+msgid "Currency"
+msgstr "Moneda"
+
+#: ../inc/woocommerce-paytpv.php:332
+msgid "Use 3D Secure on purchases over"
+msgstr "Usar 3DS en compras superiores a"
+
+#: ../inc/woocommerce-paytpv.php:339
+msgid "Secure"
+msgstr "Seguro"
+
+#: ../inc/woocommerce-paytpv.php:339
+msgid "Non-Secure"
+msgstr "No Seguro"
+
+#: ../inc/woocommerce-paytpv.php:339
+msgid "Both"
+msgstr "Ambos"
+
+#: ../inc/woocommerce-paytpv.php:385
+msgid "+ Add Terminal"
+msgstr "+ Añadir Terminal"
+
+#: ../inc/woocommerce-paytpv.php:385
+msgid "- Remove Terminal"
+msgstr "- Eliminar Terminal"
+
+#: ../inc/woocommerce-paytpv.php:392
+msgid "Must have at least one terminal configured to process payments."
+msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
+
+#: ../inc/woocommerce-paytpv.php:393
+msgid "There can be two terminals configured with the same currency."
+msgstr "No puede haber dos terminales configurados con la misma moneda."
+
+#: ../inc/woocommerce-paytpv.php:427 ../inc/woocommerce-paytpv.php:429
+msgid "Invalid commerce password"
+msgstr "Contraseña comercio no válida"
+
+#: ../inc/woocommerce-paytpv.php:490 ../inc/woocommerce-paytpv.php:591
+msgid "PayTpv payment completed"
+msgstr "Pago PayTPV completado"
+
+#: ../inc/woocommerce-paytpv.php:493
+msgid "Test Mode. Not Real Payment"
+msgstr "Modo de prueba. No es real Pago"
+
+#: ../inc/woocommerce-paytpv.php:890
+msgid ""
+"Thanks for your order, please fill the data below to process the payment."
+msgstr ""
+"Gracias por su pedido, por favor, rellene los datos a continuación para "
+"procesar el pago."
+
+#: ../inc/woocommerce-paytpv.php:912
+msgid "Card"
+msgstr "Tarjeta"
+
+#: ../inc/woocommerce-paytpv.php:923
+msgid "NEW CARD"
+msgstr "NUEVA TARJETA"
+
+#: ../inc/woocommerce-paytpv.php:929
+msgid "Commerce Password"
+msgstr "Contraseña Tienda"
+
+#: ../inc/woocommerce-paytpv.php:935
+msgid "Pay"
+msgstr "Pagar"
+
+#: ../inc/woocommerce-paytpv.php:947
+msgid "STREAMLINE YOUR FUTURE PURCHASES!"
+msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
+
+#: ../inc/woocommerce-paytpv.php:948
+msgid "Yes, remember my card accepting the"
+msgstr "Si, recordar mi tarjeta aceptando los"
+
+#: ../inc/woocommerce-paytpv.php:948 ../template/myaccount/my-cards.php:41
+msgid "terms and conditions of the service"
+msgstr "términos y condiciones del servicio"
+
+#: ../inc/woocommerce-paytpv.php:1170
+#, php-format
+msgid "Refunded %s - Refund ID: %s"
+msgstr "Devuelto %s - ID Devolución: %s"
+
+#: ../template/myaccount/conditions.php:9
+msgid "Related Cards"
+msgstr "Tarjetas Disponibles"
+
+#: ../template/myaccount/conditions.php:11
+msgid ""
+"This business does not store or transmit credit card or debit card data. "
+"Data are sent over an encrypted and secure channel to the PayTPV platform."
+msgstr ""
+"Este comercio no almacena ni transmite los datos tarjetas de crédito o "
+"débito. Los datos son enviados a través de un canal cifrado y seguro a la "
+"plataforma PayTPV"
+
+#: ../template/myaccount/conditions.php:14
+msgid ""
+"At any time, the user can add or remove data from their linked cards. In the "
+"section My account, they will see a section \"My linked cards\" where stored "
+"cards are displayed and they may be removed."
+msgstr ""
+"En cualquier momento, el usuario puede añadir ó eliminar los datos de sus "
+"tarjetas vinculadas. En el apartado Mi cuenta, verá un apartado \\\"Mis "
+"tarjetas vinculadas\\\" donde se mostrarán las tarjetas almacenadas y podrán "
+"ser eliminadas."
+
+#: ../template/myaccount/conditions.php:16
+msgid "Security Policy"
+msgstr "Política de seguridad"
+
+#: ../template/myaccount/conditions.php:18
+msgid ""
+"All transaction information transmitted between this site and PayTPV systems "
+"is encrypted using 256-bit SSL certificates. All cardholder information is "
+"transmitted encrypted and all messages sent to your servers from PayTPV are "
+"signed using SHA hashing to prevent tampering. The information that is "
+"transmitted to PayTPV servers cannot be examined, scanned, used or modified "
+"by any external party that gains access to confidential information."
+msgstr ""
+"Toda la información de transacciones que se transmite entre este sitio y los "
+"sistemas de PAYTPV se cifra mediante certificados SSL de 256 bits. Toda la "
+"información del titular se transmite cifrada y todos Los mensajes enviados a "
+"sus servidores desde PAYTPV se firman mediante hashing SHA para evitar su "
+"manipulación. La información que se transmite a los servidores de PAYTPV no "
+"se puede examinar, escanear, utilizar o modificar por cualquier externo que "
+"obtenga acceso a información confidencial."
+
+#: ../template/myaccount/conditions.php:20
+msgid "Encryption and Data Storage"
+msgstr "Cifrado y almacenamiento de datos"
+
+#: ../template/myaccount/conditions.php:22
+msgid ""
+"Once in the PayTPV systems, confidential information is protected using "
+"standard 1024-bit encryption. Encryption keys are kept in volatile high "
+"security systems with double authentication, which makes their extraction "
+"impossible. Banks, security agents and banking institutions perform regular "
+"audits to ensure data protection."
+msgstr ""
+"Una vez en los sistemas de PAYTPV, la información confidencial se protege "
+"utilizando estándares de cifrado de 1024 bits. Las claves de cifrado se "
+"mantienen en sistemas de alta seguridad volátiles y con doble autenticación "
+"lo que imposibilita su extracción. Bancos, agentes de seguridad y "
+"entidades      bancarias realizan auditorías con regularidad para garantizar "
+"la protección de los datos."
+
+#: ../template/myaccount/conditions.php:24
+msgid "System Safety"
+msgstr "Seguridad en los sistemas"
+
+#: ../template/myaccount/conditions.php:26
+msgid ""
+"PAYTPV systems are reviewed quarterly by specific ISO tools, an independent "
+"Qualified Security Assessor (QSA) and a scanning vendor (ASV) approved by "
+"the payment card brands."
+msgstr ""
+"Los sistemas de PAYTPV se examinan trimestralmente mediante herramientas "
+"específicas ISO, un Asesor de Seguridad Cualificado (QSA) independiente y un "
+"proveedor de exploración aprobado (ASV) por las marcas de tarjetas de pago."
+
+#: ../template/myaccount/conditions.php:29
+msgid ""
+"PAYTPV is also subject to an annual audit according to the standards of data "
+"security of the Payment Card Industry (PCI DSS) and is a fully approved "
+"Level 1 provider of payment services, which is the highest level of "
+"compliance."
+msgstr ""
+"PAYTPV también se somete a una auditoría anual según los estándares de "
+"seguridad de datos del sector de tarjetas de pago (PCI DSS) y es un "
+"proveedor de servicios de pago de Nivel 1 totalmente aprobado, que es el "
+"mayor nivel de cumplimiento."
+
+#: ../template/myaccount/conditions.php:31
+msgid "Links to banking institutions"
+msgstr "Enlaces con entidades bancarias"
+
+#: ../template/myaccount/conditions.php:33
+msgid ""
+"PAYTPV has multiple private links to banking networks that are completely "
+"independent of the Internet and which do not cross any public access "
+"network. All the information of the holder sent to banks and all the "
+"authorization messages sent in response are protected and cannot be "
+"manipulated."
+msgstr ""
+"PAYTPV tiene varios enlaces privados con redes bancarias que son "
+"completamente independientes de Internet y que no atraviesan ninguna red de "
+"acceso público. Toda la información del titular enviada a los bancos y todos "
+"los mensajes de autorización enviados como respuesta están protegidos y no "
+"se pueden manipular."
+
+#: ../template/myaccount/conditions.php:35
+msgid "Internal security"
+msgstr "Seguridad interna"
+
+#: ../template/myaccount/conditions.php:37
+msgid ""
+"PAYTPV is audited in access controls to production environments. The CPD "
+"where systems are hosted operate according to the requirements for Tier III "
+"centers. This ensures that safety is not put at risk at any time. It has "
+"sophisticated alarm systems, surveillance by means of closed circuit TV and "
+"security guards 24 hours a day, 7 days a week on site, as well as rigorous "
+"monitoring and maintenance. All the information about transactions and "
+"customer cards is protected even from our own employees."
+msgstr ""
+"PAYTPV está auditado en controles de acceso a los entornos de producción. "
+"Los CPD donde se alojan los sistemas operan conforme a los requisitos para "
+"los centros Tier III. De esta forma se garantiza que la seguridad no se "
+"ponga en riesgo en ningún momento. Se dispone de sofisticados sistemas de "
+"alarma,           vigilancia mediante circuitos cerrados de TV y vigilantes "
+"de seguridad, presentes 24 horas al día y 7 días a la semana en las "
+"instalaciones, así como de una monitorización y un mantenimiento rigurosos. "
+"Toda la información de transacciones y tarjetas de clientes está protegida "
+"incluso de nuestros propios empleados."
+
+#: ../template/myaccount/conditions.php:39
+msgid "Disaster Recovery"
+msgstr "Recuperación de desastres"
+
+#: ../template/myaccount/conditions.php:41
+msgid ""
+"PAYTPV has Backup systems hosted in different countries to ensure optimal "
+"safety of the systems and high availability. It also has a complete business "
+"continuity and disaster recovery policy."
+msgstr ""
+"PAYTPV dispone de sistemas de Backup alojados en diferentes países para "
+"garantizar una seguridad de sistemas óptima y una alta disponibilidad. "
+"Asimismo, cuenta con una política de continuación comercial y recuperación "
+"de desastres completa."
+
+#: ../template/myaccount/my-cards.php:9
+msgid "My Cards"
+msgstr "Mis Tarjetas"
+
+#: ../template/myaccount/my-cards.php:17
+msgid "Add a description"
+msgstr "Añadir descripción"
+
+#: ../template/myaccount/my-cards.php:19
+msgid "Save Description"
+msgstr "Guardar"
+
+#: ../template/myaccount/my-cards.php:20
+msgid "Remove"
+msgstr "Eliminar"
+
+#: ../template/myaccount/my-cards.php:31
+msgid "You have no active cars."
+msgstr "No tiene tarjetas almacenadas"
+
+#: ../template/myaccount/my-cards.php:36
+msgid "STREAMLINE YOUR FUTURE PURCHASES"
+msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
+
+#: ../template/myaccount/my-cards.php:37
+msgid ""
+"Link a card to your account to be able to make all procedures easily and "
+"quickly."
+msgstr ""
+"Vincule una tarjeta a su cuenta para poder realizar todos los procedimientos "
+"de forma fácil y rápida."
+
+#: ../template/myaccount/my-cards.php:41
+msgid "By linking a card you accept the "
+msgstr "Al vincular una tarjeta acepta los "
+
+#: ../template/myaccount/my-cards.php:44 ../template/myaccount/my-cards.php:45
+msgid "Link card"
+msgstr "Vincular tarjetas"
+
+#: ../template/myaccount/my-cards.php:47 ../template/myaccount/my-cards.php:48
+#: ../template/payment_3ds_test.php:128
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: ../template/myaccount/my-cards.php:52
+msgid "You must accept the terms and conditions of service"
+msgstr "Debe aceptar los términos y condiciones del servicio"
+
+#: ../template/myaccount/my-cards.php:53
+msgid "Description stored successfully"
+msgstr "Descripción almacenada con éxito"
+
+#: ../template/payment_3ds_test.php:19
+msgid "The PIN entered is incorrect"
+msgstr "El PIN introducido es incorrecto"
+
+#: ../template/payment_3ds_test.php:30
+msgid "Authentication Secure Electronic Commerce"
+msgstr "Autenticación Comercio Electrónico Seguro"
+
+#: ../template/payment_3ds_test.php:46
+msgid "Check the details of your operation"
+msgstr "Compruebe los detalles de su operación"
+
+#: ../template/payment_3ds_test.php:59
+msgid "Commerce"
+msgstr "Comercio"
+
+#: ../template/payment_3ds_test.php:67
+msgid "Date"
+msgstr "Fecha"
+
+#: ../template/payment_3ds_test.php:75
+msgid "Hour"
+msgstr "Hora"
+
+#: ../template/payment_3ds_test.php:88
+msgid "Enter the PIN of 4 digits of your credit / debit card"
+msgstr "Introduzca el PIN de 4 dígitos de su tarjeta de débito / crédito"
+
+#: ../template/payment_3ds_test.php:125
+msgid "Confirm purchase"
+msgstr "Confirmar compra"
+
+#: ../template/payment_test_mode.php:39
+msgid "Name on credit card"
+msgstr "Titular de la tarjeta de crédito"
+
+#: ../template/payment_test_mode.php:45
+msgid "Credit card number"
+msgstr "Tarjeta de crédito"
+
+#: ../template/payment_test_mode.php:51
+msgid "Expiration date"
+msgstr "Fecha de caducidad"
+
+#: ../template/payment_test_mode.php:78
+msgid "CVC2"
+msgstr "CVC2"
+
+#: ../template/payment_test_mode.php:85
+msgid "The last 3 digits"
+msgstr "Los últimos 3 dígitos"
+
+#: ../template/payment_test_mode.php:92
+msgid "Wait"
+msgstr "Espere"
+
+#: ../template/payment_test_mode.php:110
+msgid ""
+"It not has been able to successfully perform the operation for the following "
+"reason"
+msgstr ""
+"No ha sido capaz de realizar con éxito la operación por la siguiente razón"
+
+#: ../template/payment_test_mode.php:111
+msgid "Error"
+msgstr "Error"
+
+#: ../template/payment_test_mode.php:111
+msgid "Unexpected error. Check the data on the card and try again"
+msgstr ""
+"Error inesperado. Compruebe los datos de la tarjeta y vuelva a intentarlo"
+
+#~ msgid "Pasarela de pago para PayTpv"
+#~ msgstr "Pasarela de pago para PayTpv"
+
+#~ msgid "La pasarela de pago PayTPV para WooCommerce"
+#~ msgstr "La pasarela de pago PayTPV para WooCommerce"
+
+#~ msgid "Jose Ramón García"
+#~ msgstr "Jose Ramón García"
+
+#~ msgid "http://PayTpv.com"
+#~ msgstr "http://paytpv.com"
