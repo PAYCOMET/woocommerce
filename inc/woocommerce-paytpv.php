@@ -454,7 +454,7 @@
 				if ($secure_pay){
 
 					$URLOK = $this->get_return_url( $order );
-					$URLKO = $order->get_cancel_order_url();
+					$URLKO = $order->get_cancel_order_url_raw();
 
 					$OPERATION = "109"; //exec_purchase_token
 
@@ -515,7 +515,7 @@
 
 					$url = $this->get_return_url( $order );
 				}else{
-					$url = $order->get_cancel_order_url();
+					$url = $order->get_cancel_order_url_raw();
 
 				}
 				wp_redirect( $url, 303 );
@@ -766,7 +766,7 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $order->get_cancel_order_url();
+			$URLKO = $order->get_cancel_order_url_raw();
 			$paytpv_req_args = array( );
 			$mensaje = $this->clientcode . $term . $OPERATION . $MERCHANT_ORDER . $MERCHANT_AMOUNT . $MERCHANT_CURRENCY;
 			$MERCHANT_MERCHANTSIGNATURE = md5( $mensaje . md5( $pass ) );
