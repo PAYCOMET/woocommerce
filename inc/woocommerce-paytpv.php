@@ -909,6 +909,7 @@
 		function savedCardsHtml($order_id){
 			$order = new WC_Order( $order_id );
 			$saved_cards = Paytpv::savedCards($order->user_id);
+			$store_card = (sizeof($saved_cards)==0)?"":"";
 
 			// Tarjetas almacenadas
 			$store_card = (sizeof($saved_cards)==0)?"none":"";
@@ -932,7 +933,7 @@
 
             // Contraseña tienda
             if ($this->commerce_password==1){
-            	print '<div id="div_commerce_password">'.__( 'Commerce Password', 'wc_paytpv' ).': <input type="password" name="commerce_password" id="commerce_password"></div>';
+            	print '<div id="div_commerce_password" style="display:'.$store_card.'" >'.__( 'Commerce Password', 'wc_paytpv' ).': <input type="password" name="commerce_password" id="commerce_password"></div>';
             }
 
             if (sizeof($saved_cards)>0){
@@ -946,14 +947,17 @@
 			print '<input type="hidden" id="order_id" name="Order" value="'.$order_id.'">';
 
 
-			// Comprobacion almacenar tarjeta
-			$store_card = (sizeof($saved_cards)==0)?"":"";
-			print '
-			<div id="storingStep" class="box" style="display:'.$store_card.'">
-                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
-                <label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()" checked>'.__('Yes, remember my card accepting the', 'wc_paytpv' ).' <a id="open_conditions" href="#conditions" class="link"> '.__('terms and conditions of the service', 'wc_paytpv' ).'.</a>.</label>';
 
-            print  $this->generate_paytpv_form( $order_id );
+			// Comprobacion almacenar tarjeta
+			if ($order->user_id>0){
+				print '
+				<div id="storingStep" class="box" style="display:'.$store_card.'">
+	                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
+	                <label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()" checked>'.__('Yes, remember my card accepting the', 'wc_paytpv' ).' <a id="open_conditions" href="#conditions" class="link"> '.__('terms and conditions of the service', 'wc_paytpv' ).'.</a>.</label>';
+	        }else{
+	        	print '<div>';
+	        }
+	        print  $this->generate_paytpv_form( $order_id );
             print '</div>';
 
             print '</form>';

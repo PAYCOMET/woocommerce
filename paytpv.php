@@ -26,7 +26,7 @@
 		public static function savedCards($user_id){
 			global $wpdb;
 			
-			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer = ". $user_id  . " order by date desc", ARRAY_A);
+			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer>0 and id_customer = ". $user_id  . " order by date desc", ARRAY_A);
 			
 			return $saved_cards;
 		}
@@ -82,10 +82,12 @@
 				
 			}
 
-			$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
-												VALUES(%d, %s, %s,%s, %d, %s)",
-			                                   array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $user_id, date('Y-m-d H:i:s')) );
-			$wpdb->query( $insert_prepared );
+			if ($user_id>0){
+				$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
+													VALUES(%d, %s, %s,%s, %d, %s)",
+				                                   array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $user_id, date('Y-m-d H:i:s')) );
+				$wpdb->query( $insert_prepared );
+			}
 
 
 			$result["paytpv_iduser"] = $paytpv_iduser;

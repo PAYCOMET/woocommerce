@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pasarela de pago para PayTpv
   Description: La pasarela de pago PayTPV para WooCommerce
-  Version: 3.1
+  Version: 3.2
   Author: PayTPV
   Author URI: http://PayTpv.com/
 
@@ -12,7 +12,7 @@
 
  */
 
-define( 'PAYTPV_VERSION', '3.1' );
+define( 'PAYTPV_VERSION', '3.2' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
