@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pasarela de pago para PayTpv
   Description: La pasarela de pago PayTPV para WooCommerce
-  Version: 3.2
+  Version: 3.3
   Author: PayTPV
   Author URI: http://PayTpv.com/
 
