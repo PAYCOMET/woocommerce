@@ -40,6 +40,13 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 3.3 =
+Mejoras tokenizacion de tarjetas area de usuario
+
+= 3.2 =
+Mejoras del Módulo de pago
+
 = 3.0 =
 Release date: Dec 10st, 2015
 

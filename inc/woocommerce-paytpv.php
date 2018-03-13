@@ -411,7 +411,9 @@
 			if (isset($_REQUEST['Order']) ){
 				$datos_order = explode("_",$_REQUEST['Order']); // En los pagos de suscripcion viene {id_order}_{numpago}
 				$ref = $datos_order[0];
-				$order = new WC_Order( ( int ) substr( $ref, 0, 8 ) );
+				try{
+					$order = new WC_Order( ( int ) substr( $ref, 0, 8 ) );
+				}catch (exception $e){}
 			}
 
 			if ( $_REQUEST[ 'tpvLstr' ] == 'pay' && $order->status != 'completed' ) { //PAGO CON TARJETA GUARDADA
