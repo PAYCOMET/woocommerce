@@ -22,7 +22,7 @@ class WS_Client {
 	public function __construct( array $config = array( ), $proxyhost = '', $proxyport = '', $proxyusername = '', $proxypassword = '' ) {
 		$useCURL = isset( $_POST[ 'usecurl' ] ) ? $_POST[ 'usecurl' ] : '0';
 		$this->config = $config;
-		$this->client = new nusoap_client( 'https://secure.paytpv.com/gateway/xml_bankstore.php', false,
+		$this->client = new nusoap_client( 'https://api.paycomet.com/gateway/xml-bankstore', false,
 						$proxyhost, $proxyport, $proxyusername, $proxypassword );
 		$err = $this->client->getError();
 		if ( $err ) {
@@ -33,15 +33,16 @@ class WS_Client {
 		$this->client->setUseCurl( $useCURL );
 	}
 
-	function execute_purchase( $order, $DS_IDUSER,$DS_TOKEN_USER,$DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS,$DS_MERCHANT_CURRENCY='EUR',$amount,$ref='' ) {
+	function execute_purchase( $order, $DS_IDUSER,$DS_TOKEN_USER,$DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS,$DS_MERCHANT_CURRENCY='EUR',$amount,$ref='',$DS_MERCHANT_SCA_EXCEPTION='',$DS_MERCHANT_TRX_TYPE='',$DS_MERCHANT_DATA='') {
 
+		
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_AMOUNT = $amount;
 
 		$DS_MERCHANT_ORDER = str_pad( $ref, 8, "0", STR_PAD_LEFT );
 		
-		$DS_MERCHANT_MERCHANTSIGNATURE = sha1( $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AMOUNT . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS );
-		$DS_ORIGINAL_IP = get_post_meta( ( int ) $order->id, '_customer_ip_address', true );
+		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AMOUNT . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS );
+		$DS_ORIGINAL_IP = get_post_meta( ( int ) $order->get_id(), '_customer_ip_address', true );
 		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
 
 		$p = array(
@@ -57,6 +58,17 @@ class WS_Client {
 			'DS_MERCHANT_PRODUCTDESCRIPTION' => '',
 			'DS_MERCHANT_OWNER' => ''
 		);
+
+		if ($DS_MERCHANT_SCA_EXCEPTION!='') {
+			$p["DS_MERCHANT_SCA_EXCEPTION"] = $DS_MERCHANT_SCA_EXCEPTION;
+		}
+		if ($DS_MERCHANT_TRX_TYPE!='') {
+			$p["DS_MERCHANT_TRX_TYPE"] = $DS_MERCHANT_TRX_TYPE;
+		}
+		if ($DS_MERCHANT_DATA!='') {
+			$p["DS_MERCHANT_DATA"] = $DS_MERCHANT_DATA;
+		}
+
 		$this->write_log("Petición execute_purchase:\n".print_r($p,true));
 		$res = $this->client->call( 'execute_purchase', $p, '', '', false, true );
 		$this->write_log("Respuesta execute_purchase:\n".print_r($res,true));
@@ -66,7 +78,7 @@ class WS_Client {
 
 	function info_user( $DS_IDUSER, $DS_TOKEN_USER,$DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS ) {
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
-		$DS_MERCHANT_MERCHANTSIGNATURE = sha1( $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_PASS );
+		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_PASS );
 		$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
 		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
 		$p = array(
@@ -91,7 +103,7 @@ class WS_Client {
 		
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_ORDER = str_pad( $ref, 8, "0", STR_PAD_LEFT );
-		$DS_MERCHANT_MERCHANTSIGNATURE = sha1($DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AUTHCODE . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS);
+		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AUTHCODE . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS);
 		$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
 		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
 

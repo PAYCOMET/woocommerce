@@ -1,18 +1,18 @@
 <?php
 /*
-  Plugin Name: Pasarela de pago para PayTpv
-  Description: La pasarela de pago PayTPV para WooCommerce
-  Version: 3.3
-  Author: PayTPV
-  Author URI: http://PayTpv.com/
+  Plugin Name: Pasarela de pago para PAYCOMET
+  Description: La pasarela de pago PAYCOMET para WooCommerce
+  Version: 4.0
+  Author: PAYCOMET
+  Author URI: http://www.paycomet.com/
 
-  Copyright: © 2009-2015 PayTpv Online.
+  Copyright: © 2009-2019 PAYCOMET Online.
   License: GNU General Public License v3.0
   License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
  */
 
-define( 'PAYTPV_VERSION', '3.3' );
+define( 'PAYTPV_VERSION', '4.0' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );

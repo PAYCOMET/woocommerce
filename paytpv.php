@@ -69,19 +69,11 @@
 		}
 
 
-		public static function saveCard($environment,$user_id,$paytpv_iduser,$paytpv_tokenuser,$paytpv_cc,$paytpv_brand){
+		public static function saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$paytpv_cc,$paytpv_brand){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
-
-			// Test Mode
-			// First 100.000 paytpv_iduser for Test_Mode
-			if ($environment==1){
-				$paytpv_iduser = self::get_Customer();
-				$paytpv_tokenuser = "TESTTOKEN";
-				
-			}
-
+			
 			if ($user_id>0){
 				$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
 													VALUES(%d, %s, %s,%s, %d, %s)",

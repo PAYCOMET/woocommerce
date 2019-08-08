@@ -1,21 +1,21 @@
-=== PAYTPV for WooCommerce ===
-Contributors: PayTPV
+=== PAYCOMET for WooCommerce ===
+Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 5.1
-Stable tag: 3.3
+Tested up to: 5.2.2
+Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Módulo de pago PAYTPV para WooCommerce. Permite realizar pagos con tarjeta de crédito.
+Módulo de pago PAYCOMET para WooCommerce. Permite realizar pagos con tarjeta de crédito.
 
-PAYTPV - Pasarela de pagos PCI-DSS Nivel 1 Multiplataforma
+PAYCOMET - Pasarela de pagos PCI-DSS Nivel 1 Multiplataforma
 
 == Description ==
 
-This is a payment gateway for WooCommerce to accept credit card payments using merchant accounts from https://paytpv.com
+This is a payment gateway for WooCommerce to accept credit card payments using merchant accounts from https://www.paycomet.com
 
-Módulo de pago para WooCommerce que permite el pago de los pedidos mediante tarjeta de crédito usando el servicio de tpv virtual de https://paytpv.com
+Módulo de pago para WooCommerce que permite el pago de los pedidos mediante tarjeta de crédito usando el servicio de tpv virtual de https://www.paycomet.com
 
 Funcionalidades del módulo:
 
@@ -23,13 +23,13 @@ Funcionalidades del módulo:
 * Devoluciones: Admite las Devoluciones Totales o Parciales en línea.
 * Subscriptions: Compatible con WooCommerce Subscriptions.
 * Multimoneda: Se puede asociar un terminal por cada moneda.
-* Multibanco: PAYTPV permite operar con diferentes bancos y procesar las operaciones con el banco que se desee.
+* Multibanco: PAYCOMET permite operar con diferentes bancos y procesar las operaciones con el banco que se desee.
 
 == Installation ==
 
 1. Suba el directorio paytpv-for-woocommerce a la carpeta de plugins de wordpresss `/wp-content/plugins/`
 2. Active el plugin desde el apartado de Plugins de WordPress
-3. Acceda a WooCommerce -> Setting -> Payment Gateways -> PAYTPV link y configure los datos. Estos los podrá obtener en su cuenta dentro de https://paytpv.com account.
+3. Acceda a WooCommerce -> Setting -> Payment Gateways -> PAYCOMET link y configure los datos. Estos los podrá obtener en su cuenta dentro de https://www.paycomet.com account.
 
 == Frequently Asked Questions ==
 
@@ -40,6 +40,10 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 4.0 =
+Cambio de marca a PAYCOMET
+Adaptación PSD2
 
 = 3.3 =
 Mejoras tokenizacion de tarjetas area de usuario

@@ -1,6 +1,6 @@
 <?php
 	/**
-	 * Pasarela PayTpv Gateway Class
+	 * Pasarela PAYCOMET Gateway Class
 	 * 
 	 */
 	class woocommerce_paytpv extends WC_Payment_Gateway {
@@ -21,7 +21,7 @@
 			$this->id = 'paytpv';
 			$this->icon = PAYTPV_PLUGIN_URL . 'images/cards.png';
 			$this->has_fields = false;
-			$this->method_title = 'PayTPV';
+			$this->method_title = 'PAYCOMET';
             $this->method_description = __('Payment gateway for credit card payment.', 'wc_paytpv' );
 			$this->supports = array(
 				'products',
@@ -39,13 +39,12 @@
 			// Load the settings.
 			$this->init_settings();
 
-			$this->iframeurl = 'https://secure.paytpv.com/gateway/bnkgateway.php';
+			$this->iframeurl = 'https://api.paycomet.com/gateway/ifr-bankstore';
 
 			// Get setting values
 			$this->enabled = $this->settings[ 'enabled' ];
 			$this->title = $this->settings[ 'title' ];
 			$this->description = $this->settings[ 'description' ];
-			$this->environment = $this->settings[ 'environment' ];
 			$this->clientcode = $this->settings[ 'clientcode' ];
 			$this->paytpv_terminals = get_option( 'woocommerce_paytpv_terminals',
 				array(
@@ -71,16 +70,11 @@
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'save_terminals_details' ) );
 			add_action( 'woocommerce_api_woocommerce_' . $this->id, array( $this, 'check_' . $this->id . '_resquest' ) );
 			
-			
 			add_action('admin_notices', array( $this, 'validate_paytpv' ));
 
-
 			// Subscriptions
-			//add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment' ), 10, 2 );
-			add_action( 'scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment' ), 10, 3 );
-			add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', array( $this, 'store_renewal_order_id' ), 10, 4 );
-
-	
+			add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment' ), 10, 2 );
+			add_filter( 'wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id' ), 10, 4 );
 
 		}
 
@@ -108,7 +102,7 @@
 
 			$secure_pay = 0;
 			
-			$signature = md5($gateway->clientcode.$term.$operation.$order.md5($pass));
+			$signature = hash('sha512',$gateway->clientcode.$term.$operation.$order.md5($pass));
 			$fields = array
 			(
 				'MERCHANT_MERCHANTCODE' => $gateway->clientcode,
@@ -124,7 +118,9 @@
 
 			$query = http_build_query($fields);
 
-			$url_paytpv = $gateway->getIframeUrl($secure_pay) . $query;
+			$vhash = hash('sha512', md5($query.md5($pass)));
+
+			$url_paytpv = $gateway->getIframeUrl($secure_pay) . $query . "&VHASH=".$vhash;
 			
 			wc_get_template( 'myaccount/my-cards.php', array( 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv), '', PAYTPV_PLUGIN_DIR . 'template/' );
 
@@ -138,7 +134,7 @@
 		}
 
 		/**
-		 * There are no payment fields for PayTpv, but we want to show the description if set.
+		 * There are no payment fields for PAYCOMET, but we want to show the description if set.
 		 * */
 		function payment_fields() {
 			if ( $this->description )
@@ -151,9 +147,9 @@
 		 * */
 		public function admin_options() {
 			?>
-			<h3><?php _e( 'PayTpv Payment Gateway', 'wc_paytpv' ); ?></h3>
+			<h3><?php _e( 'PAYCOMET Payment Gateway', 'wc_paytpv' ); ?></h3>
 			<p>
-				<?php _e( '<a href="https://PayTpv.com">PayTpv Online</a> payment gateway for Woocommerce enables credit card payment in your shop. Al you need is a PayTpv.com merchant account and access to <a href="https://www.paytpv.com/clientes.php">customer area</a>', 'wc_paytpv'  ); ?>
+				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. Al you need is a www.paycomet.com merchant account and access to <a href="https://dashboard.paycomet.com/cp_control">customer area</a>', 'wc_paytpv'  ); ?>
 			</p>
 			<p>
 				<?php _e( 'There you should configure "Tipo de notificación del cobro:" as "Notificación por URL" set ther teh following URL:', 'wc_paytpv'  ); ?> <?php echo add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) ); ?></p>
@@ -216,8 +212,9 @@
 			wp_register_style( 'paytpv.css', PAYTPV_PLUGIN_URL . 'css/paytpv.css', PAYTPV_VERSION );
 			wp_enqueue_style( 'paytpv.css');
 
-			wp_register_script( 'paytpv.js', PAYTPV_PLUGIN_URL . 'js/paytpv.js', array(),  PAYTPV_VERSION );
+			wp_register_script( 'paytpv.js', PAYTPV_PLUGIN_URL . 'js/paytpv.js', array('jquery'),  PAYTPV_VERSION );
 			wp_enqueue_script( 'paytpv.js' );	
+
 
 			wp_register_script( 'lightcase.js', PAYTPV_PLUGIN_URL . 'js/lightcase.js', array('jquery'), PAYTPV_VERSION );
 			wp_enqueue_script( 'lightcase.js' );
@@ -231,7 +228,7 @@
 			wp_register_style( 'paytpv.css', PAYTPV_PLUGIN_URL . 'css/paytpv.css', PAYTPV_VERSION );
 			wp_enqueue_style( 'paytpv.css');
 
-			wp_register_script( 'paytpv_conf.js', PAYTPV_PLUGIN_URL . 'js/paytpv_conf.js', array(),  PAYTPV_VERSION );
+			wp_register_script( 'paytpv_conf.js', PAYTPV_PLUGIN_URL . 'js/paytpv_conf.js', array('jquery'),  PAYTPV_VERSION );
 			wp_enqueue_script( 'paytpv_conf.js' );	
 
 			
@@ -246,7 +243,7 @@
 			$this->form_fields = array(
 				'enabled' => array(
 					'title' => __( 'Enable/Disable', 'wc_paytpv' ),
-					'label' => __( 'Enable PayTpv gateway', 'wc_paytpv' ),
+					'label' => __( 'Enable PAYCOMET gateway', 'wc_paytpv' ),
 					'type' => 'checkbox',
 					'description' => '',
 					'default' => 'no'
@@ -255,7 +252,7 @@
 					'title' => __( 'Title', 'wc_paytpv' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
-					'default' => __( 'Credit Card (by PayTpv)', 'wc_paytpv' )
+					'default' => __( 'Credit Card (by PAYCOMET)', 'wc_paytpv' )
 				),
 				'description' => array(
 					'title' => __( 'Description', 'wc_paytpv' ),
@@ -263,15 +260,6 @@
 					'class' => 'description',
 					'description' => __( 'This controls the description which the user sees during checkout.', 'wc_paytpv' ),
 					'default' => __( 'Pay using your credit card in a secure way', 'wc_paytpv' ),
-				),
-				'environment' => array(
-					'title' => __( 'Environment', 'wc_paytpv' ),
-					'type' => 'select',
-					'description' => __( 'Try PayTPV module without the need of an associate PayTPV account. Terminal number (1,2,3, ... One for each currency) Password: paytpvtest Test Cards: 5325298401138208 / 5540568785541245/5407696658785988 Expiration Date: Month: 5 / Year: 2020CVC2: 123 / 3DSecure: 1234', 'wc_paytpv' ),
-					'options' => array(
-						0 => __( 'Live Mode', 'wc_paytpv' ),
-						1 => __( 'Test Mode', 'wc_paytpv' )
-					)
 				),
 				'clientcode' => array(
 					'title' => __( 'Client code', 'wc_paytpv' ),
@@ -400,7 +388,7 @@
 
 		
 		/**
-		 * Check for PayTpv IPN Response
+		 * Check for PAYCOMET IPN Response
 		 * */
 		function check_paytpv_resquest() {
 
@@ -416,16 +404,16 @@
 				}catch (exception $e){}
 			}
 
-			if ( $_REQUEST[ 'tpvLstr' ] == 'pay' && $order->status != 'completed' ) { //PAGO CON TARJETA GUARDADA
+			if ( $_REQUEST[ 'tpvLstr' ] == 'pay' && $order->get_status() != 'completed' ) { //PAGO CON TARJETA GUARDADA
 
 				$card = $_POST[ 'card' ];
-				$saved_card = PayTPV::savedCard($order->user_id,$card);
+				$saved_card = PayTPV::savedCard($order->get_user_id(),$card);
 
 				// Verificar contraseña usuario.
-				if ($this->commerce_password && !$this->validPassword($order->user_id,$_POST['commerce_password'])){
-					 if (!$this->validPassword($order->user_id,$_POST['commerce_password'])){
+				if ($this->commerce_password && !$this->validPassword($order->get_user_id(),$_POST['commerce_password'])){
+					 if (!$this->validPassword($order->get_user_id(),$_POST['commerce_password'])){
 
-			        	$url = add_query_arg( 'order', $order->id, add_query_arg( 'key', $order->order_key, get_permalink( woocommerce_get_page_id( 'pay' ) ) ) );
+			        	$url = add_query_arg( 'order', $order->get_id(), add_query_arg( 'key', $order->get_order_key(), get_permalink( wc_get_page_id( 'pay' ) ) ) );
 			        	
 
 			        	if ( function_exists( 'wc_add_notice' ) ) {
@@ -448,7 +436,9 @@
 				$currency_iso_code = $arrTerminalData["currency_iso_code"];
 				$term = $arrTerminalData["term"];
 				$pass = $arrTerminalData["pass"];
-				$paytpv_order_ref = $order->id;
+				$paytpv_order_ref = $order->get_id();
+
+				$MERCHANT_DATA = $this->getMerchantData($order);
 
 				$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,$card,$saved_card["paytpv_iduser"])?1:0;
 				
@@ -458,10 +448,10 @@
 					$URLOK = $this->get_return_url( $order );
 					$URLKO = $order->get_cancel_order_url_raw();
 
-					$OPERATION = "109"; //exec_purchase_token
+					$OPERATION = "109"; 
 
-					$signature = md5($this->clientcode.$saved_card["paytpv_iduser"].$saved_card["paytpv_tokenuser"].$term.$OPERATION.$paytpv_order_ref.$importe.$currency_iso_code.md5($pass));
-			
+					$signature = hash('sha512',$this->clientcode.$saved_card["paytpv_iduser"].$saved_card["paytpv_tokenuser"].$term.$OPERATION.$paytpv_order_ref.$importe.$currency_iso_code.md5($pass));
+					
 					$fields = array
 						(
 							'MERCHANT_MERCHANTCODE' => $this->clientcode,
@@ -478,10 +468,15 @@
 							'URLOK' => $URLOK,
 							'URLKO' => $URLKO
 						);
-						
-					$query = http_build_query($fields);
 
-					$salida = $this->getIframeUrl($secure_pay) . $query;
+					if ($MERCHANT_DATA!=null)           $fields["MERCHANT_DATA"] = $MERCHANT_DATA;
+					
+					$query = http_build_query($fields);
+					$vhash = hash('sha512', md5($query.md5($pass)));
+				
+					$salida = $this->getIframeUrl($secure_pay) . $query. "&VHASH=".$vhash;
+
+					
 
 					header('Location: '.$salida);
 					exit;
@@ -489,31 +484,22 @@
  
 				// PAGO NO SEGURO --------------------------------------------------------------------------
 
-			    // Test Mode
-				if ($this->environment==1){
-					$charge['DS_RESPONSE'] =1;
-					$order->add_order_note( __( 'PayTpv payment completed', 'woocommerce' ) );
-					$_REQUEST[ 'AuthCode' ] = 'Test_mode';
-					$order->payment_complete($_REQUEST[ 'AuthCode' ]);
-					update_post_meta( ( int ) $order->id, 'PayTPV_Referencia', __('Test Mode. Not Real Payment', 'wc_paytpv' ) );
-
-
-				}else{
-					$client = $this->get_client();
-					$charge = $client->execute_purchase( $order,$saved_card["paytpv_iduser"],$saved_card["paytpv_tokenuser"],$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref);
-				}
-
+			    $client = $this->get_client();
+				//$charge = $client->execute_purchase( $order,$saved_card["paytpv_iduser"],$saved_card["paytpv_tokenuser"],$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','',$MERCHANT_DATA);
+				$charge = $client->execute_purchase( $order,$saved_card["paytpv_iduser"],$saved_card["paytpv_tokenuser"],$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
+				
+				
 				if ( ( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
 					
 					// Se procesa en la notificacion
 					/*
-					$order->add_order_note( __( 'PayTpv payment completed', 'woocommerce' ) );
+					$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
 					$order->payment_complete($charge[ 'DS_MERCHANT_AUTHCODE' ]);
 					update_post_meta( ( int ) $order->id, 'PayTPV_Referencia', $charge[ 'DS_MERCHANT_ORDER' ]);
 					*/
 
-					update_post_meta( ( int ) $order->id, 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-					update_post_meta( ( int ) $order->id, 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
 
 					$url = $this->get_return_url( $order );
 				}else{
@@ -531,33 +517,25 @@
 					// add_User
 					case 107:
 
-
-
 						$terminal = $this->paytpv_terminals[0];
 						$term = $terminal["term"];
 						$pass = $terminal["pass"];
 
 						$user_id = $_POST["Order"];
 						$DateTime = (isset($_POST[ 'DateTime']))?$_POST[ 'DateTime']:"";
-						$Signature = (isset($_POST[ 'Signature']))?$_POST[ 'Signature']:"";
+						$sign = (isset($_POST[ 'NotificationHash']))?$_POST[ 'NotificationHash']:"";
 
-						$SIGNATURE = md5($this->clientcode . $term . $_POST["TransactionType"] . $_POST[ 'Order' ] . $DateTime . md5($pass));
+						$localSign = hash('sha512',$this->clientcode . $term . $_POST["TransactionType"] . $_POST[ 'Order' ] . $DateTime . md5($pass));
 
-						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($Signature == $SIGNATURE || $this->environment==1)) {
+						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
+							
 							if (isset($_REQUEST[ 'IdUser' ])){
 								// Save User Card
 								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
 							}
-						}
+						}		
 
-						// Modo Test 
-						if ($this->environment==1){
-							$res["urlok"] = wc_get_page_permalink( 'myaccount' );
-							print json_encode($res);
-							exit;
-						}
-
-						print "Notificacion Procesada";
+						print "PAYCOMET OK";
 						exit;
 
 					break;
@@ -580,15 +558,15 @@
 								$currency_iso_code;
 
 						
-						$SIGNATURE = md5( $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
-						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK' && ($_REQUEST[ 'ExtendedSignature' ] == $SIGNATURE || $this->environment==1)) {
-
+						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
+						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK' && ($_REQUEST[ 'NotificationHash' ] == $localSign)) {
+							
 							if (isset($_REQUEST[ 'IdUser' ])){
 
-								$save_card = get_post_meta( ( int ) $order->id, 'paytpv_savecard', true );
+								$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
 								if ($save_card!=="0"){
 									// Save User Card
-									$result = $this->saveCard($order, $order->user_id, $_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
+									$result = $this->saveCard($order, $order->get_user_id(), $_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
 									$paytpv_iduser = $result["paytpv_iduser"];
 									$paytpv_tokenuser = $result["paytpv_tokenuser"];
 								}else{
@@ -596,38 +574,33 @@
 									$paytpv_tokenuser = $_REQUEST[ 'TokenUser' ];
 								}
 
-								update_post_meta( ( int ) $order->id, 'PayTPV_IdUser', $paytpv_iduser );
-								update_post_meta( ( int ) $order->id, 'PayTPV_TokenUser', $paytpv_tokenuser );
+								update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $paytpv_iduser );
+								update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $paytpv_tokenuser );
 								
 							}
 
-							$order->add_order_note( __( 'PayTpv payment completed', 'woocommerce' ) );
+							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
 							$order->payment_complete($_REQUEST[ 'AuthCode' ]);
 
-							update_post_meta( ( int ) $order->id, 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+							update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
 
-							// Modo Test 
-							if ($this->environment==1){
-								$url = $this->get_return_url( $order );
-								$res["urlok"] = $url;
-								print json_encode($res);
-								exit;
-							}
-							print "Notificacion Procesada";
+							print "PAYCOMET WC OK";
+							exit;
 						}else{
-							print "Notificacion NO Procesada";
+							print "PAYCOMET WC KO";
+							exit;
 						}
 
 					break;
 				}
-				print "Error";
+				print "PAYCOMET WC ERROR";
 				exit;
 			}
 
 			// Save Card in execute_purchase
 			if ( $_REQUEST[ 'tpvLstr' ] == 'savecard' ) {//NOTIFICACIÓN
 
-				update_post_meta( ( int ) $order->id, 'paytpv_savecard', $_POST["paytpv_agree"] );
+				update_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', $_POST["paytpv_agree"] );
 				exit;
 			}
 
@@ -653,53 +626,9 @@
 				$res["resp"] = 0;
 				print json_encode($res);
 				exit;
-			}
+			}						
 
-			// Load Test Mode iframe Payment
-			if ( $_REQUEST[ 'tpvLstr' ] == 'testmode' ) {//NOTIFICACIÓN
-
-				$dsecure = (isset($_REQUEST["dsecure"]))?$_REQUEST["dsecure"]:"";
-				if ($dsecure==1){
-					print wc_get_template( 'payment_3ds_test.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
-				}else{
-					print wc_get_template( 'payment_test_mode.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
-				}
-				exit;
-			}
-
-			// Check Test Mode Card
-			if ( $_REQUEST[ 'tpvLstr' ] == 'checkcard' ) {//NOTIFICACIÓN
-				
-				// add_user
-				if ($_POST['TransactionType']==107){
-					$secure_pay = 0;
-				}else{
-					// Obtenemos el terminal para el pedido
-					$arrTerminalData = $this->TerminalCurrency($order);	
-					$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,0,0)?1:0;
-				}
-
-				$res["dsecure"] = $secure_pay;
-				if ($secure_pay==1) sleep(2);
-
-				// Test Mode
-				$res["checked"] = 0;
-
-				$arrTestCard = array(5325298401138208,5540568785541245,5407696658785988);
-
-				$mm = 5;
-				$yy = 20;
-				$merchan_cvc2 = 123;
-
-				if (in_array($_POST["merchan_pan"],$arrTestCard) && $_POST["mm"]==$mm && $_POST["yy"]==$yy && $_POST["merchan_cvc2"]==$merchan_cvc2)
-					$res["checked"] = 1;
-
-				
-				print json_encode($res);
-				exit;
-			}
-
-			print "Error Notificacion";
+			print "PAYCOMET WC ERROR 2";
 			exit;
 			
 		}
@@ -717,7 +646,7 @@
 		}
 
 		/**
-		 * Get PayTpv language code
+		 * Get PAYCOMET language code
 		 * */
 		function _getLanguange() {
 			$lng = substr( get_bloginfo( 'language' ), 0, 2 );
@@ -741,13 +670,305 @@
 		}
 
 		/**
-		 * Get PayTpv Args for passing to PP
+		 * Get PAYCOMET Args for passing to PP
 		 * */
 		function get_paytpv_args( $order ) {
 			$paytpv_req_args = array( );
 			$paytpv_args = array( );
 			$paytpv_args = $this->get_paytpv_bankstore_args( $order );
 			return array_merge( $paytpv_args, $paytpv_req_args );
+		}
+
+		public function isoCodeToNumber($code) 
+		{
+			try {
+				$arrCode = array("AF" => "004", "AX" => "248", "AL" => "008", "DE" => "276", "AD" => "020", "AO" => "024", "AI" => "660", "AQ" => "010", "AG" => "028", "SA" => "682", "DZ" => "012", "AR" => "032", "AM" => "051", "AW" => "533", "AU" => "036", "AT" => "040", "AZ" => "031", "BS" => "044", "BD" => "050", "BB" => "052", "BH" => "048", "BE" => "056", "BZ" => "084", "BJ" => "204", "BM" => "060", "BY" => "112", "BO" => "068", "BQ" => "535", "BA" => "070", "BW" => "072", "BR" => "076", "BN" => "096", "BG" => "100", "BF" => "854", "BI" => "108", "BT" => "064", "CV" => "132", "KH" => "116", "CM" => "120", "CA" => "124", "QA" => "634", "TD" => "148", "CL" => "52", "CN" => "156", "CY" => "196", "CO" => "170", "KM" => "174", "KP" => "408", "KR" => "410", "CI" => "384", "CR" => "188", "HR" => "191", "CU" => "192", "CW" => "531", "DK" => "208", "DM" => "212", "EC" => "218", "EG" => "818", "SV" => "222", "AE" => "784", "ER" => "232", "SK" => "703", "SI" => "705", "ES" => "724", "US" => "840", "EE" => "233", "ET" => "231", "PH" => "608", "FI" => "246", "FJ" => "242", "FR" => "250", "GA" => "266", "GM" => "270", "GE" => "268", "GH" => "288", "GI" => "292", "GD" => "308", "GR" => "300", "GL" => "304", "GP" => "312", "GU" => "316", "GT" => "320", "GF" => "254", "GG" => "831", "GN" => "324", "GW" => "624", "GQ" => "226", "GY" => "328", "HT" => "332", "HN" => "340", "HK" => "344", "HU" => "348", "IN" => "356", "ID" => "360", "IQ" => "368", "IR" => "364", "IE" => "372", "BV" => "074", "IM" => "833", "CX" => "162", "IS" => "352", "KY" => "136", "CC" => "166", "CK" => "184", "FO" => "234", "GS" => "239", "HM" => "334", "FK" => "238", "MP" => "580", "MH" => "584", "PN" => "612", "SB" => "090", "TC" => "796", "UM" => "581", "VG" => "092", "VI" => "850", "IL" => "376", "IT" => "380", "JM" => "388", "JP" => "392", "JE" => "832", "JO" => "400", "KZ" => "398", "KE" => "404", "KG" => "417", "KI" => "296", "KW" => "414", "LA" => "418", "LS" => "426", "LV" => "428", "LB" => "422", "LR" => "430", "LY" => "434", "LI" => "438", "LT" => "440", "LU" => "442", "MO" => "446", "MK" => "807", "MG" => "450", "MY" => "458", "MW" => "454", "MV" => "462", "ML" => "466", "MT" => "470", "MA" => "504", "MQ" => "474", "MU" => "480", "MR" => "478", "YT" => "175", "MX" => "484", "FM" => "583", "MD" => "498", "MC" => "492", "MN" => "496", "ME" => "499", "MS" => "500", "MZ" => "508", "MM" => "104", "NA" => "516", "NR" => "520", "NP" => "524", "NI" => "558", "NE" => "562", "NG" => "566", "NU" => "570", "NF" => "574", "NO" => "578", "NC" => "540", "NZ" => "554", "OM" => "512", "NL" => "528", "PK" => "586", "PW" => "585", "PS" => "275", "PA" => "591", "PG" => "598", "PY" => "600", "PE" => "604", "PF" => "258", "PL" => "616", "PT" => "620", "PR" => "630", "GB" => "826", "EH" => "732", "CF" => "140", "CZ" => "203", "CG" => "178", "CD" => "180", "DO" => "214", "RE" => "638", "RW" => "646", "RO" => "642", "RU" => "643", "WS" => "882", "AS" => "016", "BL" => "652", "KN" => "659", "SM" => "674", "MF" => "663", "PM" => "666", "VC" => "670", "SH" => "654", "LC" => "662", "ST" => "678", "SN" => "686", "RS" => "688", "SC" => "690", "SL" => "694", "SG" => "702", "SX" => "534", "SY" => "760", "SO" => "706", "LK" => "144", "SZ" => "748", "ZA" => "710", "SD" => "729", "SS" => "728", "SE" => "752", "CH" => "756", "SR" => "740", "SJ" => "744", "TH" => "764", "TW" => "158", "TZ" => "834", "TJ" => "762", "IO" => "086", "TF" => "260", "TL" => "626", "TG" => "768", "TK" => "772", "TO" => "776", "TT" => "780", "TN" => "788", "TM" => "795", "TR" => "792", "TV" => "798", "UA" => "804", "UG" => "800", "UY" => "858", "UZ" => "860", "VU" => "548", "VA" => "336", "VE" => "862", "VN" => "704", "WF" => "876", "YE" => "887", "DJ" => "262", "ZM" => "894", "ZW" => "716");
+				return $arrCode[$code];
+			} catch (exception $e) {}
+			
+			return "";
+		}
+		
+		public function isoCodePhonePrefix($code)
+		{
+			try {
+				$arrCode = array("AC" => "247", "AD" => "376", "AE" => "971", "AF" => "93","AG" => "268", "AI" => "264", "AL" => "355", "AM" => "374", "AN" => "599", "AO" => "244", "AR" => "54", "AS" => "684", "AT" => "43", "AU" => "61", "AW" => "297", "AX" => "358", "AZ" => "374", "AZ" => "994", "BA" => "387", "BB" => "246", "BD" => "880", "BE" => "32", "BF" => "226", "BG" => "359", "BH" => "973", "BI" => "257", "BJ" => "229", "BM" => "441", "BN" => "673", "BO" => "591", "BR" => "55", "BS" => "242", "BT" => "975", "BW" => "267", "BY" => "375", "BZ" => "501", "CA" => "1", "CC" => "61", "CD" => "243", "CF" => "236", "CG" => "242", "CH" => "41", "CI" => "225", "CK" => "682", "CL" => "56", "CM" => "237", "CN" => "86", "CO" => "57", "CR" => "506", "CS" => "381", "CU" => "53", "CV" => "238", "CX" => "61", "CY" => "392", "CY" => "357", "CZ" => "420", "DE" => "49", "DJ" => "253", "DK" => "45", "DM" => "767", "DO" => "809", "DZ" => "213", "EC" => "593", "EE" => "372", "EG" => "20", "EH" => "212", "ER" => "291", "ES" => "34", "ET" => "251", "FI" => "358", "FJ" => "679", "FK" => "500", "FM" => "691", "FO" => "298", "FR" => "33", "GA" => "241", "GB" => "44", "GD" => "473", "GE" => "995", "GF" => "594", "GG" => "44", "GH" => "233", "GI" => "350", "GL" => "299", "GM" => "220", "GN" => "224", "GP" => "590", "GQ" => "240", "GR" => "30", "GT" => "502", "GU" => "671", "GW" => "245", "GY" => "592", "HK" => "852", "HN" => "504", "HR" => "385", "HT" => "509", "HU" => "36", "ID" => "62", "IE" => "353", "IL" => "972", "IM" => "44", "IN" => "91", "IO" => "246", "IQ" => "964", "IR" => "98", "IS" => "354", "IT" => "39", "JE" => "44", "JM" => "876", "JO" => "962", "JP" => "81", "KE" => "254", "KG" => "996", "KH" => "855", "KI" => "686", "KM" => "269", "KN" => "869", "KP" => "850", "KR" => "82", "KW" => "965", "KY" => "345", "KZ" => "7", "LA" => "856", "LB" => "961", "LC" => "758", "LI" => "423", "LK" => "94", "LR" => "231", "LS" => "266", "LT" => "370", "LU" => "352", "LV" => "371", "LY" => "218", "MA" => "212", "MC" => "377", "MD"  > "533", "MD" => "373", "ME" => "382", "MG" => "261", "MH" => "692", "MK" => "389", "ML" => "223", "MM" => "95", "MN" => "976", "MO" => "853", "MP" => "670", "MQ" => "596", "MR" => "222", "MS" => "664", "MT" => "356", "MU" => "230", "MV" => "960", "MW" => "265", "MX" => "52", "MY" => "60", "MZ" => "258", "NA" => "264", "NC" => "687", "NE" => "227", "NF" => "672", "NG" => "234", "NI" => "505", "NL" => "31", "NO" => "47", "NP" => "977", "NR" => "674", "NU" => "683", "NZ" => "64", "OM" => "968", "PA" => "507", "PE" => "51", "PF" => "689", "PG" => "675", "PH" => "63", "PK" => "92", "PL" => "48", "PM" => "508", "PR" => "787", "PS" => "970", "PT" => "351", "PW" => "680", "PY" => "595", "QA" => "974", "RE" => "262", "RO" => "40", "RS" => "381", "RU" => "7", "RW" => "250", "SA" => "966", "SB" => "677", "SC" => "248", "SD" => "249", "SE" => "46", "SG" => "65", "SH" => "290", "SI" => "386", "SJ" => "47", "SK" => "421", "SL" => "232", "SM" => "378", "SN" => "221", "SO" => "252", "SO" => "252", "SR"  > "597", "ST" => "239", "SV" => "503", "SY" => "963", "SZ" => "268", "TA" => "290", "TC" => "649", "TD" => "235", "TG" => "228", "TH" => "66", "TJ" => "992", "TK" =>  "690", "TL" => "670", "TM" => "993", "TN" => "216", "TO" => "676", "TR" => "90", "TT" => "868", "TV" => "688", "TW" => "886", "TZ" => "255", "UA" => "380", "UG" =>  "256", "US" => "1", "UY" => "598", "UZ" => "998", "VA" => "379", "VC" => "784", "VE" => "58", "VG" => "284", "VI" => "340", "VN" => "84", "VU" => "678", "WF" => "681", "WS" => "685", "YE" => "967", "YT" => "262", "ZA" => "27","ZM" => "260", "ZW" => "263");
+				return $arrCode[$code];
+			} catch (exception $e) {}
+			return "";
+		}
+
+		public function numPurchaseCustomer($id_customer,$valid=1,$interval=1,$intervalType="DAY") {
+			global $wpdb;
+			
+			
+
+			$table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
+
+			$date_now = new DateTime("now");
+			$date_now = $date_now->format("Y-m-d h:m:s");
+			
+			if ($valid==1) {
+				$post_status = implode("','", array('wc-processing', 'wc-completed') );
+			} else {
+				$post_status = implode("','", array('wc-processing', 'wc-completed', 'wc-pending') );
+			}
+
+			$result = $wpdb->get_row( "SELECT count(*) as num_orders FROM $wpdb->posts 
+						WHERE post_type = 'shop_order'
+						AND post_author = " . $id_customer . " 
+						AND post_status IN ('{$post_status}')
+						AND post_date > '".$date_now . "' -interval " . $interval . " " . $intervalType);
+
+			
+		
+			return $result->num_orders;
+			
+		}
+
+		public function firstAddressDelivery($id_customer,$order) {
+			global $wpdb;
+			
+			$date_now = new DateTime("now");
+			$date_now = $date_now->format("Y-m-d h:m:s");
+			
+			$post_status = implode("','", array('wc-processing', 'wc-completed') );
+			
+
+			$result = $wpdb->get_row( "SELECT * FROM " . $wpdb->posts . " p INNER JOIN " . $wpdb->postmeta . " pm on p.ID = pm.post_id 
+						WHERE p.post_type = 'shop_order'
+						AND p.post_author = " . $id_customer . " 
+						AND p.post_status IN ('{$post_status}')
+						AND p.ID < " . $order->get_id() . "
+						AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
+						order by p.post_date asc limit 1");
+			if ($result) {
+				return $result->post_date;
+			} else {
+				return "";
+			}
+			
+		}
+
+		public function acctInfo($order) {
+
+			$acctInfoData = array();
+			$date_now = new DateTime("now");
+
+			$customer = wp_get_current_user();
+	
+			$isGuest = !is_user_logged_in();
+			if ($isGuest){
+				$acctInfoData["chAccAgeInd"] = "01";
+				
+			} else {
+							
+				$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
+				
+				$diff = $date_now->diff($date_customer);
+				$dias = $diff->days;
+				
+				if ($dias==0) {
+					$acctInfoData["chAccAgeInd"] = "02";
+				} else if ($dias < 30) {
+					$acctInfoData["chAccAgeInd"] = "03";
+				} else if ($dias < 60) {
+					$acctInfoData["chAccAgeInd"] = "04";
+				} else {
+					$acctInfoData["chAccAgeInd"] = "05";
+				}
+				
+								
+				$acctInfoData["chAccChange"] = date('Ymd', get_user_meta( get_current_user_id(), 'last_update', true ));
+
+				$date_customer_upd = new DateTime();
+				$date_customer_upd->setTimestamp(get_user_meta( get_current_user_id(), 'last_update', true ));
+
+				$diff = $date_now->diff($date_customer_upd);
+				$dias_upd = $diff->days;
+
+				if ($dias_upd==0) {
+					$acctInfoData["chAccChangeInd"] = "01";
+				} else if ($dias_upd < 30) {
+					$acctInfoData["chAccChangeInd"] = "02";
+				} else if ($dias_upd < 60) {
+					$acctInfoData["chAccChangeInd"] = "03";
+				} else {
+					$acctInfoData["chAccChangeInd"] = "04";
+				}
+
+				$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
+							
+				$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(),1,6,"MONTH");
+				
+				$acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer(get_current_user_id(),0,1,"DAY");				
+				$acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer(get_current_user_id(),0,1,"YEAR");
+
+				if ( ($customer->first_name != $order->get_billing_first_name()) ||
+				($customer->last_name != $order->get_billing_last_name())) { 
+					$acctInfoData["shipNameIndicator"] = "02";
+				} else {
+					$acctInfoData["shipNameIndicator"] = "01";
+				}
+				
+			}
+			
+			$firstAddressDelivery = $this->firstAddressDelivery(get_current_user_id(),$order);
+			if ($firstAddressDelivery!="") {
+				$acctInfoData["shipAddressUsage"] = date("Ymd",strtotime($firstAddressDelivery));
+
+				$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
+				$diff = $date_now->diff($date_firstAddressDelivery);
+				$dias_firstAddressDelivery = $diff->days;
+				if ($dias_firstAddressDelivery==0) {
+					$acctInfoData["shipAddressUsageInd"] = "01";
+				} else if ($dias_upd < 30) {
+					$acctInfoData["shipAddressUsageInd"] = "02";
+				} else if ($dias_upd < 60) {
+					$acctInfoData["shipAddressUsageInd"] = "03";
+				} else {
+					$acctInfoData["shipAddressUsageInd"] = "04";
+				}
+			}
+			
+			$acctInfoData["suspiciousAccActivity"] = "01";
+	
+			return $acctInfoData;
+		}
+
+
+		public function threeDSRequestorAuthenticationInfo() {
+			
+			$logged = is_user_logged_in();
+	
+			$threeDSRequestorAuthenticationInfo = array();
+			$threeDSRequestorAuthenticationInfo["threeDSReqAuthData"] = "";
+			$threeDSRequestorAuthenticationInfo["threeDSReqAuthMethod"] = ($logged)?"02":"01";
+	
+			return $threeDSRequestorAuthenticationInfo;
+		}
+
+		public function getEMV3DS($order) {
+
+			$Merchant_EMV3DS = array();			
+
+			$Merchant_EMV3DS["customer"]["id"] = get_current_user_id();
+			$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name();
+			$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name();
+			$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email();
+
+			// Billing info
+			$billing = $order->get_address('billing'); 
+			if ($billing) {
+					
+				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city();								
+				$Merchant_EMV3DS["billing"]["billAddrCountry"] = $order->get_billing_country();						
+				if ($Merchant_EMV3DS["billing"]["billAddrCountry"]!="") {
+					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["billing"]["billAddrCountry"]);
+				}
+				$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1();						
+				$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2();						
+															
+				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode();								
+
+				$Merchant_EMV3DS["billing"]["billAddrState"] = $order->get_billing_state();
+
+				$billAddState = explode("-",$order->get_billing_state());
+				$billAddState = end($billAddState);
+				$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
+
+				
+				if ($order->get_billing_phone()!="") {
+					if ($order->get_billing_country()!="" && $this->isoCodePhonePrefix($order->get_billing_country())!="") {
+						$arrDatosHomePhone["cc"] = $this->isoCodePhonePrefix($order->get_billing_country());
+						$arrDatosHomePhone["subscriber"] = $order->get_billing_phone();
+					
+						$Merchant_EMV3DS["customer"]["homePhone"] = $arrDatosHomePhone;							
+					}
+				}
+			}
+			
+			$shipping = $order->get_address('shipping'); 
+			if ($shipping) {
+			
+				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city();								
+				$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $order->get_shipping_country();		
+				if ($Merchant_EMV3DS["shipping"]["shipAddrCountry"]!="") {
+					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["shipping"]["shipAddrCountry"]);
+				}
+				$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1();							
+				$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2();						
+				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode();						
+				$Merchant_EMV3DS["shipping"]["shipAddrState"] = $order->get_shipping_state();	
+				
+			}
+			
+			// acctInfo
+			$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
+			
+			
+			// threeDSRequestorAuthenticationInfo
+			$Merchant_EMV3DS["threeDSRequestorAuthenticationInfo"] = $this->threeDSRequestorAuthenticationInfo(); 
+
+			// AddrMatch	
+			$Merchant_EMV3DS["addrMatch"] = ( ($order->get_shipping_city() == $order->get_billing_city()) &&
+											  ($order->get_shipping_country() == $order->get_billing_country()) &&
+											  ($order->get_shipping_address_1() == $order->get_billing_address_1()) &&
+											  ($order->get_shipping_address_2() == $order->get_billing_address_2()) )?"Y":"N";
+
+			$Merchant_EMV3DS["challengeWindowSize"] = 05; 
+				
+			return $Merchant_EMV3DS;
+
+		}
+
+		public function getShoppingCart($order) {
+
+			$shoppingCartData = array();
+
+			// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
+			foreach( $order->get_items() as $item_id => $item ){
+
+				
+				//Get the product ID
+				$product_id = $item->get_product_id();
+
+				//Get the WC_Product object
+				$product = $item->get_product();
+
+				$terms = get_the_terms( $product_id, 'product_cat' );
+				// echo var_dump($terms);
+				$arrCategories = array();
+				foreach ( $terms as $term ) {
+					// Categories by slug
+					$arrCategories[] = $term->slug;
+				}
+			
+				$shoppingCartData[$item_id]["sku"] = $product->get_sku();
+				$shoppingCartData[$item_id]["quantity"] = $item->get_quantity();
+				
+				$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price()*100, 0, '.', '');
+
+				
+				$shoppingCartData[$item_id]["name"] = $item->get_name();
+
+				$shoppingCartData[$item_id]["category"] = implode("|",$arrCategories);
+			}	
+
+			return array("shoppingCart"=>array_values($shoppingCartData));
+
+		}
+
+
+		public function getMerchantData($order) {
+			return null; // De momento no hacemos nada
+
+			$MERCHANT_EMV3DS = $this->getEMV3DS($order);
+			$SHOPPING_CART = $this->getShoppingCart($order);
+
+			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);			
+
+			return urlencode(base64_encode(json_encode($datos)));
 		}
 
 		function get_paytpv_bankstore_args( $order ) {
@@ -764,14 +985,17 @@
 
 			$OPERATION = '1';
 			//$URLOK		= add_query_arg('tpvLstr','notify',add_query_arg( 'wc-api', 'woocommerce_'. $this->id, home_url( '/' ) ) );
-			$MERCHANT_ORDER = str_pad( $order->id, 8, "0", STR_PAD_LEFT );
+			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
 			$URLKO = $order->get_cancel_order_url_raw();
 			$paytpv_req_args = array( );
 			$mensaje = $this->clientcode . $term . $OPERATION . $MERCHANT_ORDER . $MERCHANT_AMOUNT . $MERCHANT_CURRENCY;
-			$MERCHANT_MERCHANTSIGNATURE = md5( $mensaje . md5( $pass ) );
+			$MERCHANT_MERCHANTSIGNATURE = hash ('sha512', $mensaje . md5( $pass ) );
+
+			
+			$MERCHANT_DATA = $this->getMerchantData($order);
 
 			$paytpv_args = array(
 				'MERCHANT_MERCHANTCODE' => $this->clientcode,
@@ -784,8 +1008,17 @@
 				'MERCHANT_CURRENCY' => $MERCHANT_CURRENCY,
 				'URLOK' => $URLOK,
 				'URLKO' => $URLKO,
-				'3DSECURE' => $secure_pay
+				'3DSECURE' => $secure_pay,
+				''
 			);
+
+			if ($MERCHANT_DATA!=null)           $paytpv_args["MERCHANT_DATA"] = $MERCHANT_DATA;
+
+			$query = http_build_query($paytpv_args);
+			$vhash = hash('sha512', md5($query.md5($pass)));
+
+			$paytpv_args["VHASH"] = $vhash;
+
 			return array_merge( $paytpv_args, $paytpv_req_args );
 		}
 
@@ -796,7 +1029,7 @@
 			$order = new WC_Order( $order_id );
 			return array(
 				'result' => 'success',
-				'redirect' => add_query_arg( 'order', $order->id, add_query_arg( 'key', $order->order_key, get_permalink( woocommerce_get_page_id( 'pay' ) ) ) )
+				'redirect' => add_query_arg( 'order', $order->get_id(), add_query_arg( 'key', $order->get_order_key(), get_permalink( wc_get_page_id( 'pay' ) ) ) )
 			);
 		}	
 
@@ -830,7 +1063,7 @@
 	          }
 
 	         // Si esta definido como que la primera compra es Segura y es la primera compra aunque este tokenizada
-	        if ($terminales==2 && $tdfirst && $card>0 && $this->isFirstPurchaseToken($order->user_id,$paytpv_iduser)){
+	        if ($terminales==2 && $tdfirst && $card>0 && $this->isFirstPurchaseToken($order->get_user_id(),$paytpv_iduser)){
 	            return true;
 	        }
 	        
@@ -858,7 +1091,7 @@
 		 * return array data of order currency
 		 */
 		public function TerminalCurrency($order){
-			$order_currency = $order->get_order_currency();
+			$order_currency = $order->get_currency();
 			// PENDIENTE: Aqui habría que buscar un terminal en la moneda del pedido
 			foreach ( $this->paytpv_terminals as $terminal){
 				if ($terminal["moneda"]==$order_currency)
@@ -897,9 +1130,6 @@
 		function receipt_page( $order_id ) {
 			echo '<p>' . __( 'Thanks for your order, please fill the data below to process the payment.', 'wc_paytpv' ) . '</p>';
 
-			echo '<script type="text/javascript" src="'.PAYTPV_PLUGIN_URL . 'js/paytpv.js"></script>';
-
-
 			echo $this->savedCardsHtml($order_id);
 			
 		}
@@ -910,7 +1140,7 @@
 		 */
 		function savedCardsHtml($order_id){
 			$order = new WC_Order( $order_id );
-			$saved_cards = Paytpv::savedCards($order->user_id);
+			$saved_cards = Paytpv::savedCards($order->get_user_id());
 			$store_card = (sizeof($saved_cards)==0)?"":"";
 
 			// Tarjetas almacenadas
@@ -951,7 +1181,7 @@
 
 
 			// Comprobacion almacenar tarjeta
-			if ($order->user_id>0){
+			if ($order->get_user_id()>0){
 				print '
 				<div id="storingStep" class="box" style="display:'.$store_card.'">
 	                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
@@ -971,11 +1201,7 @@
 		}
 
 		public function getIframeUrl($dsecure){
-			if ($this->environment==1){
-				return add_query_arg(array("tpvLstr"=>"testmode","dsecure"=> $dsecure,"wc-api"=> 'woocommerce_' . $this->id)) . "&";
-			}else{
-				return $this->iframeurl . "?";
-			}
+			return $this->iframeurl . "?";			
 		}
 
 
@@ -1011,28 +1237,23 @@
 		public function saveCard($order,$user_id,$paytpv_iduser,$paytpv_tokenuser,$TransactionType){
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
-				// Live Mode
-				if ($this->environment!=1){
-					if ($order!=null){
-						// Obtenemos el terminal para el pedido
-						$arrTerminalData = $this->TerminalCurrency($order);
-					}else{
-						$arrTerminalData = $this->paytpv_terminals[0];
-					}
-					
-					$term = $arrTerminalData["term"];
-					$pass = $arrTerminalData["pass"];
-					
-
-					$client = $this->get_client();
-					$result = $client->info_user( $paytpv_iduser, $paytpv_tokenuser, $term, $pass);
-				// Test Mode
+				
+				if ($order!=null){
+					// Obtenemos el terminal para el pedido
+					$arrTerminalData = $this->TerminalCurrency($order);
 				}else{
-					$paytpv_cc = $_POST["merchan_pan"];
-					$result = array('DS_MERCHANT_PAN'=>$paytpv_cc,'DS_CARD_BRAND'=>'MASTERCARD');
+					$arrTerminalData = $this->paytpv_terminals[0];
 				}
+				
+				$term = $arrTerminalData["term"];
+				$pass = $arrTerminalData["pass"];
+				
 
-				return PayTPV::saveCard($this->environment,$user_id,$paytpv_iduser,$paytpv_tokenuser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
+				$client = $this->get_client();
+				$result = $client->info_user( $paytpv_iduser, $paytpv_tokenuser, $term, $pass);
+			
+
+				return PayTPV::saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
 
 			}else{
 				$result["paytpv_iduser"] = $paytpv_iduser;
@@ -1046,68 +1267,53 @@
 		 * Operaciones sucesivas
 		 * */
 		
-		function scheduled_subscription_payment( $amount_to_charge, $order, $product_id ) {
-
-
-			$this->write_log( 'scheduled_subscription_payment: ' . $amount_to_charge . '€ ' . $order->id );
-			$client = $this->get_client();
-			
-			// Obtenemos el numero de pago de la suscripcion
-			$subscription_key = WC_Subscriptions_Manager::get_subscription_key( $order->id, $product_id );
-			$num_pago = WC_Subscriptions_Manager::get_subscriptions_completed_payment_count( $subscription_key );
-			
-			$paytpv_order_ref = $order->id . "_" . $num_pago;
-			$importe =  number_format($amount_to_charge * 100, 0, '.', '');
-
-			// Obtenemos el terminal para el pedido
-			$arrTerminalData = $this->TerminalCurrency($order);
-			$currency_iso_code = $arrTerminalData["currency_iso_code"];
-			$term = $arrTerminalData["term"];
-			$pass = $arrTerminalData["pass"];
-			$payptv_iduser = get_post_meta( ( int ) $order->id, 'PayTPV_IdUser', true );
-			$payptv_tokenuser = get_post_meta( ( int ) $order->id, 'PayTPV_TokenUser', true );
+		function scheduled_subscription_payment( $amount_to_charge, $order ) {
 			
 
-			$result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref);
+			$subscriptions = wcs_get_subscriptions_for_renewal_order( $order );
+			$subscription  = array_pop( $subscriptions );
+			if ( false == $subscription->get_parent_id() ) { // There is no original order
+				$parent_order = null;
+			} else {
+				
+				$importe =  number_format($amount_to_charge * 100, 0, '.', '');
 
-			if ( ( int ) $result[ 'DS_RESPONSE' ] == 1 ) {
-				update_post_meta($order->id, 'PayTPV_Referencia', $result[ 'DS_MERCHANT_ORDER' ]);
-				update_post_meta($order->id, '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);	
+				// Obtenemos el terminal para el pedido
+				$arrTerminalData = $this->TerminalCurrency($order);
+				$currency_iso_code = $arrTerminalData["currency_iso_code"];
+				$term = $arrTerminalData["term"];
+				$pass = $arrTerminalData["pass"];
+				
+				$parent_order = $subscription->get_parent();
 
-				WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
+				$orders = $subscription->get_related_orders('ids','parent');
+				$num_orders = sizeof($orders);
+
+				$paytpv_order_ref = $order->get_id();
+				
+				$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
+				$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
+						
+				$MERCHANT_DATA = $this->getMerchantData($order);
+
+				$client = $this->get_client();
+				
+				// $result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'MIT','R',$MERCHANT_DATA);
+				$result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
+
+
+				if ( ( int ) $result[ 'DS_RESPONSE' ] == 1 ) {
+					update_post_meta($order->get_id(), 'PayTPV_Referencia', $result[ 'DS_MERCHANT_ORDER' ]);
+					update_post_meta($order->get_id(), '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);	
+					update_post_meta($order->get_id(), 'PayTPV_IdUser', $payptv_iduser);
+					update_post_meta($order->get_id(), 'PayTPV_TokenUser', $payptv_tokenuser);
+
+					WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
+				}
+
 			}
+
 		}
-
-		/*
-		function scheduled_subscription_payment( $amount_to_charge, $renewal_order ) {
-
-			print "Txerra";
-			exit;
-
-			$this->write_log( 'scheduled_subscription_payment: ' . $amount_to_charge . '€ ' . $renewal_order->id );
-			$client = $this->get_client();
-			
-			$paytpv_order_ref = $renewal_order->id;
-			$importe =  number_format($amount_to_charge * 100, 0, '.', '');
-
-			// Obtenemos el terminal para el pedido
-			$arrTerminalData = $this->TerminalCurrency($renewal_order);
-			$currency_iso_code = $arrTerminalData["currency_iso_code"];
-			$term = $arrTerminalData["term"];
-			$pass = $arrTerminalData["pass"];
-			$payptv_iduser = get_post_meta( ( int ) $renewal_order->id, 'PayTPV_IdUser', true );
-			$payptv_tokenuser = get_post_meta( ( int ) $renewal_order->id, 'PayTPV_TokenUser', true );
-			
-
-			$result = $client->execute_purchase( $renewal_order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref);
-
-			if ( ( int ) $result[ 'DS_RESPONSE' ] == 1 ) {
-				update_post_meta($order->id, 'PayTPV_Referencia', $result[ 'DS_MERCHANT_ORDER' ]);
-				update_post_meta($order->id, '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);
-				WC_Subscriptions_Manager::process_subscription_payments_on_order( $order );
-			}
-		}
-		*/
 
 		
 		function store_renewal_order_id( $order_meta_query, $original_order_id, $renewal_order_id, $new_order_role ) {
@@ -1115,6 +1321,7 @@
 				$order_meta_query .= " AND `meta_key` NOT LIKE 'PayTPV_IdUser' "
 						. " AND `meta_key` NOT LIKE 'PayTPV_TokenUser' "
 						. " AND `meta_key` NOT LIKE 'PayTPV_Referencia' ";
+
 			return $order_meta_query;
 		}
 
@@ -1124,19 +1331,10 @@
 		 * @return bool
 		 */
 		public function can_refund_order( $order ) {
-			return $order && $order->get_transaction_id() && get_post_meta( ( int ) $order->id, 'PayTPV_IdUser', true );
+			return $order && $order->get_transaction_id() && get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
 		}
 
-		/**
-		 * Is a test Order
-		 * @param  WC_Order $order
-		 * @return bool
-		 */
-		public function isTestOrder( $order ) {
-			$token = get_post_meta( ( int ) $order->id, 'PayTPV_TokenUser', true );
-			return ($token=="TESTTOKEN")?true:false;
-		}
-
+		
 		/**
 		 * Process a refund if supported
 		 * @param  int $order_id
@@ -1154,27 +1352,24 @@
 				return false;
 			}
 
-			if ( $this->isTestOrder( $order ) ) {
-				$result[ 'DS_RESPONSE' ]  = 1;
-				$result[ 'DS_MERCHANT_AUTHCODE'] = 'Test_mode';
-			}else{
-				$client = $this->get_client();
-				// Obtenemos el terminal para el pedido
-				$arrTerminalData = $this->TerminalCurrency($order);
-				$currency_iso_code = $arrTerminalData["currency_iso_code"];
-				$term = $arrTerminalData["term"];
-				$pass = $arrTerminalData["pass"];
+			
+			$client = $this->get_client();
+			// Obtenemos el terminal para el pedido
+			$arrTerminalData = $this->TerminalCurrency($order);
+			$currency_iso_code = $arrTerminalData["currency_iso_code"];
+			$term = $arrTerminalData["term"];
+			$pass = $arrTerminalData["pass"];
 
-				$importe = number_format($amount * 100, 0, '.', '');
+			$importe = number_format($amount * 100, 0, '.', '');
 
-				$paytpv_order_ref = get_post_meta( ( int ) $order->id, 'PayTPV_Referencia', true );
-				$payptv_iduser = get_post_meta( ( int ) $order->id, 'PayTPV_IdUser', true );
-				$payptv_tokenuser = get_post_meta( ( int ) $order->id, 'PayTPV_TokenUser', true );
-				$transaction_id = $order->get_transaction_id();
+			$paytpv_order_ref = get_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', true );
+			$payptv_iduser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
+			$payptv_tokenuser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', true );
+			$transaction_id = $order->get_transaction_id();
 
 
-				$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
-			}
+			$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
+			
 			if ( ( int ) $result[ 'DS_RESPONSE' ] != 1 ) {
 				$this->log( 'Refund Failed: ' . $result->get_error_message() );
 				return false;

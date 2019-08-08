@@ -28,7 +28,7 @@
 
 	<?php else : ?>
 
-		<p class="no_cards"><?php printf( __( 'You have no active cars.', 'wc_paytpv' ), '<a href="' . apply_filters( 'woocommerce_subscriptions_message_store_url', get_permalink( woocommerce_get_page_id( 'shop' ) ) ) . '">', '</a>' ); ?></p>
+		<p class="no_cards"><?php printf( __( 'You have no active cars.', 'wc_paytpv' ), '<a href="' . apply_filters( 'woocommerce_subscriptions_message_store_url', get_permalink( wc_get_page_id( 'shop' ) ) ) . '">', '</a>' ); ?></p>
 
 	<?php endif; ?>
 

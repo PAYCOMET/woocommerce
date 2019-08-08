@@ -1,9 +1,6 @@
 // Admin Plugin
 jQuery(function($) {
-    $("#woocommerce_paytpv_environment").on('change',function(){
-        checkenvironment();
-    })
-
+    
     $('#paytpv_terminals').on( 'click', 'a.add', function(){
         var size = $('#paytpv_terminals').find('tbody .account').size();
         var lasttr=$('.tblterminals tbody tr:first').clone();
@@ -55,18 +52,6 @@ jQuery(function($) {
         });
     });
    
-    
-
-    window.checkenvironment = function(){
-        if ($("#woocommerce_paytpv_environment").val()==1){
-            $(".clientcode").closest("tr").hide()
-            $("#woocommerce_paytpv_environment").closest("fieldset").find(".description").show()
-        }else{
-            $("#woocommerce_paytpv_environment").closest("fieldset").find(".description").hide()
-            $(".clientcode").closest("tr").show()
-            
-        }
-    }
 
     window.checkAllTerminales = function(){
         $( ".term" ).each(function() {
@@ -108,7 +93,6 @@ jQuery(function($) {
     }
 
 
-    checkenvironment();
     checkAllTerminales();
     checkaddTerminal();
 
