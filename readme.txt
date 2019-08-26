@@ -42,8 +42,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 4.0 =
-Cambio de marca a PAYCOMET
-Adaptación PSD2
+Cambio a PAYCOMET, calculo de firmas y depuración de código
 
 = 3.3 =
 Mejoras tokenizacion de tarjetas area de usuario
