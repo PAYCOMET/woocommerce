@@ -67,7 +67,7 @@
 			add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'save_terminals_details' ) );
+			//add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'save_terminals_details' ) );
 			add_action( 'woocommerce_api_woocommerce_' . $this->id, array( $this, 'check_' . $this->id . '_resquest' ) );
 			
 			add_action('admin_notices', array( $this, 'validate_paytpv' ));
@@ -77,6 +77,7 @@
 			add_filter( 'wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id' ), 10, 4 );
 
 		}
+		
 
 		/**
 		 * Loads the my-subscriptions.php template on the My Account page.
@@ -129,6 +130,7 @@
 		}
 		
 		public function validate_paytpv(){
+			print "sadkfjk";
 			if (empty($this->paytpv_terminals))
 		    	echo '<div class="error"><p>'.__('You must define at least one terminal', 'wc_paytpv' ).'</p></div>';
 		}
@@ -162,6 +164,105 @@
 		}
 
 
+		public function process_admin_options()
+        {
+            $settings = new WC_Admin_Settings();
+			$postData = $this->get_post_data();
+			
+			// Si se activa el Módulo se verifican los datos
+			if (isset($_REQUEST["woocommerce_paytpv_enabled"]) && $_REQUEST["woocommerce_paytpv_enabled"]==1) {
+				
+				// Validate required fields
+				if (empty($postData['woocommerce_paytpv_clientcode']) || 
+				$postData['term'][0] == "" ||
+				$postData['pass'][0] == ""
+				) {
+					$error = true;
+					$settings->add_error(__('ERROR: Unable to activate payment method.','wc_paytpv')  . " " . __('Please fill in required fields: Client Code, Terminal Number, Password.','wc_paytpv'));					
+				}
+				
+				// Validate info Paycomet
+				if (!$error) {				
+					$arrValidatePaycomet = $this->validatePaycomet($postData);
+					if ($arrValidatePaycomet["error"] != 0) {
+						$error = true;
+						$settings->add_error(__('ERROR: Unable to activate payment method.','wc_paytpv') . " " . $arrValidatePaycomet["error_txt"]);
+					}
+				}
+
+			}
+			
+			// Si hay error guardamos los datos pero no dejamos habilitar el método de pago			
+			if ($error) {
+				unset($_POST["woocommerce_paytpv_enabled"]);				
+			}
+			$this->save_terminals_details();
+            return parent::process_admin_options();
+		}
+	
+
+		private function validatePaycomet($postData)
+		{			
+			
+			$api = new PaytpvApi();		
+
+			$arrDatos = array();
+			$arrDatos["error"] = 0;
+			
+			// Validación de los datos en Paycomet
+			foreach (array_keys($postData["term"]) as $key) {
+				$term = ($postData['term'][$key] == '') ? "" : $postData['term'][$key];				
+
+				switch ($_POST['terminales'][$key]) {
+					case 0:  // Seguro
+						$terminales = "CES";
+						$terminales_txt = "Secure";						
+						break;
+					case 1: // No Seguro
+						$terminales = "NO-CES";
+						$terminales_txt = "Non-Secure";
+						
+						break;
+					case 2: // Ambos
+						$terminales = "BOTH";
+						$terminales_txt = "Both";
+						
+						break;
+				}
+				$resp = $api->validatePaycomet(
+					$postData['woocommerce_paytpv_clientcode'],
+					$term,
+					$postData['pass'][$key],
+					$terminales
+				);
+				
+				if ($resp["DS_RESPONSE"] != 1) {
+					$arrDatos["error"] = 1;
+					switch ($resp["DS_ERROR_ID"]) {
+						case 1121:  // No se encuentra el cliente
+						case 1130:  // No se encuentra el producto
+						case 1003:  // Credenciales inválidas
+						case 127:   // Parámetro no válido.
+							$arrDatos["error_txt"] = __('Check that the Client Code, Terminal and Password are correct','wc_paytpv');
+							break;
+						case 1337:  // Ruta de notificación no configurada
+							$arrDatos["error_txt"] = __('Notification URL is not defined in the product configuration of your account PAYCOMET account.','wc_paytpv');
+							break;
+						case 28:    // Curl
+						case 1338:  // Ruta de notificación no responde correctamente						
+							$arrDatos["error_txt"] = __('The notification URL defined in the product configuration of your PAYCOMET account does not respond correctly. Verify that it has been defined as: ','wc_paytpv') 
+							. add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) );
+							break;
+						case 1339:  // Configuración de terminales incorrecta
+							$arrDatos["error_txt"] = __('Your Product in PAYCOMET account is not set up with the Available Terminals option: ','wc_paytpv') . $terminales_txt;
+							break;
+					}
+					return $arrDatos;
+				}
+			}
+
+			return $arrDatos;
+		}
 
 
 		/**
@@ -402,6 +503,21 @@
 				try{
 					$order = new WC_Order( ( int ) substr( $ref, 0, 8 ) );
 				}catch (exception $e){}
+			}
+			
+			// Check Notification URL
+			if (isset($_REQUEST['ping']) && $_REQUEST['ping'] == 1) {
+				die("PING OK");
+			}
+
+			// Get Data
+			if (isset($_REQUEST['paycomet_data']) && $_REQUEST['paycomet_data'] == 1) {			
+				global $woocommerce;
+				global $wp_version;
+				if ($_REQUEST["merchant_code"] == $this->clientcode && $_REQUEST["terminal"]==$this->paytpv_terminals[0]["term"]) {
+					$arrDatos = array("module_v" => PAYTPV_VERSION, "wp_v" => $wp_version, "wc_v" => $woocommerce->version);
+					exit(json_encode($arrDatos));
+				}
 			}
 
 			if ( $_REQUEST[ 'tpvLstr' ] == 'pay' && $order->get_status() != 'completed' ) { //PAGO CON TARJETA GUARDADA

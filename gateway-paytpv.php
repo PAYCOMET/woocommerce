@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pasarela de pago para PAYCOMET
   Description: La pasarela de pago PAYCOMET para WooCommerce
-  Version: 4.0
+  Version: 4.1
   Author: PAYCOMET
   Author URI: http://www.paycomet.com/
 
@@ -12,7 +12,7 @@
 
  */
 
-define( 'PAYTPV_VERSION', '4.0' );
+define( 'PAYTPV_VERSION', '4.1' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -24,6 +24,7 @@ define( 'PAYTPV_PLUGIN_BASENAME', plugin_basename( PAYTPV_PLUGIN ) );
 require_once PAYTPV_PLUGIN_DIR . 'paytpv.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/dependencies.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/upgrade.php';
+require_once PAYTPV_PLUGIN_DIR . 'inc/PaytpvApi.php';
 
 add_action( 'plugins_loaded', 'woocommerce_paytpv_init', 100 );
 add_action( 'admin_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources_conf' ) );
