@@ -168,6 +168,7 @@
         {
             $settings = new WC_Admin_Settings();
 			$postData = $this->get_post_data();
+			$error = false;
 			
 			// Si se activa el Módulo se verifican los datos
 			if (isset($_REQUEST["woocommerce_paytpv_enabled"]) && $_REQUEST["woocommerce_paytpv_enabled"]==1) {
@@ -514,7 +515,11 @@
 			if (isset($_REQUEST['paycomet_data']) && $_REQUEST['paycomet_data'] == 1) {			
 				global $woocommerce;
 				global $wp_version;
-				if ($_REQUEST["merchant_code"] == $this->clientcode && $_REQUEST["terminal"]==$this->paytpv_terminals[0]["term"]) {
+				if (isset($_REQUEST["clientcode"]) &&
+					$_REQUEST["clientcode"] == $this->clientcode &&
+					isset($_REQUEST["terminal"]) &&
+					$_REQUEST["terminal"]==$this->paytpv_terminals[0]["term"]
+				) {
 					$arrDatos = array("module_v" => PAYTPV_VERSION, "wp_v" => $wp_version, "wc_v" => $woocommerce->version);
 					exit(json_encode($arrDatos));
 				}
@@ -1482,6 +1487,7 @@
 			$payptv_iduser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
 			$payptv_tokenuser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', true );
 			$transaction_id = $order->get_transaction_id();
+
 
 
 			$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
