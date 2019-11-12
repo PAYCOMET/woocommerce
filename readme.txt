@@ -2,8 +2,8 @@
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 5.2.2
-Stable tag: 4.1
+Tested up to: 5.3
+Stable tag: 4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 4.2 =
+Mejora en traducciones
 
 = 4.1 =
 Se añade la validación de los datos a la hora de guardar la configuración del Módulo para verificar que la cuenta está bien configurada en PAYCOMET para poder procesar.
