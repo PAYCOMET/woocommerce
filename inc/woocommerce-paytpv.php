@@ -566,6 +566,8 @@
 				// PAGO SEGURO redireccionamos
 				if ($secure_pay){
 
+					$paytpv_order_ref = str_pad( $paytpv_order_ref, 8, "0", STR_PAD_LEFT );
+
 					$URLOK = $this->get_return_url( $order );
 					$URLKO = $order->get_cancel_order_url_raw();
 
