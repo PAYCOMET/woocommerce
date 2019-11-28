@@ -41,6 +41,9 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
+= 4.3 =
+Depuracion de código.
+
 = 4.2 =
 Mejora en traducciones
 
