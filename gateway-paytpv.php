@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pasarela de pago para PAYCOMET
   Description: La pasarela de pago PAYCOMET para WooCommerce
-  Version: 4.3
+  Version: 4.4
   Author: PAYCOMET
   Author URI: http://www.paycomet.com/
 
