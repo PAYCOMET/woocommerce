@@ -216,17 +216,17 @@
 
 				switch ($_POST['terminales'][$key]) {
 					case 0:  // Seguro
-						$terminales = "CES";
-						$terminales_txt = "Secure";						
+						$terminales_txt = "CES";
+						$terminales_info = "Secure";						
 						break;
 					case 1: // No Seguro
-						$terminales = "NO-CES";
-						$terminales_txt = "Non-Secure";
+						$terminales_txt = "NO-CES";
+						$terminales_info = "Non-Secure";
 						
 						break;
 					case 2: // Ambos
-						$terminales = "BOTH";
-						$terminales_txt = "Both";
+						$terminales_txt = "BOTH";
+						$terminales_info = "Both";
 						
 						break;
 				}
@@ -234,7 +234,7 @@
 					$postData['woocommerce_paytpv_clientcode'],
 					$term,
 					$postData['pass'][$key],
-					$terminales
+					$terminales_txt
 				);
 				
 				if ($resp["DS_RESPONSE"] != 1) {
@@ -255,7 +255,7 @@
 							. add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) );
 							break;
 						case 1339:  // Configuración de terminales incorrecta
-							$arrDatos["error_txt"] = __('Your Product in PAYCOMET account is not set up with the Available Terminals option: ','wc_paytpv') . $terminales_txt;
+							$arrDatos["error_txt"] = __('Your Product in PAYCOMET account is not set up with the Available Terminals option: ','wc_paytpv') . $terminales_info;
 							break;
 					}
 					return $arrDatos;
