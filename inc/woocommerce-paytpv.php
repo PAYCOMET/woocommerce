@@ -1148,14 +1148,16 @@
 		
 		
 		function process_payment( $order_id ) {
+			global $woocommerce;
 			$this->write_log( 'Process payment: ' . $order_id );
-			$order = new WC_Order( $order_id );
+			$order = new WC_Order($order_id);
+
 			return array(
 				'result' => 'success',
-				'redirect' => add_query_arg( 'order', $order->get_id(), add_query_arg( 'key', $order->get_order_key(), get_permalink( wc_get_page_id( 'pay' ) ) ) )
+				'redirect'	=> $order->get_checkout_payment_url( true )
 			);
 		}	
-
+		
 
 		/**
 		 * Safe transaction
@@ -1250,7 +1252,7 @@
 		/**
 		 * receipt_page
 		 * */
-		function receipt_page( $order_id ) {
+		function receipt_page( $order_id ) {			
 			echo '<p>' . __( 'Thanks for your order, please fill the data below to process the payment.', 'wc_paytpv' ) . '</p>';
 
 			echo $this->savedCardsHtml($order_id);
