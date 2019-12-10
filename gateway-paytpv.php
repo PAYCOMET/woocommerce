@@ -2,7 +2,7 @@
 /*
   Plugin Name: Pasarela de pago para PAYCOMET
   Description: La pasarela de pago PAYCOMET para WooCommerce
-  Version: 4.6
+  Version: 4.7
   Author: PAYCOMET
   Author URI: http://www.paycomet.com/
 
@@ -12,7 +12,7 @@
 
  */
 
-define( 'PAYTPV_VERSION', '4.6' );
+define( 'PAYTPV_VERSION', '4.7' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
