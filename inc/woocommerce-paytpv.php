@@ -1497,7 +1497,7 @@
 			$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
 			
 			if ( ( int ) $result[ 'DS_RESPONSE' ] != 1 ) {
-				$this->write_log( 'Refund Failed: ' . $result->get_error_message() );
+				$this->write_log( 'Refund Failed: ' . $result[ 'DS_ERROR_ID' ] );
 				return false;
 			}else{
 				$order->add_order_note( sprintf( __( 'Refunded %s - Refund ID: %s', 'woocommerce' ), $amount, $result['DS_MERCHANT_AUTHCODE'] ) );
