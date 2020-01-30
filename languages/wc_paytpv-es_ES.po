@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2015-10-22 12:32+0200\n"
-"PO-Revision-Date: 2019-11-12 13:47+0000\n"
+"PO-Revision-Date: 2020-01-30 11:01+0000\n"
 "Last-Translator: admin <jrgarcia@paytpv.com>\n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.3.1; wp-5.3-beta3"
+"X-Loco-Version: 2.3.1; wp-5.3.1"
 
 #: ../inc/woocommerce-paytpv.php:25
 msgid "Payment gateway for credit card payment."
@@ -72,8 +72,8 @@ msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 
 #: ../inc/woocommerce-paytpv.php:256
-msgid "Credit Card (by PAYCOMET)"
-msgstr "Tarjeta de Crédito (PAYCOMET)"
+msgid "Credit Card"
+msgstr "Tarjeta de Crédito"
 
 #: ../inc/woocommerce-paytpv.php:259
 msgid "Description"

@@ -19,7 +19,7 @@
 
 		public function __construct() {
 			$this->id = 'paytpv';
-			$this->icon = PAYTPV_PLUGIN_URL . 'images/cards.png';
+			$this->icon = PAYTPV_PLUGIN_URL . 'images/paycomet.png';
 			$this->has_fields = false;
 			$this->method_title = 'PAYCOMET';
             $this->method_description = __('Payment gateway for credit card payment.', 'wc_paytpv' );
@@ -354,7 +354,7 @@
 					'title' => __( 'Title', 'wc_paytpv' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
-					'default' => __( 'Credit Card (by PAYCOMET)', 'wc_paytpv' )
+					'default' => __( 'Credit Card', 'wc_paytpv' )
 				),
 				'description' => array(
 					'title' => __( 'Description', 'wc_paytpv' ),
