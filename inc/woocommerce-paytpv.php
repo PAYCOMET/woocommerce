@@ -1343,7 +1343,7 @@
 			
 
 			$html = '';
-			$html .= '<iframe id="paytpv_iframe" src="' . $iframe_url . '' . http_build_query( $paytpv_args ) . '"
+			$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $iframe_url . '' . http_build_query( $paytpv_args ) . '"
 	name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 340px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
 			
 			return $html;

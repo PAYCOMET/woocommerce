@@ -30,7 +30,7 @@ jQuery(function($) {
 
     window.checkCard = function(){
                 
-        if ($("#card").val()=="0"){
+        if ($("#card").val()=="0" || $("#card").val()==""){
             $("#storingStep,#paytpv_iframe").removeClass("hidden").show();
             $("#div_commerce_password,#direct_pay").hide();
         }else{
