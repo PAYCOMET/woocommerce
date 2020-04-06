@@ -33,7 +33,7 @@ class WS_Client {
 		$this->client->setUseCurl( $useCURL );
 	}
 
-	function execute_purchase( $order, $DS_IDUSER,$DS_TOKEN_USER,$DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS,$DS_MERCHANT_CURRENCY='EUR',$amount,$ref='',$DS_MERCHANT_SCA_EXCEPTION='',$DS_MERCHANT_TRX_TYPE='',$DS_MERCHANT_DATA='') {
+	function execute_purchase( $order, $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS, $DS_MERCHANT_CURRENCY='EUR', $amount,$ref='', $DS_MERCHANT_SCA_EXCEPTION='', $DS_MERCHANT_TRX_TYPE='', $DS_MERCHANT_DATA='') {
 
 		
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
@@ -42,8 +42,7 @@ class WS_Client {
 		$DS_MERCHANT_ORDER = str_pad( $ref, 8, "0", STR_PAD_LEFT );
 		
 		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AMOUNT . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS );
-		$DS_ORIGINAL_IP = get_post_meta( ( int ) $order->get_id(), '_customer_ip_address', true );
-		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
+		$DS_ORIGINAL_IP = $this->getIp(( int ) $order->get_id());
 
 		$p = array(
 			'DS_MERCHANT_MERCHANTCODE' => $DS_MERCHANT_MERCHANTCODE,
@@ -76,11 +75,12 @@ class WS_Client {
 	}
 
 
-	function info_user( $DS_IDUSER, $DS_TOKEN_USER,$DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS ) {
+	function info_user( $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS ) {
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_PASS );
-		$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
-		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
+		
+		$DS_ORIGINAL_IP = $this->getIp(false);
+		
 		$p = array(
 			'DS_MERCHANT_MERCHANTCODE' => $DS_MERCHANT_MERCHANTCODE,
 			'DS_MERCHANT_TERMINAL' => $DS_MERCHANT_TERMINAL,
@@ -104,8 +104,7 @@ class WS_Client {
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_ORDER = str_pad( $ref, 8, "0", STR_PAD_LEFT );
 		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AUTHCODE . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS);
-		$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
-		if ($DS_ORIGINAL_IP=="::1")	$DS_ORIGINAL_IP = "127.0.0.1";
+		$DS_ORIGINAL_IP = $this->getIp(( int ) $ref);
 
 		$p = array(
 
@@ -130,6 +129,25 @@ class WS_Client {
 
 		return $res;
 
+	}
+
+	function getIp($ref = false) {
+
+		// Si llega referencia obtenemos la ip
+		if ($ref !== false) {
+			$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
+			if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
+				$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+			}
+		// Si no de remote address
+		} else {
+			$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+		} 
+		
+		if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
+			$DS_ORIGINAL_IP = "127.0.0.1";
+		}
+		return $DS_ORIGINAL_IP;
 	}
 
 }

@@ -3,7 +3,7 @@
  * Plugin Name: PAYCOMET Woocommerce
  * Plugin URI: https://wordpress.org/plugins/paytpv-for-woocommerce/
  * Description: La pasarela de pago PAYCOMET para WooCommerce
- * Version: 4.13
+ * Version: 4.14
  * Author: PAYCOMET 
  * Author URI: https://www.paycomet.com
  * Text Domain: wc_paytpv
@@ -11,7 +11,7 @@
  */
 
 
-define( 'PAYTPV_VERSION', '4.13' );
+define( 'PAYTPV_VERSION', '4.14' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
