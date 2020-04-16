@@ -786,6 +786,8 @@
 					return 'DE';
 				case 'it':
 					return 'IT';
+				case 'ca':
+					return 'CA';
 				default:
 					return 'ES';
 			}
@@ -1117,6 +1119,7 @@
 			$mensaje = $this->clientcode . $term . $OPERATION . $MERCHANT_ORDER . $MERCHANT_AMOUNT . $MERCHANT_CURRENCY;
 			$MERCHANT_MERCHANTSIGNATURE = hash ('sha512', $mensaje . md5( $pass ) );
 
+			
 			
 			$MERCHANT_DATA = $this->getMerchantData($order);
 

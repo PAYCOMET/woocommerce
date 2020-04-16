@@ -2,7 +2,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Pasarela de pago para PayTpv\n"
+"Project-Id-Version: Pasarela de pago para PAYCOMET\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-14 15:25+0000\n"
 "POT-Revision-Date: Tue Oct 20 2015 12:40:04 GMT+0200 (Hora de verano romance)"
@@ -26,11 +26,11 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/"
 
 #. Name of the plugin
-msgid "Pasarela de pago para PayTpv"
+msgid "Pasarela de pago para PAYCOMET"
 msgstr ""
 
 #. Description of the plugin
-msgid "La pasarela de pago PayTPV para WooCommerce"
+msgid "La pasarela de pago PAYCOMET para WooCommerce"
 msgstr ""
 
 #. Author of the plugin
@@ -38,7 +38,7 @@ msgid "Jose Ramón García"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "http://PayTpv.com"
+msgid "http://www.paycomet.com"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:25
@@ -50,15 +50,14 @@ msgid "You must define at least one terminal"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:150
-msgid "PayTpv Payment Gateway"
+msgid "PAYCOMET Payment Gateway"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:152
 msgid ""
-"<a href=\"https://PayTpv.com\">PayTpv Online</a> payment gateway for "
+"<a href=\"https://www.paycomet.com\">PAYCOMET Online</a> payment gateway for "
 "Woocommerce enables credit card payment in your shop. Al you need is a "
-"PayTpv.com merchant account and access to <a href=\"https://www.paytpv."
-"com/clientes.php\">customer area</a>"
+"PAYCOMET merchant account and access to <a href=\"https://dashboard.paycomet.com/cp_control\">customer area</a>"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:155
@@ -72,7 +71,7 @@ msgid "Enable/Disable"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:245
-msgid "Enable PayTpv gateway"
+msgid "Enable PAYCOMET gateway"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:251
@@ -84,7 +83,7 @@ msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:254
-msgid "Credit Card (by PayTpv)"
+msgid "Credit Card (by PAYCOMET)"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:257
@@ -105,7 +104,7 @@ msgstr ""
 
 #: inc/woocommerce-paytpv.php:266
 msgid ""
-"Try PayTPV module without the need of an associate PayTPV account. Terminal "
+"Try PAYCOMET module without the need of an associate PAYCOMET account. Terminal "
 "number (1,2,3, ... One for each currency) Password: paytpvtest Test Cards: "
 "5325298401138208 / 5540568785541245/5407696658785988 Expiration Date: Month: "
 "5 / Year: 2020CVC2: 123 / 3DSecure: 1234"
@@ -197,7 +196,7 @@ msgstr ""
 
 #: inc/woocommerce-paytpv.php:495 /inc/woocommerce-paytpv.php:508
 #: inc/woocommerce-paytpv.php:595
-msgid "PayTpv payment completed"
+msgid "PAYCOMET payment completed"
 msgstr ""
 
 #: inc/woocommerce-paytpv.php:497
@@ -324,7 +323,7 @@ msgstr ""
 #: template/myaccount/conditions.php:11
 msgid ""
 "This business does not store or transmit credit card or debit card data. "
-"Data are sent over an encrypted and secure channel to the PayTPV platform."
+"Data are sent over an encrypted and secure channel to the PAYCOMET platform."
 msgstr ""
 
 #: template/myaccount/conditions.php:14
@@ -340,11 +339,11 @@ msgstr ""
 
 #: template/myaccount/conditions.php:18
 msgid ""
-"All transaction information transmitted between this site and PayTPV systems "
+"All transaction information transmitted between this site and PAYCOMET systems "
 "is encrypted using 256-bit SSL certificates. All cardholder information is "
-"transmitted encrypted and all messages sent to your servers from PayTPV are "
+"transmitted encrypted and all messages sent to your servers from PAYCOMET are "
 "signed using SHA hashing to prevent tampering. The information that is "
-"transmitted to PayTPV servers cannot be examined, scanned, used or modified "
+"transmitted to PAYCOMET servers cannot be examined, scanned, used or modified "
 "by any external party that gains access to confidential information."
 msgstr ""
 
@@ -354,7 +353,7 @@ msgstr ""
 
 #: template/myaccount/conditions.php:22
 msgid ""
-"Once in the PayTPV systems, confidential information is protected using "
+"Once in the PAYCOMET systems, confidential information is protected using "
 "standard 1024-bit encryption. Encryption keys are kept in volatile high "
 "security systems with double authentication, which makes their extraction "
 "impossible. Banks, security agents and banking institutions perform regular "
@@ -367,14 +366,14 @@ msgstr ""
 
 #: template/myaccount/conditions.php:26
 msgid ""
-"PAYTPV systems are reviewed quarterly by specific ISO tools, an independent "
+"PAYCOMET systems are reviewed quarterly by specific ISO tools, an independent "
 "Qualified Security Assessor (QSA) and a scanning vendor (ASV) approved by "
 "the payment card brands."
 msgstr ""
 
 #: template/myaccount/conditions.php:29
 msgid ""
-"PAYTPV is also subject to an annual audit according to the standards of data "
+"PAYCOMET is also subject to an annual audit according to the standards of data "
 "security of the Payment Card Industry (PCI DSS) and is a fully approved "
 "Level 1 provider of payment services, which is the highest level of "
 "compliance."
@@ -386,7 +385,7 @@ msgstr ""
 
 #: template/myaccount/conditions.php:33
 msgid ""
-"PAYTPV has multiple private links to banking networks that are completely "
+"PAYCOMET has multiple private links to banking networks that are completely "
 "independent of the Internet and which do not cross any public access network."
 " All the information of the holder sent to banks and all the authorization "
 "messages sent in response are protected and cannot be manipulated."
@@ -398,7 +397,7 @@ msgstr ""
 
 #: template/myaccount/conditions.php:37
 msgid ""
-"PAYTPV is audited in access controls to production environments. The CPD "
+"PAYCOMET is audited in access controls to production environments. The CPD "
 "where systems are hosted operate according to the requirements for Tier III "
 "centers. This ensures that safety is not put at risk at any time. It has "
 "sophisticated alarm systems, surveillance by means of closed circuit TV and "
@@ -413,7 +412,7 @@ msgstr ""
 
 #: template/myaccount/conditions.php:41
 msgid ""
-"PAYTPV has Backup systems hosted in different countries to ensure optimal "
+"PAYCOMET has Backup systems hosted in different countries to ensure optimal "
 "safety of the systems and high availability. It also has a complete business "
 "continuity and disaster recovery policy."
 msgstr ""
