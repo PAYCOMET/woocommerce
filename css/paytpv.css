@@ -30,6 +30,16 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
     margin-top: 10px;
 }
 
+#ifr-paytpv-container{
+    padding: 25px 18px 10px;
+    background-color: #F9F9F7;
+    font-size: 80%;
+    margin-top: 10px;
+}
+#ifr-paytpv-container-acount{
+    width: auto!important;
+}
+
 .bankstoreCard{
 	font-size: 80%;
 }

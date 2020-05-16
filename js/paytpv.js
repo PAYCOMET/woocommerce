@@ -32,10 +32,10 @@ jQuery(function($) {
                 
         if ($("#card").val()=="0" || $("#card").val()==""){
             $("#storingStep,#paytpv_iframe").removeClass("hidden").show();
-            $("#div_commerce_password,#direct_pay").hide();
+            $("#direct_pay").hide();
         }else{
             $("#storingStep,#paytpv_iframe").hide();
-            $("#div_commerce_password,#direct_pay").show();
+            $("#direct_pay").show();
         }
     }
 

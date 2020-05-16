@@ -3,7 +3,7 @@
  * My Cards
  */
 ?>
-
+<?php if ($disable_offer_savecard == 0 ) :?>
 <div class="woocommerce_paytpv_cards">
 
 	<h2><?php _e( 'My Cards', 'wc_paytpv' ); ?></h2>
@@ -53,7 +53,7 @@
         <p id="msg_descriptionsaved" style="display:none"><?php print __('Description stored successfully', 'wc_paytpv');?></p>
 
         <p class="payment_module paytpv_iframe" id="nueva_tarjeta" style="display:none">
-            <iframe src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 340px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
+            <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 340px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
         </p>
     </div>
 
@@ -66,6 +66,8 @@
 
 </div>
 
+
 <div id="alert" style="display:none">
     <p class="title"></p>
 </div>
+<?php endif; ?>
