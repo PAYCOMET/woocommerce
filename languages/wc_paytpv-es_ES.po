@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
-"POT-Creation-Date: 2015-10-22 12:32+0200\n"
-"PO-Revision-Date: 2020-01-30 11:01+0000\n"
-"Last-Translator: admin <jrgarcia@paytpv.com>\n"
+"POT-Creation-Date: 2020-05-15 10:46+0000\n"
+"PO-Revision-Date: 2020-05-15 10:47+0000\n"
+"Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -21,21 +21,21 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.3.1; wp-5.3.1"
+"X-Loco-Version: 2.3.4; wp-5.3.2"
 
-#: ../inc/woocommerce-paytpv.php:25
+#: inc/woocommerce-paytpv.php:25
 msgid "Payment gateway for credit card payment."
 msgstr "Pasarela de pago para pagos con tarjeta de crédito."
 
-#: ../inc/woocommerce-paytpv.php:135
+#: inc/woocommerce-paytpv.php:138
 msgid "You must define at least one terminal"
 msgstr "Debe definir por lo menos un terminal"
 
-#: ../inc/woocommerce-paytpv.php:152
+#: inc/woocommerce-paytpv.php:155
 msgid "PAYCOMET Payment Gateway"
 msgstr "Pasarela de pagos PAYCOMET"
 
-#: ../inc/woocommerce-paytpv.php:154
+#: inc/woocommerce-paytpv.php:157
 msgid ""
 "<a href=\"https://www.paycomet.com\">PAYCOMET Online</a> payment gateway for "
 "Woocommerce enables credit card payment in your shop. Al you need is a "
@@ -47,7 +47,7 @@ msgstr ""
 "débito en su comercio. Para ello necesitara una cuenta en PAYCOMET y acceso "
 "al <a href=\"https://dashboard.paycomet.com/cp_control\">Área de clientes</a>"
 
-#: ../inc/woocommerce-paytpv.php:157
+#: inc/woocommerce-paytpv.php:160
 msgid ""
 "There you should configure \"Tipo de notificación del cobro:\" as "
 "\"Notificación por URL\" set ther teh following URL:"
@@ -55,194 +55,191 @@ msgstr ""
 "Allí deberá configurar \"Tipo de notificación del cobro:\" como "
 "\"Notificación por URL\" y configurar ahí la URL:"
 
-#: ../inc/woocommerce-paytpv.php:246
+#: inc/woocommerce-paytpv.php:186 inc/woocommerce-paytpv.php:194
+msgid "ERROR: Unable to activate payment method."
+msgstr "ERROR:  No se puede activar el método de pago."
+
+#: inc/woocommerce-paytpv.php:186
+msgid "Please fill in required fields: Client Code, Terminal Number, Password."
+msgstr ""
+"Por favor, rellene los siguientes campos: Código de Cliente, Terminal y "
+"Contraseña."
+
+#: inc/woocommerce-paytpv.php:251
+msgid "Check that the Client Code, Terminal and Password are correct"
+msgstr ""
+"Compruebe que el Código Cliente, Número de Terminal y Contraseña son "
+"correctos"
+
+#: inc/woocommerce-paytpv.php:254
+msgid ""
+"Notification URL is not defined in the product configuration of your account "
+"PAYCOMET account."
+msgstr ""
+"La URL de Notificación no está definida en la configuración del producto de "
+"su cuenta de PAYCOMET."
+
+#: inc/woocommerce-paytpv.php:258
+msgid ""
+"The notification URL defined in the product configuration of your PAYCOMET "
+"account does not respond correctly. Verify that it has been defined as: "
+msgstr ""
+"La Url de notificación definida en la configuración del producto de su "
+"cuenta de PAYCOMET no responde de forma correcta. Verifique que la ha "
+"definido así: "
+
+#: inc/woocommerce-paytpv.php:262
+msgid ""
+"Your Product in PAYCOMET account is not set up with the Available Terminals "
+"option: "
+msgstr ""
+"Su producto en la cuenta de PAYCOMET no está configurado para trabajar con "
+"la opción Terminales Disponibles: "
+
+#: inc/woocommerce-paytpv.php:351
 msgid "Enable/Disable"
 msgstr "Habilitar/Deshabilitar"
 
-#: ../inc/woocommerce-paytpv.php:247
+#: inc/woocommerce-paytpv.php:352
 msgid "Enable PAYCOMET gateway"
 msgstr "Habilitar Pasarela PAYCOMET"
 
-#: ../inc/woocommerce-paytpv.php:253
+#: inc/woocommerce-paytpv.php:358
 msgid "Title"
 msgstr "Título"
 
-#: ../inc/woocommerce-paytpv.php:255
+#: inc/woocommerce-paytpv.php:360
 msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 
-#: ../inc/woocommerce-paytpv.php:256
+#: inc/woocommerce-paytpv.php:361
 msgid "Credit Card"
 msgstr "Tarjeta de Crédito"
 
-#: ../inc/woocommerce-paytpv.php:259
+#: inc/woocommerce-paytpv.php:364
 msgid "Description"
 msgstr "Descripción"
 
-#: ../inc/woocommerce-paytpv.php:262
+#: inc/woocommerce-paytpv.php:367
 msgid "This controls the description which the user sees during checkout."
 msgstr "La descripción que el cliente verá en el proceso de compra"
 
-#: ../inc/woocommerce-paytpv.php:263
+#: inc/woocommerce-paytpv.php:368
 msgid "Pay using your credit card in a secure way"
 msgstr "Pague con tarjeta de crédito de la forma más segura"
 
-#: ../inc/woocommerce-paytpv.php:266
-msgid "Environment"
-msgstr "Entorno"
-
-#: ../inc/woocommerce-paytpv.php:268
-msgid ""
-"Try PAYCOMET module without the need of an associate PAYCOMET account. "
-"Terminal number (1,2,3, ... One for each currency) Password: paytpvtest Test "
-"Cards: 5325298401138208 / 5540568785541245/5407696658785988 Expiration Date: "
-"Month: 5 / Year: 2020CVC2: 123 / 3DSecure: 1234"
-msgstr ""
-"Prueba el módulo PAYCOMET sin necesidad de una cuenta PAYCOMET asociada. \n"
-"Número de terminal (1,2,3, ... Una para cada moneda) \n"
-"Contraseña: paytpvtest \n"
-"Tarjetas de Prueba: Fecha 5325298401138208 / 5540568785541245 / "
-"5407696658785988 \n"
-"Caducidad: Mes: 5 / Año: 2020 \n"
-"CVC2: 123 / 3DSecure: 1234"
-
-#: ../inc/woocommerce-paytpv.php:270
-msgid "Live Mode"
-msgstr "Producción"
-
-#: ../inc/woocommerce-paytpv.php:271
-msgid "Test Mode"
-msgstr "Modo Test"
-
-#: ../inc/woocommerce-paytpv.php:275
+#: inc/woocommerce-paytpv.php:371
 msgid "Client code"
 msgstr "Código Cliente"
 
-#: ../inc/woocommerce-paytpv.php:288
-msgid "Request business password on purchases with stored cards"
-msgstr "Solicitar contraseña negocio en compras con tarjetas almacenados"
+#: inc/woocommerce-paytpv.php:383
+msgid "Disable Offer to save card"
+msgstr "Deshabilitar Almacenar Tarjetas"
 
-#: ../inc/woocommerce-paytpv.php:293 ../inc/woocommerce-paytpv.php:340
+#: inc/woocommerce-paytpv.php:388 inc/woocommerce-paytpv.php:425
 msgid "No"
 msgstr "No"
 
-#: ../inc/woocommerce-paytpv.php:294 ../inc/woocommerce-paytpv.php:340
+#: inc/woocommerce-paytpv.php:389 inc/woocommerce-paytpv.php:425
 msgid "Yes"
 msgstr "Si"
 
-#: ../inc/woocommerce-paytpv.php:321
+#: inc/woocommerce-paytpv.php:406
 msgid "Terminals"
 msgstr "Terminales"
 
-#: ../inc/woocommerce-paytpv.php:327
+#: inc/woocommerce-paytpv.php:412
 msgid "Terminal Number"
 msgstr "Número Terminal"
 
-#: ../inc/woocommerce-paytpv.php:328
+#: inc/woocommerce-paytpv.php:413
 msgid "Password"
 msgstr "Contraseña"
 
-#: ../inc/woocommerce-paytpv.php:329
+#: inc/woocommerce-paytpv.php:414
 msgid "Terminals available"
 msgstr "Terminales disponibles"
 
-#: ../inc/woocommerce-paytpv.php:330
+#: inc/woocommerce-paytpv.php:415
 msgid "Use 3D Secure"
 msgstr "Usar 3D Secure"
 
-#: ../inc/woocommerce-paytpv.php:331
+#: inc/woocommerce-paytpv.php:416
 msgid "Currency"
 msgstr "Moneda"
 
-#: ../inc/woocommerce-paytpv.php:332
+#: inc/woocommerce-paytpv.php:417
 msgid "Use 3D Secure on purchases over"
 msgstr "Usar 3DS en compras superiores a"
 
-#: ../inc/woocommerce-paytpv.php:339
+#: inc/woocommerce-paytpv.php:424
 msgid "Secure"
 msgstr "Seguro"
 
-#: ../inc/woocommerce-paytpv.php:339
+#: inc/woocommerce-paytpv.php:424
 msgid "Non-Secure"
 msgstr "No Seguro"
 
-#: ../inc/woocommerce-paytpv.php:339
+#: inc/woocommerce-paytpv.php:424
 msgid "Both"
 msgstr "Ambos"
 
-#: ../inc/woocommerce-paytpv.php:385
+#: inc/woocommerce-paytpv.php:470
 msgid "+ Add Terminal"
 msgstr "+ Añadir Terminal"
 
-#: ../inc/woocommerce-paytpv.php:385
+#: inc/woocommerce-paytpv.php:470
 msgid "- Remove Terminal"
 msgstr "- Eliminar Terminal"
 
-#: ../inc/woocommerce-paytpv.php:392
+#: inc/woocommerce-paytpv.php:477
 msgid "Must have at least one terminal configured to process payments."
 msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 
-#: ../inc/woocommerce-paytpv.php:393
+#: inc/woocommerce-paytpv.php:478
 msgid "There can be two terminals configured with the same currency."
 msgstr "No puede haber dos terminales configurados con la misma moneda."
 
-#: ../inc/woocommerce-paytpv.php:427 ../inc/woocommerce-paytpv.php:429
-msgid "Invalid commerce password"
-msgstr "Contraseña comercio no válida"
-
-#: ../inc/woocommerce-paytpv.php:490 ../inc/woocommerce-paytpv.php:591
-msgid "PAYCOMET payment completed"
-msgstr "Pago PAYCOMET completado"
-
-#: ../inc/woocommerce-paytpv.php:493
-msgid "Test Mode. Not Real Payment"
-msgstr "Modo de prueba. No es real Pago"
-
-#: ../inc/woocommerce-paytpv.php:890
+#: inc/woocommerce-paytpv.php:1232
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: ../inc/woocommerce-paytpv.php:912
+#: inc/woocommerce-paytpv.php:1252
 msgid "Card"
 msgstr "Tarjeta"
 
-#: ../inc/woocommerce-paytpv.php:923
+#: inc/woocommerce-paytpv.php:1263
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
-#: ../inc/woocommerce-paytpv.php:929
-msgid "Commerce Password"
-msgstr "Contraseña Tienda"
-
-#: ../inc/woocommerce-paytpv.php:935
+#: inc/woocommerce-paytpv.php:1270
 msgid "Pay"
 msgstr "Pagar"
 
-#: ../inc/woocommerce-paytpv.php:947
+#: inc/woocommerce-paytpv.php:1271
+msgid "Wait, please..."
+msgstr "Espere por favor..."
+
+#: inc/woocommerce-paytpv.php:1283
 msgid "STREAMLINE YOUR FUTURE PURCHASES!"
 msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
 
-#: ../inc/woocommerce-paytpv.php:948
+#: inc/woocommerce-paytpv.php:1284
 msgid "Yes, remember my card accepting the"
 msgstr "Si, recordar mi tarjeta aceptando los"
 
-#: ../inc/woocommerce-paytpv.php:948 ../template/myaccount/my-cards.php:41
+#: inc/woocommerce-paytpv.php:1284 template/myaccount/my-cards.php:41
 msgid "terms and conditions of the service"
 msgstr "términos y condiciones del servicio"
 
-#: ../inc/woocommerce-paytpv.php:1170
-#, php-format
-msgid "Refunded %s - Refund ID: %s"
-msgstr "Devuelto %s - ID Devolución: %s"
-
-#: ../template/myaccount/conditions.php:9
+#: template/myaccount/conditions.php:3
 msgid "Related Cards"
 msgstr "Tarjetas Disponibles"
 
-#: ../template/myaccount/conditions.php:11
+#: template/myaccount/conditions.php:5
 msgid ""
 "This business does not store or transmit credit card or debit card data. "
 "Data are sent over an encrypted and secure channel to the PAYCOMET platform."
@@ -251,7 +248,7 @@ msgstr ""
 "débito. Los datos son enviados a través de un canal cifrado y seguro a la "
 "plataforma PAYCOMET"
 
-#: ../template/myaccount/conditions.php:14
+#: template/myaccount/conditions.php:8
 msgid ""
 "At any time, the user can add or remove data from their linked cards. In the "
 "section My account, they will see a section \"My linked cards\" where stored "
@@ -262,11 +259,11 @@ msgstr ""
 "tarjetas vinculadas\\\" donde se mostrarán las tarjetas almacenadas y podrán "
 "ser eliminadas."
 
-#: ../template/myaccount/conditions.php:16
+#: template/myaccount/conditions.php:10
 msgid "Security Policy"
 msgstr "Política de seguridad"
 
-#: ../template/myaccount/conditions.php:18
+#: template/myaccount/conditions.php:12
 msgid ""
 "All transaction information transmitted between this site and PAYCOMET "
 "systems is encrypted using 256-bit SSL certificates. All cardholder "
@@ -284,11 +281,11 @@ msgstr ""
 "no se puede examinar, escanear, utilizar o modificar por cualquier externo "
 "que obtenga acceso a información confidencial."
 
-#: ../template/myaccount/conditions.php:20
+#: template/myaccount/conditions.php:14
 msgid "Encryption and Data Storage"
 msgstr "Cifrado y almacenamiento de datos"
 
-#: ../template/myaccount/conditions.php:22
+#: template/myaccount/conditions.php:16
 msgid ""
 "Once in the PAYCOMET systems, confidential information is protected using "
 "standard 1024-bit encryption. Encryption keys are kept in volatile high "
@@ -303,11 +300,11 @@ msgstr ""
 "    bancarias realizan auditorías con regularidad para garantizar la "
 "protección de los datos."
 
-#: ../template/myaccount/conditions.php:24
+#: template/myaccount/conditions.php:18
 msgid "System Safety"
 msgstr "Seguridad en los sistemas"
 
-#: ../template/myaccount/conditions.php:26
+#: template/myaccount/conditions.php:20
 msgid ""
 "PAYCOMET systems are reviewed quarterly by specific ISO tools, an "
 "independent Qualified Security Assessor (QSA) and a scanning vendor (ASV) "
@@ -317,7 +314,7 @@ msgstr ""
 "específicas ISO, un Asesor de Seguridad Cualificado (QSA) independiente y un "
 "proveedor de exploración aprobado (ASV) por las marcas de tarjetas de pago."
 
-#: ../template/myaccount/conditions.php:29
+#: template/myaccount/conditions.php:23
 msgid ""
 "PAYCOMET is also subject to an annual audit according to the standards of "
 "data security of the Payment Card Industry (PCI DSS) and is a fully approved "
@@ -329,11 +326,11 @@ msgstr ""
 "proveedor de servicios de pago de Nivel 1 totalmente aprobado, que es el "
 "mayor nivel de cumplimiento."
 
-#: ../template/myaccount/conditions.php:31
+#: template/myaccount/conditions.php:25
 msgid "Links to banking institutions"
 msgstr "Enlaces con entidades bancarias"
 
-#: ../template/myaccount/conditions.php:33
+#: template/myaccount/conditions.php:27
 msgid ""
 "PAYCOMET has multiple private links to banking networks that are completely "
 "independent of the Internet and which do not cross any public access network."
@@ -346,11 +343,11 @@ msgstr ""
 "los mensajes de autorización enviados como respuesta están protegidos y no "
 "se pueden manipular."
 
-#: ../template/myaccount/conditions.php:35
+#: template/myaccount/conditions.php:29
 msgid "Internal security"
 msgstr "Seguridad interna"
 
-#: ../template/myaccount/conditions.php:37
+#: template/myaccount/conditions.php:31
 msgid ""
 "PAYCOMET is audited in access controls to production environments. The CPD "
 "where systems are hosted operate according to the requirements for Tier III "
@@ -370,11 +367,11 @@ msgstr ""
 "Toda la información de transacciones y tarjetas de clientes está protegida "
 "incluso de nuestros propios empleados."
 
-#: ../template/myaccount/conditions.php:39
+#: template/myaccount/conditions.php:33
 msgid "Disaster Recovery"
 msgstr "Recuperación de desastres"
 
-#: ../template/myaccount/conditions.php:41
+#: template/myaccount/conditions.php:35
 msgid ""
 "PAYCOMET has Backup systems hosted in different countries to ensure optimal "
 "safety of the systems and high availability. It also has a complete business "
@@ -385,31 +382,31 @@ msgstr ""
 "Asimismo, cuenta con una política de continuación comercial y recuperación "
 "de desastres completa."
 
-#: ../template/myaccount/my-cards.php:9
+#: template/myaccount/my-cards.php:9
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
-#: ../template/myaccount/my-cards.php:17
+#: template/myaccount/my-cards.php:17
 msgid "Add a description"
 msgstr "Añadir descripción"
 
-#: ../template/myaccount/my-cards.php:19
+#: template/myaccount/my-cards.php:19
 msgid "Save Description"
 msgstr "Guardar"
 
-#: ../template/myaccount/my-cards.php:20
+#: template/myaccount/my-cards.php:20
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../template/myaccount/my-cards.php:31
+#: template/myaccount/my-cards.php:31
 msgid "You have no active cars."
 msgstr "No tiene tarjetas almacenadas"
 
-#: ../template/myaccount/my-cards.php:36
+#: template/myaccount/my-cards.php:36
 msgid "STREAMLINE YOUR FUTURE PURCHASES"
 msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
 
-#: ../template/myaccount/my-cards.php:37
+#: template/myaccount/my-cards.php:37
 msgid ""
 "Link a card to your account to be able to make all procedures easily and "
 "quickly."
@@ -417,130 +414,42 @@ msgstr ""
 "Vincule una tarjeta a su cuenta para poder realizar todos los procedimientos "
 "de forma fácil y rápida."
 
-#: ../template/myaccount/my-cards.php:41
+#: template/myaccount/my-cards.php:41
 msgid "By linking a card you accept the "
 msgstr "Al vincular una tarjeta acepta los "
 
-#: ../template/myaccount/my-cards.php:44 ../template/myaccount/my-cards.php:45
+#: template/myaccount/my-cards.php:44 template/myaccount/my-cards.php:45
 msgid "Link card"
 msgstr "Vincular tarjetas"
 
-#: ../template/myaccount/my-cards.php:47 ../template/myaccount/my-cards.php:48
-#: ../template/payment_3ds_test.php:128
+#: template/myaccount/my-cards.php:47 template/myaccount/my-cards.php:48
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: ../template/myaccount/my-cards.php:52
+#: template/myaccount/my-cards.php:52
 msgid "You must accept the terms and conditions of service"
 msgstr "Debe aceptar los términos y condiciones del servicio"
 
-#: ../template/myaccount/my-cards.php:53
+#: template/myaccount/my-cards.php:53
 msgid "Description stored successfully"
 msgstr "Descripción almacenada con éxito"
 
-#: ../template/payment_3ds_test.php:19
-msgid "The PIN entered is incorrect"
-msgstr "El PIN introducido es incorrecto"
+#. Name of the plugin
+msgid "PAYCOMET Woocommerce"
+msgstr "PAYCOMET Woocommerce"
 
-#: ../template/payment_3ds_test.php:30
-msgid "Authentication Secure Electronic Commerce"
-msgstr "Autenticación Comercio Electrónico Seguro"
+#. Description of the plugin
+msgid "The PAYCOMET payment gateway for WooCommerce"
+msgstr "La pasarela de pago PAYCOMET para WooCommerce"
 
-#: ../template/payment_3ds_test.php:46
-msgid "Check the details of your operation"
-msgstr "Compruebe los detalles de su operación"
+#. URI of the plugin
+msgid "https://wordpress.org/plugins/paytpv-for-woocommerce/"
+msgstr "https://wordpress.org/plugins/paytpv-for-woocommerce/"
 
-#: ../template/payment_3ds_test.php:59
-msgid "Commerce"
-msgstr "Comercio"
+#. Author of the plugin
+msgid "PAYCOMET"
+msgstr "PAYCOMET"
 
-#: ../template/payment_3ds_test.php:67
-msgid "Date"
-msgstr "Fecha"
-
-#: ../template/payment_3ds_test.php:75
-msgid "Hour"
-msgstr "Hora"
-
-#: ../template/payment_3ds_test.php:88
-msgid "Enter the PIN of 4 digits of your credit / debit card"
-msgstr "Introduzca el PIN de 4 dígitos de su tarjeta de débito / crédito"
-
-#: ../template/payment_3ds_test.php:125
-msgid "Confirm purchase"
-msgstr "Confirmar compra"
-
-#: ../template/payment_test_mode.php:39
-msgid "Name on credit card"
-msgstr "Titular de la tarjeta de crédito"
-
-#: ../template/payment_test_mode.php:45
-msgid "Credit card number"
-msgstr "Tarjeta de crédito"
-
-#: ../template/payment_test_mode.php:51
-msgid "Expiration date"
-msgstr "Fecha de caducidad"
-
-#: ../template/payment_test_mode.php:78
-msgid "CVC2"
-msgstr "CVC2"
-
-#: ../template/payment_test_mode.php:85
-msgid "The last 3 digits"
-msgstr "Los últimos 3 dígitos"
-
-#: ../template/payment_test_mode.php:92
-msgid "Wait"
-msgstr "Espere"
-
-#: ../template/payment_test_mode.php:110
-msgid ""
-"It not has been able to successfully perform the operation for the following "
-"reason"
-msgstr ""
-"No ha sido capaz de realizar con éxito la operación por la siguiente razón"
-
-#: ../template/payment_test_mode.php:111
-msgid "Error"
-msgstr "Error"
-
-#: ../template/payment_test_mode.php:111
-msgid "Unexpected error. Check the data on the card and try again"
-msgstr ""
-"Error inesperado. Compruebe los datos de la tarjeta y vuelva a intentarlo"
-
-msgid "Please fill in required fields: Client Code, Terminal Number, Password."
-msgstr ""
-"Por favor, rellene los siguientes campos: Código de Cliente, Terminal y "
-"Contraseña."
-
-msgid "Check that the Client Code, Terminal and Password are correct"
-msgstr ""
-"Compruebe que el Código Cliente, Número de Terminal y Contraseña son "
-"correctos"
-
-msgid ""
-"Notification URL is not defined in the product configuration of your account "
-"PAYCOMET account."
-msgstr ""
-"La URL de Notificación no está definida en la configuración del producto de "
-"su cuenta de PAYCOMET."
-
-msgid ""
-"The notification URL defined in the product configuration of your PAYCOMET "
-"account does not respond correctly. Verify that it has been defined as: "
-msgstr ""
-"La Url de notificación definida en la configuración del producto de su "
-"cuenta de PAYCOMET no responde de forma correcta. Verifique que la ha "
-"definido así: "
-
-msgid ""
-"Your Product in PAYCOMET account is not set up with the Available Terminals "
-"option: "
-msgstr ""
-"Su producto en la cuenta de PAYCOMET no está configurado para trabajar con "
-"la opción Terminales Disponibles: "
-
-msgid "ERROR: Unable to activate payment method."
-msgstr "ERROR:  No se puede activar el método de pago."
+#. Author URI of the plugin
+msgid "https://www.paycomet.com"
+msgstr "https://www.paycomet.com"

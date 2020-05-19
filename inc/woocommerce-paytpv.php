@@ -59,7 +59,7 @@
 				)
 			);
 
-			$this->commerce_password = $this->settings[ 'commerce_password' ];
+			$this->disable_offer_savecard = $this->settings[ 'disable_offer_savecard' ];
 
 			
 
@@ -121,9 +121,12 @@
 
 			$vhash = hash('sha512', md5($query.md5($pass)));
 
+			$disable_offer_savecard = $gateway->disable_offer_savecard;
+
+
 			$url_paytpv = $gateway->getIframeUrl($secure_pay) . $query . "&VHASH=".$vhash;
 			
-			wc_get_template( 'myaccount/my-cards.php', array( 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv), '', PAYTPV_PLUGIN_DIR . 'template/' );
 
 						
 
@@ -169,6 +172,7 @@
             $settings = new WC_Admin_Settings();
 			$postData = $this->get_post_data();
 			$error = false;
+			
 			
 			// Si se activa el Módulo se verifican los datos
 			if (isset($_REQUEST["woocommerce_paytpv_enabled"]) && $_REQUEST["woocommerce_paytpv_enabled"]==1) {
@@ -375,9 +379,8 @@
 					'type'        => 'paytpv_terminals'
 				),
 				
-
-				'commerce_password' => array(
-					'title' => __( 'Request business password on purchases with stored cards', 'wc_paytpv' ),
+				'disable_offer_savecard' => array(
+					'title' => __( 'Disable Offer to save card', 'wc_paytpv' ),
 					'type' => 'select',
 					'label' => '',
 					
@@ -385,17 +388,7 @@
 						0 => __( 'No', 'wc_paytpv' ),
 						1 => __( 'Yes', 'wc_paytpv' )
 					)
-				),
-	
-
-				/*
-				'iframe' => array(
-					'title' => __( 'Onsite form in embended iframe', 'wc_paytpv' ),
-					'label' => '',
-					'type' => 'checkbox',
-					'default' => 'yes'
-				),
-				*/
+				)				
 			);
 		}
 
@@ -410,7 +403,7 @@
 
 			?>
 			<tr valign="top">
-				<th class="titledesc"><?php _e( 'Terminals', 'wc_paytpv' ); ?>:</th>
+				<th class="titledesc"><?php _e( 'Terminals', 'wc_paytpv' ); ?></th>
 				<td colspan="2" class="forminp" id="paytpv_terminals">
 					<table class="tblterminals widefat wc_input_table sortable" style="font-size:80%" cellspacing="0">
 						<thead>
@@ -529,26 +522,6 @@
 
 				$card = $_POST[ 'card' ];
 				$saved_card = PayTPV::savedCard($order->get_user_id(),$card);
-
-				// Verificar contraseña usuario.
-				if ($this->commerce_password && !$this->validPassword($order->get_user_id(),$_POST['commerce_password'])){
-					 if (!$this->validPassword($order->get_user_id(),$_POST['commerce_password'])){
-
-			        	$url = add_query_arg( 'order', $order->get_id(), add_query_arg( 'key', $order->get_order_key(), get_permalink( wc_get_page_id( 'pay' ) ) ) );
-			        	
-
-			        	if ( function_exists( 'wc_add_notice' ) ) {
-			        		wc_add_notice( __( 'Invalid commerce password', 'wc_paytpv' ), 'error' );
-						} else { // WC < 2.1
-							$woocommerce->add_error( __( 'Invalid commerce password', 'wc_paytpv' ) );
-							$woocommerce->set_messages();
-						}
-
-			        	wp_redirect( $url, 303 );
-			        	exit;
-			        	
-			        }
-				}
 				
 
 				// Obtenemos el terminal para el pedido
@@ -687,7 +660,8 @@
 							if (isset($_REQUEST[ 'IdUser' ])){
 
 								$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
-								if ($save_card!=="0"){
+								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
+								if ($save_card!=="0" && $this->disable_offer_savecard==0){
 									// Save User Card
 									$result = $this->saveCard($order, $order->get_user_id(), $_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
 									$paytpv_iduser = $result["paytpv_iduser"];
@@ -1291,11 +1265,6 @@
                     </div>
                 </div>';
 
-            // Contraseña tienda
-            if ($this->commerce_password==1){
-            	print '<div id="div_commerce_password" style="display:'.$store_card.'" >'.__( 'Commerce Password', 'wc_paytpv' ).': <input type="password" name="commerce_password" id="commerce_password"></div>';
-            }
-
             if (sizeof($saved_cards)>0){
 	        					
 				// Pago directo
@@ -1309,13 +1278,13 @@
 
 
 			// Comprobacion almacenar tarjeta
-			if ($order->get_user_id()>0){
+			if ($order->get_user_id()>0 && $this->disable_offer_savecard==0){
 				print '
 				<div id="storingStep" class="box" style="display:'.$store_card.'">
 	                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
 	                <label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()" checked>'.__('Yes, remember my card accepting the', 'wc_paytpv' ).' <a id="open_conditions" href="#conditions" class="link"> '.__('terms and conditions of the service', 'wc_paytpv' ).'.</a>.</label>';
 	        }else{
-	        	print '<div>';
+	        	print '<div id="ifr-paytpv-container" class="box">';
 	        }
 	        print  $this->generate_paytpv_form( $order_id );
             print '</div>';
