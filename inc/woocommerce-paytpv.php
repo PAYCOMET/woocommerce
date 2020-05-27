@@ -133,7 +133,6 @@
 		}
 		
 		public function validate_paytpv(){
-			print "sadkfjk";
 			if (empty($this->paytpv_terminals))
 		    	echo '<div class="error"><p>'.__('You must define at least one terminal', 'wc_paytpv' ).'</p></div>';
 		}
