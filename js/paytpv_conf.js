@@ -18,6 +18,10 @@ jQuery(function($) {
 
     });
 
+    $('.payment_paycomet').on( 'change', function(e){
+        checkPayment();      
+    });
+
     $('.wc_input_table .remove_term').click( function() {
         if ($(".term").length==1){
             alert($("#msg_1terminal").html());
@@ -52,6 +56,13 @@ jQuery(function($) {
         });
     });
    
+
+    window.checkPayment = function(){
+        if ($(".payment_paycomet").val()==0) 
+            $('.iframe_height').parents("tr").show();
+        else
+            $('.iframe_height').parents("tr").hide();
+    }
 
     window.checkAllTerminales = function(){
         $( ".term" ).each(function() {
@@ -95,6 +106,7 @@ jQuery(function($) {
 
     checkAllTerminales();
     checkaddTerminal();
+    checkPayment();
 
 });
 
