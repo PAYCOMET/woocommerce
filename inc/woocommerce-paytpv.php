@@ -711,6 +711,10 @@
 
 							update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
 
+							if ($_REQUEST[ 'MethodName' ]) {
+								update_post_meta( ( int ) $order->get_id(), 'PayTPV_MethodName', $_REQUEST[ 'MethodName' ] );
+							}
+
 							print "PAYCOMET WC OK";
 							exit;
 						}else{
@@ -1323,7 +1327,7 @@
 			print  $this->generate_paytpv_form( $order_id );
 						
 			print '</div>';
-			print '<p><a class="button cancel" href="'.$order->get_cancel_order_url().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
+			print '<p><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
 
             print '</form>';
 
@@ -1424,8 +1428,7 @@
 				
 				$parent_order = $subscription->get_parent();
 
-				$orders = $subscription->get_related_orders('ids','parent');
-				$num_orders = sizeof($orders);
+				$orders = $subscription->get_related_orders('ids','parent');				
 
 				$paytpv_order_ref = $order->get_id();
 				
@@ -1469,7 +1472,7 @@
 		 * @return bool
 		 */
 		public function can_refund_order( $order ) {
-			return $order && $order->get_transaction_id() && get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
+			return $order && $order->get_transaction_id();
 		}
 
 		
@@ -1500,24 +1503,19 @@
 
 			$importe = number_format($amount * 100, 0, '.', '');
 
-			$paytpv_order_ref = get_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', true );
-			$payptv_iduser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
-			$payptv_tokenuser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', true );
+			$paytpv_order_ref = get_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', true );			
 			$transaction_id = $order->get_transaction_id();
 
-
-
-			$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
+			$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
 			
 			if ( ( int ) $result[ 'DS_RESPONSE' ] != 1 ) {
-				$this->write_log( 'Refund Failed: ' . $result[ 'DS_ERROR_ID' ] );
+				$this->write_log( 'Refund Failed. Error: ' . $result[ 'DS_ERROR_ID' ] );
+				$order->add_order_note( 'Refund Failed. Error: ' . $result[ 'DS_ERROR_ID' ]  );
 				return false;
 			}else{
 				$order->add_order_note( sprintf( __( 'Refunded %s - Refund ID: %s', 'woocommerce' ), $amount, $result['DS_MERCHANT_AUTHCODE'] ) );
 				return true;
 			}
-
 		}
-
 		
 	}
