@@ -59,9 +59,11 @@
 				)
 			);
 
-			$this->disable_offer_savecard = $this->settings[ 'disable_offer_savecard' ];
+			$this->disable_offer_savecard = isset($this->settings[ 'disable_offer_savecard' ])? $this->settings[ 'disable_offer_savecard' ] : 0;
 
-			
+			$this->payment_paycomet = isset($this->settings[ 'payment_paycomet' ])? $this->settings[ 'payment_paycomet' ] : 0;
+
+			$this->iframe_height = isset($this->settings[ 'iframe_height' ])? $this->settings[ 'iframe_height' ] : 440;
 
 			// Hooks
 			add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
@@ -122,18 +124,18 @@
 			$vhash = hash('sha512', md5($query.md5($pass)));
 
 			$disable_offer_savecard = $gateway->disable_offer_savecard;
-
+			$payment_paycomet = $gateway->payment_paycomet;
+			
 
 			$url_paytpv = $gateway->getIframeUrl($secure_pay) . $query . "&VHASH=".$vhash;
 			
-			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv, 'payment_paycomet'=> $payment_paycomet), '', PAYTPV_PLUGIN_DIR . 'template/' );
 
 						
 
 		}
 		
-		public function validate_paytpv(){
-			print "sadkfjk";
+		public function validate_paytpv(){			
 			if (empty($this->paytpv_terminals))
 		    	echo '<div class="error"><p>'.__('You must define at least one terminal', 'wc_paytpv' ).'</p></div>';
 		}
@@ -165,7 +167,7 @@
 			<?php
 
 		}
-
+		
 
 		public function process_admin_options()
         {
@@ -185,6 +187,14 @@
 					$error = true;
 					$settings->add_error(__('ERROR: Unable to activate payment method.','wc_paytpv')  . " " . __('Please fill in required fields: Client Code, Terminal Number, Password.','wc_paytpv'));					
 				}
+				
+				// Validate required fields
+				if ($postData['woocommerce_paytpv_payment_paycomet'] == 0 && (!filter_var($postData['woocommerce_paytpv_iframe_height'], FILTER_VALIDATE_INT) ||  $postData['woocommerce_paytpv_iframe_height'] < 440))
+				{
+					$error = true;
+					$settings->add_error(__('ERROR: The height of the iframe must be at least 440.','wc_paytpv'));			
+				}
+				
 				
 				// Validate info Paycomet
 				if (!$error) {				
@@ -378,6 +388,26 @@
 				'paytpv_terminals' => array(
 					'type'        => 'paytpv_terminals'
 				),
+
+				'payment_paycomet' => array(
+					'title' => __( 'Payment in', 'wc_paytpv' ),
+					'type' => 'select',
+					'label' => '',
+					'class' => 'payment_paycomet',
+					'description' => __( 'Pay in a Iframe or Paycomet page.', 'wc_paytpv' ),
+					'options' => array(
+						0 => __( 'Iframe', 'wc_paytpv' ),
+						1 => __( 'Paycomet (Full Screen)', 'wc_paytpv' )
+					)
+				),
+
+				'iframe_height' => array(
+					'title' => __( 'Iframe Height (px)', 'wc_paytpv' ),
+					'type' => 'text',
+					'class' => 'iframe_height',
+					'description' => __( 'Iframe height in pixels (Min 440)', 'wc_paytpv' ),
+					'default' => '440'
+				),
 				
 				'disable_offer_savecard' => array(
 					'title' => __( 'Disable Offer to save card', 'wc_paytpv' ),
@@ -387,7 +417,8 @@
 					'options' => array(
 						0 => __( 'No', 'wc_paytpv' ),
 						1 => __( 'Yes', 'wc_paytpv' )
-					)
+					),
+					'default' => '0'
 				)				
 			);
 		}
@@ -680,6 +711,10 @@
 							$order->payment_complete($_REQUEST[ 'AuthCode' ]);
 
 							update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+
+							if ($_REQUEST[ 'MethodName' ]) {
+								update_post_meta( ( int ) $order->get_id(), 'PayTPV_MethodName', $_REQUEST[ 'MethodName' ] );
+							}
 
 							print "PAYCOMET WC OK";
 							exit;
@@ -1229,8 +1264,12 @@
 		/**
 		 * receipt_page
 		 * */
-		function receipt_page( $order_id ) {			
-			echo '<p>' . __( 'Thanks for your order, please fill the data below to process the payment.', 'wc_paytpv' ) . '</p>';
+		function receipt_page( $order_id ) {
+			if ($this->payment_paycomet == 0) {
+				echo '<p>' . __( 'Thanks for your order, please fill the data below to process the payment.', 'wc_paytpv' ) . '</p>';
+			} else {
+				echo '<p>' . __( 'Thanks for your order, please press the button to pay.', 'wc_paytpv' ) . '</p>';
+			}
 
 			echo $this->savedCardsHtml($order_id);
 			
@@ -1268,7 +1307,7 @@
             if (sizeof($saved_cards)>0){
 	        					
 				// Pago directo
-				print  '<input type="submit" id="direct_pay" value="'.__( 'Pay', 'wc_paytpv' ).'" class="button alt">';
+				print  '<input type="submit" id="direct_pay" value="'.__( 'Pay', 'wc_paytpv' ).'" class="button paycomet_pay">';
 				print  '<img src="'.PAYTPV_PLUGIN_URL . 'images/clockpayblue.gif" alt="'.__( 'Wait, please...', 'wc_paytpv' ).'" width="41" height="30" id="clockwait" style="display:none; margin-top:5px;" />';
 				print '<input type="hidden" name="tpvLstr" value="pay">';
 				
@@ -1280,14 +1319,15 @@
 			// Comprobacion almacenar tarjeta
 			if ($order->get_user_id()>0 && $this->disable_offer_savecard==0){
 				print '
-				<div id="storingStep" class="box" style="display:'.$store_card.'">
-	                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
-	                <label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()" checked>'.__('Yes, remember my card accepting the', 'wc_paytpv' ).' <a id="open_conditions" href="#conditions" class="link"> '.__('terms and conditions of the service', 'wc_paytpv' ).'.</a>.</label>';
+				<div id="storingStep" class="box" style="display:'.$store_card.'">					
+					<label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()"> '.__('Save card for future purchases', 'wc_paytpv' ).'. <span class="paytpv-pci"> '.__('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ).'.</span></label>';						                
 	        }else{
 	        	print '<div id="ifr-paytpv-container" class="box">';
 	        }
-	        print  $this->generate_paytpv_form( $order_id );
-            print '</div>';
+			print  $this->generate_paytpv_form( $order_id );
+						
+			print '</div>';
+			print '<p><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
 
             print '</form>';
 
@@ -1313,10 +1353,15 @@
 
 			$iframe_url = $this->getIframeUrl(0);
 			
-
 			$html = '';
-			$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $iframe_url . '' . http_build_query( $paytpv_args ) . '"
-	name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 340px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
+			$src = $iframe_url . '' . http_build_query( $paytpv_args );
+			// Pago Iframe
+			if ($this->payment_paycomet == 0) {		
+				$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $src . '"
+	name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
+			} else {
+				$html .= '<p><a href="' . $src . '" id="paycomet_page" class="button paycomet_pay">'.__( 'Pay', 'wc_paytpv' ).'<a/></p>';
+			}
 			
 			return $html;
 			
@@ -1383,8 +1428,7 @@
 				
 				$parent_order = $subscription->get_parent();
 
-				$orders = $subscription->get_related_orders('ids','parent');
-				$num_orders = sizeof($orders);
+				$orders = $subscription->get_related_orders('ids','parent');				
 
 				$paytpv_order_ref = $order->get_id();
 				
@@ -1428,7 +1472,7 @@
 		 * @return bool
 		 */
 		public function can_refund_order( $order ) {
-			return $order && $order->get_transaction_id() && get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
+			return $order && $order->get_transaction_id();
 		}
 
 		
@@ -1459,24 +1503,19 @@
 
 			$importe = number_format($amount * 100, 0, '.', '');
 
-			$paytpv_order_ref = get_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', true );
-			$payptv_iduser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', true );
-			$payptv_tokenuser = get_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', true );
+			$paytpv_order_ref = get_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', true );			
 			$transaction_id = $order->get_transaction_id();
 
-
-
-			$result = $client->execute_refund($payptv_iduser, $payptv_tokenuser, $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
+			$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code,  $transaction_id, $importe);
 			
 			if ( ( int ) $result[ 'DS_RESPONSE' ] != 1 ) {
-				$this->write_log( 'Refund Failed: ' . $result[ 'DS_ERROR_ID' ] );
+				$this->write_log( 'Refund Failed. Error: ' . $result[ 'DS_ERROR_ID' ] );
+				$order->add_order_note( 'Refund Failed. Error: ' . $result[ 'DS_ERROR_ID' ]  );
 				return false;
 			}else{
 				$order->add_order_note( sprintf( __( 'Refunded %s - Refund ID: %s', 'woocommerce' ), $amount, $result['DS_MERCHANT_AUTHCODE'] ) );
 				return true;
 			}
-
 		}
-
 		
 	}
