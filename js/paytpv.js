@@ -38,8 +38,9 @@ jQuery(function($) {
             $("#direct_pay").show();
         }
     }
-
-    checkCard();
+    
+    setTimeout(checkCard, 0);
+   
 });
 
 
@@ -60,7 +61,12 @@ jQuery(function($) {
         if ($("#savecard").is(':checked')){
             $('#savecard').attr("disabled", true);
             $('#close_vincular').show();
-            $('#nueva_tarjeta').show();
+            if ($('#payment_paycomet').val()!=1) {
+                $('#nueva_tarjeta').show();
+            } else {
+                window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
+            }
+
             $('#open_vincular').hide();
         }else{
             alert("#msg_accept");

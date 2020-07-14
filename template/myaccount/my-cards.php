@@ -33,12 +33,9 @@
 	<?php endif; ?>
 
 	<div id="storingStepUser" class="box">
-        <h4><?php print __('STREAMLINE YOUR FUTURE PURCHASES', 'wc_paytpv');?></h4>
-        <p><?php print __('Link a card to your account to be able to make all procedures easily and quickly.', 'wc_paytpv');?></p>
-
         <p class="checkbox">
             <span class="checked"><input type="checkbox" name="savecard" id="savecard"></span>
-            <label for="savecard"><?php print __('By linking a card you accept the ', 'wc_paytpv');?><a id="open_conditions" href="#conditions" class="link"><strong><?php print __('terms and conditions of the service', 'wc_paytpv');?></strong></a></label>
+            <label for="savecard"><?php print __('Save card for future purchases ', 'wc_paytpv');?><span class="paytpv-pci"><?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' );?></label>
         </p>
         <p>
             <a href="javascript:void(0);" onclick="vincularTarjeta();" title="<?php print __('Link card', 'wc_paytpv');?>" id="open_vincular" class="button button-small btn btn-default">
@@ -49,12 +46,14 @@
             </a>
         </p>
 
-        <p id="msg_accept" style="display:none"><?php print __('You must accept the terms and conditions of service', 'wc_paytpv');?></p>
+        <p id="msg_accept" style="display:none"><?php print __('You must accept save card to continue', 'wc_paytpv');?></p>
         <p id="msg_descriptionsaved" style="display:none"><?php print __('Description stored successfully', 'wc_paytpv');?></p>
 
         <p class="payment_module paytpv_iframe" id="nueva_tarjeta" style="display:none">
             <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
         </p>
+
+        <input type="hidden" name="payment_paycomet" id="payment_paycomet" value="<?=$payment_paycomet?>">
     </div>
 
 

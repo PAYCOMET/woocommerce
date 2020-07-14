@@ -124,11 +124,12 @@
 			$vhash = hash('sha512', md5($query.md5($pass)));
 
 			$disable_offer_savecard = $gateway->disable_offer_savecard;
+			$payment_paycomet = $gateway->payment_paycomet;
 			
 
 			$url_paytpv = $gateway->getIframeUrl($secure_pay) . $query . "&VHASH=".$vhash;
 			
-			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv, 'payment_paycomet'=> $payment_paycomet), '', PAYTPV_PLUGIN_DIR . 'template/' );
 
 						
 
@@ -1318,9 +1319,8 @@
 			// Comprobacion almacenar tarjeta
 			if ($order->get_user_id()>0 && $this->disable_offer_savecard==0){
 				print '
-				<div id="storingStep" class="box" style="display:'.$store_card.'">
-	                <h4>'.__('STREAMLINE YOUR FUTURE PURCHASES!', 'wc_paytpv' ).'</h4>
-	                <label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()" checked> '.__('Yes, remember my card accepting the', 'wc_paytpv' ).' <a id="open_conditions" href="#conditions" class="link"> '.__('terms and conditions of the service', 'wc_paytpv' ).'.</a>.</label>';
+				<div id="storingStep" class="box" style="display:'.$store_card.'">					
+					<label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()"> '.__('Save card for future purchases', 'wc_paytpv' ).'. <span class="paytpv-pci"> '.__('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ).'.</span></label>';						                
 	        }else{
 	        	print '<div id="ifr-paytpv-container" class="box">';
 	        }

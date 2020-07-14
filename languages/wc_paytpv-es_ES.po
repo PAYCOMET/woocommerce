@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
-"POT-Creation-Date: 2020-07-08 12:36+0000\n"
-"PO-Revision-Date: 2020-07-08 12:36+0000\n"
+"POT-Creation-Date: 2020-07-14 06:25+0000\n"
+"PO-Revision-Date: 2020-07-14 06:26+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -228,47 +228,47 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "There can be two terminals configured with the same currency."
 msgstr "No puede haber dos terminales configurados con la misma moneda."
 
-#: inc/woocommerce-paytpv.php:1264
+#: inc/woocommerce-paytpv.php:1268
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1266
+#: inc/woocommerce-paytpv.php:1270
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
 
-#: inc/woocommerce-paytpv.php:1287
+#: inc/woocommerce-paytpv.php:1291
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1298
+#: inc/woocommerce-paytpv.php:1302
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
-#: inc/woocommerce-paytpv.php:1305 inc/woocommerce-paytpv.php:1359
+#: inc/woocommerce-paytpv.php:1309 inc/woocommerce-paytpv.php:1362
 msgid "Pay"
 msgstr "Pagar"
 
-#: inc/woocommerce-paytpv.php:1306
+#: inc/woocommerce-paytpv.php:1310
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
-#: inc/woocommerce-paytpv.php:1318
-msgid "STREAMLINE YOUR FUTURE PURCHASES!"
-msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
+#: inc/woocommerce-paytpv.php:1322
+msgid "Save card for future purchases"
+msgstr "Guardar tarjeta para futuras compras"
 
-#: inc/woocommerce-paytpv.php:1319
-msgid "Yes, remember my card accepting the"
-msgstr "Si, recordar mi tarjeta aceptando los"
+#: inc/woocommerce-paytpv.php:1322 template/myaccount/my-cards.php:38
+msgid ""
+"Card data is protected by the Payment Card Industry Data Security Standard "
+"(PCI DSS)"
+msgstr ""
+"Los datos de tarjetas se protegen mediante el Estándar de Seguridad de Datos "
+"para la Industria de Tarjeta de Pago (PCI DSS)"
 
-#: inc/woocommerce-paytpv.php:1319 template/myaccount/my-cards.php:41
-msgid "terms and conditions of the service"
-msgstr "términos y condiciones del servicio"
-
-#: inc/woocommerce-paytpv.php:1326
+#: inc/woocommerce-paytpv.php:1329
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
@@ -439,35 +439,23 @@ msgstr "Eliminar"
 msgid "You have no active cars."
 msgstr "No tiene tarjetas almacenadas"
 
-#: template/myaccount/my-cards.php:36
-msgid "STREAMLINE YOUR FUTURE PURCHASES"
-msgstr "¡AGILICE SUS FUTURAS COMPRAS!"
+#: template/myaccount/my-cards.php:38
+msgid "Save card for future purchases "
+msgstr "Guardar tarjeta para futuras compras"
 
-#: template/myaccount/my-cards.php:37
-msgid ""
-"Link a card to your account to be able to make all procedures easily and "
-"quickly."
-msgstr ""
-"Vincule una tarjeta a su cuenta para poder realizar todos los procedimientos "
-"de forma fácil y rápida."
-
-#: template/myaccount/my-cards.php:41
-msgid "By linking a card you accept the "
-msgstr "Al vincular una tarjeta acepta los "
-
-#: template/myaccount/my-cards.php:44 template/myaccount/my-cards.php:45
+#: template/myaccount/my-cards.php:41 template/myaccount/my-cards.php:42
 msgid "Link card"
 msgstr "Vincular tarjetas"
 
-#: template/myaccount/my-cards.php:47 template/myaccount/my-cards.php:48
+#: template/myaccount/my-cards.php:44 template/myaccount/my-cards.php:45
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: template/myaccount/my-cards.php:52
-msgid "You must accept the terms and conditions of service"
-msgstr "Debe aceptar los términos y condiciones del servicio"
+#: template/myaccount/my-cards.php:49
+msgid "You must accept save card to continue"
+msgstr "Debes aceptar guardar tarjeta para continuar"
 
-#: template/myaccount/my-cards.php:53
+#: template/myaccount/my-cards.php:50
 msgid "Description stored successfully"
 msgstr "Descripción almacenada con éxito"
 

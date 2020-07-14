@@ -69,3 +69,8 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
 	padding-bottom: 10px;
 }
 
+.paytpv-pci{
+    font-size: 0.8em;
+    display: block;
+}
+
