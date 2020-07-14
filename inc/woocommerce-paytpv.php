@@ -692,7 +692,7 @@
 
 								$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
-								if ($save_card!=="0" && $this->disable_offer_savecard==0){
+								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
 									$result = $this->saveCard($order, $order->get_user_id(), $_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
 									$paytpv_iduser = $result["paytpv_iduser"];
