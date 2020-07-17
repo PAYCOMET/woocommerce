@@ -22,20 +22,22 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
     width:150px!important;
 }
 
-#storingStep.box,#storingStepUser.box{
-    border: 1px solid #e5e5e5;
-    padding: 5px 18px 10px;
-    background-color: #F9F9F7;
+#storingStep.box, #storingStepUser.box{   
+    padding: -1px;    
     font-size: 80%;
     margin-top: 10px;
 }
 
 #ifr-paytpv-container{
-    padding: 25px 18px 10px;
-    background-color: #F9F9F7;
+    padding: -1px;       
     font-size: 80%;
     margin-top: 10px;
 }
+
+#paycomet-cancel{
+    font-size: 80%;
+}
+
 #ifr-paytpv-container-acount{
     width: auto!important;
 }

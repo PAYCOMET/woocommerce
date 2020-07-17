@@ -1327,7 +1327,7 @@
 			print  $this->generate_paytpv_form( $order_id );
 						
 			print '</div>';
-			print '<p><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
+			print '<p id="paycomet-cancel"><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
 
             print '</form>';
 
