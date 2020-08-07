@@ -62,6 +62,11 @@ jQuery(function($) {
             $('.iframe_height').parents("tr").show();
         else
             $('.iframe_height').parents("tr").hide();
+
+        if ($(".payment_paycomet").val()==2) 
+            $('.jet_id').parents("tr").show();
+        else
+            $('.jet_id').parents("tr").hide();
     }
 
     window.checkAllTerminales = function(){
