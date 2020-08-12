@@ -48,6 +48,7 @@
 			$this->title = $this->settings['title'];
 			$this->description = $this->settings['description'];
 			$this->clientcode = $this->settings['clientcode'];
+			$this->apiKey = $this->settings['apikey'];
 			$this->paytpv_terminals = get_option('woocommerce_paytpv_terminals',
 				array(
 					array(
@@ -384,6 +385,13 @@
 					'class' => 'description',
 					'description' => __( 'This controls the description which the user sees during checkout.', 'wc_paytpv' ),
 					'default' => __( 'Pay using your credit card in a secure way', 'wc_paytpv' ),
+				),
+				'apikey' => array(
+					'title' => __('ApiKey', 'wc_paytpv' ),
+					'type' => 'text',
+					'class' => 'api_key',
+					'description' => __( 'Your API Key from PayComet', 'wc_paytpv' ),
+					'default' => ''
 				),
 				'clientcode' => array(
 					'title' => __( 'Client code', 'wc_paytpv' ),
@@ -1157,58 +1165,94 @@
 			$client = $this->get_client();
 			$ip = $client->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
+			$URLOK = $this->get_return_url($order);
+			$URLKO = $order->get_cancel_order_url_raw();
 
-			$addUserTokenResponse = $client->add_user_token(
-				$this->clientcode,
-				$arrTerminalData['term'],
-				$_POST['jetiframe-token'],
-				$this->jet_id,
-				$arrTerminalData['pass'],
-				$ip
-			);
+			if ($this->apiKey != '') {
+				$apiRest = new PaycometApiRest($this->apiKey);
 
-			if ($addUserTokenResponse["DS_ERROR_ID"] == "0") {
-				$URLOK = $this->get_return_url($order);
-				$URLKO = $order->get_cancel_order_url_raw();
+				$addUserResponse = $apiRest->addUser(
+					$arrTerminalData['term'],
+					$_POST['jetiframe-token'],
+					$order->get_id(),
+				);
 
-				if ($arrTerminalData["tdfirst"] == 1) {
-					$api = new PaytpvApi();
+				$executePurchaseResponse = $apiRest->executePurchase(
+					$arrTerminalData['term'],
+					$order->get_id(),
+					$arrTerminalData["importe"],
+					$arrTerminalData["currency_iso_code"],
+					'1',
+					$ip,
+					$arrTerminalData["tdfirst"],
+					$addUserResponse->idUser,
+					$addUserResponse->tokenUser,
+					$URLOK,
+					$URLKO
+				);
+	
+				$this->jetiframeOkUrl = $arrTerminalData["tdfirst"] ? $executePurchaseResponse->challengeUrl : $URLOK;
+			} else {
+				$addUserTokenResponse = $client->add_user_token(
+					$this->clientcode,
+					$arrTerminalData['term'],
+					$_POST['jetiframe-token'],
+					$this->jet_id,
+					$arrTerminalData['pass'],
+					$ip
+				);
 
-					$purchaseTokenResponse = $api->executePurchaseToken(
-						$this->clientcode,
-						$arrTerminalData['term'],
-						$order->get_id(),
-						$arrTerminalData["importe"],
-						$arrTerminalData["currency_iso_code"],
-						$addUserTokenResponse["DS_IDUSER"],
-						$addUserTokenResponse["DS_TOKEN_USER"],
-						$arrTerminalData['pass'],
-						$URLOK,
-						$URLKO,
-						$this->_getLanguange()
-					);
-
-					$this->jetiframeOkUrl = $purchaseTokenResponse;
-				} else {
-					$new_client = new WS_Client($this->settings);
-
-					$executePurchaseResponse = $new_client->execute_purchase(
-						$order,
-						$addUserTokenResponse["DS_IDUSER"],
-						$addUserTokenResponse["DS_TOKEN_USER"],
-						$arrTerminalData['term'],
-						$arrTerminalData['pass'],
-						$arrTerminalData["currency_iso_code"],
-						$arrTerminalData["importe"],
-						$order->get_id()
-					);
-
-					if ($executePurchaseResponse["DS_RESPONSE"] == "1") {
-						$order->payment_complete();
-						$this->jetiframeOkUrl = $URLOK;
+				if ($addUserTokenResponse["DS_ERROR_ID"] == "0") {
+					if ($arrTerminalData["tdfirst"] == 1) {
+						$api = new PaytpvApi();
+	
+						$purchaseTokenResponse = $api->executePurchaseToken(
+							$this->clientcode,
+							$arrTerminalData['term'],
+							$order->get_id(),
+							$arrTerminalData["importe"],
+							$arrTerminalData["currency_iso_code"],
+							$addUserTokenResponse["DS_IDUSER"],
+							$addUserTokenResponse["DS_TOKEN_USER"],
+							$arrTerminalData['pass'],
+							$URLOK,
+							$URLKO,
+							$this->_getLanguange(),
+							'',
+							'',
+							1,
+							'',
+							$this->getMerchantData($order),
+							'',
+							'',
+							''
+						);
+	
+						$this->jetiframeOkUrl = $purchaseTokenResponse;
 					} else {
-						wc_add_notice("SE HA PRODUCIDO UN ERROR DURANTE LA COMPRA - " . $order->get_id() . " error = ". $executePurchaseResponse['DS_ERROR_ID'], 'error' );
-						return;
+						$new_client = new WS_Client($this->settings);
+	
+						$executePurchaseResponse = $new_client->execute_purchase(
+							$order,
+							$addUserTokenResponse["DS_IDUSER"],
+							$addUserTokenResponse["DS_TOKEN_USER"],
+							$arrTerminalData['term'],
+							$arrTerminalData['pass'],
+							$arrTerminalData["currency_iso_code"],
+							$arrTerminalData["importe"],
+							$order->get_id(),
+							$arrTerminalData["importe"] > 30 ? 'LWV' : '',
+							'',
+							$this->getMerchantData($order)
+						);
+	
+						if ($executePurchaseResponse["DS_RESPONSE"] == "1") {
+							$order->payment_complete();
+							$this->jetiframeOkUrl = $URLOK;
+						} else {
+							wc_add_notice("SE HA PRODUCIDO UN ERROR DURANTE LA COMPRA - " . $order->get_id() . " error = ". $executePurchaseResponse['DS_ERROR_ID'], 'error' );
+							return;
+						}
 					}
 				}
 			}

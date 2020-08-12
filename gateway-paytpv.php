@@ -26,6 +26,7 @@ require_once PAYTPV_PLUGIN_DIR . 'paytpv.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/dependencies.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/upgrade.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/PaytpvApi.php';
+require_once PAYTPV_PLUGIN_DIR . 'inc/PaycometApiRest.php';
 
 add_action( 'plugins_loaded', 'woocommerce_paytpv_init', 100 );
 add_action( 'admin_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources_conf' ) );
