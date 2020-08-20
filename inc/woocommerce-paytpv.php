@@ -84,12 +84,7 @@
 			//JetIframe integration
 			if ($this->isJetIFrameActive) {
 				add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
-				add_filter('woocommerce_order_button_html', array($this, 'remove_order_button_html'));
 			}
-		}
-
-		public function remove_order_button_html( $button ) {
-			return '<button type="submit" class="button alt" style="display:none" name="woocommerce_checkout_place_order" id="place_order" value="Realizar el pedido" data-value="Realizar el pedido">Realizar el pedidor</button>';
 		}
 
 		public function addFieldForJetiframeToken() {
@@ -1089,7 +1084,10 @@
 			$MERCHANT_EMV3DS = $this->getEMV3DS($order);
 			$SHOPPING_CART = $this->getShoppingCart($order);
 
-			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);			
+			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);
+
+			//Si el PSD2 sólo va a ir por API, los datos se envían como un array, no codificado en base64
+			return $datos;
 
 			return urlencode(base64_encode(json_encode($datos)));
 		}
@@ -1188,7 +1186,15 @@
 					$addUserResponse->idUser,
 					$addUserResponse->tokenUser,
 					$URLOK,
-					$URLKO
+					$URLKO,
+					'0',
+					'',
+					'',
+					1,
+					[],
+					'',
+					$arrTerminalData["importe"] > 30 ? 'LWV' : '',
+					$this->getMerchantData($order)
 				);
 	
 				$this->jetiframeOkUrl = $arrTerminalData["tdfirst"] ? $executePurchaseResponse->challengeUrl : $URLOK;
@@ -1222,7 +1228,7 @@
 							'',
 							1,
 							'',
-							$this->getMerchantData($order),
+							'',
 							'',
 							'',
 							''
@@ -1243,7 +1249,7 @@
 							$order->get_id(),
 							$arrTerminalData["importe"] > 30 ? 'LWV' : '',
 							'',
-							$this->getMerchantData($order)
+							''
 						);
 	
 						if ($executePurchaseResponse["DS_RESPONSE"] == "1") {
@@ -1273,7 +1279,7 @@
 	        
 	        // Si solo tiene Terminal Seguro
 	        if ($terminales==0)
-	            return true;   
+	            return true;
 
 	        // Si esta definido que el pago es 3d secure y no estamos usando una tarjeta tokenizada
 	        if ($tdfirst && $card == 0) {
@@ -1478,7 +1484,19 @@
 				$pass = $arrTerminalData["pass"];
 
 				$client = $this->get_client();
-				$result = $client->info_user( $paytpv_iduser, $paytpv_tokenuser, $term, $pass);
+				if ($this->apiKey != '') {
+					$apiRest = new PaycometApiRest($this->apiKey);
+					$infoUserResponse = $apiRest->infoUser(
+						$paytpv_iduser,
+						$paytpv_tokenuser,
+						$term
+					);
+
+					$result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
+					$result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+				} else {
+					$result = $client->info_user($paytpv_iduser, $paytpv_tokenuser, $term, $pass);
+				}
 
 				return PayTPV::saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
 			}else{
@@ -1521,9 +1539,37 @@
 				$MERCHANT_DATA = $this->getMerchantData($order);
 
 				$client = $this->get_client();
+				$ip = $client->getIp();
 				
 				// $result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'MIT','R',$MERCHANT_DATA);
-				$result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
+
+				if($this->apiKey != '') {
+					$apiRest = new PaycometApiRest($this->apiKey);
+
+					$executePurchaseResponse = $apiRest->executePurchase(
+						$arrTerminalData['term'],
+						$order->get_id(),
+						$arrTerminalData["importe"],
+						$arrTerminalData["currency_iso_code"],
+						'1',
+						$ip,
+						$arrTerminalData["tdfirst"],
+						$payptv_iduser,
+						$payptv_tokenuser,
+						'',
+						'',
+						'0',
+						'',
+						'',
+						1,
+						[],
+						'R',
+						'MIT',
+						$this->getMerchantData($order)
+					);
+				} else {
+					$result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
+				}
 
 				if ((int) $result[ 'DS_RESPONSE' ] == 1) {
 					update_post_meta($order->get_id(), 'PayTPV_Referencia', $result['DS_MERCHANT_ORDER']);
@@ -1574,6 +1620,7 @@
 			}
 			
 			$client = $this->get_client();
+			$ip = $client->getIp();
 			// Obtenemos el terminal para el pedido
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$currency_iso_code = $arrTerminalData["currency_iso_code"];
@@ -1585,7 +1632,22 @@
 			$paytpv_order_ref = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);			
 			$transaction_id = $order->get_transaction_id();
 
-			$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code, $transaction_id, $importe);
+			if($this->apiKey != '') {
+				$apiRest = new PayCometApiRest($this->apiKey);
+				$executeRefundReponse = $apiRest->executeRefund(
+					$paytpv_order_ref,
+					$term,
+					$importe,
+					$currency_iso_code,
+					$transaction_id,
+					$ip
+				);
+
+				$result['DS_RESPONSE'] = $executeRefundReponse->errorCode;
+				$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
+			} else {
+				$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code, $transaction_id, $importe);
+			}
 			
 			if ((int) $result[ 'DS_RESPONSE' ] != 1) {
 				$this->write_log('Refund Failed. Error: ' . $result['DS_ERROR_ID' ]);
