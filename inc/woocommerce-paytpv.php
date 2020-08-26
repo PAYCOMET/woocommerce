@@ -66,7 +66,7 @@
 			$this->payment_paycomet = isset($this->settings['payment_paycomet']) ? $this->settings['payment_paycomet'] : 0;
 			$this->jet_id = isset($this->settings['jet_id']) ? $this->settings['jet_id'] : '';
 			$this->iframe_height = isset($this->settings['iframe_height']) ? $this->settings['iframe_height'] : 440;
-			$this->isJetIFrameActive = $this->payment_paycomet === '2';
+			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
 			// Hooks
 			add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
@@ -82,13 +82,15 @@
 			add_filter('wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id'), 10, 4 );
 			
 			//JetIframe integration
-			if ($this->isJetIFrameActive) {
+			if ($this->isJetIframeActive) {
 				add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
 			}
 		}
 
 		public function addFieldForJetiframeToken() {
-			print '<input type="hidden" id="jetiframefield" name="jetiframe-token">';
+			print '<input type="hidden" id="jetiframe-token" name="jetiframe-token">';
+			print '<input type="checkbox" id="savecard_jetiframe" name="savecard_jetiframe" style="display:none">';
+			print '<input type="text" id="hiddenCardField" name="hiddenCardField" style="display:none">';
 		}
 		
 		/**
@@ -148,10 +150,9 @@
 			if ( $this->description)
 				echo wpautop( wptexturize( $this->description ) );
 
-			if ($this->isJetIFrameActive) {
-				wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			if ($this->isJetIframeActive) {
+				wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
 			}
-			
 		}
 
 		/**
@@ -385,7 +386,7 @@
 					'title' => __('ApiKey', 'wc_paytpv' ),
 					'type' => 'text',
 					'class' => 'api_key',
-					'description' => __( 'Your API Key from PayComet', 'wc_paytpv' ),
+					'description' => __( 'Your API Key from PayComet. Read documentation <a href="https://docs.paycomet.com/es/inicio/configuracion#apikeys">here</a>', 'wc_paytpv' ),
 					'default' => ''
 				),
 				'clientcode' => array(
@@ -573,7 +574,7 @@
 				$pass = $arrTerminalData["pass"];
 				$paytpv_order_ref = $order->get_id();
 				$MERCHANT_DATA = $this->getMerchantData($order);
-				$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,$card,$saved_card["paytpv_iduser"])?1:0;
+				$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,$card,$saved_card["paytpv_iduser"]) ? 1 : 0;
 				
 				// PAGO SEGURO redireccionamos
 				if ($secure_pay){
@@ -675,6 +676,8 @@
 						$currency_iso_code = $arrTerminalData["currency_iso_code"];
 						$term = $arrTerminalData["term"];
 						$pass = $arrTerminalData["pass"];
+						$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
+						$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
 
 						$AMOUNT = round( $order->get_total() * 100 );
 						
@@ -688,21 +691,21 @@
 						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
 
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK' && ($_REQUEST[ 'NotificationHash' ] == $localSign)) {
-							if (isset($_REQUEST[ 'IdUser' ])){
+							if (isset($idUser)){
 								$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
-									$result = $this->saveCard($order, $order->get_user_id(), $_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
+									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
 									$paytpv_iduser = $result["paytpv_iduser"];
 									$paytpv_tokenuser = $result["paytpv_tokenuser"];
 								} else {
-									$paytpv_iduser = $_REQUEST[ 'IdUser' ];
-									$paytpv_tokenuser = $_REQUEST[ 'TokenUser' ];
+									$paytpv_iduser = $idUser;
+									$paytpv_tokenuser = $tokenUser;
 								}
 
-								update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $paytpv_iduser );
-								update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $paytpv_tokenuser );
+								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $paytpv_iduser);
+								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $paytpv_tokenuser);
 							}
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
@@ -1131,7 +1134,8 @@
 				''
 			);
 
-			if ($MERCHANT_DATA!=null)           $paytpv_args["MERCHANT_DATA"] = $MERCHANT_DATA;
+			//En principio sólo se envía el merchant_data con API REST
+			// if ($MERCHANT_DATA!=null)           $paytpv_args["MERCHANT_DATA"] = $MERCHANT_DATA;
 
 			$query = http_build_query($paytpv_args);
 			$vhash = hash('sha512', md5($query.md5($pass)));
@@ -1145,7 +1149,7 @@
 		{
 			$order = new WC_Order($order_id);
 
-			if ($this->isJetIFrameActive) {
+			if ($this->isJetIframeActive) {
 				$this->processJetIFramePayment($order);
 			}
 			
@@ -1154,7 +1158,7 @@
 
 			return array(
 				'result' => 'success',
-				'redirect'	=> $this->isJetIFrameActive ? $this->jetiframeOkUrl : $order->get_checkout_payment_url( true )
+				'redirect'	=> $this->isJetIframeActive ? $this->jetiframeOkUrl : $order->get_checkout_payment_url( true )
 			);
 		}
 
@@ -1168,12 +1172,24 @@
 
 			if ($this->apiKey != '') {
 				$apiRest = new PaycometApiRest($this->apiKey);
+				
+				if ($_POST['hiddenCardField'] != 0) {
+					$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
+					$idUser = $saved_card["paytpv_iduser"];
+					$tokenUser = $saved_card["paytpv_tokenuser"];
+				} else {
+					$addUserResponse = $apiRest->addUser(
+						$arrTerminalData['term'],
+						$_POST['jetiframe-token'],
+						$order->get_id(),
+					);
+					$idUser = $addUserResponse->idUser;
+					$tokenUser = $addUserResponse->tokenUser;
+				}
 
-				$addUserResponse = $apiRest->addUser(
-					$arrTerminalData['term'],
-					$_POST['jetiframe-token'],
-					$order->get_id(),
-				);
+				update_post_meta((int) $order->get_id(), 'paytpv_savecard', $_POST["savecard_jetiframe"]);
+				update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
+				update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
 
 				$executePurchaseResponse = $apiRest->executePurchase(
 					$arrTerminalData['term'],
@@ -1183,8 +1199,8 @@
 					'1',
 					$ip,
 					$arrTerminalData["tdfirst"],
-					$addUserResponse->idUser,
-					$addUserResponse->tokenUser,
+					$idUser,
+					$tokenUser,
 					$URLOK,
 					$URLKO,
 					'0',
@@ -1193,72 +1209,82 @@
 					1,
 					[],
 					'',
-					$arrTerminalData["importe"] > 30 ? 'LWV' : '',
+					'',
 					$this->getMerchantData($order)
 				);
-	
-				$this->jetiframeOkUrl = $arrTerminalData["tdfirst"] ? $executePurchaseResponse->challengeUrl : $URLOK;
-			} else {
-				$addUserTokenResponse = $client->add_user_token(
-					$this->clientcode,
-					$arrTerminalData['term'],
-					$_POST['jetiframe-token'],
-					$this->jet_id,
-					$arrTerminalData['pass'],
-					$ip
-				);
 
-				if ($addUserTokenResponse["DS_ERROR_ID"] == "0") {
-					if ($arrTerminalData["tdfirst"] == 1) {
-						$api = new PaytpvApi();
-	
-						$purchaseTokenResponse = $api->executePurchaseToken(
-							$this->clientcode,
-							$arrTerminalData['term'],
-							$order->get_id(),
-							$arrTerminalData["importe"],
-							$arrTerminalData["currency_iso_code"],
-							$addUserTokenResponse["DS_IDUSER"],
-							$addUserTokenResponse["DS_TOKEN_USER"],
-							$arrTerminalData['pass'],
-							$URLOK,
-							$URLKO,
-							$this->_getLanguange(),
-							'',
-							'',
-							1,
-							'',
-							'',
-							'',
-							'',
-							''
-						);
-	
-						$this->jetiframeOkUrl = $purchaseTokenResponse;
+				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $URLOK;
+			} else {
+				if ($_POST['hiddenCardField'] != 0) {
+					$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
+					$idUser = $saved_card["paytpv_iduser"];
+					$tokenUser = $saved_card["paytpv_tokenuser"];
+				} else {
+					$addUserTokenResponse = $client->add_user_token(
+						$this->clientcode,
+						$arrTerminalData['term'],
+						$_POST['jetiframe-token'],
+						$this->jet_id,
+						$arrTerminalData['pass'],
+						$ip
+					);
+					$idUser = $addUserTokenResponse["DS_IDUSER"];
+					$tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
+				}
+
+				update_post_meta((int) $order->get_id(), 'paytpv_savecard', $_POST["savecard_jetiframe"]);
+				update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
+				update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+
+				if ($arrTerminalData["tdfirst"] == 1) {
+					$api = new PaytpvApi();
+
+					$purchaseTokenResponse = $api->executePurchaseToken(
+						$this->clientcode,
+						$arrTerminalData['term'],
+						$order->get_id(),
+						$arrTerminalData["importe"],
+						$arrTerminalData["currency_iso_code"],
+						$idUser,
+						$tokenUser,
+						$arrTerminalData['pass'],
+						$URLOK,
+						$URLKO,
+						$this->_getLanguange(),
+						'',
+						'',
+						1,
+						'',
+						'',
+						'',
+						'',
+						''
+					);
+
+					$this->jetiframeOkUrl = $purchaseTokenResponse;
+				} else {
+					$new_client = new WS_Client($this->settings);
+
+					$executePurchaseResponse = $new_client->execute_purchase(
+						$order,
+						$idUser,
+						$tokenUser,
+						$arrTerminalData['term'],
+						$arrTerminalData['pass'],
+						$arrTerminalData["currency_iso_code"],
+						$arrTerminalData["importe"],
+						$order->get_id(),
+						'',
+						'',
+						''
+					);
+
+					if ($executePurchaseResponse["DS_RESPONSE"] == "1") {
+						$order->payment_complete();
+						$this->jetiframeOkUrl = $URLOK;
 					} else {
-						$new_client = new WS_Client($this->settings);
-	
-						$executePurchaseResponse = $new_client->execute_purchase(
-							$order,
-							$addUserTokenResponse["DS_IDUSER"],
-							$addUserTokenResponse["DS_TOKEN_USER"],
-							$arrTerminalData['term'],
-							$arrTerminalData['pass'],
-							$arrTerminalData["currency_iso_code"],
-							$arrTerminalData["importe"],
-							$order->get_id(),
-							$arrTerminalData["importe"] > 30 ? 'LWV' : '',
-							'',
-							''
-						);
-	
-						if ($executePurchaseResponse["DS_RESPONSE"] == "1") {
-							$order->payment_complete();
-							$this->jetiframeOkUrl = $URLOK;
-						} else {
-							wc_add_notice("SE HA PRODUCIDO UN ERROR DURANTE LA COMPRA - " . $order->get_id() . " error = ". $executePurchaseResponse['DS_ERROR_ID'], 'error' );
-							return;
-						}
+						wc_add_notice("SE HA PRODUCIDO UN ERROR DURANTE LA COMPRA - " . $order->get_id() . " error = ". $executePurchaseResponse['DS_ERROR_ID'], 'error' );
+						return;
 					}
 				}
 			}
@@ -1364,9 +1390,7 @@
 				case 1:
 					echo '<p>' . __( 'Thanks for your order, please press the button to pay.', 'wc_paytpv' ) . '</p>';
 					break;
-				case 2:
-					var_dump("TODO BIEN");
-
+				default:
 					break;
 			}
 
@@ -1379,7 +1403,7 @@
 		function savedCardsHtml($order_id)
 		{
 			$order = new WC_Order( $order_id );
-			$saved_cards = Paytpv::savedCards($order->get_user_id());
+			$saved_cards = Paytpv::savedCards(get_current_user_id());
 			$store_card = (sizeof($saved_cards)==0) ? "" : "";
 
 			// Tarjetas almacenadas
@@ -1395,7 +1419,7 @@
         		print 		"<option value='".$card['id']."'>".$card["paytpv_cc"]. $card_desc. "</option>";
 
         	}
-                            
+
             print '      <option value="0">'.__('NEW CARD', 'wc_paytpv' ).'</option></select>
                     </div>
                 </div>';
@@ -1410,20 +1434,20 @@
 			print '<input type="hidden" id="order_id" name="Order" value="'.$order_id.'">';
 
 			// Comprobacion almacenar tarjeta
-			if ($order->get_user_id() > 0 && $this->disable_offer_savecard == 0) {
+			if (get_current_user_id() > 0 && $this->disable_offer_savecard == 0) {
 				print '
 				<div id="storingStep" class="box" style="display:'.$store_card.'">					
 					<label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()"> '.__('Save card for future purchases', 'wc_paytpv' ).'. <span class="paytpv-pci"> '.__('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ).'.</span></label>';						                
 	        } else {
 	        	print '<div id="ifr-paytpv-container" class="box">';
 			}
-			
+
 			print  $this->generate_paytpv_form( $order_id );
 						
 			print '</div>';
 			print '<p id="paycomet-cancel"><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
 
-            print '</form>';
+			print '</form>';
 
             wc_get_template( 'myaccount/conditions.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
 		}
@@ -1441,12 +1465,32 @@
 			global $woocommerce;
 
 			$order = new WC_Order( $order_id );
-			$paytpv_args = $this->get_paytpv_args($order);
-
-			$iframe_url = $this->getIframeUrl(0);
+			
+			if ($this->apiKey !='') {
+				$arrTerminalData = $this->TerminalCurrency($order);
+				$apiRest = new PaycometApiRest($this->apiKey);
+				
+				$form = $apiRest->form(
+					1,
+					$this->_getLanguange(),
+					$arrTerminalData['term'],
+					'',
+					[
+						'terminal' => (int) $arrTerminalData['term'],
+						'order' => (string) $order_id,
+						'amount' => (string) $arrTerminalData['importe'],
+						'currency' => (string) $arrTerminalData['currency_iso_code'],
+						]
+					);
+					
+					$src = $form->challengeUrl;
+			} else {
+				$paytpv_args = $this->get_paytpv_args($order);
+				$iframe_url = $this->getIframeUrl(0);
+				$src = $iframe_url . '' . http_build_query($paytpv_args);
+			}
 			
 			$html = '';
-			$src = $iframe_url . '' . http_build_query($paytpv_args);
 
 			// Pago Iframe
 			if ($this->payment_paycomet == 0) {		

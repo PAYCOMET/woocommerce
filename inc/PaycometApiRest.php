@@ -32,6 +32,26 @@ class PaycometApiRest
         $this->apiKey = $apiKey;
     }
 
+    public function form(
+        $operationType,
+        $language = 'ES',
+        $terminal = '',
+        $productDescription = '',
+        $payment = [],
+        $subscription = []
+    ) {
+        $params = [
+            "operationType" => (int) $operationType,
+            "language" => (string) $language,
+            "terminal" => (int) $terminal,
+            "productDescription" => (string) $productDescription,
+            "payment" => $payment,
+            "subscription" => $subscription
+        ];
+
+        return $this->executeRequest('https://rest.paycomet.com/v1/form', $params);
+    }
+
     public function addUser(
         $terminal,
         $jetToken,
