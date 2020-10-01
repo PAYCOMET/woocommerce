@@ -116,7 +116,9 @@
 <script>
 //Comportamiento cuando se valida el formulario de JetIframe correctamente
 function jetIframeValidated(){
-    document.getElementById("savecard_jetiframe").checked = document.getElementById("jetiframe_savecard").checked;
+    if (document.getElementById("jetiframe_savecard") != null) {
+        document.getElementById("savecard_jetiframe").checked = document.getElementById("jetiframe_savecard").checked;
+    }
     document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
     document.getElementById('place_order').click();
     document.getElementById('jetiframe-button').disabled = false;
@@ -125,7 +127,7 @@ function jetIframeValidated(){
 //Ocultar boton de realizar pedido para el jetIframe
 window.onload = function() {
     if (document.getElementById('payment_method_paytpv').checked && document.getElementById('jet_iframe_card').value == 0) {
-        setTimeout(() => {  document.getElementById('place_order').style.display = "none"; }, 500);
+        setTimeout(() => {  document.getElementById('place_order').style.display = "none"; }, 750);
     }
     setTimeout(() => {  checkSelectedCard() }, 500);
 };
@@ -134,12 +136,12 @@ window.onload = function() {
 function checkSelectedCard() {
     if (document.getElementById('jet_iframe_card').value != 0){
         document.getElementById('toHide').style.display = "none";
-        document.getElementById('storingStep').style.display = "none";
+        // document.getElementById('storingStep').style.display = "none";
         document.getElementById('jetiframe-button').style.display = "none";
         document.getElementById('place_order').style.display = "block";
     } else {
         document.getElementById('toHide').style.display = "block";
-        document.getElementById('storingStep').style.display = "block";
+        // document.getElementById('storingStep').style.display = "block";
         document.getElementById('jetiframe-button').style.display = "block";
         document.getElementById('place_order').style.display = "none";
     }

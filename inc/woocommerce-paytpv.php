@@ -604,7 +604,9 @@
 							'URLKO' => $URLKO
 						);
 
-					if ($MERCHANT_DATA!=null)           $fields["MERCHANT_DATA"] = $MERCHANT_DATA;
+					if ($MERCHANT_DATA!=null) {
+						$fields["MERCHANT_DATA"] = $MERCHANT_DATA;
+					}
 
 					$query = http_build_query($fields);
 					$vhash = hash('sha512', md5($query.md5($pass)));
@@ -620,9 +622,50 @@
 
 			    $client = $this->get_client();
 				//$charge = $client->execute_purchase( $order,$saved_card["paytpv_iduser"],$saved_card["paytpv_tokenuser"],$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','',$MERCHANT_DATA);
-				$charge = $client->execute_purchase( $order,$saved_card["paytpv_iduser"],$saved_card["paytpv_tokenuser"],$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
 				
-				if ( ( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
+				if ($this->apiKey == '') {
+					$apiRest = new PaycometApiRest($this->apiKey);
+					$URLOK = $this->get_return_url($order);
+					$URLKO = $order->get_cancel_order_url_raw();
+
+					$executePurchaseResponse = $apiRest->executePurchase(
+						$term,
+						$paytpv_order_ref,
+						$importe,
+						$currency_iso_code,
+						'1',
+						$client->getIp(),
+						'0',
+						$saved_card["paytpv_iduser"],
+						$saved_card["paytpv_tokenuser"],
+						$URLOK,
+						$URLKO,
+						'',
+						'',
+						'',
+						1,
+						[],
+						'',
+						'',
+						$MERCHANT_DATA
+                	);
+				} else {
+					$charge = $client->execute_purchase(
+						$order,
+						$saved_card["paytpv_iduser"],
+						$saved_card["paytpv_tokenuser"],
+						$term,
+						$pass,
+						$currency_iso_code,
+						$importe,
+						$paytpv_order_ref,
+						'',
+						'',
+						''
+					);
+				}
+				
+				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 || (isset($executePurchaseResponse->errorCode) && $executePurchaseResponse->errorCode == 0)) {
 					// Se procesa en la notificacion
 					/*
 					$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
@@ -1172,7 +1215,7 @@
 
 			if ($this->apiKey != '') {
 				$apiRest = new PaycometApiRest($this->apiKey);
-				
+
 				if ($_POST['hiddenCardField'] != 0) {
 					$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
 					$idUser = $saved_card["paytpv_iduser"];
@@ -1480,8 +1523,8 @@
 						'order' => (string) $order_id,
 						'amount' => (string) $arrTerminalData['importe'],
 						'currency' => (string) $arrTerminalData['currency_iso_code'],
-						]
-					);
+					]
+				);
 					
 					$src = $form->challengeUrl;
 			} else {
@@ -1615,7 +1658,7 @@
 					$result = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
 				}
 
-				if ((int) $result[ 'DS_RESPONSE' ] == 1) {
+				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 || (isset($executePurchaseResponse->errorCode) && $executePurchaseResponse->errorCode == 0)) {
 					update_post_meta($order->get_id(), 'PayTPV_Referencia', $result['DS_MERCHANT_ORDER']);
 					update_post_meta($order->get_id(), '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);	
 					update_post_meta($order->get_id(), 'PayTPV_IdUser', $payptv_iduser);
@@ -1688,12 +1731,13 @@
 				);
 
 				$result['DS_RESPONSE'] = $executeRefundReponse->errorCode;
+				$result['DS_ERROR_ID'] = $executeRefundReponse->errorCode;
 				$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
 			} else {
 				$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code, $transaction_id, $importe);
 			}
 			
-			if ((int) $result[ 'DS_RESPONSE' ] != 1) {
+			if ((int) $result['DS_RESPONSE'] != 1) {
 				$this->write_log('Refund Failed. Error: ' . $result['DS_ERROR_ID' ]);
 				$order->add_order_note('Refund Failed. Error: ' . $result['DS_ERROR_ID']);
 
