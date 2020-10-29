@@ -22,7 +22,7 @@
 </div>
 
 
-<div id="toHide">
+<div id="toHide" style="display:none;">
     <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
     <div class="form-group">
@@ -98,14 +98,14 @@
 </div>
 
     <?php if(get_current_user_id() > 0 && $disable_offer_savecard == 0) { ?>
-        <div id="storingStep" class="box">					
-            <label class="checkbox"><input type="checkbox" name="jetiframe_savecard" id="jetiframe_savecard"><?php print __('Save card for future purchases', 'wc_paytpv' ) ?><span class="paytpv-pci"> <?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ) ?></span></label>
+        <div id="storingStep" class="box" style="display:none;">					
+            <label class="checkbox"><input type="checkbox" name="jetiframe_savecard" id="jetiframe_savecard"> <?php print __('Save card for future purchases', 'wc_paytpv' ) ?><span class="paytpv-pci"> <?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ) ?></span></label>
         </div>
     <?php
         }
     ?>
 
-    <button style="width: 290px" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Make payment', 'wc_paytpv');?></button>
+    <button style="width: 290px; display:none;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Make payment', 'wc_paytpv');?></button>    
 
 </form>
 
@@ -129,19 +129,19 @@ window.onload = function() {
     if (document.getElementById('payment_method_paytpv').checked && document.getElementById('jet_iframe_card').value == 0) {
         setTimeout(() => {  document.getElementById('place_order').style.display = "none"; }, 750);
     }
-    setTimeout(() => {  checkSelectedCard() }, 500);
+    setTimeout(() => {  checkSelectedCard() }, 100);    
 };
 
 //Oculta o muestra el formulario si hay una tarjeta guardada seleccionada
 function checkSelectedCard() {
     if (document.getElementById('jet_iframe_card').value != 0){
         document.getElementById('toHide').style.display = "none";
-        // document.getElementById('storingStep').style.display = "none";
+        document.getElementById('storingStep').style.display = "none";
         document.getElementById('jetiframe-button').style.display = "none";
         document.getElementById('place_order').style.display = "block";
     } else {
         document.getElementById('toHide').style.display = "block";
-        // document.getElementById('storingStep').style.display = "block";
+        document.getElementById('storingStep').style.display = "block";
         document.getElementById('jetiframe-button').style.display = "block";
         document.getElementById('place_order').style.display = "none";
     }
@@ -169,5 +169,3 @@ for(var i = 0; i < radio_buttons.length; i++){
 </script>
 
 <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
-
-

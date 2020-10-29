@@ -69,7 +69,7 @@ class PaycometApiRest
 
         return $this->executeRequest('https://rest.paycomet.com/v1/cards', $params);
     }
-    
+
     public function infoUser(
         $idUser,
         $tokenUser,
@@ -80,7 +80,7 @@ class PaycometApiRest
             'tokenUser' => (string) $tokenUser,
             'terminal' => (string) $terminal,
         ];
-            
+
         return $this->executeRequest('https://rest.paycomet.com/v1/cards/info', $params);
     }
 
@@ -94,7 +94,7 @@ class PaycometApiRest
             'idUser' => (int) $idUser,
             'tokenUser' => (string) $tokenUser,
         ];
-            
+
         return $this->executeRequest('https://rest.paycomet.com/v1/cards/delete', $params);
     }
 
@@ -113,7 +113,7 @@ class PaycometApiRest
         $scoring = '0',
         $productDescription = '',
         $merchantDescription = '',
-        $userInteraction = 1,
+        $userInteraction = '1',
         $escrowTargets = [],
         $trxType = '',
         $SCAException = '',
@@ -132,7 +132,7 @@ class PaycometApiRest
                 'scoring' => (string) $scoring,
                 'productDescription' => (string) $productDescription,
                 'merchantDescription' => (string) $merchantDescription,
-                'userInteraction' => (int) $userInteraction,
+                'userInteraction' => (string) $userInteraction,
                 'escrowTargets' => $escrowTargets,
                 'trxType' => (string) $trxType,
                 'SCAException' => (string) $SCAException,
@@ -225,8 +225,7 @@ class PaycometApiRest
         $currency,
         $authCode,
         $originalIp,
-        $tokenUser = '',
-        $idUser = ''
+        $notifyDirectPayment = 1
     ) {
         $params = [
             "payment" => [
@@ -235,8 +234,7 @@ class PaycometApiRest
                 'currency' => (string) $currency,
                 'authCode' => (string) $authCode,
                 'originalIp' => (string) $originalIp,
-                'tokenUser' => (string) $tokenUser = '',
-                'idUser' => (int) $idUser = ''
+                'notifyDirectPayment' => (int) $notifyDirectPayment
             ]
         ];
 
