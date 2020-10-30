@@ -141,11 +141,16 @@ function jetIframeValidated(){
 jQuery( function( $ ) {    
     $( "#place_order").on('click',function( event ) {
         if ($( '#payment_method_paytpv' ).is( ':checked' )) {
-            event.preventDefault();           
-            // Ejecutamos la accion de jetIframe 
-            $("#jetiframe-button").click()
-            // Si se ha tokenizado. Hacemos el submit.
-            if ($( "#jetiframe-token" ).val() != ""){                 
+            event.preventDefault();
+
+            new_card = (document.getElementById('jet_iframe_card').value == 0)?true:false;
+        
+            // New Card
+            if (new_card) {
+                // jetIframe action
+                $("#jetiframe-button").click();            
+            }
+            if ($( "#jetiframe-token" ).val() != "" || !new_card){
                 $('#place_order').submit();
             }
         }

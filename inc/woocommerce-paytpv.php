@@ -114,12 +114,10 @@
 			$secure_pay = 0;
 
 
-			if ($gateway->apiKey != '') {
-
-				$apiRest = new PaycometApiRest($gateway->apiKey);
+			if ($gateway->apiKey != '') {				
 
 				try {
-
+					$apiRest = new PaycometApiRest($gateway->apiKey);
 					$apiResponse = $apiRest->form(
 						$operation,
 						$gateway->_getLanguange(),
@@ -592,9 +590,9 @@
 				}
 			}
 
-			
+
 			if ( $_REQUEST[ 'tpvLstr' ] == 'pay' && $order->get_status() != 'completed' ) { //PAGO CON TARJETA GUARDADA
-				
+
 				$card = $_POST[ 'card' ];
 				$saved_card = PayTPV::savedCard($order->get_user_id(),$card);
 
@@ -608,9 +606,9 @@
 				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
 				$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,$card,$saved_card["paytpv_iduser"]) ? 1 : 0;
-				
+
 				// PAGO SEGURO redireccionamos
-				if ($secure_pay){					
+				if ($secure_pay){
 
 					$URLOK = $this->get_return_url( $order );
 					$URLKO = $order->get_cancel_order_url_raw();
@@ -618,7 +616,7 @@
 					// REST
 					if ($this->apiKey != '') {
 						$OPERATION = "1";
-						$methodId = '1';					
+						$methodId = '1';
 						$userInteraction = '1';
 						$scoring = '0';
 
@@ -626,8 +624,7 @@
 
 						try {
 
-							$apiRest = new PaycometApiRest($this->apiKey);							
-
+							$apiRest = new PaycometApiRest($this->apiKey);
 							$apiResponse = $apiRest->form(
 								$OPERATION,
 								$this->_getLanguange(),
@@ -647,16 +644,16 @@
 									'urlOk' => $URLOK,
 									'urlKo' => $URLKO
 								]
-							);							
+							);
 
 							if ($apiResponse->errorCode==0) {
 								$salida = $apiResponse->challengeUrl;
 							}
-							
+
 						} catch (exception $e){
 							$this->write_log('Error challengeUrl. Error: ' . print_r($apiResponse));
 							wp_redirect( $URLKO, 303 );
-							exit;							
+							exit;
 						}
 
 					} else {
@@ -681,7 +678,7 @@
 								'URLOK' => $URLOK,
 								'URLKO' => $URLKO
 							);
-						
+
 
 						$query = http_build_query($fields);
 						$vhash = hash('sha512', md5($query.md5($pass)));
@@ -697,15 +694,15 @@
 				// PAGO NO SEGURO --------------------------------------------------------------------------
 
 				$client = $this->get_client();
-				$ip = $client->getIp();				
+				$ip = $client->getIp();
 
 				// REST
 				if ($this->apiKey != '') {
-									
+
 					$URLOK = $this->get_return_url($order);
 					$URLKO = $order->get_cancel_order_url_raw();
 
-					$methodId = '1';					
+					$methodId = '1';
 					$userInteraction = '1';
 					$scoring = '0';
 
@@ -735,15 +732,15 @@
 							'',
 							$merchantData
 						);
-						
-						$res["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
-						$res["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
-						$res["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
-						$res["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
-			
+
+						$charge["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
+						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
+						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
+						$charge["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
+
 					} catch (Exception $e) {
-						$res["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
-					}				
+						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
+					}
 
 				} else {
 					$charge = $client->execute_purchase(
@@ -761,13 +758,8 @@
 					);
 				}
 
-				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 || (isset($executePurchaseResponse->errorCode) && $executePurchaseResponse->errorCode == 0)) {
-					// Se procesa en la notificacion
-					/*
-					$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
-					$order->payment_complete($charge[ 'DS_MERCHANT_AUTHCODE' ]);
-					update_post_meta( ( int ) $order->id, 'PayTPV_Referencia', $charge[ 'DS_MERCHANT_ORDER' ]);
-					*/
+				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
+
 					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
 
@@ -841,7 +833,7 @@
 									$paytpv_iduser = $idUser;
 									$paytpv_tokenuser = $tokenUser;
 								}
-								
+
 								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $paytpv_iduser);
 								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $paytpv_tokenuser);
 							}
@@ -882,7 +874,7 @@
 				$card_desc = $_POST["card_desc"];
 				$id_card = $_GET["id"];
 
-				$saved_cards = Paytpv::saveCardDesc($id_card,$card_desc);
+				Paytpv::saveCardDesc($id_card,$card_desc);
 
 				$res["resp"] = 0;
 				print json_encode($res);
@@ -893,7 +885,7 @@
 			if ( $_REQUEST[ 'tpvLstr' ] == 'removeCard' ) {//NOTIFICACIÓN
 				$id_card = $_GET["id"];
 
-				$saved_cards = Paytpv::removeCard($id_card);
+				Paytpv::removeCard($id_card);
 
 				$res["resp"] = 0;
 				print json_encode($res);
@@ -947,7 +939,7 @@
 			}
 			return 'ES';
 		}
-		
+
 		public function isoCodeToNumber($code)
 		{
 			try {
@@ -971,8 +963,6 @@
 		public function numPurchaseCustomer($id_customer, $valid=1, $interval=1, $intervalType = "DAY")
 		{
 			global $wpdb;
-
-            $table_prefix = $wpdb->prefix ? $wpdb->prefix : 'wp_';
 
 			$date_now = new DateTime("now");
 			$date_now = $date_now->format("Y-m-d h:m:s");
@@ -1213,7 +1203,7 @@
 			$MERCHANT_EMV3DS = $this->getEMV3DS($order);
 			$SHOPPING_CART = $this->getShoppingCart($order);
 
-			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);			
+			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);
 
 			//Si el PSD2 sólo va a ir por API, los datos se envían como un array, no codificado en base64
 			return $datos;
@@ -1232,19 +1222,19 @@
 			$pass = $arrTerminalData["pass"];
 			$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,0,0)?1:0;
 
-			$OPERATION = '1';		
+			$OPERATION = '1';
 			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $order->get_cancel_order_url_raw();			
-			
+			$URLKO = $order->get_cancel_order_url_raw();
+
 			// REST
 			if ($this->apiKey != '') {
 
 				$userInteraction = '1';
-				$merchantData = $this->getMerchantData($order);				
-				
+				$merchantData = $this->getMerchantData($order);
+
 				try {
 
 					$apiRest = new PaycometApiRest($this->apiKey);
@@ -1257,14 +1247,14 @@
 							'terminal' => $term,
 							'order' => $MERCHANT_ORDER,
 							'amount' => $MERCHANT_AMOUNT,
-							'currency' => $currency_iso_code,							
+							'currency' => $currency_iso_code,
 							'userInteraction' => $userInteraction,
 							'secure' => $secure_pay,
 							'merchantData' => $merchantData,
 							'urlOk' => $URLOK,
 							'urlKo' => $URLKO
 						],
-						[]						
+						[]
 					);
 
 					$url = $form->challengeUrl;
@@ -1272,9 +1262,9 @@
 					$url = "";
 				}
 
-			} else {						
+			} else {
 				$mensaje = $this->clientcode . $term . $OPERATION . $MERCHANT_ORDER . $MERCHANT_AMOUNT . $MERCHANT_CURRENCY;
-				$MERCHANT_MERCHANTSIGNATURE = hash ('sha512', $mensaje . md5( $pass ) );			
+				$MERCHANT_MERCHANTSIGNATURE = hash ('sha512', $mensaje . md5( $pass ) );
 
 				$paytpv_args = array(
 					'MERCHANT_MERCHANTCODE' => $this->clientcode,
@@ -1289,12 +1279,12 @@
 					'URLKO' => $URLKO,
 					'3DSECURE' => $secure_pay,
 					''
-				);			
+				);
 
 				$query = http_build_query($paytpv_args);
 				$vhash = hash('sha512', md5($query.md5($pass)));
 
-				$paytpv_args["VHASH"] = $vhash;			
+				$paytpv_args["VHASH"] = $vhash;
 
 				$url = $this->getIframeUrl() . '' . http_build_query($paytpv_args);
 			}
@@ -1310,7 +1300,6 @@
 				$this->processJetIFramePayment($order);
 			}
 
-			global $woocommerce;
 			$this->write_log( 'Process payment: ' . $order_id );
 
 			return array(
@@ -1334,17 +1323,17 @@
 				$idUser = $saved_card["paytpv_iduser"];
 				$tokenUser = $saved_card["paytpv_tokenuser"];
 			// With jetIframe Token
-			} else {				
-
+			} else {
 				// REST
 				if ($this->apiKey != '') {
+					$apiRest = new PaycometApiRest($this->apiKey);
 					$addUserResponse = $apiRest->addUser(
 						$arrTerminalData['term'],
 						$_POST['jetiframe-token'],
-						$order->get_id(),
+						$order->get_id()
 					);
 					$idUser = $addUserResponse->idUser;
-					$tokenUser = $addUserResponse->tokenUser;
+					$tokenUser = $addUserResponse->tokenUser;					
 				// XML
 				} else {
 					$addUserTokenResponse = $client->add_user_token(
@@ -1357,7 +1346,7 @@
 					);
 					$idUser = $addUserTokenResponse["DS_IDUSER"];
 					$tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
-				}				
+				}
 			}
 
 			$savecard_jetiframe = (isset($_POST["savecard_jetiframe"]))?1:0;
@@ -1367,21 +1356,22 @@
 			update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
 
 			$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,$_POST['hiddenCardField'],$idUser) ? '1' : '0';
-			
+
 			$term = $arrTerminalData['term'];
 			$importe = $arrTerminalData["importe"];
 			$pass = $arrTerminalData['pass'];
 			$currency = $arrTerminalData["currency_iso_code"];
 
 			if ($this->apiKey != '') {
-				$apiRest = new PaycometApiRest($this->apiKey);			
-
-				$methodId = '1';					
-				$userInteraction = '1';
-				$scoring = '0';				
 				
+
+				$methodId = '1';
+				$userInteraction = '1';
+				$scoring = '0';
+
 				$merchantData = $this->getMerchantData($order);
 
+				$apiRest = new PaycometApiRest($this->apiKey);
 				$executePurchaseResponse = $apiRest->executePurchase(
 					$term,
 					$order->get_id(),
@@ -1405,8 +1395,8 @@
 				);
 
 				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $URLOK;
-				
-			} else {								
+
+			} else {
 
 				$OPERATION = "109";
 
@@ -1427,13 +1417,13 @@
 						'3DSECURE' => $secure_pay,
 						'URLOK' => $URLOK,
 						'URLKO' => $URLKO
-					);				
+					);
 
 				$query = http_build_query($fields);
 				$vhash = hash('sha512', md5($query.md5($pass)));
-				
+
 				$this->jetiframeOkUrl = $this->getIframeUrl() . $query. "&VHASH=".$vhash;
-				
+
 			}
 		}
 
@@ -1608,8 +1598,7 @@
 		 * Generate the paytpv button link
 		 * */
         function generate_paytpv_form($order_id)
-        {
-			global $woocommerce;
+        {			
 
 			$order = new WC_Order( $order_id );
 
@@ -1651,7 +1640,7 @@
 
 				$term = $arrTerminalData["term"];
 				$pass = $arrTerminalData["pass"];
-				
+
 				// REST
 				if ($this->apiKey != '') {
 					$apiRest = new PaycometApiRest($this->apiKey);
@@ -1697,7 +1686,7 @@
 				$term = $arrTerminalData["term"];
 				$pass = $arrTerminalData["pass"];
 
-				$parent_order = $subscription->get_parent();				
+				$parent_order = $subscription->get_parent();
 
 				$paytpv_order_ref = $order->get_id();
 
@@ -1705,30 +1694,29 @@
 				$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
 
 				$client = $this->get_client();
-				$ip = $client->getIp();				
+				$ip = $client->getIp();
 
 				// REST
 				if($this->apiKey != '') {					
 
-					$apiRest = new PaycometApiRest($this->apiKey);
-
 					$methodId = '1';
 					$secure = '0';
 					$userInteraction = '0';
-					$scoring = '0';													
+					$scoring = '0';
 
 					$merchantData = $this->getMerchantData($order);
-					
+
 					// Añadimos información MIT -> R
 					$trxType = "R";
 					$SCAException = "MIT";
 
-					$dateAux = new \DateTime("now");            
-					$dateAux->modify('+10 year'); 
-					$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.									
-					$merchantData["recurringExpiry"] = $recurringExpiry; 
-					$merchantData["recurringFrequency"] = "1";			
+					$dateAux = new \DateTime("now");
+					$dateAux->modify('+10 year');
+					$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+					$merchantData["recurringExpiry"] = $recurringExpiry;
+					$merchantData["recurringFrequency"] = "1";
 
+					$apiRest = new PaycometApiRest($this->apiKey);
 					$executePurchaseResponse = $apiRest->executePurchase(
 						$arrTerminalData['term'],
 						$order->get_id(),
@@ -1829,13 +1817,13 @@
 					$transaction_id,
 					$ip,
 					$notifyDirectPayment
-				);			
-				
+				);
+
 				$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
-				$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;				
+				$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
 				$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
 
-			} else {				
+			} else {
 				$result = $client->execute_refund('', '', $paytpv_order_ref, $term,$pass,$currency_iso_code, $transaction_id, $importe);
 			}
 
