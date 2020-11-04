@@ -34,8 +34,10 @@
 
 	<div id="storingStepUser" class="box">
         <p class="checkbox">
-            <span class="checked"><input type="checkbox" name="savecard" id="savecard"></span>
-            <label for="savecard"><?php print __('Save card for future purchases ', 'wc_paytpv');?><span class="paytpv-pci"><?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' );?></label>
+            <label for="savecard">
+                <span class="checked"><input type="checkbox" name="savecard" id="savecard"></span>
+            <?php print __('Save card for future purchases ', 'wc_paytpv');?><span class="paytpv-pci"><?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' );?>
+            </label>
         </p>
         <p>
             <a href="javascript:void(0);" onclick="vincularTarjeta();" title="<?php print __('Link card', 'wc_paytpv');?>" id="open_vincular" class="button button-small btn btn-default">
