@@ -56,6 +56,7 @@ class PaycometApiRest
         $terminal,
         $jetToken,
         $order,
+        $notify = '1',
         $productDescription = '',
         $language = 'ES'
     ) {
@@ -63,6 +64,7 @@ class PaycometApiRest
             "terminal" => (int) $terminal,
             "jetToken" => (string) $jetToken,
             "order" => (string) $order,
+            "notify" => (string) $notify,
             "productDescription" => (string) $productDescription,
             "language" => (string) $language
         ];

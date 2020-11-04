@@ -1326,11 +1326,15 @@
 			} else {
 				// REST
 				if ($this->apiKey != '') {
+
+					$notify = 2; // No notificar HTTP
+
 					$apiRest = new PaycometApiRest($this->apiKey);
 					$addUserResponse = $apiRest->addUser(
 						$arrTerminalData['term'],
 						$_POST['jetiframe-token'],
-						$order->get_id()
+						$order->get_id(),
+						$notify
 					);
 					$idUser = $addUserResponse->idUser;
 					$tokenUser = $addUserResponse->tokenUser;					
