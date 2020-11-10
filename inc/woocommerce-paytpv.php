@@ -161,11 +161,21 @@
 			$payment_paycomet = $gateway->payment_paycomet;
 			$jet_id = $gateway->jet_id;
 
-			if($gateway->isJetIframeActive) {
-				wc_get_template( 'myaccount/my-cards-jetiframe.php', array('disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'jet_id' => $jet_id, 'apiKey' => $gateway->apiKey, 'term' => $term, 'pass' => $pass, 'clientcode' => $gateway->clientcode, 'settings' => $gateway->settings), '', PAYTPV_PLUGIN_DIR . 'template/' );
-			} else {
-				wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv, 'payment_paycomet'=> $payment_paycomet), '', PAYTPV_PLUGIN_DIR . 'template/' );
-			}
+			wc_get_template( 'myaccount/my-cards.php', 
+			array( 
+				'isJetIframeActive' => ($gateway->isJetIframeActive)?1:0,
+				'disable_offer_savecard' => $disable_offer_savecard, 
+				'saved_cards' => $saved_cards, 
+				'jet_id' => $jet_id, 
+				'apiKey' => $gateway->apiKey, 
+				'term' => $term, 
+				'pass' => $pass, 
+				'clientcode' => $gateway->clientcode, 
+				'settings' => $gateway->settings,
+				'user_id' => get_current_user_id(), 
+				'url_paytpv'=> $url_paytpv, 
+				'payment_paycomet'=> $payment_paycomet
+			), '', PAYTPV_PLUGIN_DIR . 'template/' );			
 		}
 
 		public function validate_paytpv()
