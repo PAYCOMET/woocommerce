@@ -148,7 +148,7 @@ jQuery( function( $ ) {
             // New Card
             if (new_card) {
                 // jetIframe action
-                $("#jetiframe-button").click();            
+                $("#jetiframe-button").click();
             }
             if ($( "#jetiframe-token" ).val() != "" || !new_card){
                 $('#place_order').submit();

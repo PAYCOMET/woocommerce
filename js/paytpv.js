@@ -108,7 +108,6 @@ jQuery(function($) {
             url: element.attr("href"),
             type: "POST",
             data: {
-                
                 'card_desc': car_desc,
                 'ajax': true
             },

@@ -58,15 +58,11 @@
         <input type="hidden" name="payment_paycomet" id="payment_paycomet" value="<?=$payment_paycomet?>">
     </div>
 
-
-
 	<?php
-	wc_get_template( 'myaccount/conditions.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
+	    wc_get_template( 'myaccount/conditions.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
 	?>
-	
 
 </div>
-
 
 <div id="alert" style="display:none">
     <p class="title"></p>

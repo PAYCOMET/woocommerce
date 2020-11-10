@@ -113,9 +113,7 @@
 			$order = $user_id;
 			$secure_pay = 0;
 
-
 			if ($gateway->apiKey != '') {				
-
 				try {
 					$apiRest = new PaycometApiRest($gateway->apiKey);
 					$apiResponse = $apiRest->form(
@@ -161,8 +159,13 @@
 
 			$disable_offer_savecard = $gateway->disable_offer_savecard;
 			$payment_paycomet = $gateway->payment_paycomet;
+			$jet_id = $gateway->jet_id;
 
-			wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv, 'payment_paycomet'=> $payment_paycomet), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			if($gateway->isJetIframeActive) {
+				wc_get_template( 'myaccount/my-cards-jetiframe.php', array('disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'jet_id' => $jet_id, 'apiKey' => $gateway->apiKey, 'term' => $term, 'pass' => $pass, 'clientcode' => $gateway->clientcode, 'settings' => $gateway->settings), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			} else {
+				wc_get_template( 'myaccount/my-cards.php', array( 'disable_offer_savecard' => $disable_offer_savecard, 'saved_cards' => $saved_cards, 'user_id' => get_current_user_id(), 'url_paytpv'=> $url_paytpv, 'payment_paycomet'=> $payment_paycomet), '', PAYTPV_PLUGIN_DIR . 'template/' );
+			}
 		}
 
 		public function validate_paytpv()
@@ -1367,8 +1370,6 @@
 			$currency = $arrTerminalData["currency_iso_code"];
 
 			if ($this->apiKey != '') {
-				
-
 				$methodId = '1';
 				$userInteraction = '1';
 				$scoring = '0';
