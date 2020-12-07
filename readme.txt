@@ -2,9 +2,9 @@
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 4.20
+Stable tag: 4.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 4.21 =
+Se añade integración JetIframe para incluir formulario de pago en el checkout.
+Se añade Integración REST y parámetros PSD2. Es necesario configurar el nuevo parámetro API Key. La API Key se genera en el Panel de PAYCOMET.
 
 = 4.20 =
 Cambios en la definicion del Iframe de pago para compatibilidad con diversos temas de Wordpress.
