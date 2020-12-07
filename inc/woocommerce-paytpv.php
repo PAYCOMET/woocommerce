@@ -425,7 +425,7 @@
 					'default' => __( 'Pay using your credit card in a secure way', 'wc_paytpv' ),
 				),
 				'apikey' => array(
-					'title' => __('ApiKey', 'wc_paytpv' ),
+					'title' => __('API Key', 'wc_paytpv' ),
 					'type' => 'text',
 					'class' => 'api_key',
 					'description' => __( 'Your API Key from PayComet. Read documentation <a href="https://docs.paycomet.com/es/inicio/configuracion#apikeys">here</a>', 'wc_paytpv' ),
@@ -628,10 +628,10 @@
 
 					// REST
 					if ($this->apiKey != '') {
-						$OPERATION = "1";
-						$methodId = '1';
-						$userInteraction = '1';
-						$scoring = '0';
+						$OPERATION = 1;
+						$methodId = 1;
+						$userInteraction = 1;
+						$scoring = 0;
 
 						$merchantData = $this->getMerchantData($order);
 
@@ -671,7 +671,7 @@
 
 					} else {
 
-						$OPERATION = "109";
+						$OPERATION = 109;
 
 						$signature = hash('sha512',$this->clientcode.$saved_card["paytpv_iduser"].$saved_card["paytpv_tokenuser"].$term.$OPERATION.$paytpv_order_ref.$importe.$currency_iso_code.md5($pass));
 
@@ -715,9 +715,9 @@
 					$URLOK = $this->get_return_url($order);
 					$URLKO = $order->get_cancel_order_url_raw();
 
-					$methodId = '1';
-					$userInteraction = '1';
-					$scoring = '0';
+					$methodId = 1;
+					$userInteraction = 1;
+					$scoring = 0;
 
 					$merchantData = $this->getMerchantData($order);
 
@@ -1235,7 +1235,7 @@
 			$pass = $arrTerminalData["pass"];
 			$secure_pay = $this->isSecureTransaction($order,$arrTerminalData,0,0)?1:0;
 
-			$OPERATION = '1';
+			$OPERATION = 1;
 			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
@@ -1245,7 +1245,7 @@
 			// REST
 			if ($this->apiKey != '') {
 
-				$userInteraction = '1';
+				$userInteraction = 1;
 				$merchantData = $this->getMerchantData($order);
 
 				try {
@@ -1379,17 +1379,19 @@
 			$pass = $arrTerminalData['pass'];
 			$currency = $arrTerminalData["currency_iso_code"];
 
+			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
+
 			if ($this->apiKey != '') {
-				$methodId = '1';
-				$userInteraction = '1';
-				$scoring = '0';
+				$methodId = 1;
+				$userInteraction = 1;
+				$scoring = 0;
 
 				$merchantData = $this->getMerchantData($order);
 
 				$apiRest = new PaycometApiRest($this->apiKey);
 				$executePurchaseResponse = $apiRest->executePurchase(
 					$term,
-					$order->get_id(),
+					$MERCHANT_ORDER,
 					$importe,
 					$currency,
 					$methodId,
@@ -1413,7 +1415,7 @@
 
 			} else {
 
-				$OPERATION = "109";
+				$OPERATION = 109;
 
 				$signature = hash('sha512',$this->clientcode.$idUser.$tokenUser.$term.$OPERATION.$order->get_id().$importe.$currency.md5($pass));
 
@@ -1424,7 +1426,7 @@
 						'OPERATION' => $OPERATION,
 						'LANGUAGE' => $this->_getLanguange(),
 						'MERCHANT_MERCHANTSIGNATURE' => $signature,
-						'MERCHANT_ORDER' => $order->get_id(),
+						'MERCHANT_ORDER' => $MERCHANT_ORDER,
 						'MERCHANT_AMOUNT' => $importe,
 						'MERCHANT_CURRENCY' => $currency,
 						'IDUSER' => $idUser,
@@ -1555,8 +1557,7 @@
 		function savedCardsHtml($order_id)
 		{
 			$order = new WC_Order( $order_id );
-			$saved_cards = Paytpv::savedCards(get_current_user_id());
-			$store_card = (sizeof($saved_cards)==0) ? "" : "";
+			$saved_cards = Paytpv::savedCards(get_current_user_id());			
 
 			// Tarjetas almacenadas
 			$store_card = (sizeof($saved_cards) == 0) ? "none" : "";
@@ -1626,7 +1627,7 @@
 				$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $src . '"
 	name="paytpv" style="min-width: 670px!important; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
 			} else {
-				$html .= '<p><a href="' . $src . '" id="paycomet_page" class="button paycomet_pay">'.__( 'Pay', 'wc_paytpv' ).'<a/></p>';
+				$html .= '<p><a href="' . $src . '" id="paycomet_page" class="button paycomet_pay">'.__( 'Pay', 'wc_paytpv' ).'</a></p>';
 			}
 
 			return $html;
@@ -1712,12 +1713,12 @@
 				$ip = $client->getIp();
 
 				// REST
-				if($this->apiKey != '') {					
+				if($this->apiKey != '') {
 
-					$methodId = '1';
-					$secure = '0';
-					$userInteraction = '0';
-					$scoring = '0';
+					$methodId = 1;
+					$secure = 0;
+					$userInteraction = 0;
+					$scoring = 0;
 
 					$merchantData = $this->getMerchantData($order);
 
