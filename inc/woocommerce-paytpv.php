@@ -1366,7 +1366,7 @@
 						$this->jet_id,
 						$arrTerminalData['pass'],
 						$ip
-					);
+					);					
 					$idUser = $addUserTokenResponse["DS_IDUSER"];
 					$tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
 				}
@@ -1423,7 +1423,7 @@
 
 				$OPERATION = 109;
 
-				$signature = hash('sha512',$this->clientcode.$idUser.$tokenUser.$term.$OPERATION.$order->get_id().$importe.$currency.md5($pass));
+				$signature = hash('sha512',$this->clientcode.$idUser.$tokenUser.$term.$OPERATION.$MERCHANT_ORDER.$importe.$currency.md5($pass));
 
 				$fields = array
 					(
@@ -1444,6 +1444,7 @@
 
 				$query = http_build_query($fields);
 				$vhash = hash('sha512', md5($query.md5($pass)));
+				
 
 				$this->jetiframeOkUrl = $this->getIframeUrl() . $query. "&VHASH=".$vhash;
 
