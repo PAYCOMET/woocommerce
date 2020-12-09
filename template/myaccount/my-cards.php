@@ -15,13 +15,15 @@ if (isset($_POST["paytpvToken"])) {
         $ip = $_SERVER['REMOTE_ADDR'];
     }
 
+    $error = false;
     if ($token && strlen($token) == 64) {
+       
         if ($apiKey != '') {
 
             $notify = 2;
 
             $apiRest = new PaycometApiRest($apiKey);
-    
+
             $addUserResponse = $apiRest->addUser(
                 $term,
                 $token,
@@ -29,17 +31,24 @@ if (isset($_POST["paytpvToken"])) {
                 $notify
             );
 
-            $idUser = $addUserResponse->idUser;
-            $tokenUser = $addUserResponse->tokenUser;
-            
-            $infoUserResponse = $apiRest->infoUser(
-                $idUser,
-                $tokenUser,
-                $term
-            );
+            if ($addUserResponse->errorCode==0) {
 
-            $result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
-            $result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+                $idUser = $addUserResponse->idUser;
+                $tokenUser = $addUserResponse->tokenUser;
+
+                $infoUserResponse = $apiRest->infoUser(
+                    $idUser,
+                    $tokenUser,
+                    $term
+                );
+
+                if ($infoUserResponse->errorCode==0) {
+                    $result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
+                    $result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+                }
+            } else {
+                $error = true;
+            }
 
         } else {
             require_once PAYTPV_PLUGIN_DIR . '/ws_client.php';
@@ -53,15 +62,24 @@ if (isset($_POST["paytpvToken"])) {
                 $pass,
                 $ip
             );
-            $idUser = $addUserTokenResponse["DS_IDUSER"];
-            $tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
 
-            $result = $client->info_user($idUser, $tokenUser, $term, $pass);
+            if ($addUserTokenResponse["DS_ERROR_ID"]==0) {
+                $idUser = $addUserTokenResponse["DS_IDUSER"];
+                $tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
+
+                $result = $client->info_user($idUser, $tokenUser, $term, $pass);
+            } else {
+                $error = true;
+            }
         }
 
-        PayTPV::saveCard($user_id,$idUser,$tokenUser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
-        $_POST["paytpvToken"] = '';
-        echo "<meta http-equiv='refresh' content='0'>";
+        if (!$error) {
+            PayTPV::saveCard($user_id,$idUser,$tokenUser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
+            $_POST["paytpvToken"] = '';
+            echo "<meta http-equiv='refresh' content='0'>";
+        } else {
+            print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';    
+        }
     } else {
         print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';
     }
@@ -97,7 +115,7 @@ if (isset($_POST["paytpvToken"])) {
 
 	<?php endif; ?>
 
-	<div id="storingStepUser" class="box">        
+	<div id="storingStepUser" class="box">
         <p>
             <a href="javascript:void(0);" onclick="vincularTarjeta();" title="<?php print __('Link card', 'wc_paytpv');?>" id="open_vincular" class="button button-small btn btn-default">
                 <span><?php print __('Link card', 'wc_paytpv');?><i class="icon-chevron-right right"></i></span>
@@ -118,16 +136,16 @@ if (isset($_POST["paytpvToken"])) {
                 <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
             <?php else : ?>
                 <form role="form" id="paycometPaymentForm" action="" method="POST">
-            
+
                 <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
                 <input type="hidden" class="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style="height:30px; width: 290px">
-                
+
                 <div class="form-group">
                     <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
                     <div class="input-group">
-                        <div id="paycomet-pan" style="width: 300px; padding:0px; height:35px; border: 1px solid #dcd7ca"></div>
-                        <input paycomet-style="height: 24px; font-size:14px; padding-left:7px; padding-top:8px; border:0px;" paycomet-name="pan">
+                        <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
+                        <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
                     </div>
                 </div>
 
@@ -137,7 +155,7 @@ if (isset($_POST["paytpvToken"])) {
                             <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                             <div class="form-inline">
 
-                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 17px;" data-paycomet="dateMonth">
+                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
                                     <option><?php print __('Month', 'wc_paytpv');?></option>
                                     <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                                     <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -153,7 +171,7 @@ if (isset($_POST["paytpvToken"])) {
                                     <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                                 </select>
 
-                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 17px;" data-paycomet="dateYear">
+                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
                                     <option><?php print __('Year', 'wc_paytpv');?></option>
 
                                     <?php
@@ -180,8 +198,7 @@ if (isset($_POST["paytpvToken"])) {
                             </label>
 
                             <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
-
-                            <input paycomet-name="cvc2" paycomet-style="border:0px; width: 130px; height: 30px; font-size:12px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+                            <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
 
                         </div>
                     </div>
@@ -189,9 +206,9 @@ if (isset($_POST["paytpvToken"])) {
                 </div>
 
                 <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>                            
-                
+
                 <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
-                
+
             <?php endif; ?>
         </p>
         <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 290px; font-size: 20px;">

@@ -1,10 +1,11 @@
 <?php
     $saved_cards = Paytpv::savedCards(get_current_user_id());
+    $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 ?>
 
 <form role="form" id="paycometPaymentForm" action="javascript:jetIframeValidated()" method="POST">
 
-<div id="saved_cards">
+<div id="saved_cards" style="display:<?=$store_card;?>">
     <div class="form-group">
         <label for="card"><?php print __('Card', 'wc_paytpv'); ?></label>
         <select name="jet_iframe_card" id="jet_iframe_card" onChange="checkSelectedCard()" class="form-control">
@@ -26,22 +27,23 @@
     <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
     <input type="hidden" class="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style="height:30px; width: 290px">
-    
-    <div class="form-group">
-        <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
-        <div class="input-group">
-            <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
-            <input paycomet-style="height: 24px; font-size:14px; padding-left:7px; padding-top:8px; border:0px;" paycomet-name="pan">
+
+    <div class="row">
+        <div class="form-group">
+            <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
+            <div class="input-group">
+                <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
+                <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+            </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-sm-8">
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
 
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 17px;" data-paycomet="dateMonth">
+                    <select class="form-control" style="height:30px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
                         <option><?php print __('Month', 'wc_paytpv');?></option>
                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -57,7 +59,7 @@
                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                     </select>
 
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 17px;" data-paycomet="dateYear">
+                    <select class="form-control" style="height:30px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                         <?php
@@ -85,7 +87,7 @@
 
                 <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
 
-                <input paycomet-name="cvc2" paycomet-style="border:0px; width: 130px; height: 30px; font-size:12px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+                <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
 
             </div>
         </div>
@@ -144,7 +146,7 @@ jQuery( function( $ ) {
             event.preventDefault();
 
             new_card = (document.getElementById('jet_iframe_card').value == 0)?true:false;
-        
+
             // New Card
             if (new_card) {
                 // jetIframe action
