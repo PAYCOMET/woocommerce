@@ -51,26 +51,20 @@ jQuery(function($) {
         lightcase.start({
           href: '#'+msg,
         });
-    }
-
-
-    $('#open_conditions').lightcase();
+    }    
 
 
     window.vincularTarjeta = function(){
-        if ($("#savecard").is(':checked')){
-            $('#savecard').attr("disabled", true);
-            $('#close_vincular').show();
-            if ($('#payment_paycomet').val()!=1) {
-                $('#nueva_tarjeta').show();
-            } else {
-                window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
-            }
-
-            $('#open_vincular').hide();
-        }else{
-            alert("#msg_accept");
+       
+        $('#savecard').attr("disabled", true);
+        $('#close_vincular').show();
+        if ($('#payment_paycomet').val()!=1) {
+            $('#nueva_tarjeta').show();
+        } else {
+            window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
         }
+
+        $('#open_vincular').hide();       
     }
 
     window.close_vincularTarjeta = function (){
@@ -108,7 +102,6 @@ jQuery(function($) {
             url: element.attr("href"),
             type: "POST",
             data: {
-                
                 'card_desc': car_desc,
                 'ajax': true
             },

@@ -1,8 +1,91 @@
 <?php
-/**
- * My Cards
- */
+// jetIFrame
+if (isset($_POST["paytpvToken"])) {
+    
+    $token = $_POST["paytpvToken"];
+    $user_id = get_current_user_id();
+
+    if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+        //check ip from share internet
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+        //to check ip is pass from proxy
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    $error = false;
+    if ($token && strlen($token) == 64) {
+       
+        if ($apiKey != '') {
+
+            $notify = 2;
+
+            $apiRest = new PaycometApiRest($apiKey);
+
+            $addUserResponse = $apiRest->addUser(
+                $term,
+                $token,
+                '',
+                $notify
+            );
+
+            if ($addUserResponse->errorCode==0) {
+
+                $idUser = $addUserResponse->idUser;
+                $tokenUser = $addUserResponse->tokenUser;
+
+                $infoUserResponse = $apiRest->infoUser(
+                    $idUser,
+                    $tokenUser,
+                    $term
+                );
+
+                if ($infoUserResponse->errorCode==0) {
+                    $result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
+                    $result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+                }
+            } else {
+                $error = true;
+            }
+
+        } else {
+            require_once PAYTPV_PLUGIN_DIR . '/ws_client.php';
+            $client = new WS_Client($settings);
+
+            $addUserTokenResponse = $client->add_user_token(
+                $clientcode,
+                $term,
+                $token,
+                $jet_id,
+                $pass,
+                $ip
+            );
+
+            if ($addUserTokenResponse["DS_ERROR_ID"]==0) {
+                $idUser = $addUserTokenResponse["DS_IDUSER"];
+                $tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
+
+                $result = $client->info_user($idUser, $tokenUser, $term, $pass);
+            } else {
+                $error = true;
+            }
+        }
+
+        if (!$error) {
+            PayTPV::saveCard($user_id,$idUser,$tokenUser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
+            $_POST["paytpvToken"] = '';
+            echo "<meta http-equiv='refresh' content='0'>";
+        } else {
+            print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';    
+        }
+    } else {
+        print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';
+    }
+}
 ?>
+
 <?php if ($disable_offer_savecard == 0 ) :?>
 <div class="woocommerce_paytpv_cards">
 
@@ -33,10 +116,6 @@
 	<?php endif; ?>
 
 	<div id="storingStepUser" class="box">
-        <p class="checkbox">
-            <span class="checked"><input type="checkbox" name="savecard" id="savecard"></span>
-            <label for="savecard"><?php print __('Save card for future purchases ', 'wc_paytpv');?><span class="paytpv-pci"><?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' );?></label>
-        </p>
         <p>
             <a href="javascript:void(0);" onclick="vincularTarjeta();" title="<?php print __('Link card', 'wc_paytpv');?>" id="open_vincular" class="button button-small btn btn-default">
                 <span><?php print __('Link card', 'wc_paytpv');?><i class="icon-chevron-right right"></i></span>
@@ -44,27 +123,103 @@
             <a href="javascript:void(0);" onclick="close_vincularTarjeta();" title="<?php print __('Cancel', 'wc_paytpv');?>" class="button button-small btn btn-default" id="close_vincular" style="display:none">
                 <span><?php print __('Cancel', 'wc_paytpv');?><i class="icon-chevron-right right"></i></span>
             </a>
+            <label>
+                <span class="paytpv-pci"><?php print __('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' );?></span>
+            </label>
         </p>
 
         <p id="msg_accept" style="display:none"><?php print __('You must accept save card to continue', 'wc_paytpv');?></p>
         <p id="msg_descriptionsaved" style="display:none"><?php print __('Description stored successfully', 'wc_paytpv');?></p>
 
-        <p class="payment_module paytpv_iframe" id="nueva_tarjeta" style="display:none">
-            <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
-        </p>
+        <div class="payment_module paytpv_iframe" id="nueva_tarjeta" style="display:none">
+            <?php if ($isJetIframeActive == 0 ) :?>
+                <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="width: 670px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
+            <?php else : ?>
+                <form role="form" id="paycometPaymentForm" action="" method="POST">
 
+                <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
+
+                <input type="hidden" class="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style="height:30px; width: 290px">
+
+                <div class="form-group">
+                    <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
+                    <div class="input-group">
+                        <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
+                        <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
+                            <div class="form-inline">
+
+                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
+                                    <option><?php print __('Month', 'wc_paytpv');?></option>
+                                    <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
+                                    <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
+                                    <option value="03"><?php print __('03 - March', 'wc_paytpv');?></option>
+                                    <option value="04"><?php print __('04 - April', 'wc_paytpv');?></option>
+                                    <option value="05"><?php print __('05 - May', 'wc_paytpv');?></option>
+                                    <option value="06"><?php print __('06 - June', 'wc_paytpv');?></option>
+                                    <option value="07"><?php print __('07 - July', 'wc_paytpv');?></option>
+                                    <option value="08"><?php print __('08 - August', 'wc_paytpv');?></option>
+                                    <option value="09"><?php print __('09 - September', 'wc_paytpv');?></option>
+                                    <option value="10"><?php print __('10 - October', 'wc_paytpv');?></option>
+                                    <option value="11"><?php print __('11 - November', 'wc_paytpv');?></option>
+                                    <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
+                                </select>
+
+                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
+                                    <option><?php print __('Year', 'wc_paytpv');?></option>
+
+                                    <?php
+                                        $firstYear = (int) date('Y');
+                                        for($i = 0; $i <= 8; $i++) { ?>
+                                        <option value="<?= substr($firstYear, 2, 2) ?>"><?= $firstYear?></option>
+                                    <?php
+                                            $firstYear++;
+                                        }
+                                    ?>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+
+                            <label data-toggle="tooltip" title=""
+                                data-original-title="3 digits code on back side of the card">
+                                CVV <i class="fa fa-question-circle"></i>
+                            </label>
+
+                            <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
+                            <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>                            
+
+                <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
+
+            <?php endif; ?>
+        </p>
+        <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 290px; font-size: 20px;">
         <input type="hidden" name="payment_paycomet" id="payment_paycomet" value="<?=$payment_paycomet?>">
     </div>
 
-
-
 	<?php
-	wc_get_template( 'myaccount/conditions.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
+	    wc_get_template( 'myaccount/conditions.php', array( ), '', PAYTPV_PLUGIN_DIR . 'template/' );
 	?>
-	
 
 </div>
-
 
 <div id="alert" style="display:none">
     <p class="title"></p>

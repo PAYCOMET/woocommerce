@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET 
  * Author URI: https://www.paycomet.com
- * Version: 4.20
- * Tested up to: 5.4
- * WC tested up to: 4.2
+ * Version: 4.21
+ * Tested up to: 5.6
+ * WC tested up to: 4.8
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '4.20' );
+define( 'PAYTPV_VERSION', '4.21' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -26,6 +26,7 @@ require_once PAYTPV_PLUGIN_DIR . 'paytpv.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/dependencies.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/upgrade.php';
 require_once PAYTPV_PLUGIN_DIR . 'inc/PaytpvApi.php';
+require_once PAYTPV_PLUGIN_DIR . 'inc/PaycometApiRest.php';
 
 add_action( 'plugins_loaded', 'woocommerce_paytpv_init', 100 );
 add_action( 'admin_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources_conf' ) );

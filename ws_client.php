@@ -33,9 +33,8 @@ class WS_Client {
 		$this->client->setUseCurl( $useCURL );
 	}
 
-	function execute_purchase( $order, $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS, $DS_MERCHANT_CURRENCY='EUR', $amount,$ref='', $DS_MERCHANT_SCA_EXCEPTION='', $DS_MERCHANT_TRX_TYPE='', $DS_MERCHANT_DATA='') {
-
-		
+	function execute_purchase( $order, $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS, $DS_MERCHANT_CURRENCY='EUR', $amount,$ref='', $DS_MERCHANT_SCA_EXCEPTION='', $DS_MERCHANT_TRX_TYPE='', $DS_MERCHANT_DATA='') 
+	{
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_AMOUNT = $amount;
 
@@ -54,8 +53,8 @@ class WS_Client {
 			'DS_MERCHANT_CURRENCY' => $DS_MERCHANT_CURRENCY,
 			'DS_MERCHANT_MERCHANTSIGNATURE' => $DS_MERCHANT_MERCHANTSIGNATURE,
 			'DS_ORIGINAL_IP' => $DS_ORIGINAL_IP,
-			'DS_MERCHANT_PRODUCTDESCRIPTION' => '',
-			'DS_MERCHANT_OWNER' => ''
+			'DS_MERCHANT_PRODUCTDESCRIPTION' => 'Product description',
+			'DS_MERCHANT_OWNER' => 'Owner'
 		);
 
 		if ($DS_MERCHANT_SCA_EXCEPTION!='') {
@@ -68,14 +67,15 @@ class WS_Client {
 			$p["DS_MERCHANT_DATA"] = $DS_MERCHANT_DATA;
 		}
 
-		$this->write_log("Petición execute_purchase:\n".print_r($p,true));
+		$this->write_log("Petición execute_purchase:\n".print_r($p, true));
 		$res = $this->client->call( 'execute_purchase', $p, '', '', false, true );
-		$this->write_log("Respuesta execute_purchase:\n".print_r($res,true));
+		$this->write_log("Respuesta execute_purchase:\n".print_r($res, true));
+
 		return $res;
 	}
 
-
-	function info_user( $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS ) {
+	function info_user( $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS ) 
+	{
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_PASS );
 		
@@ -89,8 +89,6 @@ class WS_Client {
 			'DS_MERCHANT_MERCHANTSIGNATURE' => $DS_MERCHANT_MERCHANTSIGNATURE,
 			'DS_ORIGINAL_IP' => $DS_ORIGINAL_IP
 		);
-
-		
 		
 		$this->write_log("Petición info_user:\n".print_r($p,true));
 		$res = $this->client->call( 'info_user', $p, '', '', false, true );
@@ -98,9 +96,33 @@ class WS_Client {
 		return $res;
 	}
 
-	function execute_refund($DS_IDUSER, $DS_TOKEN_USER, $ref, $DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS,$DS_MERCHANT_CURRENCY,  $DS_MERCHANT_AUTHCODE, $DS_MERCHANT_AMOUNT) {
+	public function add_user_token($merchantCode, $terminal, $token, $jetID, $password, $ip)
+	{
+        $signature = hash(
+            'sha512',
+            $merchantCode . $token . $jetID . $terminal . $password
+        );
 
-		
+        $data = array(
+            'DS_MERCHANT_MERCHANTCODE' => $merchantCode,
+            'DS_MERCHANT_TERMINAL' => $terminal,
+            'DS_MERCHANT_JETTOKEN' => $token,
+            'DS_MERCHANT_JETID' => $jetID,
+            'DS_MERCHANT_MERCHANTSIGNATURE' => $signature,
+            'DS_ORIGINAL_IP' => $ip
+        );
+
+        $this->write_log("Petición add_user_token:\n" . print_r($data, true));
+
+        $response = $this->client->call('add_user_token', $data, '', '', false, true);
+
+		$this->write_log("Respuesta add_user_token:\n" . print_r($response, true));
+
+		return $response;
+	}
+
+	function execute_refund($DS_IDUSER, $DS_TOKEN_USER, $ref, $DS_MERCHANT_TERMINAL,$DS_MERCHANT_PASS,$DS_MERCHANT_CURRENCY,  $DS_MERCHANT_AUTHCODE, $DS_MERCHANT_AMOUNT)
+	{
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_ORDER = str_pad( $ref, 8, "0", STR_PAD_LEFT );
 		$DS_MERCHANT_MERCHANTSIGNATURE = hash('sha512', $DS_MERCHANT_MERCHANTCODE . $DS_IDUSER . $DS_TOKEN_USER . $DS_MERCHANT_TERMINAL . $DS_MERCHANT_AUTHCODE . $DS_MERCHANT_ORDER . $DS_MERCHANT_PASS);
@@ -128,11 +150,10 @@ class WS_Client {
 		$this->write_log("Respuesta execute_refund:\n".print_r($res,true));
 
 		return $res;
-
 	}
 
-	function getIp($ref = false) {
-
+	function getIp($ref = false)
+	{
 		// Si llega referencia obtenemos la ip
 		if ($ref !== false) {
 			$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
