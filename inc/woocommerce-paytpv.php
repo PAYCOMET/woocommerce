@@ -1417,7 +1417,12 @@
 					$merchantData
 				);
 
-				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $URLOK;
+				$urlReturn = $URLOK;
+				if ($executePurchaseResponse->errorCode>0) {
+					$urlReturn = $URLKO;
+				}
+
+				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $urlReturn;
 
 			} else {
 
@@ -1444,7 +1449,6 @@
 
 				$query = http_build_query($fields);
 				$vhash = hash('sha512', md5($query.md5($pass)));
-				
 
 				$this->jetiframeOkUrl = $this->getIframeUrl() . $query. "&VHASH=".$vhash;
 
