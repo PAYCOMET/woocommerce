@@ -48,7 +48,8 @@
 			$this->title = $this->settings['title'];
 			$this->description = $this->settings['description'];
 			$this->clientcode = $this->settings['clientcode'];
-			$this->apiKey = $this->settings['apikey'];
+			$this->apiKey = isset($this->settings['apikey'])?$this->settings['apikey']:"";
+									
 			$this->paytpv_terminals = get_option('woocommerce_paytpv_terminals',
 				array(
 					array(
@@ -273,9 +274,7 @@
 			$api = new PaytpvApi();
 
 			$arrDatos = array();
-			$arrDatos["error"] = 0;
-
-			return $arrDatos;
+			$arrDatos["error"] = 0;			
 
 			// Validación de los datos en Paycomet
 			foreach (array_keys($postData["term"]) as $key) {
