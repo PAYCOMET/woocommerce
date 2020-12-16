@@ -4,7 +4,7 @@ Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pa
 Requires at least: 3.0.1
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 4.21
+Stable tag: 4.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 4.22 =
+Depuración de código
 
 = 4.21 =
 Se añade integración JetIframe para incluir formulario de pago en el checkout.
