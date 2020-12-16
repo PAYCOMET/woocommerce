@@ -1734,7 +1734,7 @@
 
 					// Añadimos información MIT -> R
 					$trxType = "R";
-					$SCAException = "MIT";
+					$scaException = "MIT";
 
 					$dateAux = new \DateTime("now");
 					$dateAux->modify('+10 year');
@@ -1761,7 +1761,7 @@
 						$userInteraction,
 						[],
 						$trxType,
-						$SCAException,
+						$scaException,
 						$merchantData
 					);
 
