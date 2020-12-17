@@ -717,6 +717,7 @@
 					$methodId = 1;
 					$userInteraction = 1;
 					$scoring = 0;
+					$notifyDirectPayment = 1;
 
 					$merchantData = $this->getMerchantData($order);
 
@@ -742,7 +743,8 @@
 							[],
 							'',
 							'',
-							$merchantData
+							$merchantData,
+							$notifyDirectPayment
 						);
 
 						$charge["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
@@ -1352,6 +1354,8 @@
 						$arrTerminalData['term'],
 						$_POST['jetiframe-token'],
 						$order->get_id(),
+						'',
+						'ES',
 						$notify
 					);
 					$idUser = $addUserResponse->idUser;
@@ -1390,6 +1394,7 @@
 				$methodId = 1;
 				$userInteraction = 1;
 				$scoring = 0;
+				$notifyDirectPayment = 1;
 
 				$merchantData = $this->getMerchantData($order);
 
@@ -1413,7 +1418,8 @@
 					[],
 					'',
 					'',
-					$merchantData
+					$merchantData,
+					$notifyDirectPayment
 				);
 
 				$urlReturn = $URLOK;
@@ -1729,12 +1735,13 @@
 					$secure = 0;
 					$userInteraction = 0;
 					$scoring = 0;
+					$notifyDirectPayment = 1;
 
 					$merchantData = $this->getMerchantData($order);
 
 					// Añadimos información MIT -> R
 					$trxType = "R";
-					$SCAException = "MIT";
+					$scaException = "MIT";
 
 					$dateAux = new \DateTime("now");
 					$dateAux->modify('+10 year');
@@ -1761,8 +1768,9 @@
 						$userInteraction,
 						[],
 						$trxType,
-						$SCAException,
-						$merchantData
+						$scaException,
+						$merchantData,
+						$notifyDirectPayment
 					);
 
 					$charge["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
