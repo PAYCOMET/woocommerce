@@ -42,12 +42,9 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
-<<<<<<< HEAD
 = 4.24 =
 Actualización libreria API REST
 
-=======
->>>>>>> 7fc63b608a7233f611e99283d3fa1082c705ee32
 = 4.23 =
 Validación parámetros API REST
 
