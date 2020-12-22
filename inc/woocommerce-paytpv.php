@@ -132,6 +132,8 @@
 
 					if ($apiResponse->errorCode==0) {
 						$url_paytpv = $apiResponse->challengeUrl;
+					} else {
+						print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
 					}
 				} catch (exception $e){
 					$url_paytpv = "";
@@ -274,7 +276,7 @@
 			$api = new PaytpvApi();
 
 			$arrDatos = array();
-			$arrDatos["error"] = 0;			
+			$arrDatos["error"] = 0;
 
 			// Validación de los datos en Paycomet
 			foreach (array_keys($postData["term"]) as $key) {
@@ -660,6 +662,8 @@
 
 							if ($apiResponse->errorCode==0) {
 								$salida = $apiResponse->challengeUrl;
+							} else {
+								print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
 							}
 
 						} catch (exception $e){
@@ -1277,6 +1281,8 @@
 
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
+					} else {
+						print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
 					}
 				} catch (exception $e){
 					$url = "";
@@ -1614,7 +1620,7 @@
 			print  $this->generate_paytpv_form( $order_id );
 
 			print '</div>';
-			print '<p id="paycomet-cancel"><a class="button cancel" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
+			print '<p id="paycomet-cancel"><a class="button cancel" style="color: white;" href="'.$order->get_cancel_order_url_raw().'">'.__('Cancel order', 'wc_paytpv').'</a></p>';
 
 			print '</form>';
 
