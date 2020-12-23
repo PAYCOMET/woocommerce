@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 4.24 =
-Actualización libreria API REST
+Cambios de css
 
 = 4.23 =
 Validación parámetros API REST

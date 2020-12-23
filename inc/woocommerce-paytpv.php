@@ -114,7 +114,9 @@
 			$order = $user_id;
 			$secure_pay = 0;
 
-			if ($gateway->apiKey != '') {				
+			$url_paytpv = "";
+
+			if ($gateway->apiKey != '') {
 				try {
 					$apiRest = new PaycometApiRest($gateway->apiKey);
 					$apiResponse = $apiRest->form(
@@ -132,8 +134,8 @@
 
 					if ($apiResponse->errorCode==0) {
 						$url_paytpv = $apiResponse->challengeUrl;
-					} else {
-						print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
+					} else {						
+						print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
 					}
 				} catch (exception $e){
 					$url_paytpv = "";
@@ -663,7 +665,7 @@
 							if ($apiResponse->errorCode==0) {
 								$salida = $apiResponse->challengeUrl;
 							} else {
-								print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
+								print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
 							}
 
 						} catch (exception $e){
@@ -1281,8 +1283,8 @@
 
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
-					} else {
-						print '<h4>Paycomet error: ' . $apiResponse->errorCode . ' - ' . $apiResponse->error->message .'</h4>';
+					} else {						
+						print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
 					}
 				} catch (exception $e){
 					$url = "";
