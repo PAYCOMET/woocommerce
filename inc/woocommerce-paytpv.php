@@ -1133,47 +1133,48 @@
 			// Billing info
 			$billing = $order->get_address('billing');
 			if ($billing) {
-
-				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city();
-				$Merchant_EMV3DS["billing"]["billAddrCountry"] = $order->get_billing_country();
-				if ($Merchant_EMV3DS["billing"]["billAddrCountry"]!="") {
-					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["billing"]["billAddrCountry"]);
+				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city();				
+				if ($order->get_billing_country()!="") {
+					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($order->get_billing_country());
+					// billAddrState -> Solo si está definido billAddrCountry
+					if ($order->get_billing_state()!="") {						
+						$billAddState = explode("-",$order->get_billing_state());
+						$billAddState = end($billAddState);
+						$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
+					}
 				}
 				$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1();
 				$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2();
 
-				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode();
-
-				$Merchant_EMV3DS["billing"]["billAddrState"] = $order->get_billing_state();
-
-				$billAddState = explode("-",$order->get_billing_state());
-				$billAddState = end($billAddState);
-				$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
+				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode();				
 
 				if ($order->get_billing_phone()!="") {
 					if ($order->get_billing_country()!="" && $this->isoCodePhonePrefix($order->get_billing_country())!="") {
 						$arrDatosHomePhone["cc"] = $this->isoCodePhonePrefix($order->get_billing_country());
-						$arrDatosHomePhone["subscriber"] = $order->get_billing_phone();
+						$arrDatosHomePhone["subscriber"] = preg_replace('/[^0-9]/', '', $order->get_billing_phone());	
 
 						$Merchant_EMV3DS["customer"]["homePhone"] = $arrDatosHomePhone;
 					}
 				}
 			}
 
-			$shipping = $order->get_address('shipping');
-
+			$shipping = $order->get_address('shipping');			
 			if ($shipping) {
-				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city();
-				$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $order->get_shipping_country();
-				if ($Merchant_EMV3DS["shipping"]["shipAddrCountry"]!="") {
-					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["shipping"]["shipAddrCountry"]);
+				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city();				
+				if ($order->get_shipping_country()!="") {
+					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($order->get_shipping_country());
+					// shipAddrState -> Solo si está definido shipAddrCountry
+					if ($order->get_shipping_state()!="") {
+						$shipAddrState = explode("-",$order->get_shipping_state());
+						$shipAddrState = end($shipAddrState);
+						$Merchant_EMV3DS["shipping"]["shipAddrState"] = $shipAddrState;
+					}
 				}
 				$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1();
 				$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2();
-				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode();
-				$Merchant_EMV3DS["shipping"]["shipAddrState"] = $order->get_shipping_state();
+				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode();				
 			}
-
+					
 			// acctInfo
 			$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
 
