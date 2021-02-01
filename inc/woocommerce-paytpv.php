@@ -261,6 +261,7 @@
 						$settings->add_error(__('ERROR: Unable to activate payment method.','wc_paytpv') . " " . $arrValidatePaycomet["error_txt"]);
 					}
 				}
+
 			}
 
 			// Si hay error guardamos los datos pero no dejamos habilitar el método de pago
@@ -336,6 +337,7 @@
 					return $arrDatos;
 				}
 			}
+
 			return $arrDatos;
 		}
 
@@ -1014,13 +1016,16 @@
 
 			$post_status = implode("','", array('wc-processing', 'wc-completed') );
 
-			$result = $wpdb->get_row( "SELECT * FROM " . $wpdb->posts . " p INNER JOIN " . $wpdb->postmeta . " pm on p.ID = pm.post_id
-						WHERE p.post_type = 'shop_order'
-						AND p.post_author = " . $id_customer . "
-						AND p.post_status IN ('{$post_status}')
-						AND p.ID < " . $order->get_id() . "
-						AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
-						order by p.post_date asc limit 1");
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM " . $wpdb->posts . " p INNER JOIN " . $wpdb->postmeta . " pm on p.ID = pm.post_id
+					WHERE p.post_type = 'shop_order'
+					AND p.post_author = " . $id_customer . "
+					AND p.post_status IN ('{$post_status}')
+					AND p.ID < " . $order->get_id() . "
+					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
+					order by p.post_date asc limit 1")
+				);
 			if ($result) {
 				return $result->post_date;
 			} else {
@@ -1125,56 +1130,55 @@
 		{
 			$Merchant_EMV3DS = array();
 
-			$Merchant_EMV3DS["customer"]["id"] = get_current_user_id();
-			$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name();
-			$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name();
-			$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email();
+			$Merchant_EMV3DS["customer"]["id"] = get_current_user_id() ?? '';
+			$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name() ?? '';
+			$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name() ?? '';
+			$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email() ?? '';
 
 			// Billing info
 			$billing = $order->get_address('billing');
 			if ($billing) {
-				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city();				
-				if ($order->get_billing_country()!="") {
-					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($order->get_billing_country());
-					// billAddrState -> Solo si está definido billAddrCountry
-					if ($order->get_billing_state()!="") {						
-						$billAddState = explode("-",$order->get_billing_state());
-						$billAddState = end($billAddState);
-						$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
-					}
-				}
-				$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1();
-				$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2();
 
-				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode();				
+				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city() ?? '';
+				$Merchant_EMV3DS["billing"]["billAddrCountry"] = $order->get_billing_country() ?? '';
+				if ($Merchant_EMV3DS["billing"]["billAddrCountry"]!="") {
+					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["billing"]["billAddrCountry"]) ?? '';
+				}
+				$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1() ?? '';
+				$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2() ?? '';
+
+				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode() ?? '';
+
+				$Merchant_EMV3DS["billing"]["billAddrState"] = $order->get_billing_state() ?? '';
+
+				$billAddState = explode("-",$order->get_billing_state());
+				$billAddState = end($billAddState);
+				$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
 
 				if ($order->get_billing_phone()!="") {
 					if ($order->get_billing_country()!="" && $this->isoCodePhonePrefix($order->get_billing_country())!="") {
-						$arrDatosHomePhone["cc"] = $this->isoCodePhonePrefix($order->get_billing_country());
-						$arrDatosHomePhone["subscriber"] = preg_replace('/[^0-9]/', '', $order->get_billing_phone());	
+						$arrDatosHomePhone["cc"] = (string) $this->isoCodePhonePrefix($order->get_billing_country()) ?? '';
+						$arrDatosHomePhone["subscriber"] = (string) $order->get_billing_phone() ?? '';
 
 						$Merchant_EMV3DS["customer"]["homePhone"] = $arrDatosHomePhone;
 					}
 				}
 			}
 
-			$shipping = $order->get_address('shipping');			
+			$shipping = $order->get_address('shipping');
+
 			if ($shipping) {
-				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city();				
-				if ($order->get_shipping_country()!="") {
-					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($order->get_shipping_country());
-					// shipAddrState -> Solo si está definido shipAddrCountry
-					if ($order->get_shipping_state()!="") {
-						$shipAddrState = explode("-",$order->get_shipping_state());
-						$shipAddrState = end($shipAddrState);
-						$Merchant_EMV3DS["shipping"]["shipAddrState"] = $shipAddrState;
-					}
+				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city() ?? '';
+				$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $order->get_shipping_country() ?? '';
+				if ($Merchant_EMV3DS["shipping"]["shipAddrCountry"]!="") {
+					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($Merchant_EMV3DS["shipping"]["shipAddrCountry"]) ?? '';
 				}
-				$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1();
-				$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2();
-				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode();				
+				$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1() ?? '';
+				$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2() ?? '';
+				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode() ?? '';
+				$Merchant_EMV3DS["shipping"]["shipAddrState"] = $order->get_shipping_state() ?? '';
 			}
-					
+
 			// acctInfo
 			$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
 
@@ -1211,10 +1215,10 @@
 					$arrCategories[] = $term->slug;
 				}
 
-				$shoppingCartData[$item_id]["sku"] = $product->get_sku();
-				$shoppingCartData[$item_id]["quantity"] = $item->get_quantity();
+				$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
+				$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
 				$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-				$shoppingCartData[$item_id]["name"] = $item->get_name();
+				$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
 				$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
 			}
 
