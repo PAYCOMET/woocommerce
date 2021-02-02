@@ -68,19 +68,22 @@
 			}
 		}
 
-
 		public static function saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$paytpv_cc,$paytpv_brand){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
-			
-			if ($user_id>0){
-				$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
-													VALUES(%d, %s, %s,%s, %d, %s)",
-				                                   array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $user_id, date('Y-m-d H:i:s')) );
-				$wpdb->query( $insert_prepared );
-			}
 
+			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "'");
+
+			if (count($saved_cards) == 0) {
+
+				if ($user_id>0){
+					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
+														VALUES(%d, %s, %s,%s, %d, %s)",
+													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $user_id, date('Y-m-d H:i:s')) );
+					$wpdb->query( $insert_prepared );
+				}
+			}
 
 			$result["paytpv_iduser"] = $paytpv_iduser;
 			$result["paytpv_tokenuser"] = $paytpv_tokenuser;
