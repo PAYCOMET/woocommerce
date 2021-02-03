@@ -716,14 +716,15 @@
 				$client = $this->get_client();
 				$ip = $client->getIp();
 
+				$userInteraction = 1;
+
 				// REST
 				if ($this->apiKey != '') {
 
 					$URLOK = $this->get_return_url($order);
 					$URLKO = $order->get_cancel_order_url_raw();
 
-					$methodId = 1;
-					$userInteraction = 1;
+					$methodId = 1;					
 					$scoring = 0;
 					$notifyDirectPayment = 1;
 
@@ -755,19 +756,18 @@
 							$notifyDirectPayment
 						);
 
-						$charge["DS_RESPONSE"] = ($executePurchaseResponse->errorCode > 0)? 0 : 1;
-						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
-
-						if ($executePurchaseResponse->errorCode == 0) {
-							$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
-							$charge["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
-						}
+						$charge["DS_RESPONSE"] 			= ($executePurchaseResponse->errorCode > 0)? 0 : 1;
+						$charge["DS_ERROR_ID"] 			= $executePurchaseResponse->errorCode;
+						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode ?? '';
+						$charge["DS_MERCHANT_AMOUNT"] 	= $executePurchaseResponse->amount ?? 0;
+						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
 
 					} catch (Exception $e) {
 						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
 					}
 
 				} else {
+					
 					$charge = $client->execute_purchase(
 						$order,
 						$saved_card["paytpv_iduser"],
@@ -779,21 +779,27 @@
 						$paytpv_order_ref,
 						'',
 						'',
-						''
+						'',
+						$userInteraction
 					);
 				}
-
-				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-
+				
+				// Si hay challenge redirigimos al cliente a la URL
+				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {					
+					$url = urldecode($charge[ 'DS_CHALLENGE_URL' ]);
+				// Si es OK
+				} else if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
 					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
 
 					$url = $this->get_return_url( $order );
+				// Si es KO
 				} else {
 					$url = $order->get_cancel_order_url_raw();
 				}
 
 				wp_redirect( $url, 303 );
+				exit;
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
@@ -1022,13 +1028,13 @@
 				$wpdb->prepare(
 					"SELECT * FROM " . $wpdb->posts . " p INNER JOIN " . $wpdb->postmeta . " pm on p.ID = pm.post_id
 					WHERE p.post_type = 'shop_order'
-					AND p.post_author = " . $id_customer . "
+					AND p.post_author = %d
 					AND p.post_status IN ('{$post_status}')
 					AND p.ID < " . $order->get_id() . "
 					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
-					order by p.post_date asc limit 1")
+					order by p.post_date asc limit 1", $id_customer)
 				);
-			if ($result) {
+			if ($result) {				
 				return $result->post_date;
 			} else {
 				return "";
@@ -1743,12 +1749,13 @@
 				$client = $this->get_client();
 				$ip = $client->getIp();
 
+				$userInteraction = 0;
+
 				// REST
 				if($this->apiKey != '') {
 
 					$methodId = 1;
-					$secure = 0;
-					$userInteraction = 0;
+					$secure = 0;					
 					$scoring = 0;
 					$notifyDirectPayment = 1;
 
@@ -1797,7 +1804,7 @@
 					}
 
 				} else {
-					$charge = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','');
+					$charge = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','',$userInteraction);
 				}
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
