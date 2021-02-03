@@ -33,7 +33,7 @@ class WS_Client {
 		$this->client->setUseCurl( $useCURL );
 	}
 
-	function execute_purchase( $order, $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS, $DS_MERCHANT_CURRENCY='EUR', $amount,$ref='', $DS_MERCHANT_SCA_EXCEPTION='', $DS_MERCHANT_TRX_TYPE='', $DS_MERCHANT_DATA='') 
+	function execute_purchase( $order, $DS_IDUSER, $DS_TOKEN_USER, $DS_MERCHANT_TERMINAL, $DS_MERCHANT_PASS, $DS_MERCHANT_CURRENCY='EUR', $amount,$ref='', $DS_MERCHANT_SCA_EXCEPTION='', $DS_MERCHANT_TRX_TYPE='', $DS_MERCHANT_DATA='', $DS_USER_INTERACTION = 0) 
 	{
 		$DS_MERCHANT_MERCHANTCODE = $this->config[ 'clientcode' ];
 		$DS_MERCHANT_AMOUNT = $amount;
@@ -65,6 +65,10 @@ class WS_Client {
 		}
 		if ($DS_MERCHANT_DATA!='') {
 			$p["DS_MERCHANT_DATA"] = $DS_MERCHANT_DATA;
+		}
+
+		if ($DS_USER_INTERACTION!='') {
+			$p["DS_USER_INTERACTION"] = $DS_USER_INTERACTION;
 		}
 
 		$this->write_log("Petición execute_purchase:\n".print_r($p, true));
