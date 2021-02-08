@@ -785,7 +785,11 @@
 				}
 				
 				// Si hay challenge redirigimos al cliente a la URL
-				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {					
+				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {
+
+					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+
 					$url = urldecode($charge[ 'DS_CHALLENGE_URL' ]);
 				// Si es OK
 				} else if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
@@ -857,16 +861,11 @@
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
-									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
-									$paytpv_iduser = $result["paytpv_iduser"];
-									$paytpv_tokenuser = $result["paytpv_tokenuser"];
-								} else {
-									$paytpv_iduser = $idUser;
-									$paytpv_tokenuser = $tokenUser;
+									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);									
 								}
-
-								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $paytpv_iduser);
-								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $paytpv_tokenuser);
+								
+								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
+								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
 							}
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
@@ -1725,6 +1724,8 @@
 
         function scheduled_subscription_payment($amount_to_charge, $order)
         {
+
+			
 			$subscriptions = wcs_get_subscriptions_for_renewal_order($order);
 			$subscription  = array_pop( $subscriptions );
 
@@ -1742,6 +1743,7 @@
 				$parent_order = $subscription->get_parent();
 
 				$paytpv_order_ref = $order->get_id();
+				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
 				$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
 				$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
@@ -1751,30 +1753,30 @@
 
 				$userInteraction = 0;
 
+				$merchantData = $this->getMerchantData($order);
+
+				// Añadimos información MIT -> R
+				$trxType = "R";
+				$scaException = "MIT";
+
+				$dateAux = new \DateTime("now");
+				$dateAux->modify('+10 year');
+				$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+				$merchantData["recurringExpiry"] = $recurringExpiry;
+				$merchantData["recurringFrequency"] = "1";
+
 				// REST
 				if($this->apiKey != '') {
 
 					$methodId = 1;
 					$secure = 0;					
 					$scoring = 0;
-					$notifyDirectPayment = 1;
-
-					$merchantData = $this->getMerchantData($order);
-
-					// Añadimos información MIT -> R
-					$trxType = "R";
-					$scaException = "MIT";
-
-					$dateAux = new \DateTime("now");
-					$dateAux->modify('+10 year');
-					$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-					$merchantData["recurringExpiry"] = $recurringExpiry;
-					$merchantData["recurringFrequency"] = "1";
+					$notifyDirectPayment = 1;					
 
 					$apiRest = new PaycometApiRest($this->apiKey);
 					$executePurchaseResponse = $apiRest->executePurchase(
 						$arrTerminalData['term'],
-						$order->get_id(),
+						$paytpv_order_ref,
 						$arrTerminalData["importe"],
 						$arrTerminalData["currency_iso_code"],
 						$methodId,
@@ -1804,7 +1806,10 @@
 					}
 
 				} else {
-					$charge = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref,'','','',$userInteraction);
+
+					$merchantData = urlencode(base64_encode(json_encode($merchantData)));
+					$charge = $client->execute_purchase( $order,$payptv_iduser,$payptv_tokenuser,$term,$pass,$currency_iso_code,$importe,$paytpv_order_ref, $scaException, $trxType, $merchantData,$userInteraction);
+					
 				}
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
