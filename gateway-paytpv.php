@@ -49,18 +49,40 @@ function woocommerce_paytpv_init() {
 	 * Add the gateway to woocommerce
 	 * */
 	function add_paytpv_gateway( $methods ) {
-		$methods[ ] = 'woocommerce_paytpv';
+		$methods[] = 'woocommerce_paytpv';
+		$paytpvBase = new woocommerce_paytpv();
+		$userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
+		$apiKey = $paytpvBase->settings['apikey'];
+		$userPaymentMethods = [];
+
+		if($userTerminal && $apiKey) {
+			$userPaymentMethods = getUserPaymentMethods($userTerminal, $apiKey);
+		}
+		
+		$methods = array_merge($methods, $userPaymentMethods);
+
 		return $methods;
 	}
 
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
 	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
-	
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
 }
 
 
 add_action( 'admin_init', 'wppaytpv_upgrade' );
+
+function getUserPaymentMethods($userTerminal, $apiKey)
+{
+	$apiRest = new PaycometApiRest($apiKey);
+	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
+	foreach ($userPaymentMethods as $apm) {
+		$methods[] = 'Paycomet_' . $apm->name;
+	}
+
+	return $methods;
+}
 
 function wppaytpv_upgrade() {
 

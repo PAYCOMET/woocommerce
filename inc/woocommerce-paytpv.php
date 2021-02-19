@@ -24,7 +24,7 @@
 			$this->icon = PAYTPV_PLUGIN_URL . 'images/paycomet.png';
 			$this->has_fields = false;
 			$this->method_title = 'PAYCOMET';
-            $this->method_description = __('Payment gateway for credit card payment.', 'wc_paytpv' );
+            $this->method_description = __('Payment gateway for credit card payment. Configuration for PayComet and alternative payment methods.', 'wc_paytpv' );
 			$this->supports = array(
 				'products',
 				'refunds',
@@ -1234,7 +1234,6 @@
 
         public function getMerchantData($order)
         {
-
 			$MERCHANT_EMV3DS = $this->getEMV3DS($order);
 			$SHOPPING_CART = $this->getShoppingCart($order);
 
