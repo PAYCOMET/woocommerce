@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
-"POT-Creation-Date: 2021-02-18 11:42+0000\n"
-"PO-Revision-Date: 2021-02-18 11:43+0000\n"
+"POT-Creation-Date: 2021-02-22 12:21+0000\n"
+"PO-Revision-Date: 2021-02-22 12:21+0000\n"
 "Last-Translator: Pablo Andrés Castro\n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -23,12 +23,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.4.1; wp-5.4.2"
 
+#: inc/paycomet-klarna.php:12
+msgid "Pay with Klarna. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Klarna. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-klarna.php:14
+msgid "Pay with Klarna"
+msgstr "Paga con Klarna"
+
 #: inc/paycomet-bizum.php:12
 msgid "Pay with Bizum. Configuration is on PAYCOMET main payment method."
 msgstr ""
 "Paga con Bizum. La configuración se realiza desde el módulo de Paycomet."
 
-#: inc/paycomet-bizum.php:21
+#: inc/paycomet-bizum.php:14
 msgid "Pay with Bizum"
 msgstr "Paga con Bizum"
 
@@ -271,39 +280,39 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "There can be two terminals configured with the same currency."
 msgstr "No puede haber dos terminales configurados con la misma moneda."
 
-#: inc/woocommerce-paytpv.php:1578
+#: inc/woocommerce-paytpv.php:1579
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1581
+#: inc/woocommerce-paytpv.php:1582
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
 
-#: inc/woocommerce-paytpv.php:1603 template/checkout/jetiframe-checkout.php:10
+#: inc/woocommerce-paytpv.php:1604 template/checkout/jetiframe-checkout.php:10
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1612 template/checkout/jetiframe-checkout.php:20
+#: inc/woocommerce-paytpv.php:1613 template/checkout/jetiframe-checkout.php:20
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
-#: inc/woocommerce-paytpv.php:1618 inc/woocommerce-paytpv.php:1666
+#: inc/woocommerce-paytpv.php:1619 inc/woocommerce-paytpv.php:1667
 msgid "Pay"
 msgstr "Pagar"
 
-#: inc/woocommerce-paytpv.php:1619
+#: inc/woocommerce-paytpv.php:1620
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
-#: inc/woocommerce-paytpv.php:1629 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1630 template/checkout/jetiframe-checkout.php:99
 msgid "Save card for future purchases"
 msgstr "Guardar tarjeta para futuras compras"
 
-#: inc/woocommerce-paytpv.php:1629 template/myaccount/my-cards.php:129
+#: inc/woocommerce-paytpv.php:1630 template/myaccount/my-cards.php:129
 #: template/checkout/jetiframe-checkout.php:99
 msgid ""
 "Card data is protected by the Payment Card Industry Data Security Standard "
@@ -312,7 +321,7 @@ msgstr ""
 "Los datos de tarjetas se protegen mediante el Estándar de Seguridad de Datos "
 "para la Industria de Tarjeta de Pago (PCI DSS)"
 
-#: inc/woocommerce-paytpv.php:1637
+#: inc/woocommerce-paytpv.php:1638
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 

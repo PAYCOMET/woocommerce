@@ -58,7 +58,7 @@ function woocommerce_paytpv_init() {
 		if($userTerminal && $apiKey) {
 			$userPaymentMethods = getUserPaymentMethods($userTerminal, $apiKey);
 		}
-		
+
 		$methods = array_merge($methods, $userPaymentMethods);
 
 		return $methods;
@@ -67,7 +67,29 @@ function woocommerce_paytpv_init() {
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
 	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-apm.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instant-credit.php';
 }
 
 
@@ -78,7 +100,7 @@ function getUserPaymentMethods($userTerminal, $apiKey)
 	$apiRest = new PaycometApiRest($apiKey);
 	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
 	foreach ($userPaymentMethods as $apm) {
-		$methods[] = 'Paycomet_' . $apm->name;
+		$methods[] = preg_replace('/\s+/', '_', 'Paycomet_' . $apm->name);
 	}
 
 	return $methods;

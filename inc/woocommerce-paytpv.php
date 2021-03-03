@@ -1141,6 +1141,8 @@
 			$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name() ?? '';
 			$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name() ?? '';
 			$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email() ?? '';
+			$Merchant_EMV3DS["customer"]["mobilePhone"]["cc"] = '34';
+			$Merchant_EMV3DS["customer"]["mobilePhone"]["subscriber"] = $order->get_billing_phone() ?? '';
 
 			// Billing info
 			$billing = $order->get_address('billing');
