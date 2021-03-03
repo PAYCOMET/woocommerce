@@ -116,43 +116,43 @@ abstract class Paycomet_APM extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        // $paytpvBase = new woocommerce_paytpv();
-        // $apiKey = $paytpvBase->settings['apikey'];
-        // $order = wc_get_order( $order_id );
-        // $ip = $_SERVER['REMOTE_ADDR'];
-        // $userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
-        // $currency = $paytpvBase->paytpv_terminals[0]['currency_iso_code'];
-        // $importe = number_format($amount * 100, 0, '.', '');
-        // $orderReference = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
-        // $transaction_id = $order->get_transaction_id();
-        // $notifyDirectPayment = 2; // No notificar HTTP
+        $paytpvBase = new woocommerce_paytpv();
+        $apiKey = $paytpvBase->settings['apikey'];
+        $order = wc_get_order( $order_id );
+        $ip = $_SERVER['REMOTE_ADDR'];
+        $userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
+        $currency = $paytpvBase->paytpv_terminals[0]['moneda'] ?? 'EUR';
+        $importe = number_format($amount * 100, 0, '.', '');
+        $orderReference = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
+        $transaction_id = $order->get_transaction_id();
+        $notifyDirectPayment = 2; // No notificar HTTP
 
-        // $apiRest = new PayCometApiRest($apiKey);
-        // $executeRefundReponse = $apiRest->executeRefund(
-        //     $orderReference,
-        //     $userTerminal,
-        //     $importe,
-        //     $currency,
-        //     $transaction_id,
-        //     $ip,
-        //     $notifyDirectPayment
-        // );
+        $apiRest = new PayCometApiRest($apiKey);
+        $executeRefundReponse = $apiRest->executeRefund(
+            $orderReference,
+            $userTerminal,
+            $importe,
+            $currency,
+            $transaction_id,
+            $ip,
+            $notifyDirectPayment
+        );
 
+        $result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0) ? 0 : 1;
+        $result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
 
-        // $result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0) ? 0 : 1;
-        // $result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
-        // if ($executeRefundReponse->errorCode == 0) {
-        //     $result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
-        // }
+        if ($executeRefundReponse->errorCode == 0) {
+            $result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
+        }
 
-        // if ((int) $result['DS_RESPONSE'] != 1) {
-        //     $order->add_order_note('Refund Failed. Error: ' . $result['DS_ERROR_ID']);
+        if ((int) $result['DS_RESPONSE'] != 1) {
+            $order->add_order_note('Refund Failed. Error: ' . $result['DS_ERROR_ID']);
 
-        //     return false;
-        // } else {
-        //     $order->add_order_note( sprintf( __('Refunded %s - Refund ID: %s', 'woocommerce'), $amount, $result['DS_MERCHANT_AUTHCODE']));
+            return false;
+        } else {
+            $order->add_order_note( sprintf( __('Refunded %s - Refund ID: %s', 'woocommerce'), $amount, $result['DS_MERCHANT_AUTHCODE']));
 
-        //     return true;
-        // }
+            return true;
+        }
     }
 }

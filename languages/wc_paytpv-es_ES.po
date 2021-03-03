@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
-"POT-Creation-Date: 2021-02-22 12:21+0000\n"
-"PO-Revision-Date: 2021-02-22 12:21+0000\n"
+"POT-Creation-Date: 2021-03-03 12:17+0000\n"
+"PO-Revision-Date: 2021-03-03 12:21+0000\n"
 "Last-Translator: Pablo Andrés Castro\n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -22,6 +22,17 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.4.1; wp-5.4.2"
+
+#: inc/paycomet-yandex.php:12
+msgid ""
+"Pay with Yandex Money. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Yandex Money. La configuración se realiza desde el módulo de "
+"Paycomet."
+
+#: inc/paycomet-yandex.php:14
+msgid "Pay with Yandex Money"
+msgstr "Paga con Yandex Money."
 
 #: inc/paycomet-klarna.php:12
 msgid "Pay with Klarna. Configuration is on PAYCOMET main payment method."
@@ -40,6 +51,70 @@ msgstr ""
 #: inc/paycomet-bizum.php:14
 msgid "Pay with Bizum"
 msgstr "Paga con Bizum"
+
+#: inc/paycomet-skrill.php:12
+msgid "Pay with Skrill. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Skrill. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-skrill.php:14
+msgid "Pay with Skrill"
+msgstr "Paga con Skrill."
+
+#: inc/paycomet-paypal.php:12
+msgid "Pay with Paypal. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con PayPal. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-paypal.php:14
+msgid "Pay with Paypal"
+msgstr "Paga con PayPal."
+
+#: inc/paycomet-przelewy.php:12
+msgid "Pay with Przelewy24. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Przelewy24. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-przelewy.php:14
+msgid "Pay with Przelewy24"
+msgstr "Paga con Przelewy24."
+
+#: inc/paycomet-qiwi.php:12
+msgid "Pay with QIWI Wallet. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con QIWI Wallet. La configuración se realiza desde el módulo de "
+"Paycomet."
+
+#: inc/paycomet-qiwi.php:14
+msgid "Pay with QIWI Wallet"
+msgstr "Paga con QIWI Wallet."
+
+#: inc/paycomet-bancontact.php:12
+msgid "Pay with Bancontact. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Bancontact. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-bancontact.php:14
+msgid "Pay with Bancontact"
+msgstr "Paga con Bancontact."
+
+#: inc/paycomet-tele2.php:12
+msgid "Pay with Tele2. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Tele2. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-tele2.php:14
+msgid "Pay with Tele2"
+msgstr "Paga con Tele2."
+
+#: inc/paycomet-webmoney.php:12
+msgid "Pay with WebMoney. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con WebMoney. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-webmoney.php:14
+msgid "Pay with WebMoney"
+msgstr "Paga con WebMoney."
 
 #: inc/woocommerce-paytpv.php:27
 msgid ""
@@ -324,6 +399,116 @@ msgstr ""
 #: inc/woocommerce-paytpv.php:1638
 msgid "Cancel order"
 msgstr "Cancelar pedido"
+
+#: inc/paycomet-postfinance.php:12
+msgid "Pay with PostFinance. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con PostFinance. La configuración se realiza desde el módulo de "
+"Paycomet."
+
+#: inc/paycomet-postfinance.php:14
+msgid "Pay with PostFinance"
+msgstr "Paga con PostFinance."
+
+#: inc/paycomet-paysera.php:12
+msgid "Pay with Paysera. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Paysera. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-paysera.php:14
+msgid "Pay with Paysera"
+msgstr "Paga con Paysera."
+
+#: inc/paycomet-mts.php:12
+msgid "Pay with MTS. Configuration is on PAYCOMET main payment method."
+msgstr "Paga con MTS. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-mts.php:14
+msgid "Pay with MTS"
+msgstr "Paga con MTS."
+
+#: inc/paycomet-multibanco.php:12
+msgid "Pay with SIBS. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con SIBS. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-multibanco.php:14
+msgid "Pay with SIBS"
+msgstr "Paga con SIBS."
+
+#: inc/paycomet-beeline.php:12
+msgid "Pay with Beeline. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Beeline. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-beeline.php:14
+msgid "Pay with Beeline"
+msgstr "Paga con Beeline."
+
+#: inc/paycomet-mybank.php:12
+msgid "Pay with MyBank. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con MyBank. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-mybank.php:14
+msgid "Pay with MyBank"
+msgstr "Paga con MyBank."
+
+#: inc/paycomet-giropay.php:12
+msgid "Pay with Giropay. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Giropay. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-giropay.php:14
+msgid "Pay with Giropay"
+msgstr "Paga con Giropay."
+
+#: inc/paycomet-trustly.php:12
+msgid "Pay with Trustly. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con Trustly. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-trustly.php:14
+msgid "Pay with Trustly"
+msgstr "Paga con Trustly."
+
+#: inc/paycomet-instant-credit.php:12
+msgid ""
+"Pay with InstantCredit. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con InstantCredit. La configuración se realiza desde el módulo de "
+"Paycomet."
+
+#: inc/paycomet-instant-credit.php:14
+msgid "Pay with InstantCredit"
+msgstr "Paga con InstantCredit."
+
+#: inc/paycomet-eps.php:12
+msgid "Pay with EPS. Configuration is on PAYCOMET main payment method."
+msgstr "Paga con EPS. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-eps.php:14
+msgid "Pay with EPS"
+msgstr "Paga con EPS."
+
+#: inc/paycomet-paysafecard.php:12
+msgid "Pay with PaySafeCard. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con PaySafeCard. La configuración se realiza desde el módulo de "
+"Paycomet."
+
+#: inc/paycomet-paysafecard.php:14
+msgid "Pay with PaySafeCard"
+msgstr "Paga con PaySafeCard."
+
+#: inc/paycomet-ideal.php:12
+msgid "Pay with iDeal. Configuration is on PAYCOMET main payment method."
+msgstr ""
+"Paga con iDeal. La configuración se realiza desde el módulo de Paycomet."
+
+#: inc/paycomet-ideal.php:14
+msgid "Pay with iDeal"
+msgstr "Paga con iDeal."
 
 #: template/myaccount/conditions.php:3
 msgid "Related Cards"
