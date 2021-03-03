@@ -1084,10 +1084,10 @@
 
 				$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
 
-				$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH");
+				$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") < 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
 
-				$acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY");
-				$acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR");
+				$acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") < 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") : 999;
+				$acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") < 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") : 999;
 
 				if ( ($customer->first_name != $order->get_billing_first_name()) ||
 				($customer->last_name != $order->get_billing_last_name())) {
