@@ -42,6 +42,9 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
+= 4.29 =
+Cambio en la anchura minima iframe.
+
 = 4.28 =
 Validación de parámetros PSD2
 
