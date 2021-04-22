@@ -1626,7 +1626,7 @@
 			if (get_current_user_id() > 0 && $this->disable_offer_savecard == 0) {
 				print '
 				<div id="storingStep" class="box" style="display:'.$store_card.'">
-					<label class="checkbox"><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()"> '.__('Save card for future purchases', 'wc_paytpv' ).'. <span class="paytpv-pci"> '.__('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ).'.</span></label>';
+					<label><input type="checkbox" name="savecard" id="savecard" onChange="saveOrderInfoJQ()"> '.__('Save card for future purchases', 'wc_paytpv' ).'. <span class="paytpv-pci"> '.__('Card data is protected by the Payment Card Industry Data Security Standard (PCI DSS)', 'wc_paytpv' ).'.</span></label>';
 	        } else {
 	        	print '<div id="ifr-paytpv-container" class="box">';
 			}
@@ -1661,7 +1661,7 @@
 			// Pago Iframe
 			if ($this->payment_paycomet == 0) {
 				$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $src . '"
-	name="paytpv" style="min-width: 300px!important; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
+	name="paytpv" style="min-width: 320px!important; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
 			} else {
 				$html .= '<p><a href="' . $src . '" id="paycomet_page" class="button paycomet_pay">'.__( 'Pay', 'wc_paytpv' ).'</a></p>';
 			}
