@@ -21,7 +21,7 @@ class PaytpvApi
             'DS_MERCHANT_MERCHANTSIGNATURE' => $signature,
             'DS_MERCHANT_TERMINALES' => $terminales_txt
         );
-        
+
         $json = json_encode($arrParams);
         $ch = curl_init();
 

@@ -4,7 +4,7 @@ Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pa
 Requires at least: 3.0.1
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 4.27
+Stable tag: 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,20 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 5.0 =
+API Key Obligatoria
+APMs se muestran como nuevas opciones de pago
+Eliminar campos no necesarios con PSD2.
+
+= 4.30 =
+Cambios de estilos por compatiblidad con temas.
+
+= 4.29 =
+Cambio en la anchura minima iframe.
+
+= 4.28 =
+Validación de parámetros PSD2
 
 = 4.27 =
 Depuración de código en pagos de suscripción
