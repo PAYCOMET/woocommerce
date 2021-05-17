@@ -1,17 +1,29 @@
 <?php
 
-class Paycomet_Multibanco_SIBS extends Paycomet_APM
+class Paycomet_Multibanco extends Paycomet_APM
 {
     // Setup our Gateway's id, description and other values
     public function __construct()
     {
-        $this->id = 'paycomet_sibs';
-        $this->icon = PAYTPV_PLUGIN_URL . 'images/sibs.png';
+        $this->id = 'paycomet_multibanco';
+        $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/multibanco.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - Multibanco SIBS';
-        $this->method_description = __('Pay with SIBS. Configuration is on PAYCOMET main payment method.', 'wc_paytpv' );
+        $this->method_description = sprintf( __( 'All other general PAYCOMET settings can be adjusted <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 16;
-        $this->title = __('Pay with SIBS', 'wc_paytpv' );
+        $this->title = __('Pay with Multibanco', 'wc_paytpv' );
+        $this->description = __('Pay with Multibanco', 'wc_paytpv' );
+
+        $this->supports = array();
+
+
+        // Load the form fields
+        $this->init_form_fields();
+        $this->init_settings();
+
+        $this->loadProp();
+
+        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
     }
 
     public function process_payment($order_id)

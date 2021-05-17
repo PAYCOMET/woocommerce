@@ -1,31 +1,62 @@
 <?php
 
-abstract class Paycomet_APM extends WC_Payment_Gateway
+class Paycomet_APM extends WC_Payment_Gateway
 {
     public function __construct()
     {
-        $this->supports = array(
-            'refunds'
-        );
+    }
 
-        $this->init_form_fields();
-        $this->init_settings();
+    public function loadProp(){
+        $this->enabled = $this->settings['enabled'];
+        $this->title = $this->settings['title'];
+        $this->description = $this->settings['description'];
+    }
+
+    public function process_admin_options()
+    {
+        return parent::process_admin_options();
     }
 
     public function init_form_fields()
     {
-        //
+
+        $this->form_fields = array(
+            'enabled' => array(
+                'title' => __( 'Enable/Disable', 'wc_paytpv' ),
+                'label' => __( 'Enable', 'wc_paytpv' ) . " " . $this->method_title,
+                'type' => 'checkbox',
+                'description' => '',
+                'default' => 'no'
+            ),
+            'title' => array(
+                'title' => __( 'Title', 'wc_paytpv' ),
+                'type' => 'text',
+                'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
+                'default' => $this->title,
+                'desc_tip'    => true
+            ),
+            'description' => array(
+                'title' => __( 'Description', 'wc_paytpv' ),
+                'type' => 'textarea',
+                'class' => 'description',
+                'description' => __( 'This controls the description which the user sees during checkout.', 'wc_paytpv' ),
+                'default' => $this->description,
+                'desc_tip'    => true
+            )
+        );
     }
 
-    public function payment_fields() 
+    public function payment_fields()
     {
-        //
+        if ( $this->description)
+            echo wpautop( wptexturize( $this->description ) );
     }
+
 
     public function payWithAlternativeMethod($order_id, $methodId)
     {
         $paytpvBase = new woocommerce_paytpv();
-        
+
         if($paytpvBase->settings['apikey']) {
             $apiRest = new PaycometApiRest($paytpvBase->settings['apikey']);
 
@@ -33,43 +64,41 @@ abstract class Paycomet_APM extends WC_Payment_Gateway
             $terminal = $paytpvBase->paytpv_terminals[0]['term'];
             $amount = number_format($order->get_total() * 100, 0, '.', '');
             $currency = $paytpvBase->paytpv_terminals[0]['moneda'];
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $userInteraction = 1;
+            $secure_pay = 1;
 
             $URLOK = $this->get_return_url($order);
             $URLKO = $order->get_cancel_order_url_raw();
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
 
-            $executePurchaseResponse = $apiRest->executePurchase(
+
+            $apiResponse = $apiRest->form(
+                1,
+                $paytpvBase->_getLanguange(),
                 $terminal,
-                $orderId,
-                $amount,
-                $currency,
-                $methodId,
-                $ip,
-                1,
                 '',
-                '',
-                $URLOK,
-                $URLKO,
-                '0',
-                '',
-                '',
-                1,
-                [],
-                '',
-                '',
-                $paytpvBase->getMerchantData($order),
-                1
+                [
+                    'terminal' => $terminal,
+                    'methods' => [$methodId],
+                    'order' => $orderId,
+                    'amount' => $amount,
+                    'currency' => $currency,
+                    'userInteraction' => (int) $userInteraction,
+                    'secure' => (int) $secure_pay,
+                    'merchantData' => $paytpvBase->getMerchantData($order),
+                    'urlOk' => $URLOK,
+                    'urlKo' => $URLKO
+                ]
             );
 
-            if($executePurchaseResponse->errorCode == '0') {
+            if($apiResponse->errorCode == '0') {
                 return array(
                     'result' => 'success',
-                    'redirect'	=> $executePurchaseResponse->challengeUrl
+                    'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-                wc_add_notice('Se ha producido un error: ' . $executePurchaseResponse->errorCode, 'error' );
+                wc_add_notice('Se ha producido un error: ' . $apiResponse->errorCode, 'error' );
                 return;
             }
 
@@ -87,24 +116,7 @@ abstract class Paycomet_APM extends WC_Payment_Gateway
 
     public function canRefundOrder($methodId)
     {
-        $paytpvBase = new woocommerce_paytpv();
-        $apiKey = $paytpvBase->settings['apikey'];
-        $userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
-
-        if($apiKey == '') {
-            return false;
-        }
-
-        $apiRest = new PaycometApiRest($apiKey);
-	    $userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
-
-        foreach ($userPaymentMethods as $paymentMethod) {
-            if($paymentMethod->id == $this->methodId) {
-                return (bool) $paymentMethod->allowAPIRefunds;
-            }
-        }
-
-        return false;
+        return (in_array('refunds',$this->supports))?true:false;
     }
 
     /**

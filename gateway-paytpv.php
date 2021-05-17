@@ -3,7 +3,7 @@
  * Plugin Name: PAYCOMET Woocommerce
  * Plugin URI: https://wordpress.org/plugins/paytpv-for-woocommerce/
  * Description: The PAYCOMET payment gateway for WooCommerce
- * Author: PAYCOMET 
+ * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
  * Version: 5.0
  * Tested up to: 5.6
@@ -45,24 +45,6 @@ function woocommerce_paytpv_init() {
 	load_plugin_textdomain( 'wc_paytpv', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	add_filter( 'woocommerce_payment_gateways', 'add_paytpv_gateway' );
 
-	/**
-	 * Add the gateway to woocommerce
-	 * */
-	function add_paytpv_gateway( $methods ) {
-		$methods[] = 'woocommerce_paytpv';
-		$paytpvBase = new woocommerce_paytpv();
-		$userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
-		$apiKey = $paytpvBase->settings['apikey'];
-		$userPaymentMethods = [];
-
-		if($userTerminal && $apiKey) {
-			$userPaymentMethods = getUserPaymentMethods($userTerminal, $apiKey);
-		}
-
-		$methods = array_merge($methods, $userPaymentMethods);
-
-		return $methods;
-	}
 
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
@@ -89,20 +71,72 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instant-credit.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
 }
 
+
+/**
+ * Add the gateway to woocommerce
+ * */
+function add_paytpv_gateway( $methods ) {
+	$methods[] = 'woocommerce_paytpv';
+	
+	// APMs
+	$methods[] = 'Paycomet_Bizum';
+	$methods[] = 'Paycomet_Paypal';
+	$methods[] = 'Paycomet_Klarna';
+	$methods[] = 'Paycomet_Ideal';
+	$methods[] = 'Paycomet_Giropay';
+	$methods[] = 'Paycomet_Mybank';
+	$methods[] = 'Paycomet_Multibanco';
+	$methods[] = 'Paycomet_Trustly';
+	$methods[] = 'Paycomet_Przelewy';
+	$methods[] = 'Paycomet_Bancontact';
+	$methods[] = 'Paycomet_Eps';
+	$methods[] = 'Paycomet_Tele2';
+	$methods[] = 'Paycomet_Paysera';
+	$methods[] = 'Paycomet_Postfinance';
+	$methods[] = 'Paycomet_Qiwi';
+	$methods[] = 'Paycomet_Yandex';
+	$methods[] = 'Paycomet_Mts';
+	$methods[] = 'Paycomet_Beeline';
+	$methods[] = 'Paycomet_Paysafecard';
+	$methods[] = 'Paycomet_Skrill';
+	$methods[] = 'Paycomet_Webmoney';
+	$methods[] = 'Paycomet_Instantcredit';
+
+
+	/*
+	$paytpvBase = new woocommerce_paytpv();
+	$userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
+	$apiKey = $paytpvBase->settings['apikey'];
+	$userPaymentMethods = [];
+
+	if($userTerminal && $apiKey) {
+		$userPaymentMethods = getUserPaymentMethods($userTerminal, $apiKey);
+	}	
+	$methods = array_merge($methods, $userPaymentMethods);
+	*/
+	
+
+	return $methods;
+}
 
 add_action( 'admin_init', 'wppaytpv_upgrade' );
 
 function getUserPaymentMethods($userTerminal, $apiKey)
 {
+	$methods = array();
 	$apiRest = new PaycometApiRest($apiKey);
 	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
-	foreach ($userPaymentMethods as $apm) {
-		$methods[] = preg_replace('/\s+/', '_', 'Paycomet_' . $apm->name);
-	}
-
+	try {
+		if ($userPaymentMethods) {
+			foreach ($userPaymentMethods as $apm) {
+				$methods[] = preg_replace('/\s+/', '_', 'Paycomet_' . $apm->name);
+			}
+		}
+	}catch (exception $e){}
+	
 	return $methods;
 }
 
@@ -112,7 +146,7 @@ function wppaytpv_upgrade() {
 	$new_ver = PAYTPV_VERSION;
 
 	PayTPV::update_option( 'version', $old_ver );
-	
+
 	if ( $old_ver == $new_ver ) {
 		return;
 	}

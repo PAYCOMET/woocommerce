@@ -60,6 +60,11 @@
 				)
 			);
 
+			// Verificar campos obligatorios para que esté habilitado.
+			if ($this->apiKey == "" || $this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "") {
+				$this->enabled = false;
+			}
+
 			$this->disable_offer_savecard = isset($this->settings['disable_offer_savecard']) ? $this->settings['disable_offer_savecard'] : 0;
 			$this->payment_paycomet = isset($this->settings['payment_paycomet']) ? $this->settings['payment_paycomet'] : 0;
 			$this->jet_id = isset($this->settings['jet_id']) ? $this->settings['jet_id'] : '';
@@ -139,7 +144,8 @@
 				}
 
 			} else {
-				print '<h4>Paycomet error: 1004</h4>';
+				print '<p>Paycomet error: 1004</p>';
+				exit;
 			}
 
 			$disable_offer_savecard = $gateway->disable_offer_savecard;
@@ -174,11 +180,15 @@
 		 * */
 		function payment_fields()
 		{
-			if ( $this->description)
-				echo wpautop( wptexturize( $this->description ) );
+			if ($this->apiKey != '') {
+				if ( $this->description)
+					echo wpautop( wptexturize( $this->description ) );
 
-			if ($this->isJetIframeActive) {
-				wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
+				if ($this->isJetIframeActive) {
+					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
+				}
+			} else {
+				print '<p>Paycomet error: 1004</p>';
 			}
 		}
 
@@ -191,7 +201,7 @@
 			?>
 			<h3><?php _e( 'PAYCOMET Payment Gateway', 'wc_paytpv' ); ?></h3>
 			<p>
-				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. Al you need is a PAYCOMET merchant account and access to <a href="https://dashboard.paycomet.com/cp_control">customer area</a>', 'wc_paytpv'  ); ?>
+				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. All you need is a PAYCOMET merchant account and access to <a href="https://dashboard.paycomet.com/cp_control">customer area</a>', 'wc_paytpv'  ); ?>
 			</p>
 			<p>
 				<?php _e( 'There you should configure "Tipo de notificación del cobro:" as "Notificación por URL" set ther teh following URL:', 'wc_paytpv'  ); ?> <?php echo add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) ); ?></p>
@@ -380,7 +390,8 @@
 					'title' => __( 'Title', 'wc_paytpv' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
-					'default' => __( 'Credit Card', 'wc_paytpv' )
+					'default' => __( 'Credit Card', 'wc_paytpv' ),
+                	'desc_tip'    => true
 				),
 				'description' => array(
 					'title' => __( 'Description', 'wc_paytpv' ),
@@ -388,6 +399,7 @@
 					'class' => 'description',
 					'description' => __( 'This controls the description which the user sees during checkout.', 'wc_paytpv' ),
 					'default' => __( 'Pay using your credit card in a secure way', 'wc_paytpv' ),
+                	'desc_tip'    => true
 				),
 				'apikey' => array(
 					'title' => __('API Key', 'wc_paytpv' ),
@@ -416,21 +428,24 @@
 						0 => __('Iframe', 'wc_paytpv'),
 						1 => __('Paycomet (Full Screen)', 'wc_paytpv'),
 						2 => __('Jet Iframe', 'wc_paytpv'),
-					)
+					),
+					'desc_tip'    => true
 				),
 				'jet_id' => array(
 					'title' => __('JetId', 'wc_paytpv' ),
 					'type' => 'text',
 					'class' => 'jet_id',
 					'description' => __( 'Your JetId from PayComet', 'wc_paytpv' ),
-					'default' => ''
+					'default' => '',
+					'desc_tip'    => true
 				),
 				'iframe_height' => array(
 					'title' => __( 'Iframe Height (px)', 'wc_paytpv' ),
 					'type' => 'text',
 					'class' => 'iframe_height',
 					'description' => __( 'Iframe height in pixels (Min 440)', 'wc_paytpv' ),
-					'default' => '440'
+					'default' => '440',
+					'desc_tip'    => true
 				),
 				'disable_offer_savecard' => array(
 					'title' => __( 'Disable Offer to save card', 'wc_paytpv' ),
@@ -441,7 +456,8 @@
 						0 => __( 'No', 'wc_paytpv' ),
 						1 => __( 'Yes', 'wc_paytpv' )
 					),
-					'default' => '0'
+					'default' => '0',
+					'desc_tip'    => true
 				)
 			);
 		}
@@ -619,7 +635,7 @@
 						}
 
 					} else {
-						print '<h4>Paycomet error: 1004</h4>';
+						print '<p>Paycomet error: 1004</p>';
 					}
 
 					header('Location: '.$salida);
@@ -1185,9 +1201,10 @@
 						'',
 						[
 							'terminal' => $term,
+							'methods' => [1],
 							'order' => $MERCHANT_ORDER,
 							'amount' => $MERCHANT_AMOUNT,
-							'currency' => $currency_iso_code,
+							'currency' => $MERCHANT_CURRENCY,
 							'userInteraction' => $userInteraction,
 							'secure' => $secure_pay,
 							'merchantData' => $merchantData,
@@ -1207,7 +1224,7 @@
 				}
 
 			} else {
-				print '<h4>Paycomet error: 1004</h4>';
+				print '<p>Paycomet error: 1004</p>';
 			}
 
 			return $url;
