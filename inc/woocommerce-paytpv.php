@@ -214,6 +214,7 @@
 
 		public function process_admin_options()
         {
+			print "Txerra";
             $settings = new WC_Admin_Settings();
 			$postData = $this->get_post_data();
 			$error = false;

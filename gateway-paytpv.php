@@ -45,7 +45,6 @@ function woocommerce_paytpv_init() {
 	load_plugin_textdomain( 'wc_paytpv', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	add_filter( 'woocommerce_payment_gateways', 'add_paytpv_gateway' );
 
-
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
 	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
@@ -73,6 +72,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
 }
+
 
 
 /**
@@ -104,20 +104,6 @@ function add_paytpv_gateway( $methods ) {
 	$methods[] = 'Paycomet_Skrill';
 	$methods[] = 'Paycomet_Webmoney';
 	$methods[] = 'Paycomet_Instantcredit';
-
-
-	/*
-	$paytpvBase = new woocommerce_paytpv();
-	$userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
-	$apiKey = $paytpvBase->settings['apikey'];
-	$userPaymentMethods = [];
-
-	if($userTerminal && $apiKey) {
-		$userPaymentMethods = getUserPaymentMethods($userTerminal, $apiKey);
-	}	
-	$methods = array_merge($methods, $userPaymentMethods);
-	*/
-	
 
 	return $methods;
 }

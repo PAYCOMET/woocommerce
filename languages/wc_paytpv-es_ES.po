@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2021-05-17 08:14+0000\n"
-"Last-Translator: Pablo Andrés Castro\n"
+"PO-Revision-Date: 2021-05-17 14:50+0000\n"
+"Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.4.1; wp-5.4.2"
+"X-Loco-Version: 2.5.0; wp-5.6.1"
 
 #: inc/woocommerce-paytpv.php:520
 msgid "+ Add Terminal"
@@ -211,7 +211,7 @@ msgstr "Tarjeta de Crédito"
 msgid "Currency"
 msgstr "Moneda"
 
-#: inc/paycomet-apm.php:39 inc/woocommerce-paytpv.php:397
+#: inc/paycomet-apm.php:52 inc/woocommerce-paytpv.php:397
 msgid "Description"
 msgstr "Descripción"
 
@@ -227,7 +227,7 @@ msgstr "Deshabilitar Almacenar Tarjetas"
 msgid "Disaster Recovery"
 msgstr "Recuperación de desastres"
 
-#: inc/paycomet-apm.php:26
+#: inc/paycomet-apm.php:39
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -235,7 +235,7 @@ msgstr "Habilitar"
 msgid "Enable PAYCOMET gateway"
 msgstr "Habilitar Pasarela PAYCOMET"
 
-#: inc/paycomet-apm.php:25 inc/woocommerce-paytpv.php:383
+#: inc/paycomet-apm.php:38 inc/woocommerce-paytpv.php:383
 msgid "Enable/Disable"
 msgstr "Habilitar/Deshabilitar"
 
@@ -315,6 +315,15 @@ msgstr "Realizar pedido"
 msgid "Month"
 msgstr "Mes"
 
+#: inc/paycomet-apm.php:33
+msgid ""
+"Must be activated from your Paycomet Control Panel <a href=\"https:"
+"//dashboard.paycomet.com/cp_control/\" target=\"_blank\">here</a>"
+msgstr ""
+"Debe estar activo en los ajustes de tu Panel de Control de Paycomet <a "
+"href=\"https://dashboard.paycomet.com/cp_control/\" target=\"_blank\">"
+"aquí</a>"
+
 #: inc/woocommerce-paytpv.php:527
 msgid "Must have at least one terminal configured to process payments."
 msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
@@ -376,11 +385,11 @@ msgstr "Pague con tarjeta de crédito de la forma más segura"
 
 #: inc/paycomet-bancontact.php:14 inc/paycomet-bancontact.php:15
 msgid "Pay with Bancontact"
-msgstr "Paga con Bancontact."
+msgstr "Paga con Bancontact"
 
 #: inc/paycomet-beeline.php:14 inc/paycomet-beeline.php:15
 msgid "Pay with Beeline"
-msgstr "Paga con Beeline."
+msgstr "Paga con Beeline"
 
 #: inc/paycomet-bizum.php:14 inc/paycomet-bizum.php:15
 msgid "Pay with Bizum"
@@ -388,19 +397,20 @@ msgstr "Paga con Bizum"
 
 #: inc/paycomet-eps.php:14 inc/paycomet-eps.php:15
 msgid "Pay with EPS"
-msgstr "Paga con EPS."
+msgstr "Paga con EPS"
 
 #: inc/paycomet-giropay.php:14 inc/paycomet-giropay.php:15
 msgid "Pay with Giropay"
-msgstr "Paga con Giropay."
+msgstr "Paga con Giropay"
 
 #: inc/paycomet-ideal.php:14 inc/paycomet-ideal.php:15
 msgid "Pay with iDeal"
-msgstr "Paga con iDeal."
+msgstr "Paga con iDeal"
 
 #: inc/paycomet-instantcredit.php:14 inc/paycomet-instantcredit.php:15
-msgid "Pay with InstantCredit"
-msgstr "Paga con InstantCredit."
+#| msgid "Pay with InstantCredit"
+msgid "Pay with Instant Credit"
+msgstr "Paga con Instant Credit"
 
 #: inc/paycomet-klarna.php:14 inc/paycomet-klarna.php:15
 msgid "Pay with Klarna"
@@ -408,59 +418,59 @@ msgstr "Paga con Klarna"
 
 #: inc/paycomet-mts.php:14 inc/paycomet-mts.php:15
 msgid "Pay with MTS"
-msgstr "Paga con MTS."
+msgstr "Paga con MTS"
 
 #: inc/paycomet-multibanco.php:14 inc/paycomet-multibanco.php:15
 msgid "Pay with Multibanco"
-msgstr "Paga con Multibanco."
+msgstr "Paga con Multibanco"
 
 #: inc/paycomet-mybank.php:14 inc/paycomet-mybank.php:15
 msgid "Pay with MyBank"
-msgstr "Paga con MyBank."
+msgstr "Paga con MyBank"
 
 #: inc/paycomet-paypal.php:14 inc/paycomet-paypal.php:15
 msgid "Pay with Paypal"
-msgstr "Paga con PayPal."
+msgstr "Paga con PayPal"
 
 #: inc/paycomet-paysafecard.php:14 inc/paycomet-paysafecard.php:15
 msgid "Pay with PaySafeCard"
-msgstr "Paga con PaySafeCard."
+msgstr "Paga con PaySafeCard"
 
 #: inc/paycomet-paysera.php:14 inc/paycomet-paysera.php:15
 msgid "Pay with Paysera"
-msgstr "Paga con Paysera."
+msgstr "Paga con Paysera"
 
 #: inc/paycomet-postfinance.php:14 inc/paycomet-postfinance.php:15
 msgid "Pay with PostFinance"
-msgstr "Paga con PostFinance."
+msgstr "Paga con PostFinance"
 
 #: inc/paycomet-przelewy.php:14 inc/paycomet-przelewy.php:15
 msgid "Pay with Przelewy24"
-msgstr "Paga con Przelewy24."
+msgstr "Paga con Przelewy24"
 
 #: inc/paycomet-qiwi.php:14 inc/paycomet-qiwi.php:15
 msgid "Pay with QIWI Wallet"
-msgstr "Paga con QIWI Wallet."
+msgstr "Paga con QIWI Wallet"
 
 #: inc/paycomet-skrill.php:14 inc/paycomet-skrill.php:15
 msgid "Pay with Skrill"
-msgstr "Paga con Skrill."
+msgstr "Paga con Skrill"
 
 #: inc/paycomet-tele2.php:14 inc/paycomet-tele2.php:15
 msgid "Pay with Tele2"
-msgstr "Paga con Tele2."
+msgstr "Paga con Tele2"
 
 #: inc/paycomet-trustly.php:14 inc/paycomet-trustly.php:15
 msgid "Pay with Trustly"
-msgstr "Paga con Trustly."
+msgstr "Paga con Trustly"
 
 #: inc/paycomet-webmoney.php:14 inc/paycomet-webmoney.php:15
 msgid "Pay with WebMoney"
-msgstr "Paga con WebMoney."
+msgstr "Paga con WebMoney"
 
 #: inc/paycomet-yandex.php:14 inc/paycomet-yandex.php:15
 msgid "Pay with Yandex Money"
-msgstr "Paga con Yandex Money."
+msgstr "Paga con Yandex Money"
 
 #. Author of the plugin
 msgid "PAYCOMET"
@@ -648,15 +658,15 @@ msgstr ""
 "débito. Los datos son enviados a través de un canal cifrado y seguro a la "
 "plataforma PAYCOMET"
 
-#: inc/paycomet-apm.php:42 inc/woocommerce-paytpv.php:400
+#: inc/paycomet-apm.php:55 inc/woocommerce-paytpv.php:400
 msgid "This controls the description which the user sees during checkout."
 msgstr "La descripción que el cliente verá en el proceso de compra"
 
-#: inc/paycomet-apm.php:34 inc/woocommerce-paytpv.php:392
+#: inc/paycomet-apm.php:47 inc/woocommerce-paytpv.php:392
 msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 
-#: inc/paycomet-apm.php:32 inc/woocommerce-paytpv.php:390
+#: inc/paycomet-apm.php:45 inc/woocommerce-paytpv.php:390
 msgid "Title"
 msgstr "Título"
 

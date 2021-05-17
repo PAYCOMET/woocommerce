@@ -11,8 +11,8 @@ class Paycomet_Instantcredit extends Paycomet_APM
         $this->method_title = 'PAYCOMET - InstantCredit';
         $this->method_description = sprintf( __( 'All other general PAYCOMET settings can be adjusted <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 33;
-        $this->title = __('Pay with InstantCredit', 'wc_paytpv' );
-        $this->description = __('Pay with InstantCredit', 'wc_paytpv' );
+        $this->title = __('Pay with Instant Credit', 'wc_paytpv' );
+        $this->description = __('Pay with Instant Credit', 'wc_paytpv' );
 
         $this->supports = array(
             'refunds'

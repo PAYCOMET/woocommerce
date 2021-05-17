@@ -10,17 +10,26 @@ class Paycomet_APM extends WC_Payment_Gateway
         $this->enabled = $this->settings['enabled'];
         $this->title = $this->settings['title'];
         $this->description = $this->settings['description'];
+
+        $paytpvBase = new woocommerce_paytpv();
+        // Verificar campos obligatorios para que esté habilitado.
+        if ($paytpvBase->apiKey == "" || $paytpvBase->clientcode == "" || $paytpvBase->paytpv_terminals[0]["term"] == "" || $paytpvBase->paytpv_terminals[0]["pass"] == "") {
+            $this->enabled = false;
+        }
+
     }
 
-    public function process_admin_options()
-    {
-        return parent::process_admin_options();
-    }
 
     public function init_form_fields()
     {
 
         $this->form_fields = array(
+
+            'activation'  => array(
+                'description' => __( 'Must be activated from your Paycomet Control Panel <a href="https://dashboard.paycomet.com/cp_control/" target="_blank">here</a>', 'wc_paytpv' ),
+                'type'        => 'title',
+            ),
+
             'enabled' => array(
                 'title' => __( 'Enable/Disable', 'wc_paytpv' ),
                 'label' => __( 'Enable', 'wc_paytpv' ) . " " . $this->method_title,
@@ -44,6 +53,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                 'desc_tip'    => true
             )
         );
+
     }
 
     public function payment_fields()
