@@ -1,10 +1,10 @@
 // Plugin
-           
+
 jQuery(function($) {
 
     window.saveOrderInfoJQ = function(){
         paytpv_agree = $("#savecard").is(':checked')?1:0;
-               
+
         $.ajax({
             url: $("#form_paytpv").attr("action"),
             type: "POST",
@@ -26,10 +26,10 @@ jQuery(function($) {
         $("#form_paytpv").submit();
 
     });
-    
+
 
     window.checkCard = function(){
-                
+
         if ($("#card").val()=="0" || $("#card").val()==""){
             $("#storingStep,#paytpv_iframe").removeClass("hidden").show();
             $("#direct_pay").hide();
@@ -38,9 +38,9 @@ jQuery(function($) {
             $("#direct_pay").show();
         }
     }
-    
+
     setTimeout(checkCard, 0);
-   
+
 });
 
 
@@ -51,11 +51,10 @@ jQuery(function($) {
         lightcase.start({
           href: '#'+msg,
         });
-    }    
-
+    }
 
     window.vincularTarjeta = function(){
-       
+
         $('#savecard').attr("disabled", true);
         $('#close_vincular').show();
         if ($('#payment_paycomet').val()!=1) {
@@ -64,7 +63,7 @@ jQuery(function($) {
             window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
         }
 
-        $('#open_vincular').hide();       
+        $('#open_vincular').hide();
     }
 
     window.close_vincularTarjeta = function (){
@@ -74,9 +73,9 @@ jQuery(function($) {
         $('#open_vincular').show();
     }
 
-   
-        
-    $(".remove_card").on("click", function(e){  
+
+
+    $(".remove_card").on("click", function(e){
         e.preventDefault();
         element = $(this);
         id = $(this).attr("id");
@@ -86,9 +85,9 @@ jQuery(function($) {
         };
     });
 
-    $(".save_desc").on("click", function(e){ 
+    $(".save_desc").on("click", function(e){
         e.preventDefault();
-        
+
         card_desc = $("#card_desc_"+$(this).attr("id")).val()
         saveDescriptionCard($(this));
     });
@@ -110,18 +109,18 @@ jQuery(function($) {
                 if (result.resp == '0')
                 {
                    alert("#msg_descriptionsaved")
-                   
+
                 }
             },
             dataType:"json"
         });
-        
+
     };
 
 
     window.removeCard = function(element)
     {
-        
+
         $.ajax({
             url: element.attr("href"),
             type: "POST",
@@ -138,7 +137,7 @@ jQuery(function($) {
             dataType:"json"
         });
     };
-    
+
 
 });
 

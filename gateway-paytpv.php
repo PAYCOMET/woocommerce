@@ -3,9 +3,9 @@
  * Plugin Name: PAYCOMET Woocommerce
  * Plugin URI: https://wordpress.org/plugins/paytpv-for-woocommerce/
  * Description: The PAYCOMET payment gateway for WooCommerce
- * Author: PAYCOMET 
+ * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 4.29
+ * Version: 5.0
  * Tested up to: 5.6
  * WC tested up to: 4.8
  * Text Domain: wc_paytpv
@@ -13,7 +13,7 @@
  */
 
 
-define( 'PAYTPV_VERSION', '4.29' );
+define( 'PAYTPV_VERSION', '5.0' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -45,22 +45,86 @@ function woocommerce_paytpv_init() {
 	load_plugin_textdomain( 'wc_paytpv', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	add_filter( 'woocommerce_payment_gateways', 'add_paytpv_gateway' );
 
-	/**
-	 * Add the gateway to woocommerce
-	 * */
-	function add_paytpv_gateway( $methods ) {
-		$methods[ ] = 'woocommerce_paytpv';
-		return $methods;
-	}
-
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
 	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
-	
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-apm.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
 }
 
 
+
+/**
+ * Add the gateway to woocommerce
+ * */
+function add_paytpv_gateway( $methods ) {
+	$methods[] = 'woocommerce_paytpv';
+	
+	// APMs
+	$methods[] = 'Paycomet_Bizum';
+	$methods[] = 'Paycomet_Paypal';
+	$methods[] = 'Paycomet_Klarna';
+	$methods[] = 'Paycomet_Ideal';
+	$methods[] = 'Paycomet_Giropay';
+	$methods[] = 'Paycomet_Mybank';
+	$methods[] = 'Paycomet_Multibanco';
+	$methods[] = 'Paycomet_Trustly';
+	$methods[] = 'Paycomet_Przelewy';
+	$methods[] = 'Paycomet_Bancontact';
+	$methods[] = 'Paycomet_Eps';
+	$methods[] = 'Paycomet_Tele2';
+	$methods[] = 'Paycomet_Paysera';
+	$methods[] = 'Paycomet_Postfinance';
+	$methods[] = 'Paycomet_Qiwi';
+	$methods[] = 'Paycomet_Yandex';
+	$methods[] = 'Paycomet_Mts';
+	$methods[] = 'Paycomet_Beeline';
+	$methods[] = 'Paycomet_Paysafecard';
+	$methods[] = 'Paycomet_Skrill';
+	$methods[] = 'Paycomet_Webmoney';
+	$methods[] = 'Paycomet_Instantcredit';
+
+	return $methods;
+}
+
 add_action( 'admin_init', 'wppaytpv_upgrade' );
+
+function getUserPaymentMethods($userTerminal, $apiKey)
+{
+	$methods = array();
+	$apiRest = new PaycometApiRest($apiKey);
+	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
+	try {
+		if ($userPaymentMethods) {
+			foreach ($userPaymentMethods as $apm) {
+				$methods[] = preg_replace('/\s+/', '_', 'Paycomet_' . $apm->name);
+			}
+		}
+	}catch (exception $e){}
+	
+	return $methods;
+}
 
 function wppaytpv_upgrade() {
 
@@ -68,7 +132,7 @@ function wppaytpv_upgrade() {
 	$new_ver = PAYTPV_VERSION;
 
 	PayTPV::update_option( 'version', $old_ver );
-	
+
 	if ( $old_ver == $new_ver ) {
 		return;
 	}

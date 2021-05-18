@@ -317,6 +317,16 @@ class PaycometApiRest
         return $this->executeRequest('/v1/payments/' . $order . '/refund', $params);
     }
 
+    public function getUserPaymentMethods(
+        $terminal
+    ) {
+        $params = [
+            'terminal'      => (int) $terminal
+        ];
+
+        return $this->executeRequest('/v1/methods', $params);
+    }
+
     private function executeRequest($endpoint, $params)
     {
         $jsonParams = json_encode($params);
