@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2021-05-17 14:50+0000\n"
+"PO-Revision-Date: 2021-05-18 14:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -148,6 +148,10 @@ msgstr ""
 "no se puede examinar, escanear, utilizar o modificar por cualquier externo "
 "que obtenga acceso a información confidencial."
 
+#: inc/paycomet-apm.php:113
+msgid "An error has occurred"
+msgstr "Se he producido un error"
+
 #: inc/woocommerce-paytpv.php:405
 msgid "API Key"
 msgstr "API Key"
@@ -211,7 +215,7 @@ msgstr "Tarjeta de Crédito"
 msgid "Currency"
 msgstr "Moneda"
 
-#: inc/paycomet-apm.php:52 inc/woocommerce-paytpv.php:397
+#: inc/paycomet-apm.php:50 inc/woocommerce-paytpv.php:397
 msgid "Description"
 msgstr "Descripción"
 
@@ -227,7 +231,7 @@ msgstr "Deshabilitar Almacenar Tarjetas"
 msgid "Disaster Recovery"
 msgstr "Recuperación de desastres"
 
-#: inc/paycomet-apm.php:39
+#: inc/paycomet-apm.php:37
 msgid "Enable"
 msgstr "Habilitar"
 
@@ -235,7 +239,7 @@ msgstr "Habilitar"
 msgid "Enable PAYCOMET gateway"
 msgstr "Habilitar Pasarela PAYCOMET"
 
-#: inc/paycomet-apm.php:38 inc/woocommerce-paytpv.php:383
+#: inc/paycomet-apm.php:36 inc/woocommerce-paytpv.php:383
 msgid "Enable/Disable"
 msgstr "Habilitar/Deshabilitar"
 
@@ -290,6 +294,10 @@ msgstr "Integración con"
 msgid "Internal security"
 msgstr "Seguridad interna"
 
+#: inc/paycomet-apm.php:117
+msgid "Invalid API KEY"
+msgstr "API Key inválida o no definida"
+
 #: inc/woocommerce-paytpv.php:430
 msgid "Jet Iframe"
 msgstr "Jet Iframe"
@@ -315,7 +323,7 @@ msgstr "Realizar pedido"
 msgid "Month"
 msgstr "Mes"
 
-#: inc/paycomet-apm.php:33
+#: inc/paycomet-apm.php:31
 msgid ""
 "Must be activated from your Paycomet Control Panel <a href=\"https:"
 "//dashboard.paycomet.com/cp_control/\" target=\"_blank\">here</a>"
@@ -658,15 +666,15 @@ msgstr ""
 "débito. Los datos son enviados a través de un canal cifrado y seguro a la "
 "plataforma PAYCOMET"
 
-#: inc/paycomet-apm.php:55 inc/woocommerce-paytpv.php:400
+#: inc/paycomet-apm.php:53 inc/woocommerce-paytpv.php:400
 msgid "This controls the description which the user sees during checkout."
 msgstr "La descripción que el cliente verá en el proceso de compra"
 
-#: inc/paycomet-apm.php:47 inc/woocommerce-paytpv.php:392
+#: inc/paycomet-apm.php:45 inc/woocommerce-paytpv.php:392
 msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 
-#: inc/paycomet-apm.php:45 inc/woocommerce-paytpv.php:390
+#: inc/paycomet-apm.php:43 inc/woocommerce-paytpv.php:390
 msgid "Title"
 msgstr "Título"
 

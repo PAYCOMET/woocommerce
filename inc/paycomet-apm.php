@@ -11,12 +11,12 @@ class Paycomet_APM extends WC_Payment_Gateway
         $this->title = $this->settings['title'];
         $this->description = $this->settings['description'];
 
-        $paytpvBase = new woocommerce_paytpv();
+        // Habilitamos el APM si están definidos los parámetros obligatorios de paycomet
+        $paytpvBase = new woocommerce_paytpv(false);
         // Verificar campos obligatorios para que esté habilitado.
         if ($paytpvBase->apiKey == "" || $paytpvBase->clientcode == "" || $paytpvBase->paytpv_terminals[0]["term"] == "" || $paytpvBase->paytpv_terminals[0]["pass"] == "") {
             $this->enabled = false;
         }
-
     }
 
 
@@ -65,7 +65,7 @@ class Paycomet_APM extends WC_Payment_Gateway
 
     public function payWithAlternativeMethod($order_id, $methodId)
     {
-        $paytpvBase = new woocommerce_paytpv();
+        $paytpvBase = new woocommerce_paytpv(false);
 
         if($paytpvBase->settings['apikey']) {
             $apiRest = new PaycometApiRest($paytpvBase->settings['apikey']);
@@ -81,7 +81,6 @@ class Paycomet_APM extends WC_Payment_Gateway
             $URLKO = $order->get_cancel_order_url_raw();
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
-
 
             $apiResponse = $apiRest->form(
                 1,
@@ -108,14 +107,12 @@ class Paycomet_APM extends WC_Payment_Gateway
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-                wc_add_notice('Se ha producido un error: ' . $apiResponse->errorCode, 'error' );
+                wc_add_notice(__( 'An error has occurred', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
                 return;
             }
-
-            return array(
-                'result' => 'success',
-                'redirect'	=> 'url de redirección que corresponda'
-            );
+        } else {
+            wc_add_notice(__( 'Invalid API KEY', 'wc_paytpv' ), 'error');
+            return;
         }
     }
 
@@ -138,7 +135,7 @@ class Paycomet_APM extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        $paytpvBase = new woocommerce_paytpv();
+        $paytpvBase = new woocommerce_paytpv(false);
         $apiKey = $paytpvBase->settings['apikey'];
         $order = wc_get_order( $order_id );
         $ip = $_SERVER['REMOTE_ADDR'];

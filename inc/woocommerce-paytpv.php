@@ -18,7 +18,7 @@
 			}
 		}
 
-		public function __construct()
+		public function __construct($loadHooks = true)
 		{
 			$this->id = 'paytpv';
 			$this->icon = PAYTPV_PLUGIN_URL . 'images/paycomet.png';
@@ -60,33 +60,36 @@
 				)
 			);
 
-			// Verificar campos obligatorios para que esté habilitado.
-			if ($this->apiKey == "" || $this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "") {
-				$this->enabled = false;
-			}
-
 			$this->disable_offer_savecard = isset($this->settings['disable_offer_savecard']) ? $this->settings['disable_offer_savecard'] : 0;
 			$this->payment_paycomet = isset($this->settings['payment_paycomet']) ? $this->settings['payment_paycomet'] : 0;
 			$this->jet_id = isset($this->settings['jet_id']) ? $this->settings['jet_id'] : '';
 			$this->iframe_height = isset($this->settings['iframe_height']) ? $this->settings['iframe_height'] : 440;
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
+			// Verificar campos obligatorios para que esté habilitado.
+			if ($this->apiKey == "" || $this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
+				$this->enabled = false;
+			}
+
 			// Hooks
-			add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
+			if ($loadHooks) {
+				
+				add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
 
-			add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
-			//add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'save_terminals_details' ) );
-			add_action('woocommerce_api_woocommerce_' . $this->id, array($this, 'check_' . $this->id . '_resquest'));
+				add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+				//add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'save_terminals_details' ) );
+				add_action('woocommerce_api_woocommerce_' . $this->id, array($this, 'check_' . $this->id . '_resquest'));
 
-			add_action('admin_notices', array($this, 'validate_paytpv'));
+				add_action('admin_notices', array($this, 'validate_paytpv'));
 
-			// Subscriptions
-			add_action('woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment'), 10, 2 );
-			add_filter('wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id'), 10, 4 );
+				// Subscriptions
+				add_action('woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment'), 10, 2 );
+				add_filter('wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id'), 10, 4 );
 
-			//JetIframe integration
-			if ($this->isJetIframeActive) {
-				add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
+				//JetIframe integration
+				if ($this->isJetIframeActive) {
+					add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
+				}
 			}
 		}
 
@@ -214,7 +217,6 @@
 
 		public function process_admin_options()
         {
-			print "Txerra";
             $settings = new WC_Admin_Settings();
 			$postData = $this->get_post_data();
 			$error = false;
