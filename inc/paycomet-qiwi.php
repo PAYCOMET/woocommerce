@@ -9,7 +9,7 @@ class Paycomet_Qiwi extends Paycomet_APM
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/qiwi.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - QIWI Wallet';
-        $this->method_description = sprintf( __( 'All other general PAYCOMET settings can be adjusted <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
+        $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 24;
         $this->title = __('Pay with QIWI Wallet', 'wc_paytpv' );
         $this->description = __('Pay with QIWI Wallet', 'wc_paytpv' );

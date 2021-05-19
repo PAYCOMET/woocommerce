@@ -11,10 +11,14 @@ class Paycomet_APM extends WC_Payment_Gateway
         $this->title = $this->settings['title'];
         $this->description = $this->settings['description'];
 
-        // Habilitamos el APM si están definidos los parámetros obligatorios de paycomet
-        $paytpvBase = new woocommerce_paytpv(false);
-        // Verificar campos obligatorios para que esté habilitado.
-        if ($paytpvBase->apiKey == "" || $paytpvBase->clientcode == "" || $paytpvBase->paytpv_terminals[0]["term"] == "" || $paytpvBase->paytpv_terminals[0]["pass"] == "") {
+        // Para habiltar el APM tienen que estar definidos los campos obligatorios de paycomet
+        $paytpv_settings = get_option('woocommerce_paytpv_settings');
+        $paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+        if ($paytpv_settings && $paytpv_terminals){
+            if ($paytpv_settings["apikey"] == "" || $paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
+                $this->enabled = false;
+            }
+        } else {
             $this->enabled = false;
         }
     }
