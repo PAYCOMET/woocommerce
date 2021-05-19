@@ -9,7 +9,7 @@ class Paycomet_Bancontact extends Paycomet_APM
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/bancontact.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - Bancontact';
-        $this->method_description = sprintf( __( 'All other general PAYCOMET settings can be adjusted <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
+        $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 19;
         $this->title = __('Pay with Bancontact', 'wc_paytpv' );
         $this->description = __('Pay with Bancontact', 'wc_paytpv' );
