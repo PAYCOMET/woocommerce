@@ -140,14 +140,16 @@
 					if ($apiResponse->errorCode==0) {
 						$url_paytpv = $apiResponse->challengeUrl;
 					} else {
-						print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
+						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
+						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
+						exit;
 					}
 				} catch (exception $e){
 					$url_paytpv = "";
 				}
 
 			} else {
-				print '<p>Paycomet error: 1004</p>';
+				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
 				exit;
 			}
 
@@ -190,8 +192,8 @@
 				if ($this->isJetIframeActive) {
 					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
 				}
-			} else {
-				print '<p>Paycomet error: 1004</p>';
+			} else {				
+				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
 			}
 		}
 
@@ -586,65 +588,62 @@
 
 				$secure_pay = 1;
 
-				// PAGO SEGURO redireccionamos
-				if ($secure_pay){
+				$URLOK = $this->get_return_url( $order );
+				$URLKO = $order->get_cancel_order_url_raw();
 
-					$URLOK = $this->get_return_url( $order );
-					$URLKO = $order->get_cancel_order_url_raw();
+				$salida = $URLKO; // Default
 
-					// REST
-					if ($this->apiKey != '') {
-						$OPERATION = 1;
-						$methodId = 1;
-						$userInteraction = 1;
-						$scoring = 0;
+				// REST
+				if ($this->apiKey != '') {
+					$OPERATION = 1;
+					$methodId = 1;
+					$userInteraction = 1;
+					$scoring = 0;
 
-						$merchantData = $this->getMerchantData($order);
+					$merchantData = $this->getMerchantData($order);
 
-						try {
+					try {
 
-							$apiRest = new PaycometApiRest($this->apiKey);
-							$apiResponse = $apiRest->form(
-								$OPERATION,
-								$this->_getLanguange(),
-								$term,
-								'',
-								[
-									'terminal' => $term,
-									'methods' => [$methodId],
-									'order' => $paytpv_order_ref,
-									'amount' => $importe,
-									'currency' => $currency_iso_code,
-									'idUser' => $saved_card["paytpv_iduser"],
-									'tokenUser' => $saved_card["paytpv_tokenuser"],
-									'userInteraction' => $userInteraction,
-									'secure' => $secure_pay,
-									'merchantData' => $merchantData,
-									'urlOk' => $URLOK,
-									'urlKo' => $URLKO
-								]
-							);
+						$apiRest = new PaycometApiRest($this->apiKey);
+						$apiResponse = $apiRest->form(
+							$OPERATION,
+							$this->_getLanguange(),
+							$term,
+							'',
+							[
+								'terminal' => $term,
+								'methods' => [$methodId],
+								'order' => $paytpv_order_ref,
+								'amount' => $importe,
+								'currency' => $currency_iso_code,
+								'idUser' => $saved_card["paytpv_iduser"],
+								'tokenUser' => $saved_card["paytpv_tokenuser"],
+								'userInteraction' => $userInteraction,
+								'secure' => $secure_pay,
+								'merchantData' => $merchantData,
+								'urlOk' => $URLOK,
+								'urlKo' => $URLKO
+							]
+						);
 
-							if ($apiResponse->errorCode==0) {
-								$salida = $apiResponse->challengeUrl;
-							} else {
-								print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
-							}
-
-						} catch (exception $e){
-							$this->write_log('Error challengeUrl. Error: ' . print_r($apiResponse));
-							wp_redirect( $URLKO, 303 );
-							exit;
+						if ($apiResponse->errorCode==0) {
+							$salida = $apiResponse->challengeUrl;
+						} else {
+							$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
+							wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
 						}
 
-					} else {
-						print '<p>Paycomet error: 1004</p>';
+					} catch (exception $e){
+						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ), 'error' );
 					}
 
-					header('Location: '.$salida);
-
-					exit;
+				} else {
+					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . "1004", 'error' );
+					$salida = $URLKO;
 				}
+
+				header('Location: '. $salida);
+				exit;
 
 				// PAGO NO SEGURO --------------------------------------------------------------------------
 
@@ -1220,14 +1219,15 @@
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
 					} else {
-						print '<h4>Paycomet error: ' . $apiResponse->errorCode .'</h4>';
+						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
+						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
 					}
 				} catch (exception $e){
 					$url = "";
 				}
 
 			} else {
-				print '<p>Paycomet error: 1004</p>';
+				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
 			}
 
 			return $url;
@@ -1279,6 +1279,13 @@
 						'ES',
 						$notify
 					);
+
+					if ($addUserResponse->errorCode>0) {
+						$errorCode = ($addUserResponse->errorCode==1004)?"1004":"";
+						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+						return;
+					}
+
 					$idUser = $addUserResponse->idUser;
 					$tokenUser = $addUserResponse->tokenUser;
 				}
@@ -1333,6 +1340,8 @@
 
 				$urlReturn = $URLOK;
 				if ($executePurchaseResponse->errorCode>0) {
+					$errorCode = ($executePurchaseResponse->errorCode==1004)?"1004":"";
+					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
 					$urlReturn = $URLKO;
 				}
 

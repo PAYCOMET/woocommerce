@@ -111,7 +111,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-                wc_add_notice(__( 'An error has occurred', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
+				wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
                 return;
             }
         } else {
