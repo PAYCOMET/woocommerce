@@ -8,7 +8,7 @@ class Paycomet_Multibanco extends Paycomet_APM
         $this->id = 'paycomet_multibanco';
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/multibanco.svg';
         $this->has_fields = false;
-        $this->method_title = 'PAYCOMET - Multibanco SIBS';
+        $this->method_title = 'PAYCOMET - Multibanco';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 16;
         $this->title = __('Pay with Multibanco', 'wc_paytpv' );

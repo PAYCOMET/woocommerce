@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 5.0 =
-¡¡ API Key Obligatoria !! A partir de esta versión es necesaria.
+¡¡ API Key Obligatoria !! A partir de esta versión es necesario para el funcionamiento del plugin.
 APMs se muestran como nuevas opciones de pago.
 Eliminar campos no necesarios con PSD2.
 

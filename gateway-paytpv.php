@@ -142,7 +142,6 @@ function wppaytpv_upgrade() {
 	PayTPV::update_option( 'version', $new_ver );
 }
 
-
 /* Install and default settings */
 /*
 add_action( 'activate_' . PAYTPV_PLUGIN, 'wppaytpv_install' );
@@ -154,3 +153,21 @@ function wppaytpv_install() {
 	wppaytpv_upgrade();
 }
 */
+
+
+// Notice: Si tiene habilitado el plugin y no ha definido la API KEY.
+if( (isset( get_option('woocommerce_paytpv_settings')['enabled'] ) && get_option('woocommerce_paytpv_settings')['enabled'] == "yes") && 
+	(!isset(get_option('woocommerce_paytpv_settings')['apikey']) || empty( get_option('woocommerce_paytpv_settings')['apikey'] )) ) {
+    add_action( 'admin_notices', 'my_update_notice' );
+}
+
+function my_update_notice() {
+	$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv');
+	?>
+	<div class="notice notice-error">
+	
+	   <p><b><?php echo sprintf(__( 'PAYCOMET Error: You must define the API Key <a href="%s">here</a>.', 'wc_paytpv'), $url);?></b></p>
+
+	</div>
+	<?php 
+}
