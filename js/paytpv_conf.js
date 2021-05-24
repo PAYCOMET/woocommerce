@@ -1,6 +1,5 @@
 // Admin Plugin
 jQuery(function($) {
-    
     $('#paytpv_terminals').on( 'click', 'a.add', function(){
         var size = $('#paytpv_terminals').find('tbody .account').size();
         var lasttr=$('.tblterminals tbody tr:first').clone();
@@ -19,7 +18,7 @@ jQuery(function($) {
     });
 
     $('.payment_paycomet').on( 'change', function(e){
-        checkPayment();      
+        checkPayment();
     });
 
     $('.wc_input_table .remove_term').click( function() {
@@ -47,7 +46,7 @@ jQuery(function($) {
         previous = $(this).val();
         moneda = $(this);
     }).on('change',function() {
-        
+
         $('#paytpv_terminals .moneda').not(moneda).each(function() {
             if ($(this)!=moneda && $(this).val()==$(moneda).val()){
                 alert($("#msg_moneda_terminal").html());
@@ -55,7 +54,7 @@ jQuery(function($) {
             }
         });
     });
-   
+
 
     window.checkPayment = function(){
         if ($(".payment_paycomet").val()==0) 
@@ -69,47 +68,15 @@ jQuery(function($) {
             $('.jet_id').parents("tr").hide();
     }
 
-    window.checkAllTerminales = function(){
-        $( ".term" ).each(function() {
-            checkterminales($(this));
-        });
-    }
-
-    window.checkterminales = function (element){
-        // Si solo tiene terminal seguro o tiene los dos la primera compra va por seguro
-        // Seguro
-        switch ($(element).val()){
-            case "0": // SEGURO
-                $(element).closest("tr").find('.dsecure').val(1);
-                $(element).closest("tr").find('.dsecure option:not(:selected)').prop( "disabled", true );
-                $(element).closest("tr").find('.tdmin').hide();
-                
-                break;
-            case "1": // NO SEGURO
-                $(element).closest("tr").find('.dsecure').val(0);
-                $(element).closest("tr").find('.dsecure option:not(:selected)').prop( "disabled", true );
-                $(element).closest("tr").find('.tdmin').hide();
-                
-                break;
-            case "2": // AMBOS
-                $(element).closest("tr").find('.dsecure option:not(:selected)').prop( "disabled", false );
-                $(element).closest("tr").find('.tdmin').show();
-                
-                break;
-        }
-    }
-
     window.checkaddTerminal = function (remove){
         max_terms = 3;
-        
+
         if ($(".term").length< max_terms)
             $(".add.button").show()
         else
             $(".add.button").hide()
     }
 
-
-    checkAllTerminales();
     checkaddTerminal();
     checkPayment();
 
