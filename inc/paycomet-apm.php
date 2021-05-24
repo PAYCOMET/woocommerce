@@ -6,7 +6,7 @@ class Paycomet_APM extends WC_Payment_Gateway
     {
     }
 
-    public function loadProp(){
+    public function loadProp() {
         $this->enabled = $this->settings['enabled'];
         $this->title = $this->settings['title'];
         $this->description = $this->settings['description'];
@@ -15,7 +15,7 @@ class Paycomet_APM extends WC_Payment_Gateway
         $paytpv_settings = get_option('woocommerce_paytpv_settings');
         $paytpv_terminals = get_option('woocommerce_paytpv_terminals');
         if ($paytpv_settings && $paytpv_terminals){
-            if ($paytpv_settings["apikey"] == "" || $paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
+            if (!isset($paytpv_settings["apikey"]) || $paytpv_settings["apikey"] == "" || $paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
                 $this->enabled = false;
             }
         } else {

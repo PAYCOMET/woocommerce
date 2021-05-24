@@ -1237,14 +1237,16 @@
 		{
 			$order = new WC_Order($order_id);
 
+			$result = "success";
+
 			if ($this->isJetIframeActive) {
-				$this->processJetIFramePayment($order);
+				$result = $this->processJetIFramePayment($order);
 			}
 
 			$this->write_log( 'Process payment: ' . $order_id );
 
 			return array(
-				'result' => 'success',
+				'result' => $result,
 				'redirect'	=> $this->isJetIframeActive ? $this->jetiframeOkUrl : $order->get_checkout_payment_url( true )
 			);
 		}
@@ -1283,7 +1285,7 @@
 					if ($addUserResponse->errorCode>0) {
 						$errorCode = ($addUserResponse->errorCode==1004)?"1004":"";
 						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
-						return;
+						return "error";
 					}
 
 					$idUser = $addUserResponse->idUser;
@@ -1349,6 +1351,7 @@
 			} else {
 				$this->jetiframeOkUrl = $URLKO;
 			}
+			return "success";
 		}
 
 
