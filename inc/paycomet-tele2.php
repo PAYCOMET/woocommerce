@@ -9,7 +9,7 @@ class Paycomet_Tele2 extends Paycomet_APM
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/tele2.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - Tele2';
-        $this->method_description = sprintf( __( 'All other general PAYCOMET settings can be adjusted <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
+        $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 21;
         $this->title = __('Pay with Tele2', 'wc_paytpv' );
         $this->description = __('Pay with Tele2', 'wc_paytpv' );

@@ -6,15 +6,19 @@ class Paycomet_APM extends WC_Payment_Gateway
     {
     }
 
-    public function loadProp(){
+    public function loadProp() {
         $this->enabled = $this->settings['enabled'];
         $this->title = $this->settings['title'];
         $this->description = $this->settings['description'];
 
-        // Habilitamos el APM si están definidos los parámetros obligatorios de paycomet
-        $paytpvBase = new woocommerce_paytpv(false);
-        // Verificar campos obligatorios para que esté habilitado.
-        if ($paytpvBase->apiKey == "" || $paytpvBase->clientcode == "" || $paytpvBase->paytpv_terminals[0]["term"] == "" || $paytpvBase->paytpv_terminals[0]["pass"] == "") {
+        // Para habiltar el APM tienen que estar definidos los campos obligatorios de paycomet
+        $paytpv_settings = get_option('woocommerce_paytpv_settings');
+        $paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+        if ($paytpv_settings && $paytpv_terminals){
+            if (!isset($paytpv_settings["apikey"]) || $paytpv_settings["apikey"] == "" || $paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
+                $this->enabled = false;
+            }
+        } else {
             $this->enabled = false;
         }
     }
@@ -107,7 +111,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-                wc_add_notice(__( 'An error has occurred', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
+				wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
                 return;
             }
         } else {
