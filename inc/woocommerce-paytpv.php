@@ -5,7 +5,6 @@
 	 */
 	class woocommerce_paytpv extends WC_Payment_Gateway
 	{
-		private $ws_client;
 
         private function write_log( $log )
         {
@@ -646,9 +645,7 @@
 				exit;
 
 				// PAGO NO SEGURO --------------------------------------------------------------------------
-
-				$client = $this->get_client();
-				$ip = $client->getIp();
+				$ip = $this->getIp();
 
 				$userInteraction = 1;
 
@@ -848,6 +845,25 @@
 			exit;
 		}
 
+		public function getIp($ref = false)
+		{
+			// Si llega referencia obtenemos la ip
+			if ($ref !== false) {
+				$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
+				if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
+					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+				}
+			// Si no de remote address
+			} else {
+				$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+			} 
+			
+			if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
+				$DS_ORIGINAL_IP = "127.0.0.1";
+			}
+			return $DS_ORIGINAL_IP;
+		}
+
 		/**
 		 * Validate user password
 		 * */
@@ -968,77 +984,81 @@
 			$customer = wp_get_current_user();
 			$isGuest = !is_user_logged_in();
 
-			if ($isGuest){
-				$acctInfoData["chAccAgeInd"] = "01";
-			} else {
-				$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
-				$diff = $date_now->diff($date_customer);
-				$dias = $diff->days;
-
-				if ($dias == 0) {
-					$acctInfoData["chAccAgeInd"] = "02";
-				} else if ($dias < 30) {
-					$acctInfoData["chAccAgeInd"] = "03";
-				} else if ($dias < 60) {
-					$acctInfoData["chAccAgeInd"] = "04";
+			try {
+				if ($isGuest){
+					$acctInfoData["chAccAgeInd"] = "01";
 				} else {
-					$acctInfoData["chAccAgeInd"] = "05";
+					$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
+					$diff = $date_now->diff($date_customer);
+					$dias = $diff->days;
+
+					if ($dias == 0) {
+						$acctInfoData["chAccAgeInd"] = "02";
+					} else if ($dias < 30) {
+						$acctInfoData["chAccAgeInd"] = "03";
+					} else if ($dias < 60) {
+						$acctInfoData["chAccAgeInd"] = "04";
+					} else {
+						$acctInfoData["chAccAgeInd"] = "05";
+					}
+
+					$acctInfoData["chAccChange"] = date('Ymd', get_user_meta( get_current_user_id(), 'last_update', true ));
+
+					$date_customer_upd = new DateTime();
+					$date_customer_upd->setTimestamp(get_user_meta( get_current_user_id(), 'last_update', true ));
+
+					$diff = $date_now->diff($date_customer_upd);
+					$dias_upd = $diff->days;
+
+					if ($dias_upd == 0) {
+						$acctInfoData["chAccChangeInd"] = "01";
+					} else if ($dias_upd < 30) {
+						$acctInfoData["chAccChangeInd"] = "02";
+					} else if ($dias_upd < 60) {
+						$acctInfoData["chAccChangeInd"] = "03";
+					} else {
+						$acctInfoData["chAccChangeInd"] = "04";
+					}
+
+					$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
+
+					$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") <= 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
+
+					$acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") <= 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") : 999;
+					$acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") <= 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") : 999;
+
+					if ( ($customer->first_name != $order->get_billing_first_name()) ||
+					($customer->last_name != $order->get_billing_last_name())) {
+						$acctInfoData["shipNameIndicator"] = "02";
+					} else {
+						$acctInfoData["shipNameIndicator"] = "01";
+					}
 				}
 
-				$acctInfoData["chAccChange"] = date('Ymd', get_user_meta( get_current_user_id(), 'last_update', true ));
+				$firstAddressDelivery = $this->firstAddressDelivery(get_current_user_id(), $order);
 
-				$date_customer_upd = new DateTime();
-				$date_customer_upd->setTimestamp(get_user_meta( get_current_user_id(), 'last_update', true ));
+				if ($firstAddressDelivery != "") {
+					$acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
 
-				$diff = $date_now->diff($date_customer_upd);
-				$dias_upd = $diff->days;
+					$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
+					$diff = $date_now->diff($date_firstAddressDelivery);
+					$dias_firstAddressDelivery = $diff->days;
 
-				if ($dias_upd == 0) {
-					$acctInfoData["chAccChangeInd"] = "01";
-				} else if ($dias_upd < 30) {
-					$acctInfoData["chAccChangeInd"] = "02";
-				} else if ($dias_upd < 60) {
-					$acctInfoData["chAccChangeInd"] = "03";
-				} else {
-					$acctInfoData["chAccChangeInd"] = "04";
+					if ($dias_firstAddressDelivery == 0) {
+						$acctInfoData["shipAddressUsageInd"] = "01";
+					} else if ($dias_upd < 30) {
+						$acctInfoData["shipAddressUsageInd"] = "02";
+					} else if ($dias_upd < 60) {
+						$acctInfoData["shipAddressUsageInd"] = "03";
+					} else {
+						$acctInfoData["shipAddressUsageInd"] = "04";
+					}
 				}
 
-				$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
-
-				$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") <= 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
-
-				$acctInfoData["txnActivityDay"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") <= 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "DAY") : 999;
-				$acctInfoData["txnActivityYear"] = $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") <= 999 ? $this->numPurchaseCustomer(get_current_user_id(), 0, 1, "YEAR") : 999;
-
-				if ( ($customer->first_name != $order->get_billing_first_name()) ||
-				($customer->last_name != $order->get_billing_last_name())) {
-					$acctInfoData["shipNameIndicator"] = "02";
-				} else {
-					$acctInfoData["shipNameIndicator"] = "01";
-				}
+				$acctInfoData["suspiciousAccActivity"] = "01";
+			} catch (exception $e){
+				// If exception send empty $acctInfoData
 			}
-
-			$firstAddressDelivery = $this->firstAddressDelivery(get_current_user_id(), $order);
-
-			if ($firstAddressDelivery != "") {
-				$acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
-
-				$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
-				$diff = $date_now->diff($date_firstAddressDelivery);
-				$dias_firstAddressDelivery = $diff->days;
-
-				if ($dias_firstAddressDelivery == 0) {
-					$acctInfoData["shipAddressUsageInd"] = "01";
-				} else if ($dias_upd < 30) {
-					$acctInfoData["shipAddressUsageInd"] = "02";
-				} else if ($dias_upd < 60) {
-					$acctInfoData["shipAddressUsageInd"] = "03";
-				} else {
-					$acctInfoData["shipAddressUsageInd"] = "04";
-				}
-			}
-
-			$acctInfoData["suspiciousAccActivity"] = "01";
 
 			return $acctInfoData;
 		}
@@ -1058,70 +1078,74 @@
 		{
 			$Merchant_EMV3DS = array();
 
-			$Merchant_EMV3DS["customer"]["id"] = get_current_user_id() ?? '';
-			$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name() ?? '';
-			$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name() ?? '';
-			$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email() ?? '';
-			
-			// Billing info
-			$billing = $order->get_address('billing');
-			if ($billing) {
-				$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city() ?? '';
-				if ($order->get_billing_country() != "") {
-					$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($order->get_billing_country()) ?? '';
-					// billAddrState -> Solo si está definido billAddrCountry
-					if ($order->get_billing_state() != "" ) {
-						$billAddState = explode("-",$order->get_billing_state());
-						$billAddState = end($billAddState);
-						$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
+			try {
+
+				$Merchant_EMV3DS["customer"]["id"] = get_current_user_id() ?? '';
+				$Merchant_EMV3DS["customer"]["name"] = $order->get_billing_first_name() ?? '';
+				$Merchant_EMV3DS["customer"]["surname"] = $order->get_billing_last_name() ?? '';
+				$Merchant_EMV3DS["customer"]["email"] = $order->get_billing_email() ?? '';
+
+				// Billing info
+				$billing = $order->get_address('billing');
+				if ($billing) {
+					$Merchant_EMV3DS["billing"]["billAddrCity"] = $order->get_billing_city() ?? '';
+					if ($order->get_billing_country() != "") {
+						$Merchant_EMV3DS["billing"]["billAddrCountry"] = $this->isoCodeToNumber($order->get_billing_country()) ?? '';
+						// billAddrState -> Solo si está definido billAddrCountry
+						if ($order->get_billing_state() != "" ) {
+							$billAddState = explode("-",$order->get_billing_state());
+							$billAddState = end($billAddState);
+							$Merchant_EMV3DS["billing"]["billAddrState"] = $billAddState;
+						}
+					}
+					$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1() ?? '';
+					$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2() ?? '';
+					$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode() ?? '';
+
+					if ( $order->get_billing_phone() != "" ) {
+						if ($order->get_billing_country() != "" && $this->isoCodePhonePrefix($order->get_billing_country()) != "") {
+							$arrDatosHomePhone["cc"] = $this->isoCodePhonePrefix($order->get_billing_country()) ?? '';
+							$arrDatosHomePhone["subscriber"] = substr(preg_replace('/[^0-9]/', '', $order->get_billing_phone()), 0, 15);
+
+							$Merchant_EMV3DS["customer"]["homePhone"] = $arrDatosHomePhone;
+							$Merchant_EMV3DS["customer"]["mobilePhone"] = $arrDatosHomePhone;
+						}
 					}
 				}
-				$Merchant_EMV3DS["billing"]["billAddrLine1"] = $order->get_billing_address_1() ?? '';
-				$Merchant_EMV3DS["billing"]["billAddrLine2"] = $order->get_billing_address_2() ?? '';
-				$Merchant_EMV3DS["billing"]["billAddrPostCode"] = $order->get_billing_postcode() ?? '';
 
-				if ( $order->get_billing_phone() != "" ) {
-					if ($order->get_billing_country() != "" && $this->isoCodePhonePrefix($order->get_billing_country()) != "") {
-						$arrDatosHomePhone["cc"] = $this->isoCodePhonePrefix($order->get_billing_country()) ?? '';
-						$arrDatosHomePhone["subscriber"] = substr(preg_replace('/[^0-9]/', '', $order->get_billing_phone()), 0, 15);
-
-						$Merchant_EMV3DS["customer"]["homePhone"] = $arrDatosHomePhone;
-						$Merchant_EMV3DS["customer"]["mobilePhone"] = $arrDatosHomePhone;
+				$shipping = $order->get_address('shipping');
+				if ($shipping) {
+					$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city() ?? '';
+					if ($order->get_shipping_country() != "") {
+						$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($order->get_shipping_country()) ?? '';
+						// shipAddrState -> Solo si está definido shipAddrCountry
+						if ($order->get_shipping_state() != "") {
+							$shipAddrState = explode("-",$order->get_shipping_state());
+							$shipAddrState = end($shipAddrState);
+							$Merchant_EMV3DS["shipping"]["shipAddrState"] = $shipAddrState;
+						}
 					}
+					$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1() ?? '';
+					$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2() ?? '';
+					$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode() ?? '';
 				}
+
+				// acctInfo
+				$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
+
+				// threeDSRequestorAuthenticationInfo
+				$Merchant_EMV3DS["threeDSRequestorAuthenticationInfo"] = $this->threeDSRequestorAuthenticationInfo();
+
+				// AddrMatch
+				$Merchant_EMV3DS["addrMatch"] = (($order->get_shipping_city() == $order->get_billing_city()) &&
+												($order->get_shipping_country() == $order->get_billing_country()) &&
+												($order->get_shipping_address_1() == $order->get_billing_address_1()) &&
+												($order->get_shipping_address_2() == $order->get_billing_address_2())) ? "Y" : "N";
+
+				$Merchant_EMV3DS["challengeWindowSize"] = 05;
+			} catch (exception $e){
+				// If exception send empty $Merchant_EMV3DS
 			}
-
-			$shipping = $order->get_address('shipping');
-			if ($shipping) {
-				$Merchant_EMV3DS["shipping"]["shipAddrCity"] = $order->get_shipping_city() ?? '';
-				if ($order->get_shipping_country() != "") {
-					$Merchant_EMV3DS["shipping"]["shipAddrCountry"] = $this->isoCodeToNumber($order->get_shipping_country()) ?? '';
-					// shipAddrState -> Solo si está definido shipAddrCountry
-					if ($order->get_shipping_state() != "") {
-						$shipAddrState = explode("-",$order->get_shipping_state());
-						$shipAddrState = end($shipAddrState);
-						$Merchant_EMV3DS["shipping"]["shipAddrState"] = $shipAddrState;
-					}
-				}
-				$Merchant_EMV3DS["shipping"]["shipAddrLine1"] = $order->get_shipping_address_1() ?? '';
-				$Merchant_EMV3DS["shipping"]["shipAddrLine2"] = $order->get_shipping_address_2() ?? '';
-				$Merchant_EMV3DS["shipping"]["shipAddrPostCode"] = $order->get_shipping_postcode() ?? '';
-			}
-
-			// acctInfo
-			$Merchant_EMV3DS["acctInfo"] = $this->acctInfo($order);
-
-			// threeDSRequestorAuthenticationInfo
-			$Merchant_EMV3DS["threeDSRequestorAuthenticationInfo"] = $this->threeDSRequestorAuthenticationInfo();
-
-			// AddrMatch
-			$Merchant_EMV3DS["addrMatch"] = (($order->get_shipping_city() == $order->get_billing_city()) &&
-											  ($order->get_shipping_country() == $order->get_billing_country()) &&
-											  ($order->get_shipping_address_1() == $order->get_billing_address_1()) &&
-											  ($order->get_shipping_address_2() == $order->get_billing_address_2())) ? "Y" : "N";
-
-			$Merchant_EMV3DS["challengeWindowSize"] = 05;
-
 			return $Merchant_EMV3DS;
 		}
 
@@ -1129,26 +1153,31 @@
 		{
 			$shoppingCartData = array();
 
-			// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
-			foreach($order->get_items() as $item_id => $item) {
-				//Get the product ID
-				$product_id = $item->get_product_id();
+			try {
 
-				//Get the WC_Product object
-				$product = $item->get_product();
-				$terms = get_the_terms($product_id, 'product_cat');
-				$arrCategories = array();
+				// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
+				foreach($order->get_items() as $item_id => $item) {
+					//Get the product ID
+					$product_id = $item->get_product_id();
 
-				foreach ( $terms as $term ) {
-					// Categories by slug
-					$arrCategories[] = $term->slug;
+					//Get the WC_Product object
+					$product = $item->get_product();
+					$terms = get_the_terms($product_id, 'product_cat');
+					$arrCategories = array();
+
+					foreach ( $terms as $term ) {
+						// Categories by slug
+						$arrCategories[] = $term->slug;
+					}
+
+					$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
+					$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
+					$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+					$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
+					$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
 				}
-
-				$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
-				$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
-				$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-				$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
-				$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
+			} catch (exception $e){
+				// If exception send empty $shoppingCartData
 			}
 
 			return array("shoppingCart"=>array_values($shoppingCartData));
@@ -1161,10 +1190,8 @@
 
 			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);
 
-			//Si el PSD2 sólo va a ir por API, los datos se envían como un array, no codificado en base64
 			return $datos;
 
-			return urlencode(base64_encode(json_encode($datos)));
 		}
 
         function getOrderPaymentUrl($order)
@@ -1252,8 +1279,7 @@
 
 		function processJetIframePayment($order)
 		{
-			$client = $this->get_client();
-			$ip = $client->getIp();
+			$ip = $this->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$URLOK = $this->get_return_url($order);
 			$URLKO = $order->get_cancel_order_url_raw();
@@ -1505,16 +1531,6 @@
 			return $html;
 		}
 
-        function get_client()
-        {
-			if (!isset($this->ws_client)) {
-				require_once PAYTPV_PLUGIN_DIR . '/ws_client.php';
-				$this->ws_client = new WS_Client( $this->settings );
-			}
-
-			return $this->ws_client;
-		}
-
 		public function saveCard($order,$user_id,$paytpv_iduser,$paytpv_tokenuser,$TransactionType)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
@@ -1581,8 +1597,7 @@
 				$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
 				$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
 
-				$client = $this->get_client();
-				$ip = $client->getIp();
+				$ip = $this->getIp();
 
 				$userInteraction = 0;
 
@@ -1691,8 +1706,7 @@
 				return false;
 			}
 
-			$client = $this->get_client();
-			$ip = $client->getIp();
+			$ip = $this->getIp();
 			// Obtenemos el terminal para el pedido
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$currency_iso_code = $arrTerminalData["currency_iso_code"];
