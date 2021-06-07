@@ -4,7 +4,7 @@ Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pa
 Requires at least: 3.0.1
 Tested up to: 5.6
 Requires PHP: 5.6
-Stable tag: 5.1
+Stable tag: 5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,8 +42,15 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
+= 5.3 =
+Nuevas validaciones de campos PSD2
+
+= 5.2 =
+Cambios en estilos
+Validación campos PSD2
+
 = 5.1 =
-Simulador de Instant Credit
+Fix! Se añaden fichero que faltaban a la release
 
 = 5.0 =
 ¡¡ API Key Obligatoria !! A partir de esta versión es necesario para el funcionamiento del plugin.
