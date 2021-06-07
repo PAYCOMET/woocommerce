@@ -1,7 +1,7 @@
 <?php
 // jetIFrame
 if (isset($_POST["paytpvToken"])) {
-    
+
     $token = $_POST["paytpvToken"];
     $user_id = get_current_user_id();
 
@@ -17,7 +17,7 @@ if (isset($_POST["paytpvToken"])) {
 
     $error = false;
     if ($token && strlen($token) == 64) {
-       
+
         if ($apiKey != '') {
 
             $notify = 2;
@@ -51,28 +51,8 @@ if (isset($_POST["paytpvToken"])) {
             } else {
                 $error = true;
             }
-
         } else {
-            require_once PAYTPV_PLUGIN_DIR . '/ws_client.php';
-            $client = new WS_Client($settings);
-
-            $addUserTokenResponse = $client->add_user_token(
-                $clientcode,
-                $term,
-                $token,
-                $jet_id,
-                $pass,
-                $ip
-            );
-
-            if ($addUserTokenResponse["DS_ERROR_ID"]==0) {
-                $idUser = $addUserTokenResponse["DS_IDUSER"];
-                $tokenUser = $addUserTokenResponse["DS_TOKEN_USER"];
-
-                $result = $client->info_user($idUser, $tokenUser, $term, $pass);
-            } else {
-                $error = true;
-            }
+            $error = true;
         }
 
         if (!$error) {
@@ -80,7 +60,7 @@ if (isset($_POST["paytpvToken"])) {
             $_POST["paytpvToken"] = '';
             echo "<meta http-equiv='refresh' content='0'>";
         } else {
-            print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';    
+            print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';
         }
     } else {
         print '<div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 100%; font-size: 20px; padding: 10px;">No se ha podido guardar la tarjeta, por favor inténtelo de nuevo</div>';
