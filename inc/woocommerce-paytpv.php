@@ -139,8 +139,13 @@
 					if ($apiResponse->errorCode==0) {
 						$url_paytpv = $apiResponse->challengeUrl;
 					} else {
-						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
+						if ($apiResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}
+						print '<p>' . $error_txt .'</p>';
+						$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 						exit;
 					}
 				} catch (exception $e){
@@ -148,7 +153,8 @@
 				}
 
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$this->write_log('Error 1004. ApiKey vacía');
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
 				exit;
 			}
 
@@ -192,7 +198,8 @@
 					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
 				}
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$this->write_log('Error 1004. ApiKey vacía');
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
 			}
 		}
 
@@ -628,16 +635,23 @@
 						if ($apiResponse->errorCode==0) {
 							$salida = $apiResponse->challengeUrl;
 						} else {
-							$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-							wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+							if ($apiResponse->errorCode==1004) {
+								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+							} else {
+								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+							}
+							wc_add_notice($error_txt, 'error' );
+							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 						}
 
 					} catch (exception $e){
-						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ), 'error' );
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						wc_add_notice($error_txt, 'error' );
 					}
 
 				} else {
-					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . "1004", 'error' );
+					wc_add_notice(__( 'Error: ', 'wc_paytpv' ) . "1004", 'error' );
+					$this->write_log('Error 1004. ApiKey vacía');
 					$salida = $URLKO;
 				}
 
@@ -693,6 +707,10 @@
 						$charge["DS_MERCHANT_AMOUNT"] 	= $executePurchaseResponse->amount ?? 0;
 						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
 
+						if ($executePurchaseResponse->errorCode > 0) {
+							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
+						}
+
 					} catch (Exception $e) {
 						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
 					}
@@ -700,6 +718,7 @@
 				}  else {
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
+					$this->write_log('Error 1004. ApiKey vacía');
 				}
 
 				// Si hay challenge redirigimos al cliente a la URL
@@ -1245,15 +1264,21 @@
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
 					} else {
-						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
+						if ($apiResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}
+						print '<p>' . $error_txt .'</p>';
+						$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 					}
 				} catch (exception $e){
 					$url = "";
 				}
 
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$this->write_log('Error 1004. ApiKey vacía');
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
 			}
 
 			return $url;
@@ -1308,8 +1333,13 @@
 					);
 
 					if ($addUserResponse->errorCode>0) {
-						$errorCode = ($addUserResponse->errorCode==1004)?"1004":"";
-						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+						if ($addUserResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}						
+						wc_add_notice($error_txt, 'error' );
+						$this->write_log('Error ' . $addUserResponse->errorCode . " en addUser");
 						return "error";
 					}
 
@@ -1367,8 +1397,13 @@
 
 				$urlReturn = $URLOK;
 				if ($executePurchaseResponse->errorCode>0) {
-					$errorCode = ($executePurchaseResponse->errorCode==1004)?"1004":"";
-					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+					if ($executePurchaseResponse->errorCode==1004) {
+						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
+					} else {
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+					}
+					wc_add_notice($error_txt, 'error' );
+					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 					$urlReturn = $URLKO;
 				}
 
@@ -1651,6 +1686,8 @@
 					if ($executePurchaseResponse->errorCode == 0) {
 						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
 						$charge["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
+					} else {
+						$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase pago suscripcion");
 					}
 
 				} else {
@@ -1743,10 +1780,11 @@
 			} else {
 				$charge["DS_RESPONSE"] = 0;
 				$charge["DS_ERROR_ID"] = 1004;
+				$this->write_log('Error 1004. ApiKey vacía');
 			}
 
 			if ((int) $result['DS_RESPONSE'] != 1) {
-				$this->write_log('Refund Failed. Error: ' . $result['DS_ERROR_ID' ]);
+				$this->write_log('Error ' . $executeRefundReponse->errorCode . ' en executeRefund');
 				$order->add_order_note('Refund Failed. Error: ' . $result['DS_ERROR_ID']);
 
 				return false;
