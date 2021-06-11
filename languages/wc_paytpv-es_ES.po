@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2021-06-10 13:55+0000\n"
+"PO-Revision-Date: 2021-06-11 07:15+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -223,8 +223,8 @@ msgstr ""
 "que obtenga acceso a información confidencial."
 
 #: inc/woocommerce-paytpv.php:145 inc/woocommerce-paytpv.php:641
-#: inc/woocommerce-paytpv.php:648 inc/woocommerce-paytpv.php:1265
-#: inc/woocommerce-paytpv.php:1334 inc/woocommerce-paytpv.php:1398
+#: inc/woocommerce-paytpv.php:648 inc/woocommerce-paytpv.php:1270
+#: inc/woocommerce-paytpv.php:1339 inc/woocommerce-paytpv.php:1403
 msgid "An error has occurred. Please verify the data entered and try again"
 msgstr ""
 "Se ha producido un error. Por favor, verifica los datos introducidos y "
@@ -282,15 +282,15 @@ msgstr "Ambos"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: inc/woocommerce-paytpv.php:1529
+#: inc/woocommerce-paytpv.php:1534
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: inc/woocommerce-paytpv.php:1495 template/checkout/jetiframe-checkout.php:10
+#: inc/woocommerce-paytpv.php:1500 template/checkout/jetiframe-checkout.php:10
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1521 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1526 template/checkout/jetiframe-checkout.php:99
 #: template/myaccount/my-cards.php:109
 msgid ""
 "Card data is protected by the Payment Card Industry Data Security Standard "
@@ -356,9 +356,9 @@ msgstr "Cifrado y almacenamiento de datos"
 
 #: inc/woocommerce-paytpv.php:143 inc/woocommerce-paytpv.php:157
 #: inc/woocommerce-paytpv.php:202 inc/woocommerce-paytpv.php:639
-#: inc/woocommerce-paytpv.php:653 inc/woocommerce-paytpv.php:1263
-#: inc/woocommerce-paytpv.php:1276 inc/woocommerce-paytpv.php:1332
-#: inc/woocommerce-paytpv.php:1396
+#: inc/woocommerce-paytpv.php:653 inc/woocommerce-paytpv.php:1268
+#: inc/woocommerce-paytpv.php:1281 inc/woocommerce-paytpv.php:1337
+#: inc/woocommerce-paytpv.php:1401
 msgid "Error: "
 msgstr "Error: "
 
@@ -400,6 +400,10 @@ msgstr "Altura del Iframe (pixels)"
 #: inc/woocommerce-paytpv.php:457
 msgid "Iframe height in pixels (Min 440)"
 msgstr "Altura del iframe en pixels (Mínimo 440)"
+
+#: inc/paycomet-instantcredit.php:96
+msgid "Instant installment payment"
+msgstr "Pago a plazos instantáneo"
 
 #: inc/woocommerce-paytpv.php:433
 msgid "Integration with"
@@ -471,7 +475,7 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
-#: inc/woocommerce-paytpv.php:1504 template/checkout/jetiframe-checkout.php:20
+#: inc/woocommerce-paytpv.php:1509 template/checkout/jetiframe-checkout.php:20
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
@@ -510,7 +514,7 @@ msgstr ""
 msgid "Password"
 msgstr "Contraseña"
 
-#: inc/woocommerce-paytpv.php:1510 inc/woocommerce-paytpv.php:1558
+#: inc/woocommerce-paytpv.php:1515 inc/woocommerce-paytpv.php:1563
 msgid "Pay"
 msgstr "Pagar"
 
@@ -545,11 +549,6 @@ msgstr "Paga con Giropay"
 #: inc/paycomet-ideal.php:14 inc/paycomet-ideal.php:15
 msgid "Pay with iDeal"
 msgstr "Paga con iDeal"
-
-#: inc/paycomet-instantcredit.php:96 inc/paycomet-instantcredit.php:97
-#| msgid "Pay with InstantCredit"
-msgid "Pay with Instant Credit"
-msgstr "Paga con Instant Credit"
 
 #: inc/paycomet-klarna.php:14 inc/paycomet-klarna.php:15
 msgid "Pay with Klarna"
@@ -741,6 +740,14 @@ msgstr ""
 msgid "Priority simulator"
 msgstr "Prioridad simulador"
 
+#: inc/paycomet-instantcredit.php:97
+msgid ""
+"Quick and paperless process with the confidence of Banco Sabadell. Have your "
+"ID at hand to process the financing."
+msgstr ""
+"Proceso rápido y sin papeles con la confianza de Banco Sabadell. Ten a mano "
+"tu DNI para tramitar la financiación."
+
 #: template/myaccount/conditions.php:3
 msgid "Related Cards"
 msgstr "Tarjetas Disponibles"
@@ -753,7 +760,7 @@ msgstr "Eliminar"
 msgid "Save card"
 msgstr "Guardar Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1521 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1526 template/checkout/jetiframe-checkout.php:99
 msgid "Save card for future purchases"
 msgstr "Guardar tarjeta para futuras compras"
 
@@ -806,14 +813,14 @@ msgstr "Número Terminal"
 msgid "Terminals"
 msgstr "Terminales"
 
-#: inc/woocommerce-paytpv.php:1470
+#: inc/woocommerce-paytpv.php:1475
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1473
+#: inc/woocommerce-paytpv.php:1478
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
@@ -864,7 +871,7 @@ msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 msgid "Title"
 msgstr "Título"
 
-#: inc/woocommerce-paytpv.php:1511
+#: inc/woocommerce-paytpv.php:1516
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
