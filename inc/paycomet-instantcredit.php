@@ -93,8 +93,8 @@ class Paycomet_Instantcredit extends Paycomet_APM
         $this->method_title = 'PAYCOMET - Instant Credit';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 33;
-        $this->title = __('Pay with Instant Credit', 'wc_paytpv' );
-        $this->description = __('Pay with Instant Credit', 'wc_paytpv' );
+        $this->title = __('Instant installment payment', 'wc_paytpv' );
+        $this->description = __('Quick and paperless process with the confidence of Banco Sabadell. Have your ID at hand to process the financing.', 'wc_paytpv' );
 
         $this->supports = array(
             'refunds'
@@ -149,21 +149,21 @@ class Paycomet_Instantcredit extends Paycomet_APM
                     'title' => __( 'Simulator position', 'wc_paytpv' ),
                     'type' => 'select',
                     'options'     => array(
-                        'woocommerce_before_single_product' => __('before_single_product', 'wc_paytpv' ),
-                        'woocommerce_before_single_product_summary' => __('before_single_product_summary', 'wc_paytpv' ),
-                        'woocommerce_single_product_summary' => __('single_product_summary', 'wc_paytpv' ),
-                        'woocommerce_before_add_to_cart_form' => __('before_add_to_cart_form', 'wc_paytpv' ),
-                        'woocommerce_before_variations_form' => __('before_variations_form', 'wc_paytpv' ),
-                        'woocommerce_before_single_variation' => __('before_single_variation', 'wc_paytpv' ),
-                        'woocommerce_single_variation' => __('single_variation', 'wc_paytpv' ),
                         'woocommerce_before_add_to_cart_quantity' => __('before_add_to_cart_quantity', 'wc_paytpv' ),
                         'woocommerce_after_add_to_cart_quantity' => __('after_add_to_cart_quantity', 'wc_paytpv' ),
-                        'woocommerce_after_single_product_summary' => __('after_single_product_summary', 'wc_paytpv' ),
                         'woocommerce_after_add_to_cart_button' => __('after_add_to_cart_button', 'wc_paytpv' ),
+                        'woocommerce_before_add_to_cart_form' => __('before_add_to_cart_form', 'wc_paytpv' ),
+                        'woocommerce_before_single_product_summary' => __('before_single_product_summary', 'wc_paytpv' ),
+                        'woocommerce_after_single_product_summary' => __('after_single_product_summary', 'wc_paytpv' ),
+                        'woocommerce_before_single_product' => __('before_single_product', 'wc_paytpv' ),
+                        'woocommerce_single_product_summary' => __('single_product_summary', 'wc_paytpv' ),
+                        'woocommerce_single_variation' => __('single_variation', 'wc_paytpv' ),
+                        'woocommerce_before_variations_form' => __('before_variations_form', 'wc_paytpv' ),
+                        'woocommerce_before_single_variation' => __('before_single_variation', 'wc_paytpv' )
                     ),
                     'description' => __( 'Select position to show Instant Credit calculator','wc_paytpv'),
                     'desc_tip'    => true,
-                    'default'     => 'woocommerce_before_single_product'
+                    'default'     => 'woocommerce_before_add_to_cart_quantity'
             ),
             'priority_simulator' => array(
                     'title' => __( 'Priority simulator', 'wc_paytpv' ),
