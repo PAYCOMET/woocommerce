@@ -15,7 +15,7 @@ class Paycomet_APM extends WC_Payment_Gateway
         $paytpv_settings = get_option('woocommerce_paytpv_settings');
         $paytpv_terminals = get_option('woocommerce_paytpv_terminals');
         if ($paytpv_settings && $paytpv_terminals){
-            if (!isset($paytpv_settings["apikey"]) || $paytpv_settings["apikey"] == "" || $paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
+            if ($paytpv_settings["clientcode"] == "" || $paytpv_terminals[0]["term"] == "" || $paytpv_terminals[0]["pass"] == "" ) {
                 $this->enabled = false;
             }
         } else {
@@ -115,7 +115,8 @@ class Paycomet_APM extends WC_Payment_Gateway
                 return;
             }
         } else {
-            wc_add_notice(__( 'Invalid API KEY', 'wc_paytpv' ), 'error');
+            $error_txt = __( 'Error: ', 'wc_paytpv' ) . "1004";
+            wc_add_notice($error_txt, 'error');
             return;
         }
     }

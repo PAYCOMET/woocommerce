@@ -66,7 +66,7 @@
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
 			// Verificar campos obligatorios para que esté habilitado.
-			if ($this->apiKey == "" || $this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
+			if ($this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
 				$this->enabled = false;
 			}
 
@@ -139,8 +139,13 @@
 					if ($apiResponse->errorCode==0) {
 						$url_paytpv = $apiResponse->challengeUrl;
 					} else {
-						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
+						if ($apiResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}
+						print '<p>' . $error_txt .'</p>';
+						$gateway->write_log('Error ' . $apiResponse->errorCode . " en form");
 						exit;
 					}
 				} catch (exception $e){
@@ -148,7 +153,9 @@
 				}
 
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$gateway->write_log('Error 1004. ApiKey vacía');
 				exit;
 			}
 
@@ -192,7 +199,8 @@
 					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
 				}
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$this->write_log('Error 1004. ApiKey vacía');
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
 			}
 		}
 
@@ -557,15 +565,23 @@
 			}
 
 			// Get Data
-			if (isset($_REQUEST['paycomet_data']) && $_REQUEST['paycomet_data'] == 1) {
+			if (isset($_POST['paycomet_data']) && $_POST['paycomet_data'] == 1) {
 				global $woocommerce;
 				global $wp_version;
-				if (isset($_REQUEST["clientcode"]) &&
-					$_REQUEST["clientcode"] == $this->clientcode &&
-					isset($_REQUEST["terminal"]) &&
-					$_REQUEST["terminal"]==$this->paytpv_terminals[0]["term"]
+				if (isset($_POST["clientcode"]) &&
+					$_POST["clientcode"] == $this->clientcode &&
+					isset($_POST["terminal"]) &&
+					$_POST["terminal"]==$this->paytpv_terminals[0]["term"]
 				) {
-					$arrDatos = array("module_v" => PAYTPV_VERSION, "wp_v" => $wp_version, "wc_v" => $woocommerce->version);
+					$apiKey = ($this->apiKey != '')?1:0;
+					$enabled = ($this->enabled == "yes")?1:0;
+					$arrDatos = array(
+						"m_v" => PAYTPV_VERSION,
+						"wp_v" => $wp_version,
+						"wc_v" => $woocommerce->version,
+						"e" => $enabled,
+						"ak" => $apiKey
+					);
 					exit(json_encode($arrDatos));
 				}
 			}
@@ -628,16 +644,23 @@
 						if ($apiResponse->errorCode==0) {
 							$salida = $apiResponse->challengeUrl;
 						} else {
-							$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-							wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+							if ($apiResponse->errorCode==1004) {
+								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+							} else {
+								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+							}
+							wc_add_notice($error_txt, 'error' );
+							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 						}
 
 					} catch (exception $e){
-						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ), 'error' );
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						wc_add_notice($error_txt, 'error' );
 					}
 
 				} else {
-					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . "1004", 'error' );
+					wc_add_notice(__( 'Error: ', 'wc_paytpv' ) . "1004", 'error' );
+					$this->write_log('Error 1004. ApiKey vacía');
 					$salida = $URLKO;
 				}
 
@@ -693,6 +716,10 @@
 						$charge["DS_MERCHANT_AMOUNT"] 	= $executePurchaseResponse->amount ?? 0;
 						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
 
+						if ($executePurchaseResponse->errorCode > 0) {
+							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
+						}
+
 					} catch (Exception $e) {
 						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
 					}
@@ -700,6 +727,7 @@
 				}  else {
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
+					$this->write_log('Error 1004. ApiKey vacía');
 				}
 
 				// Si hay challenge redirigimos al cliente a la URL
@@ -1245,15 +1273,22 @@
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
 					} else {
-						$errorCode = ($apiResponse->errorCode==1004)?"1004":"";
-						print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode .'</p>';
+						if ($apiResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}
+						print '<p>' . $error_txt .'</p>';
+						$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 					}
 				} catch (exception $e){
 					$url = "";
 				}
 
 			} else {
-				print '<p>' . __( 'An error has occurred: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$this->write_log('Error 1004. ApiKey vacía');
+				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$url = "";
 			}
 
 			return $url;
@@ -1308,8 +1343,13 @@
 					);
 
 					if ($addUserResponse->errorCode>0) {
-						$errorCode = ($addUserResponse->errorCode==1004)?"1004":"";
-						wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+						if ($addUserResponse->errorCode==1004) {
+							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
+						} else {
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}						
+						wc_add_notice($error_txt, 'error' );
+						$this->write_log('Error ' . $addUserResponse->errorCode . " en addUser");
 						return "error";
 					}
 
@@ -1367,8 +1407,13 @@
 
 				$urlReturn = $URLOK;
 				if ($executePurchaseResponse->errorCode>0) {
-					$errorCode = ($executePurchaseResponse->errorCode==1004)?"1004":"";
-					wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $errorCode, 'error' );
+					if ($executePurchaseResponse->errorCode==1004) {
+						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
+					} else {
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+					}
+					wc_add_notice($error_txt, 'error' );
+					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 					$urlReturn = $URLKO;
 				}
 
@@ -1651,6 +1696,8 @@
 					if ($executePurchaseResponse->errorCode == 0) {
 						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode;
 						$charge["DS_MERCHANT_AMOUNT"] = $executePurchaseResponse->amount;
+					} else {
+						$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase pago suscripcion");
 					}
 
 				} else {
@@ -1743,10 +1790,11 @@
 			} else {
 				$charge["DS_RESPONSE"] = 0;
 				$charge["DS_ERROR_ID"] = 1004;
+				$this->write_log('Error 1004. ApiKey vacía');
 			}
 
 			if ((int) $result['DS_RESPONSE'] != 1) {
-				$this->write_log('Refund Failed. Error: ' . $result['DS_ERROR_ID' ]);
+				$this->write_log('Error ' . $executeRefundReponse->errorCode . ' en executeRefund');
 				$order->add_order_note('Refund Failed. Error: ' . $result['DS_ERROR_ID']);
 
 				return false;

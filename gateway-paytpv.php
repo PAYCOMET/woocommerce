@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.3
- * Tested up to: 5.6
- * WC tested up to: 4.8
+ * Version: 5.4
+ * Tested up to: 5.7
+ * WC tested up to: 5.4
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.3' );
+define( 'PAYTPV_VERSION', '5.4' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -114,7 +114,7 @@ function getUserPaymentMethods($userTerminal, $apiKey)
 {
 	$methods = array();
 	$apiRest = new PaycometApiRest($apiKey);
-	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);
+	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);	
 	try {
 		if ($userPaymentMethods) {
 			foreach ($userPaymentMethods as $apm) {
@@ -166,7 +166,7 @@ function my_update_notice() {
 	?>
 	<div class="notice notice-error">
 	
-	   <p><b><?php echo sprintf(__( 'PAYCOMET Error: You must define the API Key <a href="%s">here</a>.', 'wc_paytpv'), $url);?></b></p>
+	   <p><b><?php echo sprintf(__( 'PAYCOMET Error 1004: You must define the API Key <a href="%s">here</a>.', 'wc_paytpv'), $url);?></b></p>
 
 	</div>
 	<?php 
