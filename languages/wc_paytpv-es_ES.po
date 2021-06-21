@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2021-06-11 07:15+0000\n"
+"PO-Revision-Date: 2021-06-11 09:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -23,11 +23,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.5.0; wp-5.6.1"
 
-#: inc/woocommerce-paytpv.php:531
+#: inc/woocommerce-paytpv.php:529
 msgid "+ Add Terminal"
 msgstr "+ Añadir Terminal"
 
-#: inc/woocommerce-paytpv.php:531
+#: inc/woocommerce-paytpv.php:529
 msgid "- Remove Terminal"
 msgstr "- Eliminar Terminal"
 
@@ -171,7 +171,7 @@ msgstr "9"
 msgid "9"
 msgstr "9"
 
-#: inc/woocommerce-paytpv.php:215
+#: inc/woocommerce-paytpv.php:213
 #| msgid ""
 #| "<a href=\"https://www.paycomet.com\">PAYCOMET Online</a> payment gateway "
 #| "for Woocommerce enables credit card payment in your shop. Al you need is "
@@ -192,15 +192,15 @@ msgstr ""
 msgid "Add a description"
 msgstr "Añadir descripción"
 
-#: inc/paycomet-instantcredit.php:162
+#: inc/paycomet-instantcredit.php:154
 msgid "after_add_to_cart_button"
 msgstr "Después de botón Añadir al carrito"
 
-#: inc/paycomet-instantcredit.php:160
+#: inc/paycomet-instantcredit.php:153
 msgid "after_add_to_cart_quantity"
 msgstr "Después de cantidad a añadir al carrito"
 
-#: inc/paycomet-instantcredit.php:161
+#: inc/paycomet-instantcredit.php:157
 msgid "after_single_product_summary"
 msgstr "Después de la descripción del producto"
 
@@ -222,9 +222,9 @@ msgstr ""
 "no se puede examinar, escanear, utilizar o modificar por cualquier externo "
 "que obtenga acceso a información confidencial."
 
-#: inc/woocommerce-paytpv.php:145 inc/woocommerce-paytpv.php:641
-#: inc/woocommerce-paytpv.php:648 inc/woocommerce-paytpv.php:1270
-#: inc/woocommerce-paytpv.php:1339 inc/woocommerce-paytpv.php:1403
+#: inc/woocommerce-paytpv.php:142 inc/woocommerce-paytpv.php:647
+#: inc/woocommerce-paytpv.php:654 inc/woocommerce-paytpv.php:1276
+#: inc/woocommerce-paytpv.php:1345 inc/woocommerce-paytpv.php:1409
 msgid "An error has occurred. Please verify the data entered and try again"
 msgstr ""
 "Se ha producido un error. Por favor, verifica los datos introducidos y "
@@ -235,7 +235,7 @@ msgstr ""
 msgid "An error has occurred: "
 msgstr "Se he producido un error: "
 
-#: inc/woocommerce-paytpv.php:416
+#: inc/woocommerce-paytpv.php:414
 msgid "API Key"
 msgstr "API Key"
 
@@ -254,27 +254,27 @@ msgstr ""
 msgid "before_add_to_cart_form"
 msgstr "Antes del formulario de añadir al carrito"
 
-#: inc/paycomet-instantcredit.php:159
+#: inc/paycomet-instantcredit.php:152
 msgid "before_add_to_cart_quantity"
 msgstr "Antes de cantidad a añadir al carrito"
 
-#: inc/paycomet-instantcredit.php:152
+#: inc/paycomet-instantcredit.php:158
 msgid "before_single_product"
 msgstr "Antes del producto"
 
-#: inc/paycomet-instantcredit.php:153
+#: inc/paycomet-instantcredit.php:156
 msgid "before_single_product_summary"
 msgstr "Antes de la descripción del producto"
 
-#: inc/paycomet-instantcredit.php:157
+#: inc/paycomet-instantcredit.php:162
 msgid "before_single_variation"
 msgstr "Antes de variación"
 
-#: inc/paycomet-instantcredit.php:156
+#: inc/paycomet-instantcredit.php:161
 msgid "before_variations_form"
 msgstr "Antes del formulario de variaciones"
 
-#: inc/woocommerce-paytpv.php:500
+#: inc/woocommerce-paytpv.php:498
 msgid "Both"
 msgstr "Ambos"
 
@@ -282,15 +282,15 @@ msgstr "Ambos"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: inc/woocommerce-paytpv.php:1534
+#: inc/woocommerce-paytpv.php:1540
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: inc/woocommerce-paytpv.php:1500 template/checkout/jetiframe-checkout.php:10
+#: inc/woocommerce-paytpv.php:1506 template/checkout/jetiframe-checkout.php:10
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1526 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1532 template/checkout/jetiframe-checkout.php:99
 #: template/myaccount/my-cards.php:109
 msgid ""
 "Card data is protected by the Payment Card Industry Data Security Standard "
@@ -304,25 +304,25 @@ msgstr ""
 msgid "Card number"
 msgstr "Número de tarjeta"
 
-#: inc/woocommerce-paytpv.php:306
+#: inc/woocommerce-paytpv.php:304
 msgid "Check that the Client Code, Terminal and Password are correct"
 msgstr ""
 "Compruebe que el Código Cliente, Número de Terminal y Contraseña son "
 "correctos"
 
-#: inc/woocommerce-paytpv.php:423
+#: inc/woocommerce-paytpv.php:421
 msgid "Client code"
 msgstr "Código Cliente"
 
-#: inc/woocommerce-paytpv.php:404
+#: inc/woocommerce-paytpv.php:402
 msgid "Credit Card"
 msgstr "Tarjeta de Crédito"
 
-#: inc/woocommerce-paytpv.php:493
+#: inc/woocommerce-paytpv.php:491
 msgid "Currency"
 msgstr "Moneda"
 
-#: inc/paycomet-apm.php:52 inc/woocommerce-paytpv.php:408
+#: inc/paycomet-apm.php:52 inc/woocommerce-paytpv.php:406
 msgid "Description"
 msgstr "Descripción"
 
@@ -330,7 +330,7 @@ msgstr "Descripción"
 msgid "Description stored successfully"
 msgstr "Descripción almacenada con éxito"
 
-#: inc/woocommerce-paytpv.php:462
+#: inc/woocommerce-paytpv.php:460
 msgid "Disable Offer to save card"
 msgstr "Deshabilitar Almacenar Tarjetas"
 
@@ -342,11 +342,11 @@ msgstr "Recuperación de desastres"
 msgid "Enable"
 msgstr "Habilitar"
 
-#: inc/woocommerce-paytpv.php:395
+#: inc/woocommerce-paytpv.php:393
 msgid "Enable PAYCOMET gateway"
 msgstr "Habilitar Pasarela PAYCOMET"
 
-#: inc/paycomet-apm.php:38 inc/woocommerce-paytpv.php:394
+#: inc/paycomet-apm.php:38 inc/woocommerce-paytpv.php:392
 msgid "Enable/Disable"
 msgstr "Habilitar/Deshabilitar"
 
@@ -354,25 +354,25 @@ msgstr "Habilitar/Deshabilitar"
 msgid "Encryption and Data Storage"
 msgstr "Cifrado y almacenamiento de datos"
 
-#: inc/woocommerce-paytpv.php:143 inc/woocommerce-paytpv.php:157
-#: inc/woocommerce-paytpv.php:202 inc/woocommerce-paytpv.php:639
-#: inc/woocommerce-paytpv.php:653 inc/woocommerce-paytpv.php:1268
-#: inc/woocommerce-paytpv.php:1281 inc/woocommerce-paytpv.php:1337
-#: inc/woocommerce-paytpv.php:1401
+#: inc/paycomet-apm.php:118 inc/woocommerce-paytpv.php:140
+#: inc/woocommerce-paytpv.php:154 inc/woocommerce-paytpv.php:200
+#: inc/woocommerce-paytpv.php:645 inc/woocommerce-paytpv.php:659
+#: inc/woocommerce-paytpv.php:1274 inc/woocommerce-paytpv.php:1287
+#: inc/woocommerce-paytpv.php:1343 inc/woocommerce-paytpv.php:1407
 msgid "Error: "
 msgstr "Error: "
 
-#: inc/woocommerce-paytpv.php:249
+#: inc/woocommerce-paytpv.php:247
 msgid "ERROR: The height of the iframe must be at least 440."
 msgstr "ERROR: La altura del iframe debe tener un valor mínimo de 440"
 
-#: inc/woocommerce-paytpv.php:255
+#: inc/woocommerce-paytpv.php:253
 msgid ""
 "ERROR: The JetId field must be filled if the payment method is JetIframe"
 msgstr ""
 "ERROR: El campo JetID no puede estar vacío si el método de pago es JetIframe"
 
-#: inc/woocommerce-paytpv.php:242 inc/woocommerce-paytpv.php:263
+#: inc/woocommerce-paytpv.php:240 inc/woocommerce-paytpv.php:261
 msgid "ERROR: Unable to activate payment method."
 msgstr "ERROR:  No se puede activar el método de pago."
 
@@ -389,15 +389,15 @@ msgstr "https://wordpress.org/plugins/paytpv-for-woocommerce/"
 msgid "https://www.paycomet.com"
 msgstr "https://www.paycomet.com"
 
-#: inc/woocommerce-paytpv.php:439
+#: inc/woocommerce-paytpv.php:437
 msgid "Iframe"
 msgstr "Iframe"
 
-#: inc/woocommerce-paytpv.php:454
+#: inc/woocommerce-paytpv.php:452
 msgid "Iframe Height (px)"
 msgstr "Altura del Iframe (pixels)"
 
-#: inc/woocommerce-paytpv.php:457
+#: inc/woocommerce-paytpv.php:455
 msgid "Iframe height in pixels (Min 440)"
 msgstr "Altura del iframe en pixels (Mínimo 440)"
 
@@ -405,7 +405,7 @@ msgstr "Altura del iframe en pixels (Mínimo 440)"
 msgid "Instant installment payment"
 msgstr "Pago a plazos instantáneo"
 
-#: inc/woocommerce-paytpv.php:433
+#: inc/woocommerce-paytpv.php:431
 msgid "Integration with"
 msgstr "Integración con"
 
@@ -413,15 +413,11 @@ msgstr "Integración con"
 msgid "Internal security"
 msgstr "Seguridad interna"
 
-#: inc/paycomet-apm.php:118
-msgid "Invalid API KEY"
-msgstr "API Key inválida o no definida"
-
-#: inc/woocommerce-paytpv.php:441
+#: inc/woocommerce-paytpv.php:439
 msgid "Jet Iframe"
 msgstr "Jet Iframe"
 
-#: inc/woocommerce-paytpv.php:446
+#: inc/woocommerce-paytpv.php:444
 msgid "JetId"
 msgstr "JetId"
 
@@ -467,7 +463,7 @@ msgstr ""
 "href=\"https://dashboard.paycomet.com/cp_control/\" target=\"_blank\">"
 "aquí</a>"
 
-#: inc/woocommerce-paytpv.php:538
+#: inc/woocommerce-paytpv.php:536
 msgid "Must have at least one terminal configured to process payments."
 msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 
@@ -475,19 +471,19 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
-#: inc/woocommerce-paytpv.php:1509 template/checkout/jetiframe-checkout.php:20
+#: inc/woocommerce-paytpv.php:1515 template/checkout/jetiframe-checkout.php:20
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
-#: inc/woocommerce-paytpv.php:467 inc/woocommerce-paytpv.php:501
+#: inc/woocommerce-paytpv.php:465 inc/woocommerce-paytpv.php:499
 msgid "No"
 msgstr "No"
 
-#: inc/woocommerce-paytpv.php:500
+#: inc/woocommerce-paytpv.php:498
 msgid "Non-Secure"
 msgstr "No Seguro"
 
-#: inc/woocommerce-paytpv.php:310
+#: inc/woocommerce-paytpv.php:308
 msgid ""
 "Notification URL is not defined in the product configuration of your account "
 "PAYCOMET account."
@@ -510,19 +506,19 @@ msgstr ""
 "    bancarias realizan auditorías con regularidad para garantizar la "
 "protección de los datos."
 
-#: inc/woocommerce-paytpv.php:492
+#: inc/woocommerce-paytpv.php:490
 msgid "Password"
 msgstr "Contraseña"
 
-#: inc/woocommerce-paytpv.php:1515 inc/woocommerce-paytpv.php:1563
+#: inc/woocommerce-paytpv.php:1521 inc/woocommerce-paytpv.php:1569
 msgid "Pay"
 msgstr "Pagar"
 
-#: inc/woocommerce-paytpv.php:437
+#: inc/woocommerce-paytpv.php:435
 msgid "Pay in a Iframe, Paycomet page or JetIframe."
 msgstr "Pagar en Iframe, en la Página de Paycomet o con JetIframe"
 
-#: inc/woocommerce-paytpv.php:412
+#: inc/woocommerce-paytpv.php:410
 msgid "Pay using your credit card in a secure way"
 msgstr "Pague con tarjeta de crédito de la forma más segura"
 
@@ -614,14 +610,16 @@ msgstr "Paga con Yandex Money"
 msgid "PAYCOMET"
 msgstr "PAYCOMET"
 
-#: inc/woocommerce-paytpv.php:440
+#: inc/woocommerce-paytpv.php:438
 msgid "Paycomet (Full Screen)"
 msgstr "Paycomet (Pantalla Completa)"
 
 #: gateway-paytpv.php:169
 #, php-format
-msgid "PAYCOMET Error: You must define the API Key <a href=\"%s\">here</a>."
-msgstr "PAYCOMET Error: Debes definir la API Key <a href=\"%s\">aquí</a>."
+#| msgid "PAYCOMET Error: You must define the API Key <a href=\"%s\">here</a>."
+msgid ""
+"PAYCOMET Error 1004: You must define the API Key <a href=\"%s\">here</a>."
+msgstr "PAYCOMET Error 1004: Debes definir la API Key <a href=\"%s\">aquí</a>."
 
 #: inc/paycomet-bancontact.php:12 inc/paycomet-beeline.php:12
 #: inc/paycomet-bizum.php:12 inc/paycomet-eps.php:12
@@ -696,7 +694,7 @@ msgstr ""
 "Toda la información de transacciones y tarjetas de clientes está protegida "
 "incluso de nuestros propios empleados."
 
-#: inc/woocommerce-paytpv.php:213
+#: inc/woocommerce-paytpv.php:211
 msgid "PAYCOMET Payment Gateway"
 msgstr "Pasarela de pagos PAYCOMET"
 
@@ -726,7 +724,7 @@ msgstr ""
 msgid "Please enter your Instant Credit Simulator Hash."
 msgstr "Por favor, introduce el Hash del simulador de Instant Credit"
 
-#: inc/woocommerce-paytpv.php:242
+#: inc/woocommerce-paytpv.php:240
 #| msgid ""
 #| "Please fill in required fields: Client Code, Terminal Number, Password."
 msgid ""
@@ -760,7 +758,7 @@ msgstr "Eliminar"
 msgid "Save card"
 msgstr "Guardar Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1526 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1532 template/checkout/jetiframe-checkout.php:99
 msgid "Save card for future purchases"
 msgstr "Guardar tarjeta para futuras compras"
 
@@ -768,7 +766,7 @@ msgstr "Guardar tarjeta para futuras compras"
 msgid "Save Description"
 msgstr "Guardar"
 
-#: inc/woocommerce-paytpv.php:500
+#: inc/woocommerce-paytpv.php:498
 msgid "Secure"
 msgstr "Seguro"
 
@@ -793,11 +791,11 @@ msgstr "Hash Simulador"
 msgid "Simulator position"
 msgstr "Posición del Simulador"
 
-#: inc/paycomet-instantcredit.php:154
+#: inc/paycomet-instantcredit.php:159
 msgid "single_product_summary"
 msgstr "Sumario del producto"
 
-#: inc/paycomet-instantcredit.php:158
+#: inc/paycomet-instantcredit.php:160
 msgid "single_variation"
 msgstr "Variación simple"
 
@@ -805,27 +803,27 @@ msgstr "Variación simple"
 msgid "System Safety"
 msgstr "Seguridad en los sistemas"
 
-#: inc/woocommerce-paytpv.php:491
+#: inc/woocommerce-paytpv.php:489
 msgid "Terminal Number"
 msgstr "Número Terminal"
 
-#: inc/woocommerce-paytpv.php:485
+#: inc/woocommerce-paytpv.php:483
 msgid "Terminals"
 msgstr "Terminales"
 
-#: inc/woocommerce-paytpv.php:1475
+#: inc/woocommerce-paytpv.php:1481
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1478
+#: inc/woocommerce-paytpv.php:1484
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
 
-#: inc/woocommerce-paytpv.php:315
+#: inc/woocommerce-paytpv.php:313
 msgid ""
 "The notification URL defined in the product configuration of your PAYCOMET "
 "account does not respond correctly. Verify that it has been defined as: "
@@ -838,11 +836,11 @@ msgstr ""
 msgid "The PAYCOMET payment gateway for WooCommerce"
 msgstr "La pasarela de pago PAYCOMET para WooCommerce"
 
-#: inc/woocommerce-paytpv.php:539
+#: inc/woocommerce-paytpv.php:537
 msgid "There can be two terminals configured with the same currency."
 msgstr "No puede haber dos terminales configurados con la misma moneda."
 
-#: inc/woocommerce-paytpv.php:218
+#: inc/woocommerce-paytpv.php:216
 msgid ""
 "There you should configure \"Tipo de notificación del cobro:\" as "
 "\"Notificación por URL\" set ther teh following URL:"
@@ -859,19 +857,19 @@ msgstr ""
 "débito. Los datos son enviados a través de un canal cifrado y seguro a la "
 "plataforma PAYCOMET"
 
-#: inc/paycomet-apm.php:55 inc/woocommerce-paytpv.php:411
+#: inc/paycomet-apm.php:55 inc/woocommerce-paytpv.php:409
 msgid "This controls the description which the user sees during checkout."
 msgstr "La descripción que el cliente verá en el proceso de compra"
 
-#: inc/paycomet-apm.php:47 inc/woocommerce-paytpv.php:403
+#: inc/paycomet-apm.php:47 inc/woocommerce-paytpv.php:401
 msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usaurio ve en el proceso de compra"
 
-#: inc/paycomet-apm.php:45 inc/woocommerce-paytpv.php:401
+#: inc/paycomet-apm.php:45 inc/woocommerce-paytpv.php:399
 msgid "Title"
 msgstr "Título"
 
-#: inc/woocommerce-paytpv.php:1516
+#: inc/woocommerce-paytpv.php:1522
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
@@ -880,7 +878,7 @@ msgstr "Espere por favor..."
 msgid "Year"
 msgstr "Año"
 
-#: inc/woocommerce-paytpv.php:468 inc/woocommerce-paytpv.php:501
+#: inc/woocommerce-paytpv.php:466 inc/woocommerce-paytpv.php:499
 msgid "Yes"
 msgstr "Si"
 
@@ -892,11 +890,11 @@ msgstr "No tiene tarjetas almacenadas"
 msgid "You must accept save card to continue"
 msgstr "Debes aceptar guardar tarjeta para continuar"
 
-#: inc/woocommerce-paytpv.php:185
+#: inc/woocommerce-paytpv.php:183
 msgid "You must define at least one terminal"
 msgstr "Debe definir por lo menos un terminal"
 
-#: inc/woocommerce-paytpv.php:419
+#: inc/woocommerce-paytpv.php:417
 msgid ""
 "Your API Key from PayComet. Read documentation <a href=\"https://docs."
 "paycomet.com/es/inicio/configuracion#apikeys\">here</a>"
@@ -904,11 +902,11 @@ msgstr ""
 "El API Key de PayComet. Lea la documentación <a href=\"https://docs.paycomet."
 "com/es/inicio/configuracion#apikeys\">aquí</a>"
 
-#: inc/woocommerce-paytpv.php:449
+#: inc/woocommerce-paytpv.php:447
 msgid "Your JetId from PayComet"
 msgstr "El JetId de PayComet"
 
-#: inc/woocommerce-paytpv.php:320
+#: inc/woocommerce-paytpv.php:318
 msgid ""
 "Your Product in PAYCOMET account is not set up with the Available Terminals "
 "option: "

@@ -21,6 +21,19 @@ function woocommerce_paycomet_instantcredit_add_id_to_script( $tag, $handle, $sr
     return $tag;
 }
 
+add_filter( 'woocommerce_available_payment_gateways', 'available_paycomet_myinstantcredit_gateway' );
+
+function available_paycomet_myinstantcredit_gateway( $available_gateways ) {
+    $cfg = get_option('woocommerce_paycomet_instantcredit_settings');
+
+    if ( (isset($cfg['maxCost']) && WC()->cart->total > $cfg['maxCost'] ) || 
+         (isset($cfg['minCost']) && WC()->cart->total < $cfg['minCost']) 
+    ) {
+        unset( $available_gateways['paycomet_instantcredit'] );
+    }
+    return $available_gateways;
+}
+
 function woocommerce_paycomet_instantcredit_show_instantcredit_calculator(){
 
     if (!is_product() && !is_checkout() && !is_cart() ) return;

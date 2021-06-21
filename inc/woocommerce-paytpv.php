@@ -66,7 +66,7 @@
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
 			// Verificar campos obligatorios para que esté habilitado.
-			if ($this->apiKey == "" || $this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
+			if ($this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
 				$this->enabled = false;
 			}
 
@@ -145,7 +145,7 @@
 							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
 						}
 						print '<p>' . $error_txt .'</p>';
-						$this->write_log('Error ' . $apiResponse->errorCode . " en form");
+						$gateway->write_log('Error ' . $apiResponse->errorCode . " en form");
 						exit;
 					}
 				} catch (exception $e){
@@ -153,8 +153,9 @@
 				}
 
 			} else {
-				$this->write_log('Error 1004. ApiKey vacía');
+				
 				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$gateway->write_log('Error 1004. ApiKey vacía');
 				exit;
 			}
 
@@ -564,15 +565,23 @@
 			}
 
 			// Get Data
-			if (isset($_REQUEST['paycomet_data']) && $_REQUEST['paycomet_data'] == 1) {
+			if (isset($_POST['paycomet_data']) && $_POST['paycomet_data'] == 1) {
 				global $woocommerce;
 				global $wp_version;
-				if (isset($_REQUEST["clientcode"]) &&
-					$_REQUEST["clientcode"] == $this->clientcode &&
-					isset($_REQUEST["terminal"]) &&
-					$_REQUEST["terminal"]==$this->paytpv_terminals[0]["term"]
+				if (isset($_POST["clientcode"]) &&
+					$_POST["clientcode"] == $this->clientcode &&
+					isset($_POST["terminal"]) &&
+					$_POST["terminal"]==$this->paytpv_terminals[0]["term"]
 				) {
-					$arrDatos = array("module_v" => PAYTPV_VERSION, "wp_v" => $wp_version, "wc_v" => $woocommerce->version);
+					$apiKey = ($this->apiKey != '')?1:0;
+					$enabled = ($this->enabled == "yes")?1:0;
+					$arrDatos = array(
+						"m_v" => PAYTPV_VERSION,
+						"wp_v" => $wp_version,
+						"wc_v" => $woocommerce->version,
+						"e" => $enabled,
+						"ak" => $apiKey
+					);
 					exit(json_encode($arrDatos));
 				}
 			}
@@ -1279,6 +1288,7 @@
 			} else {
 				$this->write_log('Error 1004. ApiKey vacía');
 				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
+				$url = "";
 			}
 
 			return $url;
