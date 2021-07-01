@@ -883,12 +883,22 @@
 				}
 			// Si no de remote address
 			} else {
-				$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+				if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+					//check ip from share internet
+					$DS_ORIGINAL_IP = $_SERVER['HTTP_CLIENT_IP'];
+				} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+					//to check ip is pass from proxy
+					$DS_ORIGINAL_IP = $_SERVER['HTTP_X_FORWARDED_FOR'];
+				} else {
+					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
+				}
 			} 
-			
-			if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
+
+			if ($DS_ORIGINAL_IP == "" || strpos($DS_ORIGINAL_IP, ":") !== false ) {
 				$DS_ORIGINAL_IP = "127.0.0.1";
 			}
+
+
 			return $DS_ORIGINAL_IP;
 		}
 
