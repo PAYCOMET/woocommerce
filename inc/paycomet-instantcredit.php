@@ -1,7 +1,8 @@
 <?php
 
-if (isset(get_option('woocommerce_paycomet_instantcredit_settings')['calculator_position']) && isset(get_option('woocommerce_paycomet_instantcredit_settings')['priority_simulator'])) {
-    add_action(get_option('woocommerce_paycomet_instantcredit_settings')['calculator_position'], 'woocommerce_paycomet_instantcredit_show_instantcredit_calculator', get_option('woocommerce_paycomet_instantcredit_settings')['priority_simulator']);
+// Verify if enabled
+if (!isset(get_option('woocommerce_paycomet_instantcredit_settings')['enabled']) || get_option('woocommerce_paycomet_instantcredit_settings')['enabled']!="yes") {
+    return;
 }
 
 add_action( 'wp_enqueue_scripts', 'woocommerce_paycomet_instantcredit_enqueue_scripts' );
