@@ -80,3 +80,8 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
 #paycomet_ifr_panumber {
     width: 320px !important;
 }
+
+#paycometPaymentForm .row{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
