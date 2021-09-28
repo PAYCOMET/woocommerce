@@ -887,8 +887,9 @@
 					//check ip from share internet
 					$DS_ORIGINAL_IP = $_SERVER['HTTP_CLIENT_IP'];
 				} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-					//to check ip is pass from proxy
-					$DS_ORIGINAL_IP = $_SERVER['HTTP_X_FORWARDED_FOR'];
+					$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+					$ips = array_map('trim', $ips);
+					$DS_ORIGINAL_IP = $ips[0];
 				} else {
 					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
 				}
