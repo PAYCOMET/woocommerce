@@ -46,6 +46,13 @@
 			$this->enabled = $this->settings['enabled'];
 			$this->title = $this->settings['title'];
 			$this->description = $this->settings['description'];
+
+			if ($this->title == "Pagar con tarjeta") {
+				$this->title = __( 'Pay with card', 'wc_paytpv' );
+			}
+			if ($this->description == "Pague con tarjeta de crédito de la forma más segura") {
+				$this->description = __( 'Pay using your credit card in a secure way', 'wc_paytpv' );
+			}
 			$this->clientcode = $this->settings['clientcode'];
 			$this->apiKey = isset($this->settings['apikey'])?$this->settings['apikey']:"";
 
@@ -402,7 +409,7 @@
 					'title' => __( 'Title', 'wc_paytpv' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
-					'default' => __( 'Credit Card', 'wc_paytpv' ),
+					'default' => __( 'Pay with card', 'wc_paytpv' ),
                 	'desc_tip'    => true
 				),
 				'description' => array(

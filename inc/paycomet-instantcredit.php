@@ -121,6 +121,13 @@ class Paycomet_Instantcredit extends Paycomet_APM
 
         $this->loadProp();
 
+        if ($this->title == "Pago a plazos instantáneo") {
+            $this->title = __( 'Instant installment payment', 'wc_paytpv' );
+        }
+        if ($this->description == "Proceso rápido y sin papeles con la confianza de Banco Sabadell. Ten a mano tu DNI para tramitar la financiación.") {
+            $this->description = __( 'Quick and paperless process with the confidence of Banco Sabadell. Have your ID at hand to process the financing.', 'wc_paytpv' );
+        }
+
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
 
     }
