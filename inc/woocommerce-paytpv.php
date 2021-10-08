@@ -46,6 +46,13 @@
 			$this->enabled = $this->settings['enabled'];
 			$this->title = $this->settings['title'];
 			$this->description = $this->settings['description'];
+
+			if ($this->title == "Pagar con tarjeta") {
+				$this->title = __( 'Pay with card', 'wc_paytpv' );
+			}
+			if ($this->description == "Pague con tarjeta de crédito de la forma más segura") {
+				$this->description = __( 'Pay using your credit card in a secure way', 'wc_paytpv' );
+			}
 			$this->clientcode = $this->settings['clientcode'];
 			$this->apiKey = isset($this->settings['apikey'])?$this->settings['apikey']:"";
 
@@ -402,7 +409,7 @@
 					'title' => __( 'Title', 'wc_paytpv' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'wc_paytpv' ),
-					'default' => __( 'Credit Card', 'wc_paytpv' ),
+					'default' => __( 'Pay with card', 'wc_paytpv' ),
                 	'desc_tip'    => true
 				),
 				'description' => array(
@@ -1006,8 +1013,8 @@
 					AND p.post_author = %d
 					AND p.post_status IN ('{$post_status}')
 					AND p.ID < " . $order->get_id() . "
-					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
-					order by p.post_date asc limit 1", $id_customer)
+					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = %s
+					order by p.post_date asc limit 1", $id_customer, $order->get_shipping_address_1())
 				);
 			if ($result) {
 				return $result->post_date;

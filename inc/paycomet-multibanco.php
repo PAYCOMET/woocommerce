@@ -12,7 +12,7 @@ class Paycomet_Multibanco extends Paycomet_APM
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 16;
         $this->title = __('Pay with Multibanco', 'wc_paytpv' );
-        $this->description = __('Pay with Multibanco', 'wc_paytpv' );
+        $this->description = __('You will be redirected to Multibanco', 'wc_paytpv' );
 
         $this->supports = array();
 
@@ -22,6 +22,13 @@ class Paycomet_Multibanco extends Paycomet_APM
         $this->init_settings();
 
         $this->loadProp();
+
+        if ($this->title == "Paga con Multibanco") {
+            $this->title = __( 'Pay with Multibanco', 'wc_paytpv' );
+        }
+        if ($this->description == "Se te redirigirá a Multibanco") {
+            $this->description = __( 'You will be redirected to Multibanco', 'wc_paytpv' );
+        }
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
     }

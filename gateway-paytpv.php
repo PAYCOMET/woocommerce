@@ -5,7 +5,7 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.7
+ * Version: 5.8
  * Tested up to: 5.7
  * WC tested up to: 5.4
  * Text Domain: wc_paytpv
@@ -13,7 +13,7 @@
  */
 
 
-define( 'PAYTPV_VERSION', '5.7' );
+define( 'PAYTPV_VERSION', '5.8' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -49,7 +49,6 @@ function woocommerce_paytpv_init() {
 
 	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-apm.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
@@ -83,7 +82,6 @@ function add_paytpv_gateway( $methods ) {
 	
 	// APMs
 	$methods[] = 'Paycomet_Bizum';
-	$methods[] = 'Paycomet_Paypal';
 	$methods[] = 'Paycomet_Klarna';
 	$methods[] = 'Paycomet_Ideal';
 	$methods[] = 'Paycomet_Giropay';

@@ -4,7 +4,7 @@ Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pa
 Requires at least: 3.0.1
 Tested up to: 5.7
 Requires PHP: 5.6
-Stable tag: 5.7
+Stable tag: 5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,10 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 5.8 =
+Se elimina la opción de Paypal de los APMs
+Se hacen traducibles el Titulo y Descripción de las opciones de pago cuando estén definidos los textos por defecto
 
 = 5.7 =
 Mejoras de código en la obtencion de la Ip del cliente
