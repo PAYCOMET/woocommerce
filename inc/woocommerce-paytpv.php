@@ -1013,8 +1013,8 @@
 					AND p.post_author = %d
 					AND p.post_status IN ('{$post_status}')
 					AND p.ID < " . $order->get_id() . "
-					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = '" . $order->get_shipping_address_1() . "'
-					order by p.post_date asc limit 1", $id_customer)
+					AND pm.meta_key = '_shipping_address_1' and pm.meta_value = %s
+					order by p.post_date asc limit 1", $id_customer, $order->get_shipping_address_1())
 				);
 			if ($result) {
 				return $result->post_date;
