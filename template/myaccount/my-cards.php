@@ -119,81 +119,81 @@ if (isset($_POST["paytpvToken"])) {
             <?php else : ?>
                 <form role="form" id="paycometPaymentForm" action="" method="POST">
 
-                <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
+                    <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
-                <input type="hidden" class="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style="height:30px; width: 290px">
+                    <input type="hidden" class="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style="height:30px; width: 290px">
 
-                <div class="form-group">
-                    <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
-                    <div class="input-group">
-                        <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
-                        <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+                    <div class="form-group">
+                        <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
+                        <div class="input-group">
+                            <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
+                            <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-sm-8">
-                        <div class="form-group">
-                            <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
-                            <div class="form-inline">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
+                                <div class="form-inline">
 
-                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
-                                    <option><?php print __('Month', 'wc_paytpv');?></option>
-                                    <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
-                                    <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
-                                    <option value="03"><?php print __('03 - March', 'wc_paytpv');?></option>
-                                    <option value="04"><?php print __('04 - April', 'wc_paytpv');?></option>
-                                    <option value="05"><?php print __('05 - May', 'wc_paytpv');?></option>
-                                    <option value="06"><?php print __('06 - June', 'wc_paytpv');?></option>
-                                    <option value="07"><?php print __('07 - July', 'wc_paytpv');?></option>
-                                    <option value="08"><?php print __('08 - August', 'wc_paytpv');?></option>
-                                    <option value="09"><?php print __('09 - September', 'wc_paytpv');?></option>
-                                    <option value="10"><?php print __('10 - October', 'wc_paytpv');?></option>
-                                    <option value="11"><?php print __('11 - November', 'wc_paytpv');?></option>
-                                    <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
-                                </select>
+                                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
+                                        <option><?php print __('Month', 'wc_paytpv');?></option>
+                                        <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
+                                        <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
+                                        <option value="03"><?php print __('03 - March', 'wc_paytpv');?></option>
+                                        <option value="04"><?php print __('04 - April', 'wc_paytpv');?></option>
+                                        <option value="05"><?php print __('05 - May', 'wc_paytpv');?></option>
+                                        <option value="06"><?php print __('06 - June', 'wc_paytpv');?></option>
+                                        <option value="07"><?php print __('07 - July', 'wc_paytpv');?></option>
+                                        <option value="08"><?php print __('08 - August', 'wc_paytpv');?></option>
+                                        <option value="09"><?php print __('09 - September', 'wc_paytpv');?></option>
+                                        <option value="10"><?php print __('10 - October', 'wc_paytpv');?></option>
+                                        <option value="11"><?php print __('11 - November', 'wc_paytpv');?></option>
+                                        <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
+                                    </select>
 
-                                <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
-                                    <option><?php print __('Year', 'wc_paytpv');?></option>
+                                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
+                                        <option><?php print __('Year', 'wc_paytpv');?></option>
 
-                                    <?php
-                                        $firstYear = (int) date('Y');
-                                        for($i = 0; $i <= 8; $i++) { ?>
-                                        <option value="<?= substr($firstYear, 2, 2) ?>"><?= $firstYear?></option>
-                                    <?php
-                                            $firstYear++;
-                                        }
-                                    ?>
-                                </select>
+                                        <?php
+                                            $firstYear = (int) date('Y');
+                                            for($i = 0; $i <= 8; $i++) { ?>
+                                            <option value="<?= substr($firstYear, 2, 2) ?>"><?= $firstYear?></option>
+                                        <?php
+                                                $firstYear++;
+                                            }
+                                        ?>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+
+                            <div class="form-group">
+
+                                <label data-toggle="tooltip" title=""
+                                    data-original-title="3 digits code on back side of the card">
+                                    CVV <i class="fa fa-question-circle"></i>
+                                </label>
+
+                                <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
+                                <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
 
                             </div>
                         </div>
+
                     </div>
 
-                    <div class="col-sm-4">
+                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>                            
 
-                        <div class="form-group">
-
-                            <label data-toggle="tooltip" title=""
-                                data-original-title="3 digits code on back side of the card">
-                                CVV <i class="fa fa-question-circle"></i>
-                            </label>
-
-                            <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
-                            <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
-
-                        </div>
-                    </div>
-
-                </div>
-
-                <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>                            
-
-                <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
-
+                    <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
+                </form>
             <?php endif; ?>
-        </p>
-        <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 290px; font-size: 20px;">
+        </div>
+        <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center; width: 290px; font-size: 20px;"></div>
         <input type="hidden" name="payment_paycomet" id="payment_paycomet" value="<?=$payment_paycomet?>">
     </div>
 
