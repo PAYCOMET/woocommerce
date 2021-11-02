@@ -8,9 +8,16 @@ if (!isset(get_option('woocommerce_paycomet_instantcredit_settings')['enabled'])
 add_action( 'wp_enqueue_scripts', 'woocommerce_paycomet_instantcredit_enqueue_scripts' );
 
 function woocommerce_paycomet_instantcredit_enqueue_scripts() {
-    if (!is_product() && !is_checkout() &&!is_cart() ) return;
-    $ic_simulator = 'https://instantcredit.net/simulator/ic-simulator.js';      // Prod
-    wp_enqueue_script( 'woocommerce_paycomet_instantcredit-ic-calculator', $ic_simulator, array(), '1.0.3', true );
+    if (!is_product() && !is_checkout() && !is_cart() ) return;
+    if (
+        isset(get_option('woocommerce_paycomet_instantcredit_settings')['simulatorEnvironment']) && 
+        get_option('woocommerce_paycomet_instantcredit_settings')['simulatorEnvironment'] == "test"
+    ){
+        $ic_simulator = 'https://instantcredit.net/simulator/test/ic-simulator.js';      // Test
+    } else {
+        $ic_simulator = 'https://instantcredit.net/simulator/ic-simulator.js';      // Prod
+    }
+    wp_enqueue_script( 'woocommerce_paycomet_instantcredit-ic-calculator', $ic_simulator, array(), '1.1.1', true );
 }
 
 add_filter( 'script_loader_tag', 'woocommerce_paycomet_instantcredit_add_id_to_script', 10, 3 );
@@ -34,6 +41,8 @@ function available_paycomet_myinstantcredit_gateway( $available_gateways ) {
     }
     return $available_gateways;
 }
+
+add_action(get_option('woocommerce_paycomet_instantcredit_settings')['calculator_position'], 'woocommerce_paycomet_instantcredit_show_instantcredit_calculator', get_option('woocommerce_paycomet_instantcredit_settings')['priority_simulator']);
 
 function woocommerce_paycomet_instantcredit_show_instantcredit_calculator(){
 
@@ -102,7 +111,7 @@ class Paycomet_Instantcredit extends Paycomet_APM
     public function __construct()
     {
         $this->id = 'paycomet_instantcredit';
-        $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/instantcredit.svg';
+        $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/instantcredit2.png';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - Instant Credit';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
@@ -160,6 +169,15 @@ class Paycomet_Instantcredit extends Paycomet_APM
 
         $this->form_fields_instantcredit = array(
 
+            'simulatorEnvironment' => array(
+                'title' => __( 'Simulator Environment', 'wc_paytpv' ),
+                'type' => 'select',
+                'options'     => array(
+                    'production' => __('Production', 'wc_paytpv' ),
+                    'test' => __('Test', 'wc_paytpv' )
+                ),
+                'default' => 'production'
+            ),
             'simulatorHash' => array(
                 'title' => __( 'Simulator Hash', 'wc_paytpv' ),
                 'type' => 'password',
