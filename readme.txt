@@ -44,6 +44,7 @@ Funcionalidades del módulo:
 
 = 5.9 =
 Mejoras en maquetación
+Instant Credit: Posibilidad de configurar el Simulador en Test
 
 = 5.8 =
 Se elimina la opción de Paypal de los APMs
