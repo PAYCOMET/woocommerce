@@ -111,7 +111,7 @@ class Paycomet_Instantcredit extends Paycomet_APM
     public function __construct()
     {
         $this->id = 'paycomet_instantcredit';
-        $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/instantcredit2.png';
+        $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/instantcredit02.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - Instant Credit';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
