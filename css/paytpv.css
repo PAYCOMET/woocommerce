@@ -77,8 +77,14 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
     display: block;
 }
 
+
 #paycomet_ifr_panumber {
-    width: 320px !important;
+    width: 410px !important;
+    max-width: 100%;
+}
+
+.inputPaycomet {
+    padding-left: 0px!important;
 }
 
 #paycometPaymentForm .row{

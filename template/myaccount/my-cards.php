@@ -117,7 +117,7 @@ if (isset($_POST["paytpvToken"])) {
             <?php if ($isJetIframeActive == 0 ) :?>
                 <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="min-width: 320px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
             <?php else : ?>
-                <form role="form" id="paycometPaymentForm" action="" method="POST">
+                <form role="form" name="paycometPaymentForm" id="paycometPaymentForm" action="" method="POST">
 
                     <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
@@ -187,7 +187,7 @@ if (isset($_POST["paytpvToken"])) {
 
                     </div>
 
-                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>                            
+                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button> 
 
                     <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
                 </form>

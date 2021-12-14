@@ -3,7 +3,7 @@
     $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 ?>
 
-<form role="form" id="paycometPaymentForm" action="javascript:jetIframeValidated()" method="POST">
+<form role="form" name="paycometPaymentForm" id="paycometPaymentForm" action="javascript:jetIframeValidated()" method="POST">
 
 <div id="saved_cards" style="display:<?=$store_card;?>">
     <div class="form-group">
@@ -38,12 +38,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-9" style="padding-left:0px;">
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
-
-                    <select class="form-control" style="height:30px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
+                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
                         <option><?php print __('Month', 'wc_paytpv');?></option>
                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -59,7 +58,7 @@
                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                     </select>
 
-                    <select class="form-control" style="height:30px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
+                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                         <?php
@@ -76,7 +75,7 @@
             </div>
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-sm-3" style="padding-left:0px;">
 
             <div class="form-group">
 
@@ -85,7 +84,7 @@
                     CVV <i class="fa fa-question-circle"></i>
                 </label>
 
-                <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
+                <div id="paycomet-cvc2" style="height: 34px; padding:0px;"></div>
 
                 <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
 
@@ -101,9 +100,8 @@
     <?php
         }
     ?>
-
-    <button style="width: 290px; display:none;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Make payment', 'wc_paytpv');?></button>
-
+    <input type="submit" style="width: 290px; display:none;" name="jetiframe-button" id="jetiframe-button" value="<?php print __('Make payment', 'wc_paytpv');?>">
+    <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
 </form>
 
 <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center;">
@@ -118,8 +116,12 @@ function checkSelectedCard() {
         document.getElementById('toHide').style.display = "none";
         document.getElementById('storingStep').style.display = "none";
     } else {
-        document.getElementById('toHide').style.display = "block";
-        document.getElementById('storingStep').style.display = "block";
+        if (document.getElementById('toHide')) {
+            document.getElementById('toHide').style.display = "block";
+        }
+        if (document.getElementById('storingStep')) {
+            document.getElementById('storingStep').style.display = "block";
+        }
     }
 
     document.getElementById('hiddenCardField').value = document.getElementById('jet_iframe_card').value;
@@ -140,7 +142,7 @@ function jetIframeValidated(){
 }
 
 // formSubmit
-jQuery( function( $ ) {    
+jQuery( function( $ ) {
     $( "#place_order").on('click',function( event ) {
         if ($( '#payment_method_paytpv' ).is( ':checked' )) {
             event.preventDefault();
@@ -161,8 +163,4 @@ jQuery( function( $ ) {
     setTimeout(() => {  checkSelectedCard() }, 100);
 });
 
-
-
 </script>
-
-<script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
