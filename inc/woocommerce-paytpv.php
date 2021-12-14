@@ -72,6 +72,10 @@
 			$this->iframe_height = isset($this->settings['iframe_height']) ? $this->settings['iframe_height'] : 440;
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
+			if ($this->isJetIframeActive){
+				$this->has_fields = true;
+			}
+
 			// Verificar campos obligatorios para que esté habilitado.
 			if ($this->clientcode == "" || $this->paytpv_terminals[0]["term"] == "" || $this->paytpv_terminals[0]["pass"] == "" || ($this->isJetIframeActive && $this->jet_id == "")) {
 				$this->enabled = false;
@@ -1211,16 +1215,20 @@
 					$terms = get_the_terms($product_id, 'product_cat');
 					$arrCategories = array();
 
-					foreach ( $terms as $term ) {
-						// Categories by slug
-						$arrCategories[] = $term->slug;
+					if ($terms && is_array($terms)) {
+						foreach ( $terms as $term ) {
+							// Categories by slug
+							$arrCategories[] = $term->slug;
+						}
 					}
 
 					$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
 					$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
 					$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
 					$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
-					$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
+					if (sizeof($arrCategories) > 0) {
+						$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
+					}
 				}
 			} catch (exception $e){
 				// If exception send empty $shoppingCartData
