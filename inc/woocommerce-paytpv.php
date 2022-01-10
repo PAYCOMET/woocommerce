@@ -823,6 +823,14 @@
 
 								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
 								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+
+								// Si es de una suscripcion actualizamos el token del parent order para usarlo en los pagos sucesivos
+								$subscriptions = wcs_get_subscriptions_for_renewal_order($order);
+								$subscription  = array_pop( $subscriptions );
+								if ($subscription && $subscription->get_parent_id()) {
+									update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_IdUser', $idUser);
+									update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_TokenUser', $tokenUser);
+								}
 							}
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
