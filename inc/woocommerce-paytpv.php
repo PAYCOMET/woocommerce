@@ -1234,10 +1234,18 @@
 						}
 					}
 
-					$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
-					$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
-					$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-					$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
+					if (is_object($product) && $product->get_sku()) {
+						$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
+					}
+					if (is_object($item) && $item->get_quantity()) {
+						$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
+					}
+					if (is_object($product) && $product->get_price()) {
+						$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+					}
+					if (is_object($item) && $item->get_name()) {
+						$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
+					}
 					if (sizeof($arrCategories) > 0) {
 						$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
 					}
