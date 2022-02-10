@@ -137,8 +137,6 @@ function jetIframeValidated(){
     }
     document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
 
-    document.getElementById('place_order').click();
-    document.getElementById('jetiframe-button').disabled = false;
 }
 
 // formSubmit
