@@ -42,6 +42,9 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
+= 5.15 =
+Mejoras de código
+
 = 5.14 =
 Mejoras de código
 
