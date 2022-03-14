@@ -61,7 +61,8 @@
 					array(
 						'term' => $this->get_option('term'),
 						'pass' => $this->get_option('pass'),
-						'moneda' => $this->get_option('moneda')
+						'moneda' => $this->get_option('moneda'),
+						'dcc' => $this->get_option('dcc')
 					)
 				)
 			);
@@ -126,6 +127,7 @@
 			$terminal = $gateway->paytpv_terminals[0];
 			$term = $terminal["term"];
 			$pass = $terminal["pass"];
+			$dcc = $terminal["dcc"];
 			$order = $user_id;
 			$secure_pay = 0;
 
@@ -183,6 +185,7 @@
 				'apiKey' => $gateway->apiKey,
 				'term' => $term,
 				'pass' => $pass,
+				'dcc' => $dcc,
 				'clientcode' => $gateway->clientcode,
 				'settings' => $gateway->settings,
 				'user_id' => get_current_user_id(),
@@ -351,7 +354,7 @@
 				$term   = array_map( 'wc_clean', $_POST['term'] );
 				$pass = array_map( 'wc_clean', $_POST['pass'] );
 				$moneda           = array_map( 'wc_clean', $_POST['moneda'] );
-
+				$dcc = array_map( 'wc_clean', $_POST['dcc'] );
 				foreach ( $term as $i => $name ) {
 					if ( ! isset( $term[ $i ] ) ) {
 						continue;
@@ -360,7 +363,8 @@
 					$terminals[] = array(
 						'term'   => $term[ $i ],
 						'pass' => $pass[ $i ],
-						'moneda' => $moneda[ $i ]
+						'moneda' => $moneda[ $i ],
+						'dcc' => $dcc[ $i ]
 					);
 				}
 			}
@@ -474,7 +478,7 @@
 					'title' => __( 'Disable Offer to save card', 'wc_paytpv' ),
 					'type' => 'select',
 					'label' => '',
-
+					
 					'options' => array(
 						0 => __( 'No', 'wc_paytpv' ),
 						1 => __( 'Yes', 'wc_paytpv' )
@@ -491,7 +495,7 @@
 		public function generate_paytpv_terminals_html()
 		{
 			ob_start();
-
+			
 			?>
 			<tr valign="top">
 				<th class="titledesc"><?php _e( 'Terminals', 'wc_paytpv' ); ?></th>
@@ -503,6 +507,7 @@
 								<th><?php _e( 'Terminal Number', 'wc_paytpv' ); ?></th>
 								<th><?php _e( 'Password', 'wc_paytpv' ); ?></th>
 								<th><?php _e( 'Currency', 'wc_paytpv' ); ?></th>
+								<th><?php _e( 'DCC', 'wc_paytpv' ); ?></th>
 							</tr>
 						</thead>
 						<tbody class="accounts">
@@ -510,12 +515,13 @@
 							$i = -1;
 
 							$arrTerminals = array(__('Secure','wc_paytpv' ),__('Non-Secure','wc_paytpv' ),__('Both','wc_paytpv' ));
-							$arrDsecure = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));
+							$arrDsecure = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));						
 							$arrMonedas = get_woocommerce_currencies();
+							$arrDCC = array(0=>'NO', 1=>'YES');
 
 							// Un terminal por defecto en la moneda de woocommerce
 							if (empty($this->paytpv_terminals)){
-								$this->paytpv_terminals[0] = array("term"=>"","pass"=>"","moneda"=> get_woocommerce_currency());
+								$this->paytpv_terminals[0] = array("term"=>"","pass"=>"","moneda"=> get_woocommerce_currency(),"dcc"=>0);
 							}
 
 							if ( $this->paytpv_terminals){
@@ -525,13 +531,20 @@
 									echo '<tr class="terminal">
 										<td class="sort"></td>
 										<td><input type="text" value="' . esc_attr( wp_unslash( $terminal['term'] ) ) . '" name="term[]" /></td>
-										<td><input class="pass" type="text" value="' . esc_attr( wp_unslash( $terminal['pass'] ) ). '" name="pass[]" /></td>';
+										<td><input class="pass" type="text" value="' . esc_attr( wp_unslash( $terminal['pass'] ) ). '" name="pass[]" /></td>
+									';
 									echo '<td><select class="moneda" name="moneda[]">
 										';
 										foreach ($arrMonedas as $key=>$val){
 											$selected = ($key==$terminal['moneda'] || ($terminal['moneda']=="" && $key==get_woocommerce_currency()))?"selected":"";
 											echo '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 										}
+									echo '</select></td>';
+									echo '<td><select class="dcc" name="dcc[]">';
+									foreach ($arrDCC as $key=>$val){	
+										$selected = ($key==$terminal['dcc'] || ($terminal['dcc']=="" && $key==$arrTerminalData["dcc"]))?"selected":"";									
+										echo '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
+									}
 									echo '</select></td>';
 									echo '</tr>';
 								}
@@ -621,7 +634,8 @@
 
 				// REST
 				if ($this->apiKey != '') {
-					$OPERATION = 1;
+					$dcc = $arrTerminalData["dcc"];
+					$OPERATION = ($dcc == 1)?116 : 1;
 					$methodId = 1;
 					$userInteraction = 1;
 					$scoring = 0;
@@ -632,25 +646,25 @@
 
 						$apiRest = new PaycometApiRest($this->apiKey);
 						$apiResponse = $apiRest->form(
-							$OPERATION,
-							$this->_getLanguange(),
-							$term,
-							'',
-							[
-								'terminal' => $term,
-								'methods' => [$methodId],
-								'order' => $paytpv_order_ref,
-								'amount' => $importe,
-								'currency' => $currency_iso_code,
-								'idUser' => $saved_card["paytpv_iduser"],
-								'tokenUser' => $saved_card["paytpv_tokenuser"],
-								'userInteraction' => $userInteraction,
-								'secure' => $secure_pay,
-								'merchantData' => $merchantData,
-								'urlOk' => $URLOK,
-								'urlKo' => $URLKO
-							]
-						);
+                            $OPERATION,
+                            $this->_getLanguange(),
+                            $term,
+                            '',
+                            [
+                                'terminal' => $term,
+                                'methods' => [$methodId],
+                                'order' => $paytpv_order_ref,
+                                'amount' => $importe,
+                                'currency' => $currency_iso_code,
+                                'idUser' => $saved_card["paytpv_iduser"],
+                                'tokenUser' => $saved_card["paytpv_tokenuser"],
+                                'userInteraction' => $userInteraction,
+                                'secure' => $secure_pay,
+                                'merchantData' => $merchantData,
+                                'urlOk' => $URLOK,
+                                'urlKo' => $URLKO
+                            ]
+                        );
 
 						if ($apiResponse->errorCode==0) {
 							$salida = $apiResponse->challengeUrl;
@@ -1277,9 +1291,11 @@
 			$currency_iso_code = $arrTerminalData["currency_iso_code"];
 			$term = $arrTerminalData["term"];
 			$pass = $arrTerminalData["pass"];
+			$dcc = $arrTerminalData["dcc"];
 			$secure_pay = 1;
-
-			$OPERATION = 1;
+			
+			$OPERATION = ($dcc == 1)?116 : 1;
+			
 			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
@@ -1427,30 +1443,66 @@
 
 				$merchantData = $this->getMerchantData($order);
 
-				$apiRest = new PaycometApiRest($this->apiKey);
-				$executePurchaseResponse = $apiRest->executePurchase(
-					$term,
-					$MERCHANT_ORDER,
-					$importe,
-					$currency,
-					$methodId,
-					$ip,
-					$secure_pay,
-					$idUser,
-					$tokenUser,
-					$URLOK,
-					$URLKO,
-					$scoring,
-					'',
-					'',
-					$userInteraction,
-					[],
-					'',
-					'',
-					$merchantData,
-					$notifyDirectPayment
-				);
+				$dcc = $arrTerminalData["dcc"];
+				if ($dcc == 1) {
 
+					$OPERATION = 116;
+
+					try {
+
+						$apiRest = new PaycometApiRest($this->apiKey);
+						$executePurchaseResponse = $apiRest->form(
+                            $OPERATION,
+                            $this->_getLanguange(),
+                            $term,
+                            '',
+                            [
+                                'terminal' => $term,
+                                'methods' => [$methodId],
+                                'order' => $MERCHANT_ORDER,
+                                'amount' => $importe,
+                                'currency' => $currency,
+                                'idUser' => $idUser,
+                                'tokenUser' => $tokenUser,
+                                'userInteraction' => $userInteraction,
+                                'secure' => $secure_pay,
+                                'merchantData' => $merchantData,
+                                'urlOk' => $URLOK,
+                                'urlKo' => $URLKO
+                            ]
+                        );
+
+					} catch (exception $e){
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						wc_add_notice($error_txt, 'error' );
+					}	
+				}else{
+					$apiRest = new PaycometApiRest($this->apiKey);
+					$executePurchaseResponse = $apiRest->executePurchase(
+						$term,
+						$MERCHANT_ORDER,
+						$importe,
+						$currency,
+						$methodId,
+						$ip,
+						$secure_pay,
+						$idUser,
+						$tokenUser,
+						$URLOK,
+						$URLKO,
+						$scoring,
+						'',
+						'',
+						$userInteraction,
+						[],
+						'',
+						'',
+						$merchantData,
+						$notifyDirectPayment
+					);
+				
+				
+				}
 				$urlReturn = $URLOK;
 				if ($executePurchaseResponse->errorCode>0) {
 					if ($executePurchaseResponse->errorCode==1004) {
@@ -1464,6 +1516,7 @@
 				}
 
 				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $urlReturn;
+			
 			} else {
 				$this->jetiframeOkUrl = $URLKO;
 			}
@@ -1515,6 +1568,7 @@
 
 			$arrTerminalData["term"] = $terminal_currency["term"];
 			$arrTerminalData["pass"] = $terminal_currency["pass"];
+			$arrTerminalData["dcc"] = $terminal_currency["dcc"];
 			$arrTerminalData["currency_iso_code"] = $terminal_currency["moneda"];
 			$arrTerminalData["importe"] = number_format($order->get_total() * 100, 0, '.', '');
 
