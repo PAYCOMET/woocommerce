@@ -517,7 +517,7 @@
 							$arrTerminals = array(__('Secure','wc_paytpv' ),__('Non-Secure','wc_paytpv' ),__('Both','wc_paytpv' ));
 							$arrDsecure = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));						
 							$arrMonedas = get_woocommerce_currencies();
-							$arrDCC = array(0=>'NO', 1=>'YES');
+							$arrDCC = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));	
 
 							// Un terminal por defecto en la moneda de woocommerce
 							if (empty($this->paytpv_terminals)){
