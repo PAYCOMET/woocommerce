@@ -129,7 +129,6 @@
 			$pass = $terminal["pass"];
 			$dcc = $terminal["dcc"];
 			$order = $user_id;
-			$secure_pay = 0;
 
 			$url_paytpv = "";
 
@@ -166,7 +165,6 @@
 				}
 
 			} else {
-				
 				print '<p>' . __( 'Error: ', 'wc_paytpv' ) . "1004" .'</p>';
 				$gateway->write_log('Error 1004. ApiKey vacía');
 				exit;
@@ -478,7 +476,6 @@
 					'title' => __( 'Disable Offer to save card', 'wc_paytpv' ),
 					'type' => 'select',
 					'label' => '',
-					
 					'options' => array(
 						0 => __( 'No', 'wc_paytpv' ),
 						1 => __( 'Yes', 'wc_paytpv' )
@@ -495,7 +492,7 @@
 		public function generate_paytpv_terminals_html()
 		{
 			ob_start();
-			
+
 			?>
 			<tr valign="top">
 				<th class="titledesc"><?php _e( 'Terminals', 'wc_paytpv' ); ?></th>
@@ -514,10 +511,8 @@
 							<?php
 							$i = -1;
 
-							$arrTerminals = array(__('Secure','wc_paytpv' ),__('Non-Secure','wc_paytpv' ),__('Both','wc_paytpv' ));
-							$arrDsecure = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));						
 							$arrMonedas = get_woocommerce_currencies();
-							$arrDCC = array(0=>'NO', 1=>'YES');
+							$arrDCC = array(__( 'No', 'wc_paytpv' ),__( 'Yes', 'wc_paytpv' ));
 
 							// Un terminal por defecto en la moneda de woocommerce
 							if (empty($this->paytpv_terminals)){
@@ -541,8 +536,8 @@
 										}
 									echo '</select></td>';
 									echo '<td><select class="dcc" name="dcc[]">';
-									foreach ($arrDCC as $key=>$val){	
-										$selected = ($key==$terminal['dcc'] || ($terminal['dcc']=="" && $key==$arrTerminalData["dcc"]))?"selected":"";									
+									foreach ($arrDCC as $key=>$val){
+										$selected = ($key==$terminal['dcc'] || ($terminal['dcc']=="" && $key==0))?"selected":"";
 										echo '<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
 									}
 									echo '</select></td>';
@@ -930,7 +925,7 @@
 				} else {
 					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
 				}
-			} 
+			}
 
 			if ($DS_ORIGINAL_IP == "" || strpos($DS_ORIGINAL_IP, ":") !== false ) {
 				$DS_ORIGINAL_IP = "127.0.0.1";
@@ -1293,9 +1288,9 @@
 			$pass = $arrTerminalData["pass"];
 			$dcc = $arrTerminalData["dcc"];
 			$secure_pay = 1;
-			
+
 			$OPERATION = ($dcc == 1)?116 : 1;
-			
+
 			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
@@ -1409,7 +1404,7 @@
 							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
 						} else {
 							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
-						}						
+						}
 						wc_add_notice($error_txt, 'error' );
 						$this->write_log('Error ' . $addUserResponse->errorCode . " en addUser");
 						return "error";
@@ -1430,7 +1425,6 @@
 
 			$term = $arrTerminalData['term'];
 			$importe = $arrTerminalData["importe"];
-			$pass = $arrTerminalData['pass'];
 			$currency = $arrTerminalData["currency_iso_code"];
 
 			$MERCHANT_ORDER = str_pad( $order->get_id(), 8, "0", STR_PAD_LEFT );
@@ -1475,7 +1469,7 @@
 					} catch (exception $e){
 						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
 						wc_add_notice($error_txt, 'error' );
-					}	
+					}
 				}else{
 					$apiRest = new PaycometApiRest($this->apiKey);
 					$executePurchaseResponse = $apiRest->executePurchase(
@@ -1500,8 +1494,6 @@
 						$merchantData,
 						$notifyDirectPayment
 					);
-				
-				
 				}
 				$urlReturn = $URLOK;
 				if ($executePurchaseResponse->errorCode>0) {
@@ -1516,7 +1508,7 @@
 				}
 
 				$this->jetiframeOkUrl = $executePurchaseResponse->challengeUrl != '' ? $executePurchaseResponse->challengeUrl : $urlReturn;
-			
+
 			} else {
 				$this->jetiframeOkUrl = $URLKO;
 			}
@@ -1688,7 +1680,6 @@
 				}
 
 				$term = $arrTerminalData["term"];
-				$pass = $arrTerminalData["pass"];
 
 				// REST
 				if ($this->apiKey != '') {
@@ -1730,9 +1721,6 @@
 
 				// Obtenemos el terminal para el pedido
 				$arrTerminalData = $this->TerminalCurrency($order);
-				$currency_iso_code = $arrTerminalData["currency_iso_code"];
-				$term = $arrTerminalData["term"];
-				$pass = $arrTerminalData["pass"];
 
 				$parent_order = $subscription->get_parent();
 
@@ -1858,7 +1846,6 @@
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$currency_iso_code = $arrTerminalData["currency_iso_code"];
 			$term = $arrTerminalData["term"];
-			$pass = $arrTerminalData["pass"];
 
 			$importe = number_format($amount * 100, 0, '.', '');
 
