@@ -141,7 +141,7 @@ function jetIframeValidated(){
 
 // formSubmit
 jQuery( function( $ ) {
-    $( "#place_order").on('click',function( event ) {
+    $(document).on('click','#place_order',function( event ) {
         if ($( '#payment_method_paytpv' ).is( ':checked' )) {
             event.preventDefault();
 
