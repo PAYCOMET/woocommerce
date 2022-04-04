@@ -6,7 +6,7 @@
 	class woocommerce_paytpv extends WC_Payment_Gateway
 	{
 
-        private function write_log( $log )
+        public function write_log( $log )
         {
 			if ( true === WP_DEBUG ) {
 				if ( is_array($log) || is_object($log)) {

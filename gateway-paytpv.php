@@ -52,7 +52,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarnaPayments.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarnapayments.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
