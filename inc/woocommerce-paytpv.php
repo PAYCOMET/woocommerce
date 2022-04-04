@@ -1226,6 +1226,9 @@
 
 			try {
 
+				$amount=0;
+				$i=0;
+
 				// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
 				foreach($order->get_items() as $item_id => $item) {
 					//Get the product ID
@@ -1235,7 +1238,6 @@
 					$product = $item->get_product();
 					$terms = get_the_terms($product_id, 'product_cat');
 					$arrCategories = array();
-
 					if ($terms && is_array($terms)) {
 						foreach ( $terms as $term ) {
 							// Categories by slug
@@ -1243,22 +1245,43 @@
 						}
 					}
 
-					if (is_object($product) && $product->get_sku()) {
-						$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
+
+					if (is_int($item["quantity"])) {
+						$shoppingCartData[$item_id + $i]["sku"] = "1";
+						$shoppingCartData[$item_id + $i]["quantity"] = (int) $item["quantity"];					
+						$shoppingCartData[$item_id + $i]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+						$shoppingCartData[$item_id + $i]["name"] = $item["name"];
+						$shoppingCartData[$item_id + $i]["category"] = $item["category"];
+						$shoppingCartData[$item_id + $i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$item_id + $i]["unitPrice"] * $shoppingCartData[$item_id + $i]["quantity"];
+					} else {
+						$shoppingCartData[$item_id + $i]["sku"] = "1";
+						$shoppingCartData[$item_id + $i]["quantity"] = 1;
+						$shoppingCartData[$item_id + $i]["unitPrice"] = number_format(($product->get_price() * $product["quantity"]) * 100, 0, '.', '');
+						$shoppingCartData[$item_id + $i]["name"] = $item["name"];
+						$shoppingCartData[$item_id + $i]["category"] = $item["category"];
+						$shoppingCartData[$item_id + $i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$item_id + $i]["unitPrice"] * $shoppingCartData[$item_id + $i]["quantity"];
 					}
-					if (is_object($item) && $item->get_quantity()) {
-						$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
-					}
-					if (is_object($product) && $product->get_price()) {
-						$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-					}
-					if (is_object($item) && $item->get_name()) {
-						$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
-					}
-					if (sizeof($arrCategories) > 0) {
-						$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
-					}
+					
+
 				}
+				
+				// Se calculan los impuestos y gastos de envio
+				
+				$tax = number_format($order->get_total() * 100, 0, '.', '') - $amount;
+				$i++;
+				
+				if($tax > 0) {
+					$shoppingCartData[$item_id + $i]["sku"] = "1";
+					$shoppingCartData[$item_id + $i]["quantity"] = 1;
+					$shoppingCartData[$item_id + $i]["unitPrice"] = $tax;
+					$shoppingCartData[$item_id + $i]["name"] = "Tax";
+					$shoppingCartData[$item_id + $i]["articleType"] = "11";
+				}
+				
+				
+				
 			} catch (exception $e){
 				// If exception send empty $shoppingCartData
 			}
