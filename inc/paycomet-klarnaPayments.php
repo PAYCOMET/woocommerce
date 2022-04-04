@@ -1,11 +1,11 @@
 <?php
 
-class Paycomet_KlarnaPayments extends Paycomet_APM
+class Paycomet_Klarnapayments extends Paycomet_APM
 {
     // Setup our Gateway's id, description and other values
     public function __construct()
     {
-        $this->id = 'paycomet_klarnaPayments';
+        $this->id = 'paycomet_klarnapayments';
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/klarnapayments.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - KlarnaPayments';
