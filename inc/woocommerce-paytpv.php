@@ -1230,7 +1230,8 @@
 				$i=0;
 
 				// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
-				foreach($order->get_items() as $item_id => $item) {
+				foreach($order->get_items() as $item) {
+
 					//Get the product ID
 					$product_id = $item->get_product_id();
 
@@ -1245,43 +1246,36 @@
 						}
 					}
 
-
 					if (is_int($item["quantity"])) {
-						$shoppingCartData[$item_id + $i]["sku"] = "1";
-						$shoppingCartData[$item_id + $i]["quantity"] = (int) $item["quantity"];					
-						$shoppingCartData[$item_id + $i]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-						$shoppingCartData[$item_id + $i]["name"] = $item["name"];
-						$shoppingCartData[$item_id + $i]["category"] = $item["category"];
-						$shoppingCartData[$item_id + $i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
-						$amount += $shoppingCartData[$item_id + $i]["unitPrice"] * $shoppingCartData[$item_id + $i]["quantity"];
+						$shoppingCartData[$i]["sku"] = $product_id;
+						$shoppingCartData[$i]["quantity"] = (int) $item["quantity"];
+						$shoppingCartData[$i]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+						$shoppingCartData[$i]["name"] = $item["name"];
+						$shoppingCartData[$i]["category"] = $item["category"];
+						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
 					} else {
-						$shoppingCartData[$item_id + $i]["sku"] = "1";
-						$shoppingCartData[$item_id + $i]["quantity"] = 1;
-						$shoppingCartData[$item_id + $i]["unitPrice"] = number_format(($product->get_price() * $product["quantity"]) * 100, 0, '.', '');
-						$shoppingCartData[$item_id + $i]["name"] = $item["name"];
-						$shoppingCartData[$item_id + $i]["category"] = $item["category"];
-						$shoppingCartData[$item_id + $i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
-						$amount += $shoppingCartData[$item_id + $i]["unitPrice"] * $shoppingCartData[$item_id + $i]["quantity"];
+						$shoppingCartData[$i]["sku"] = $product_id;
+						$shoppingCartData[$i]["quantity"] = 1;
+						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_price() * $product["quantity"]) * 100, 0, '.', '');
+						$shoppingCartData[$i]["name"] = $item["name"];
+						$shoppingCartData[$i]["category"] = $item["category"];
+						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
 					}
-					
+					$i++;
+				}
 
-				}
-				
 				// Se calculan los impuestos y gastos de envio
-				
 				$tax = number_format($order->get_total() * 100, 0, '.', '') - $amount;
-				$i++;
-				
 				if($tax > 0) {
-					$shoppingCartData[$item_id + $i]["sku"] = "1";
-					$shoppingCartData[$item_id + $i]["quantity"] = 1;
-					$shoppingCartData[$item_id + $i]["unitPrice"] = $tax;
-					$shoppingCartData[$item_id + $i]["name"] = "Tax";
-					$shoppingCartData[$item_id + $i]["articleType"] = "11";
+					$shoppingCartData[$i]["sku"] = "1";
+					$shoppingCartData[$i]["quantity"] = 1;
+					$shoppingCartData[$i]["unitPrice"] = $tax;
+					$shoppingCartData[$i]["name"] = "Tax";
+					$shoppingCartData[$i]["articleType"] = "11";
 				}
-				
-				
-				
+
 			} catch (exception $e){
 				// If exception send empty $shoppingCartData
 			}

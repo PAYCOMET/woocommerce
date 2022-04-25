@@ -85,7 +85,7 @@ function add_paytpv_gateway( $methods ) {
 	// APMs
 	$methods[] = 'Paycomet_Bizum';
 	$methods[] = 'Paycomet_Klarna';
-	$methods[] = 'Paycomet_KlarnaPayments';
+	$methods[] = 'Paycomet_Klarnapayments';
 	$methods[] = 'Paycomet_Ideal';
 	$methods[] = 'Paycomet_Giropay';
 	$methods[] = 'Paycomet_Mybank';
