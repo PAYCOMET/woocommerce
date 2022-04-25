@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 5.17 =
-Añadir método de Pago Klarna Payments
+Añadir métodos de pago Klarna Payments y PayPal
 
 = 5.16 =
 Añadir opción de pago por DCC
