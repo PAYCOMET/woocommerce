@@ -6,7 +6,7 @@
 	class woocommerce_paytpv extends WC_Payment_Gateway
 	{
 
-        private function write_log( $log )
+        public function write_log( $log )
         {
 			if ( true === WP_DEBUG ) {
 				if ( is_array($log) || is_object($log)) {
@@ -1226,8 +1226,12 @@
 
 			try {
 
+				$amount=0;
+				$i=0;
+
 				// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
-				foreach($order->get_items() as $item_id => $item) {
+				foreach($order->get_items() as $item) {
+
 					//Get the product ID
 					$product_id = $item->get_product_id();
 
@@ -1235,7 +1239,6 @@
 					$product = $item->get_product();
 					$terms = get_the_terms($product_id, 'product_cat');
 					$arrCategories = array();
-
 					if ($terms && is_array($terms)) {
 						foreach ( $terms as $term ) {
 							// Categories by slug
@@ -1243,22 +1246,36 @@
 						}
 					}
 
-					if (is_object($product) && $product->get_sku()) {
-						$shoppingCartData[$item_id]["sku"] = $product->get_sku() ?? '';
+					if (is_int($item["quantity"])) {
+						$shoppingCartData[$i]["sku"] = $product_id;
+						$shoppingCartData[$i]["quantity"] = (int) $item["quantity"];
+						$shoppingCartData[$i]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+						$shoppingCartData[$i]["name"] = $item["name"];
+						$shoppingCartData[$i]["category"] = $item["category"];
+						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
+					} else {
+						$shoppingCartData[$i]["sku"] = $product_id;
+						$shoppingCartData[$i]["quantity"] = 1;
+						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_price() * $product["quantity"]) * 100, 0, '.', '');
+						$shoppingCartData[$i]["name"] = $item["name"];
+						$shoppingCartData[$i]["category"] = $item["category"];
+						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
+						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
 					}
-					if (is_object($item) && $item->get_quantity()) {
-						$shoppingCartData[$item_id]["quantity"] = $item->get_quantity() ?? '';
-					}
-					if (is_object($product) && $product->get_price()) {
-						$shoppingCartData[$item_id]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
-					}
-					if (is_object($item) && $item->get_name()) {
-						$shoppingCartData[$item_id]["name"] = $item->get_name() ?? '';
-					}
-					if (sizeof($arrCategories) > 0) {
-						$shoppingCartData[$item_id]["category"] = implode("|", $arrCategories);
-					}
+					$i++;
 				}
+
+				// Se calculan los impuestos y gastos de envio
+				$tax = number_format($order->get_total() * 100, 0, '.', '') - $amount;
+				if($tax > 0) {
+					$shoppingCartData[$i]["sku"] = "1";
+					$shoppingCartData[$i]["quantity"] = 1;
+					$shoppingCartData[$i]["unitPrice"] = $tax;
+					$shoppingCartData[$i]["name"] = "Tax";
+					$shoppingCartData[$i]["articleType"] = "11";
+				}
+
 			} catch (exception $e){
 				// If exception send empty $shoppingCartData
 			}

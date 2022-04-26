@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.16
+ * Version: 5.17
  * Tested up to: 5.9
- * WC tested up to: 6.3.1
+ * WC tested up to: 6.4.1
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.16' );
+define( 'PAYTPV_VERSION', '5.17' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -52,6 +52,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarnapayments.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
@@ -60,6 +61,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
@@ -83,6 +85,7 @@ function add_paytpv_gateway( $methods ) {
 	// APMs
 	$methods[] = 'Paycomet_Bizum';
 	$methods[] = 'Paycomet_Klarna';
+	$methods[] = 'Paycomet_Klarnapayments';
 	$methods[] = 'Paycomet_Ideal';
 	$methods[] = 'Paycomet_Giropay';
 	$methods[] = 'Paycomet_Mybank';
@@ -92,6 +95,7 @@ function add_paytpv_gateway( $methods ) {
 	$methods[] = 'Paycomet_Bancontact';
 	$methods[] = 'Paycomet_Eps';
 	$methods[] = 'Paycomet_Tele2';
+	$methods[] = 'Paycomet_Paypal';
 	$methods[] = 'Paycomet_Paysera';
 	$methods[] = 'Paycomet_Postfinance';
 	$methods[] = 'Paycomet_Qiwi';

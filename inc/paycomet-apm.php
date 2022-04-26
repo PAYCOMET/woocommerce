@@ -85,24 +85,29 @@ class Paycomet_APM extends WC_Payment_Gateway
             $URLKO = $order->get_cancel_order_url_raw();
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
+            $ip = $paytpvBase->getIp();
 
-            $apiResponse = $apiRest->form(
-                1,
-                $paytpvBase->_getLanguange(),
+            $apiResponse = $apiRest->executePurchase(
                 $terminal,
+                $orderId,
+                $amount,
+                $currency,
+                $methodId,
+                $ip,
+                (int) $secure_pay,
                 '',
-                [
-                    'terminal' => $terminal,
-                    'methods' => [$methodId],
-                    'order' => $orderId,
-                    'amount' => $amount,
-                    'currency' => $currency,
-                    'userInteraction' => (int) $userInteraction,
-                    'secure' => (int) $secure_pay,
-                    'merchantData' => $paytpvBase->getMerchantData($order),
-                    'urlOk' => $URLOK,
-                    'urlKo' => $URLKO
-                ]
+                '',
+                $URLOK,
+                $URLKO,
+                '',
+                '',
+                '',
+                (int) $userInteraction,
+                [],
+                '',
+                '',
+                $paytpvBase->getMerchantData($order),
+                1
             );
 
             if($apiResponse->errorCode == '0') {
@@ -111,7 +116,12 @@ class Paycomet_APM extends WC_Payment_Gateway
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-				wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
+                if ($apiResponse->errorCode==1004) {
+                    wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
+                } else {
+				    wc_add_notice(__( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' ));
+                }
+                $paytpvBase->write_log('Error ' . $apiResponse->errorCode . " en APM executePurchase");
                 return;
             }
         } else {
