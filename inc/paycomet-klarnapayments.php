@@ -26,7 +26,7 @@ class Paycomet_Klarnapayments extends Paycomet_APM
         $this->loadProp();
 
         if ($this->title == "Paga con KlarnaPayments") {
-            $this->title = __( 'Pay with KlarnaPaymets', 'wc_paytpv' );
+            $this->title = __( 'Pay with KlarnaPayments', 'wc_paytpv' );
         }
         if ($this->description == "Se te redirigirá a KlarnaPayments") {
             $this->description = __( 'You will be redirected to KlarnaPayments', 'wc_paytpv' );
