@@ -164,6 +164,8 @@ jQuery( function( $ ) {
                 jQuery('#place_order').prop("disabled",true);
                 // jetIframe action
                 $("#jetiframe-button").click();
+            } else {
+                $('#place_order').submit();
             }
 
             setTimeout(() => {  enablePlaceOrder() }, 2000);
