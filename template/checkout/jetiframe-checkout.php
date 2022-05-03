@@ -101,15 +101,14 @@
         }
     ?>
     <input type="submit" style="width: 290px; display:none;" name="jetiframe-button" id="jetiframe-button" value="<?php print __('Make payment', 'wc_paytpv');?>">
-    <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
 </form>
 
 <div id="paymentErrorMsg" style="color: #fff; background: #b22222; margin-top: 10px; text-align: center;">
 
 </div>
 
-<script>
-    
+<script type="text/javascript">
+
 //Oculta o muestra el formulario si hay una tarjeta guardada seleccionada
 function checkSelectedCard() {
     if (document.getElementById('jet_iframe_card').value != 0){
@@ -131,16 +130,29 @@ function checkSelectedCard() {
 
 //Comportamiento cuando se valida el formulario de JetIframe correctamente
 function jetIframeValidated(){
-    
     if (document.getElementById("jetiframe_savecard") != null) {
         document.getElementById("savecard_jetiframe").checked = document.getElementById("jetiframe_savecard").checked;
     }
-    document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
 
+    document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
+    if (jQuery("#jetiframe-token").val() != "") {
+        jQuery('#place_order').submit();
+    }
+
+}
+
+function enablePlaceOrder() {
+    jQuery('#place_order').prop("disabled",false);
 }
 
 // formSubmit
 jQuery( function( $ ) {
+
+    // Si esta cargado el formulario jetIframe cargamos el js
+    if ($("#paycometPaymentForm").val() == "") {
+        $.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es");
+    }
+
     $( "#place_order").on('click',function( event ) {
         if ($( '#payment_method_paytpv' ).is( ':checked' )) {
             event.preventDefault();
@@ -149,12 +161,14 @@ jQuery( function( $ ) {
 
             // New Card
             if (new_card) {
+                jQuery('#place_order').prop("disabled",true);
                 // jetIframe action
                 $("#jetiframe-button").click();
-            }
-            if ($( "#jetiframe-token" ).val() != "" || !new_card){
+            } else {
                 $('#place_order').submit();
             }
+
+            setTimeout(() => {  enablePlaceOrder() }, 2000);
         }
     });
 
