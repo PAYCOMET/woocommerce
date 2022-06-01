@@ -115,7 +115,7 @@ if (isset($_POST["paytpvToken"])) {
 
         <div class="payment_module paytpv_iframe" id="nueva_tarjeta" style="display:none">
             <?php if ($isJetIframeActive == 0 ) :?>
-                <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="min-width: 320px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>
+                <iframe id="ifr-paytpv-container-acount" src="<?php print $url_paytpv?>" name="paytpv" style="min-width: 320px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: 360px; " marginheight="0" marginwidth="0" scrolling="no" sandbox="allow-top-navigation allow-scripts allow-same-origin allow-forms"></iframe>
             <?php else : ?>
                 <form role="form" name="paycometPaymentForm" id="paycometPaymentForm" action="" method="POST">
 
