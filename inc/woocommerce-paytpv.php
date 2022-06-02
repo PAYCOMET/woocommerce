@@ -1677,7 +1677,7 @@
 			// Pago Iframe
 			if ($this->payment_paycomet == 0) {
 				$html .= '<iframe class="ifr-paytpv" id="paytpv_iframe" src="' . $src . '"
-	name="paytpv" style="min-width: 320px!important; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no"></iframe>';
+	name="paytpv" style="min-width: 320px!important; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; height: ' . $this->iframe_height . 'px; " marginheight="0" marginwidth="0" scrolling="no" sandbox="allow-top-navigation allow-scripts allow-same-origin allow-forms"></iframe>';
 			} else {
 				$html .= '<p><a href="' . $src . '" id="paycomet_page" class="button paycomet_pay">'.__( 'Pay', 'wc_paytpv' ).'</a></p>';
 			}
