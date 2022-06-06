@@ -1255,9 +1255,10 @@
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
 						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
 					} else {
+						$quantity = (isset($item["quantity"]))?$item["quantity"]:1;
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = 1;
-						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_price() * $product["quantity"]) * 100, 0, '.', '');
+						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_price() * $quantity) * 100, 0, '.', '');
 						$shoppingCartData[$i]["name"] = $item["name"];
 						$shoppingCartData[$i]["category"] = $item["category"];
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
