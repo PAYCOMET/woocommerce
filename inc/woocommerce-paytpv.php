@@ -96,12 +96,21 @@
 				// Subscriptions
 				add_action('woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment'), 10, 2 );
 				add_filter('wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id'), 10, 4 );
-
+				
 				//JetIframe integration
 				if ($this->isJetIframeActive) {
 					add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
+					add_action('woocommerce_pay_order_before_submit', array($this, 'addFieldForJetiframeToken'));
+					add_filter('woocommerce_pay_order_button_html', array( $this, 'woocommerce_pay_order_button_html_filter'), 10, 4 );
 				}
 			}
+		}
+
+		public function woocommerce_pay_order_button_html_filter( $html ) {
+			// The text of the button
+			$order_button_text = __('Place order', 'woocommerce');
+
+			return '<input type="submit" class="button alt" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">';
 		}
 
 		public function addFieldForJetiframeToken() {
@@ -206,7 +215,7 @@
 			if ($this->apiKey != '') {
 				if ( $this->description)
 					echo wpautop( wptexturize( $this->description ) );
-
+				
 				if ($this->isJetIframeActive) {
 					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard), '', PAYTPV_PLUGIN_DIR . 'template/' );
 				}
