@@ -2,7 +2,7 @@
     $saved_cards = Paytpv::savedCards(get_current_user_id());
     $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 ?>
-
+<form role="form" name="aux"></form>
 <form role="form" name="paycometPaymentForm" id="paycometPaymentForm" action="javascript:jetIframeValidated()" method="POST">
 
 <div id="saved_cards" style="display:<?=$store_card;?>">
@@ -136,7 +136,7 @@ function jetIframeValidated(){
 
     document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
     if (jQuery("#jetiframe-token").val() != "") {
-        jQuery('#place_order').submit();
+        jQuery('#place_order').parents('form:first').submit();
     }
 
 }
@@ -165,7 +165,7 @@ jQuery( function( $ ) {
                 // jetIframe action
                 $("#jetiframe-button").click();
             } else {
-                $('#place_order').submit();
+                $('#place_order').parents('form:first').submit();
             }
 
             setTimeout(() => {  enablePlaceOrder() }, 2000);
