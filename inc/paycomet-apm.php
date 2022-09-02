@@ -111,6 +111,9 @@ class Paycomet_APM extends WC_Payment_Gateway
             );
 
             if($apiResponse->errorCode == '0') {
+
+                update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
+                
                 return array(
                     'result' => 'success',
                     'redirect'	=> $apiResponse->challengeUrl
