@@ -636,6 +636,28 @@
 
 				$salida = $URLKO; // Default
 
+				$apiRest = new PaycometApiRest($this->apiKey);
+                $infoUserResponse = $apiRest->infoUser(
+                    $saved_card["paytpv_iduser"],
+                    $saved_card["paytpv_tokenuser"],
+                    $term
+                );
+
+				$añoActual = date('Y');
+                $mesActual = date('m');
+                $añoTarjeta = substr($infoUserResponse->expiryDate, 0, -3);
+                $mesTarjeta = substr($infoUserResponse->expiryDate,-2);
+
+			 
+                if ($añoActual>$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual>$mesTarjeta)) { 
+					Paytpv::removeCard($saved_card['id']);
+					$error_txt = __('Tarjeta caducada - La tarjeta ha sido eliminada', 'wc_paytpv' );
+					wc_add_notice($error_txt, 'error' );
+					$url = $order->get_cancel_order_url_raw();
+					wp_redirect( $url, 303 );
+					exit;
+                }
+
 				// REST
 				if ($this->apiKey != '') {
 					$dcc = $arrTerminalData["dcc"];
@@ -676,7 +698,13 @@
 							if ($apiResponse->errorCode==1004) {
 								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
 							} else {
-								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+								if($apiResponse->errorCode==1001){
+									Paytpv::removeCard($saved_card['id']);
+									$error_txt = __( 'La tarjeta ha sido eliminada, Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+								}else{
+									$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+								}
+								
 							}
 							wc_add_notice($error_txt, 'error' );
 							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
@@ -1409,6 +1437,28 @@
 				$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
 				$idUser = $saved_card["paytpv_iduser"];
 				$tokenUser = $saved_card["paytpv_tokenuser"];
+
+				$apiRest = new PaycometApiRest($this->apiKey);
+                $infoUserResponse = $apiRest->infoUser(
+                    $idUser,
+                    $tokenUser,
+                    $arrTerminalData['term']
+                );
+
+				$añoActual = date('Y');
+                $mesActual = date('m');
+		
+                $añoTarjeta = substr($infoUserResponse->expiryDate, 0, -3);
+                $mesTarjeta = substr($infoUserResponse->expiryDate,-2);
+
+                if ($añoActual>$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual>$mesTarjeta)) { 
+					Paytpv::removeCard($saved_card['id']);
+					$error_txt = __('Tarjeta caducada - La tarjeta ha sido eliminada', 'wc_paytpv' );
+					wc_add_notice($error_txt, 'error' );
+					$this->jetiframeOkUrl = $URLKO;
+					return "error";
+                }
+
 			// With jetIframe Token
 			} else {
 				// REST
@@ -1527,7 +1577,12 @@
 					if ($executePurchaseResponse->errorCode==1004) {
 						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
 					} else {
-						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						if($executePurchaseResponse->errorCode==1001){
+							Paytpv::removeCard($saved_card['id']);
+							$error_txt = __( 'La tarjeta ha sido eliminada, Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
+						}else{
+							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						}		
 					}
 					wc_add_notice($error_txt, 'error' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
