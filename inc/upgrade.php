@@ -6,9 +6,6 @@ add_action( 'wppaytpv_upgrade_version', 'payptv_upgrade', 10, 2 );
 function payptv_upgrade( $new_ver, $old_ver ) {
 	global $wpdb;
 
-	//if ( ! version_compare( $old_ver, '3.0', '<' ) )
-		//return;
-
 	$table_name = $wpdb->prefix . "paytpv_customer";
 	$charset_collate = $wpdb->get_charset_collate();
 
@@ -28,14 +25,16 @@ function payptv_upgrade( $new_ver, $old_ver ) {
 		) $charset_collate;";
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-	}else{
-		$sql = "ALTER TABLE $table_name
-		add paytpv_expirydate VARCHAR(7) NOT NULL 
-		after paytpv_brand;";
+		$wpdb->query( $sql );
+	} else {
+		try {
+			$sql = "ALTER TABLE $table_name
+			ADD COLUMN IF NOT EXISTS paytpv_expirydate VARCHAR(7) NOT NULL 
+			AFTER paytpv_brand;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		$query_result = $wpdb->query( $sql );
+			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			$query_result = $wpdb->query( $sql );
+		} catch (execption $e) {}
 	}
 }
 

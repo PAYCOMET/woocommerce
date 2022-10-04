@@ -1,7 +1,9 @@
 <?php
 
-add_action( 'woocommerce_order_details_after_order_table', 'hwn_add_thankyou_custom_text', $order_id);
-add_action( 'woocommerce_email_after_order_table', 'hwn_add_thankyou_custom_text', $order_id);
+if (isset($order_id)) {
+    add_action( 'woocommerce_order_details_after_order_table', 'hwn_add_thankyou_custom_text', $order_id);
+    add_action( 'woocommerce_email_after_order_table', 'hwn_add_thankyou_custom_text', $order_id);
+}
 
 function hwn_add_thankyou_custom_text($order_id) {
     // $order_id = wc_get_order_id_by_order_key( $_GET[ 'key' ] );

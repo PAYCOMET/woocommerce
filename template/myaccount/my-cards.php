@@ -47,6 +47,7 @@ if (isset($_POST["paytpvToken"])) {
                 if ($infoUserResponse->errorCode==0) {
                     $result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
                     $result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+                    $result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
                 }
             } else {
                 $error = true;
@@ -56,7 +57,7 @@ if (isset($_POST["paytpvToken"])) {
         }
 
         if (!$error) {
-            PayTPV::saveCard($user_id,$idUser,$tokenUser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
+            PayTPV::saveCard($user_id, $idUser, $tokenUser, $result['DS_MERCHANT_PAN'], $result['DS_CARD_BRAND'], $result['DS_CARD_EXPIRYDATE']);
             $_POST["paytpvToken"] = '';
             echo "<meta http-equiv='refresh' content='0'>";
         } else {
@@ -75,55 +76,46 @@ if (isset($_POST["paytpvToken"])) {
 
 	<?php if ( ! empty( $saved_cards ) ) : ?>
 		<div class="span6" id="div_tarjetas">
+        <?php if (count($saved_cards["valid"])>0) { ?></p>
         <p><?php _e( 'Available cards', 'wc_paytpv' ); ?></p>
-            <?php foreach ($saved_cards as $card) :?>  
-                <div class="bankstoreCard" id="card_<?php print $card["id"];?>">  
-                <?php  
-                        $añoActual = date('Y');
-                        $mesActual = date('m');
-                        $añoTarjeta = substr($card["paytpv_expirydate"], 0, -3);
-			            $mesTarjeta = substr($card["paytpv_expirydate"],-2);
-                        if ($añoActual<$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual<$mesTarjeta)) {             
-                ?>  
+            <?php foreach ($saved_cards["valid"] as $card) :?>
+                <div class="bankstoreCard" id="card_<?php print $card["id"];?>">
+                <?php
+                        // If not expired
+				        if ((int)date("Ym") < (int)str_replace("/", "", $card["paytpv_expirydate"])) {
+                ?>
                     <br>
                 	<span class="cc"><?php print $card["paytpv_cc"] ." (" . $card["paytpv_brand"].")"?></span>
                     <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
                     <label class="button_del">
-                        <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc button  button-smal renew"><?php print __('Save Description', 'wc_paytpv');?></a>  
+                        <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc button  button-smal renew"><?php print __('Save Description', 'wc_paytpv');?></a>
                         <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card button renew"><?php print __('Remove', 'wc_paytpv');?></a>
-                       
+
                         <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
                     </label>
-                <?php  
+                <?php
                     }
-                ?>  
+                ?>
                 </div>
             <?php endforeach; ?>
         <HR/>
+        <?php } ?></p>
+        <?php if (count($saved_cards["invalid"])>0) { ?></p>
         <p><?php _e( 'Inactive cards', 'wc_paytpv' ); ?></p>
-            <?php foreach ($saved_cards as $card) :?>  
-                <div class="bankstoreCard" id="card_<?php print $card["id"];?>">  
-                <?php  
-                        $añoActual = date('Y');
-                        $mesActual = date('m');
-                        $añoTarjeta = substr($card["paytpv_expirydate"], 0, -3);
-			            $mesTarjeta = substr($card["paytpv_expirydate"],-2);
-                        if ($añoActual>$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual>$mesTarjeta)) {               
-                ?>  
+            <?php foreach ($saved_cards["invalid"] as $card) :?>
+                <div class="bankstoreCard" id="card_<?php print $card["id"];?>">
                 <br>
                 	<span class="cc"><?php print $card["paytpv_cc"] ." (" . $card["paytpv_brand"].")"?></span>
                     <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" readonly>
-                    <label class="button_del"> 
+                    <label class="button_del">
                         <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card button renew"><?php print __('Remove', 'wc_paytpv');?></a>
-                       
+
                         <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
                     </label>
-                <?php  
-                    }
-                ?>  
-                </div>
++                </div>
             <?php endforeach; ?>
         <HR/>
+        <?php } ?></p>
         </div>
 
 	<?php else : ?>
@@ -222,7 +214,7 @@ if (isset($_POST["paytpvToken"])) {
 
                     </div>
 
-                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button> 
+                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>
 
                     <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
                 </form>

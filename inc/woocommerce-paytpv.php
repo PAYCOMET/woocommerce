@@ -1698,7 +1698,7 @@
 			return $html;
 		}
 
-		public function saveCard($order,$user_id,$paytpv_iduser,$paytpv_tokenuser,$TransactionType)
+		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
@@ -1725,7 +1725,15 @@
 					$result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
 				}
 
-				return PayTPV::saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND'],$result['DS_CARD_EXPIRYDATE']);
+				return PayTPV::saveCard(
+					$user_id,
+					$paytpv_iduser,
+					$paytpv_tokenuser,
+					$result['DS_MERCHANT_PAN'],
+					$result['DS_CARD_BRAND'],
+					$result['DS_CARD_EXPIRYDATE']
+				);
+
 			}else{
 				$result["paytpv_iduser"] = $paytpv_iduser;
 				$result["paytpv_tokenuser"] = $paytpv_tokenuser;
