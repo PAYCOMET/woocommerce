@@ -23,12 +23,73 @@
 		}
 
 
-		public static function savedCards($user_id){
+		public static function savedActiveCards($user_id){
+			global $wpdb;
+
+			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer>0 and id_customer = ". $user_id  ." order by date desc", ARRAY_A);
+			
+			$añoActual = date('Y');
+			$mesActual = date('m');
+	
+			foreach ($saved_cards as $card){
+
+				if($card["paytpv_expirydate"]==""){
+
+					Paytpv::fillExpirydate($card["paytpv_iduser"],$card["paytpv_tokenuser"],$card["id"]);
+
+				}
+				
+				$añoTarjeta = substr($card["paytpv_expirydate"], 0, -3);
+				$mesTarjeta = substr($card["paytpv_expirydate"],-2);
+
+				if ($añoActual>$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual>$mesTarjeta)) { 
+					$saved_cards = array_diff($saved_cards, array($card),$card["paytpv_tokenuser"]);
+				}
+			
+			}
+
+			return $saved_cards;
+		}
+
+		public static function savedClientCards($user_id){
 			global $wpdb;
 			
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer>0 and id_customer = ". $user_id  . " order by date desc", ARRAY_A);
 			
+			foreach ($saved_cards as $card){
+
+				if($card["paytpv_expirydate"]==""){
+
+					Paytpv::fillExpirydate($card["paytpv_iduser"],$card["paytpv_tokenuser"],$card["id"]);
+
+				}
+			
+			}
 			return $saved_cards;
+		}
+
+		public static function fillExpirydate($idUser,$tokenUser,$id){
+			global $wpdb;
+			
+			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+			$term=$paytpv_terminals[0]["term"];
+				
+			$apiRest = new PaycometApiRest(get_option('woocommerce_paytpv_settings')['apikey']);
+			$infoUserResponse = $apiRest->infoUser(
+				$idUser,
+				$tokenUser,
+				$term
+			);
+
+			if ($infoUserResponse->errorCode == 1001) {
+				$update_prepared = $wpdb->prepare( "UPDATE {$wpdb->prefix}paytpv_customer
+												SET paytpv_expirydate='1900/01' WHERE id=%d",$id);
+			}else{
+				$update_prepared = $wpdb->prepare( "UPDATE {$wpdb->prefix}paytpv_customer
+												SET paytpv_expirydate=%s WHERE id=%d",$infoUserResponse->expiryDate,$id);
+			}
+			$wpdb->query( $update_prepared );
+
 		}
 
 		public static function savedCard($user_id,$id_card){
@@ -68,7 +129,7 @@
 			}
 		}
 
-		public static function saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$paytpv_cc,$paytpv_brand){
+		public static function saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$paytpv_cc,$paytpv_brand,$paytpv_expirydate){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
@@ -78,9 +139,9 @@
 			if (count($saved_cards) == 0) {
 
 				if ($user_id>0){
-					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, id_customer, `date` )
-														VALUES(%d, %s, %s,%s, %d, %s)",
-													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $user_id, date('Y-m-d H:i:s')) );
+					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date` )
+														VALUES(%d, %s, %s, %s, %s, %d, %s)",
+													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $user_id, date('Y-m-d H:i:s')) );
 					$wpdb->query( $insert_prepared );
 				}
 			}
