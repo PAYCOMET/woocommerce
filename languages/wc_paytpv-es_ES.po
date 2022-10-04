@@ -468,6 +468,14 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
+#: template/myaccount/my-cards.php:78
+msgid "Available cards"
+msgstr "Tarjetas disponibles"
+
+#: template/myaccount/my-cards.php:101
+msgid "Inactive cards"
+msgstr "Tarjetas inactivas"
+
 #: inc/woocommerce-paytpv.php:1628 template/checkout/jetiframe-checkout.php:20
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"

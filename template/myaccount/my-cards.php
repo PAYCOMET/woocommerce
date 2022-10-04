@@ -75,9 +75,17 @@ if (isset($_POST["paytpvToken"])) {
 
 	<?php if ( ! empty( $saved_cards ) ) : ?>
 		<div class="span6" id="div_tarjetas">
-            
+        <p><?php _e( 'Available cards', 'wc_paytpv' ); ?></p>
             <?php foreach ($saved_cards as $card) :?>  
                 <div class="bankstoreCard" id="card_<?php print $card["id"];?>">  
+                <?php  
+                        $añoActual = date('Y');
+                        $mesActual = date('m');
+                        $añoTarjeta = substr($card["paytpv_expirydate"], 0, -3);
+			            $mesTarjeta = substr($card["paytpv_expirydate"],-2);
+                        if ($añoActual<$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual<$mesTarjeta)) {             
+                ?>  
+                    <br>
                 	<span class="cc"><?php print $card["paytpv_cc"] ." (" . $card["paytpv_brand"].")"?></span>
                     <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
                     <label class="button_del">
@@ -86,9 +94,36 @@ if (isset($_POST["paytpvToken"])) {
                        
                         <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
                     </label>
-                    <HR/>
+                <?php  
+                    }
+                ?>  
                 </div>
             <?php endforeach; ?>
+        <HR/>
+        <p><?php _e( 'Inactive cards', 'wc_paytpv' ); ?></p>
+            <?php foreach ($saved_cards as $card) :?>  
+                <div class="bankstoreCard" id="card_<?php print $card["id"];?>">  
+                <?php  
+                        $añoActual = date('Y');
+                        $mesActual = date('m');
+                        $añoTarjeta = substr($card["paytpv_expirydate"], 0, -3);
+			            $mesTarjeta = substr($card["paytpv_expirydate"],-2);
+                        if ($añoActual>$añoTarjeta || ($añoActual==$añoTarjeta && $mesActual>$mesTarjeta)) {               
+                ?>  
+                <br>
+                	<span class="cc"><?php print $card["paytpv_cc"] ." (" . $card["paytpv_brand"].")"?></span>
+                    <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" readonly>
+                    <label class="button_del"> 
+                        <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card button renew"><?php print __('Remove', 'wc_paytpv');?></a>
+                       
+                        <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
+                    </label>
+                <?php  
+                    }
+                ?>  
+                </div>
+            <?php endforeach; ?>
+        <HR/>
         </div>
 
 	<?php else : ?>

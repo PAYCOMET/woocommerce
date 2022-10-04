@@ -1,5 +1,5 @@
 <?php
-    $saved_cards = Paytpv::savedCards(get_current_user_id());
+    $saved_cards = Paytpv::savedActiveCards(get_current_user_id());
     $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 ?>
 <form role="form" name="aux"></form>
