@@ -1,5 +1,5 @@
 <?php
-    $saved_cards = Paytpv::savedCards(get_current_user_id());
+    $saved_cards = Paytpv::savedActiveCards(get_current_user_id());
     $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 ?>
 <form role="form" name="aux"></form>
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-9" style="padding-left:0px;">
+        <div class="col-xs-12 col-md-9" style="padding-left:0px;">
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="col-sm-3" style="padding-left:0px;">
+        <div class="col-xs-12 col-md-3" style="padding-left:0px;">
 
             <div class="form-group">
 

@@ -127,7 +127,7 @@
 		public static function get_my_cards_template()
 		{
 			$user_id = get_current_user_id();
-			$saved_cards = Paytpv::savedCards($user_id);
+			$saved_cards = Paytpv::savedClientCards($user_id); 
 			$operation = 107;
 
 			// Obtenemos el terminal para el pedido
@@ -636,6 +636,8 @@
 
 				$salida = $URLKO; // Default
 
+			
+
 				// REST
 				if ($this->apiKey != '') {
 					$dcc = $arrTerminalData["dcc"];
@@ -676,7 +678,7 @@
 							if ($apiResponse->errorCode==1004) {
 								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
 							} else {
-								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );					
 							}
 							wc_add_notice($error_txt, 'error' );
 							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
@@ -1409,6 +1411,7 @@
 				$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
 				$idUser = $saved_card["paytpv_iduser"];
 				$tokenUser = $saved_card["paytpv_tokenuser"];
+
 			// With jetIframe Token
 			} else {
 				// REST
@@ -1527,7 +1530,7 @@
 					if ($executePurchaseResponse->errorCode==1004) {
 						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
 					} else {
-						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );	
 					}
 					wc_add_notice($error_txt, 'error' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
@@ -1619,8 +1622,8 @@
 		function savedCardsHtml($order_id)
 		{
 			$order = new WC_Order( $order_id );
-			$saved_cards = Paytpv::savedCards(get_current_user_id());
-
+			$saved_cards = Paytpv::savedActiveCards(get_current_user_id());
+			
 			// Tarjetas almacenadas
 			$store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 			print '<form id="form_paytpv" method="post" action="'.add_query_arg(array("wc-api"=> 'woocommerce_' . $this->id)) . '" class="form-inline">
@@ -1629,11 +1632,11 @@
 	                        <label for="card">'.__('Card', 'wc_paytpv' ).':</label>
 	                        <select name="card" id="card" onChange="checkCard()" class="form-control">';
 
-        	foreach ($saved_cards as $card){
-        		$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
-        		print 		"<option value='".$card['id']."'>".$card["paytpv_cc"]. $card_desc. "</option>";
-
-        	}
+			foreach ($saved_cards as $card){
+				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
+				print 		"<option value='".$card['id']."'>".$card["paytpv_cc"]. $card_desc. "</option>";
+				
+			}
 
             print '      <option value="0">'.__('NEW CARD', 'wc_paytpv' ).'</option></select>
                     </div>
@@ -1695,7 +1698,7 @@
 			return $html;
 		}
 
-		public function saveCard($order,$user_id,$paytpv_iduser,$paytpv_tokenuser,$TransactionType)
+		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
@@ -1719,9 +1722,18 @@
 
 					$result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
 					$result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
+					$result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
 				}
 
-				return PayTPV::saveCard($user_id,$paytpv_iduser,$paytpv_tokenuser,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND']);
+				return PayTPV::saveCard(
+					$user_id,
+					$paytpv_iduser,
+					$paytpv_tokenuser,
+					$result['DS_MERCHANT_PAN'],
+					$result['DS_CARD_BRAND'],
+					$result['DS_CARD_EXPIRYDATE']
+				);
+
 			}else{
 				$result["paytpv_iduser"] = $paytpv_iduser;
 				$result["paytpv_tokenuser"] = $paytpv_tokenuser;
