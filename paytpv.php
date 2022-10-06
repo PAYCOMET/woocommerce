@@ -72,7 +72,6 @@
 				}
 			}
 
-			//print_r($saved_cards_validated);exit;
 			return $saved_cards_validated;
 		}
 
