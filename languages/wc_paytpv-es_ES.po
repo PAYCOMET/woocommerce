@@ -414,6 +414,22 @@ msgstr "Pago a plazos instantáneo"
 msgid "Integration with"
 msgstr "Integración con"
 
+#: inc/woocommerce-paytpv.php:473
+msgid "PAN Div Style"
+msgstr "Estilo PAN Div"
+
+#: inc/woocommerce-paytpv.php:481
+msgid "PAN Input Style"
+msgstr "Estilo PAN Input"
+
+#: inc/woocommerce-paytpv.php:489
+msgid "CVC2 Div Style"
+msgstr "Estilo CVC2 Div"
+
+#: inc/woocommerce-paytpv.php:497
+msgid "CVC2 Input Style"
+msgstr "Estilo CVC2 Input"
+
 #: template/myaccount/conditions.php:29
 msgid "Internal security"
 msgstr "Seguridad interna"
@@ -518,6 +534,22 @@ msgstr "Pagar"
 #: inc/woocommerce-paytpv.php:460
 msgid "Pay in a Iframe, Paycomet page or JetIframe."
 msgstr "Pagar en Iframe, en la Página de Paycomet o con JetIframe"
+
+#: inc/woocommerce-paytpv.php:476
+msgid "Modify the style of the PAN Div"
+msgstr "Modificar el estilo del PAN Div"
+
+#: inc/woocommerce-paytpv.php:484
+msgid "Modify the style of the PAN Input"
+msgstr "Modificar el estilo del PAN Input"
+
+#: inc/woocommerce-paytpv.php:492
+msgid "Modify the style of the CVC2 Div"
+msgstr "Modificar el estilo del CVC2 Div"
+
+#: inc/woocommerce-paytpv.php:500
+msgid "Modify the style of the CVC2 Input"
+msgstr "Modificar el estilo del CVC2 Input"
 
 #: inc/woocommerce-paytpv.php:54 inc/woocommerce-paytpv.php:435
 msgid "Pay using your credit card in a secure way"
