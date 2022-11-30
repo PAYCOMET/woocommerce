@@ -73,7 +73,7 @@
 			$this->pan_div_style = isset($this->settings['pan_div_style']) ? $this->settings['pan_div_style'] : 'width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca';
 			$this->pan_input_style = isset($this->settings['pan_input_style']) ? $this->settings['pan_input_style'] : 'height: 30px; font-size:18px; padding-top:2px; border:0px;';
 			$this->cvc2_div_style = isset($this->settings['cvc2_div_style']) ? $this->settings['cvc2_div_style'] : 'height: 34px; padding:0px;';
-			$this->cvc2_input_style = isset($this->settings['cvc2_input_style']) ? $this->settings['cvc2_input_style'] : 'border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;';
+			$this->cvc2_input_style = isset($this->settings['cvc2_input_style']) ? $this->settings['cvc2_input_style'] : 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;';
 			$this->iframe_height = isset($this->settings['iframe_height']) ? $this->settings['iframe_height'] : 440;
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
@@ -498,7 +498,7 @@
                     'type' => 'text',
                     'class' => 'jet_id',
                     'description' => __( 'Modify the style of the CVC2 Input', 'wc_paytpv' ),
-                    'default' => 'border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;',
+                    'default' => 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;',
                     'desc_tip'    => true
                 ),
 				'jet_id' => array(

@@ -207,7 +207,7 @@ if (isset($_POST["paytpvToken"])) {
                                 </label>
 
                                 <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
-                                <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+                                <input paycomet-name="cvc2" paycomet-style="width: 60px; height: 30px; font-size:18px; padding-left:7px; order: 1px solid #dcd7ca;" class="form-control" required="" type="text">
 
                             </div>
                         </div>
