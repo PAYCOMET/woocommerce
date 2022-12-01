@@ -201,7 +201,11 @@
 				'settings' => $gateway->settings,
 				'user_id' => get_current_user_id(),
 				'url_paytpv'=> $url_paytpv,
-				'payment_paycomet'=> $payment_paycomet
+				'payment_paycomet'=> $payment_paycomet,
+				'pan_div_style' => $gateway->pan_div_style,
+				'pan_input_style' => $gateway->pan_input_style,
+				'cvc2_div_style' => $gateway->cvc2_div_style,
+				'cvc2_input_style' => $gateway->cvc2_input_style
 			), '', PAYTPV_PLUGIN_DIR . 'template/' );
 		}
 

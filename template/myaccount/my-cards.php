@@ -153,8 +153,8 @@ if (isset($_POST["paytpvToken"])) {
                     <div class="form-group">
                         <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
                         <div class="input-group">
-                            <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
-                            <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+                            <div id="paycomet-pan" style="<?php print $pan_div_style ?>"></div>   
+                            <input paycomet-style="<?php print $pan_input_style ?>" paycomet-name="pan">
                         </div>
                     </div>
 
@@ -206,8 +206,8 @@ if (isset($_POST["paytpvToken"])) {
                                     CVV <i class="fa fa-question-circle"></i>
                                 </label>
 
-                                <div id="paycomet-cvc2" style="height: 45px; padding:0px;"></div>
-                                <input paycomet-name="cvc2" paycomet-style="width: 60px; height: 30px; font-size:18px; padding-left:7px; order: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+                                <div id="paycomet-cvc2" style="<?php print $cvc2_div_style ?>"></div>
+                                <input paycomet-name="cvc2" paycomet-style="<?php print $cvc2_input_style ?>" class="form-control" required="" type="text">
 
                             </div>
                         </div>
