@@ -70,10 +70,10 @@
 			$this->disable_offer_savecard = isset($this->settings['disable_offer_savecard']) ? $this->settings['disable_offer_savecard'] : 0;
 			$this->payment_paycomet = isset($this->settings['payment_paycomet']) ? $this->settings['payment_paycomet'] : 0;
 			$this->jet_id = isset($this->settings['jet_id']) ? $this->settings['jet_id'] : '';
-			$this->pan_div_style = isset($this->settings['pan_div_style']) ? $this->settings['pan_div_style'] : 'width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca';
-			$this->pan_input_style = isset($this->settings['pan_input_style']) ? $this->settings['pan_input_style'] : 'height: 30px; font-size:18px; padding-top:2px; border:0px;';
-			$this->cvc2_div_style = isset($this->settings['cvc2_div_style']) ? $this->settings['cvc2_div_style'] : 'height: 34px; padding:0px;';
-			$this->cvc2_input_style = isset($this->settings['cvc2_input_style']) ? $this->settings['cvc2_input_style'] : 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;';
+			$this->pan_div_style = (isset($this->settings['pan_div_style']) && $this->settings['pan_div_style'] != "") ? $this->settings['pan_div_style'] : 'width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca';
+			$this->pan_input_style = (isset($this->settings['pan_input_style']) && $this->settings['pan_input_style'] != "") ? $this->settings['pan_input_style'] : 'height: 30px; font-size:18px; padding-top:2px; border:0px;';
+			$this->cvc2_div_style = (isset($this->settings['cvc2_div_style']) && $this->settings['cvc2_div_style'] != "") ? $this->settings['cvc2_div_style'] : 'height: 34px; padding:0px;';
+			$this->cvc2_input_style = (isset($this->settings['cvc2_input_style']) && $this->settings['cvc2_input_style'] != "") ? $this->settings['cvc2_input_style'] : 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;';
 			$this->iframe_height = isset($this->settings['iframe_height']) ? $this->settings['iframe_height'] : 440;
 			$this->isJetIframeActive = $this->payment_paycomet === '2';
 
@@ -100,7 +100,7 @@
 				// Subscriptions
 				add_action('woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment'), 10, 2 );
 				add_filter('wcs_resubscribe_order_created', array( $this, 'store_renewal_order_id'), 10, 4 );
-				
+
 				//JetIframe integration
 				if ($this->isJetIframeActive) {
 					add_action('woocommerce_review_order_before_submit', array($this, 'addFieldForJetiframeToken'));
@@ -131,7 +131,7 @@
 		public static function get_my_cards_template()
 		{
 			$user_id = get_current_user_id();
-			$saved_cards = Paytpv::savedClientCards($user_id); 
+			$saved_cards = Paytpv::savedClientCards($user_id);
 			$operation = 107;
 
 			// Obtenemos el terminal para el pedido
@@ -220,12 +220,14 @@
 		 * */
 		function payment_fields()
 		{
+
 			if ($this->apiKey != '') {
 				if ( $this->description)
 					echo wpautop( wptexturize( $this->description ) );
-				
 				if ($this->isJetIframeActive) {
-					wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard,'pan_div_style' => $this->pan_div_style,'pan_input_style' => $this->pan_input_style,'cvc2_div_style' => $this->cvc2_div_style,'cvc2_input_style' => $this->cvc2_input_style), '', PAYTPV_PLUGIN_DIR . 'template/' );
+					if (defined('DOING_AJAX') && DOING_AJAX) {
+						wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard,'pan_div_style' => $this->pan_div_style,'pan_input_style' => $this->pan_input_style,'cvc2_div_style' => $this->cvc2_div_style,'cvc2_input_style' => $this->cvc2_input_style), '', PAYTPV_PLUGIN_DIR . 'template/' );
+					}
 				}
 			} else {
 				$this->write_log('Error 1004. ApiKey vacía');
@@ -473,38 +475,6 @@
 					),
 					'desc_tip'    => true
 				),
-				'pan_div_style' => array(
-                    'title' => __( 'PAN Div Style', 'wc_paytpv' ),
-                    'type' => 'text',
-                    'class' => 'jet_id',
-                    'description' => __( 'Modify the style of the PAN Div', 'wc_paytpv' ),
-                    'default' => 'width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca',
-                    'desc_tip'    => true
-                ),
-                'pan_input_style' => array(
-                    'title' => __( 'PAN Input Style', 'wc_paytpv' ),
-                    'type' => 'text',
-                    'class' => 'jet_id',
-                    'description' => __( 'Modify the style of the PAN Input', 'wc_paytpv' ),
-                    'default' => 'height: 30px; font-size:18px; padding-top:2px; border:0px;',
-                    'desc_tip'    => true
-                ),
-                'cvc2_div_style' => array(
-                    'title' => __( 'CVC2 Div Style', 'wc_paytpv' ),
-                    'type' => 'text',
-                    'class' => 'jet_id',
-                    'description' => __( 'Modify the style of the CVC2 Div', 'wc_paytpv' ),
-                    'default' => 'height: 34px; padding:0px;',
-                    'desc_tip'    => true
-                ),
-                'cvc2_input_style' => array(
-                    'title' => __( 'CVC2 Input Style', 'wc_paytpv' ),
-                    'type' => 'text',
-                    'class' => 'jet_id',
-                    'description' => __( 'Modify the style of the CVC2 Input', 'wc_paytpv' ),
-                    'default' => 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;',
-                    'desc_tip'    => true
-                ),
 				'jet_id' => array(
 					'title' => __('JetId', 'wc_paytpv' ),
 					'type' => 'text',
@@ -513,6 +483,38 @@
 					'default' => '',
 					'desc_tip'    => true
 				),
+				'pan_div_style' => array(
+                    'title' => __( 'PAN Div Style', 'wc_paytpv' ),
+                    'type' => 'text',
+                    'class' => 'jet_id',
+                    'description' => __( 'Modify the style of the PAN Div', 'wc_paytpv' ) . ". <br/>" . __( 'Default', 'wc_paytpv' ) . ": height:34px; width: 290px; padding:0px; border: 1px solid #dcd7ca",
+                    'default' => 'height:34px; width: 290px; padding:0px; border: 1px solid #dcd7ca',
+                    'desc_tip'    => true
+                ),
+                'pan_input_style' => array(
+                    'title' => __( 'PAN Input Style', 'wc_paytpv' ),
+                    'type' => 'text',
+                    'class' => 'jet_id',
+                    'description' => __( 'Modify the style of the PAN Input', 'wc_paytpv' ) . ". <br/>" . __( 'Default', 'wc_paytpv' ) . ": <br/>height: 30px; font-size:18px; padding-top:2px; border:0px;",
+                    'default' => 'height: 30px; font-size:18px; padding-top:2px; border:0px;',
+                    'desc_tip'    => true
+                ),
+                'cvc2_div_style' => array(
+                    'title' => __( 'CVC2 Div Style', 'wc_paytpv' ),
+                    'type' => 'text',
+                    'class' => 'jet_id',
+                    'description' => __( 'Modify the style of the CVC2 Div', 'wc_paytpv' ) . ". <br/>" . __( 'Default', 'wc_paytpv' ) . ": <br/>height: 34px; padding:0px;",
+                    'default' => 'height: 34px; padding:0px;',
+                    'desc_tip'    => true
+                ),
+                'cvc2_input_style' => array(
+                    'title' => __( 'CVC2 Input Style', 'wc_paytpv' ),
+                    'type' => 'text',
+                    'class' => 'jet_id',
+                    'description' => __( 'Modify the style of the CVC2 Input', 'wc_paytpv' ) . ". <br/>" . __( 'Default', 'wc_paytpv' ) . ": <br/>height: 30px; width: 60px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;",
+                    'default' => 'height: 30px; width: 60px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;',
+                    'desc_tip'    => true
+                ),
 				'iframe_height' => array(
 					'title' => __( 'Iframe Height (px)', 'wc_paytpv' ),
 					'type' => 'text',
@@ -676,7 +678,7 @@
 
 				$salida = $URLKO; // Default
 
-			
+
 
 				// REST
 				if ($this->apiKey != '') {
@@ -718,7 +720,7 @@
 							if ($apiResponse->errorCode==1004) {
 								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
 							} else {
-								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );					
+								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
 							}
 							wc_add_notice($error_txt, 'error' );
 							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
@@ -1570,7 +1572,7 @@
 					if ($executePurchaseResponse->errorCode==1004) {
 						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
 					} else {
-						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );	
+						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
 					}
 					wc_add_notice($error_txt, 'error' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
@@ -1663,7 +1665,7 @@
 		{
 			$order = new WC_Order( $order_id );
 			$saved_cards = Paytpv::savedActiveCards(get_current_user_id());
-			
+
 			// Tarjetas almacenadas
 			$store_card = (sizeof($saved_cards) == 0) ? "none" : "";
 			print '<form id="form_paytpv" method="post" action="'.add_query_arg(array("wc-api"=> 'woocommerce_' . $this->id)) . '" class="form-inline">
@@ -1675,7 +1677,7 @@
 			foreach ($saved_cards as $card){
 				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
 				print 		"<option value='".$card['id']."'>".$card["paytpv_cc"]. $card_desc. "</option>";
-				
+
 			}
 
             print '      <option value="0">'.__('NEW CARD', 'wc_paytpv' ).'</option></select>

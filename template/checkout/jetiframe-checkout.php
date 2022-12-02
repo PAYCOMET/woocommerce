@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
+                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
                         <option><?php print __('Month', 'wc_paytpv');?></option>
                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -58,7 +58,7 @@
                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                     </select>
 
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
+                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                         <?php

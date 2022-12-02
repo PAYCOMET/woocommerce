@@ -164,7 +164,7 @@ if (isset($_POST["paytpvToken"])) {
                                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                                 <div class="form-inline">
 
-                                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
+                                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
                                         <option><?php print __('Month', 'wc_paytpv');?></option>
                                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -180,7 +180,7 @@ if (isset($_POST["paytpvToken"])) {
                                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                                     </select>
 
-                                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
+                                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
                                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                                         <?php
@@ -214,8 +214,9 @@ if (isset($_POST["paytpvToken"])) {
 
                     </div>
 
-                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>
+                    <br/>
 
+                    <button style="width: 290px;" class="subscribe btn btn-primary btn-block" type="submit" id="jetiframe-button"><?php print __('Save card', 'wc_paytpv');?></button>
                     <script src="https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"></script>
                 </form>
             <?php endif; ?>
