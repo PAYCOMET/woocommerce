@@ -32,8 +32,8 @@
         <div class="form-group">
             <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
             <div class="input-group">
-                <div id="paycomet-pan" style="width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca"></div>
-                <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan">
+                <div id="paycomet-pan" style="<?php print $pan_div_style ?>"></div>   
+                <input paycomet-style="<?php print $pan_input_style ?>" paycomet-name="pan">
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
+                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
                         <option><?php print __('Month', 'wc_paytpv');?></option>
                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -58,7 +58,7 @@
                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                     </select>
 
-                    <select class="form-control" style="width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
+                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                         <?php
@@ -84,9 +84,9 @@
                     CVV <i class="fa fa-question-circle"></i>
                 </label>
 
-                <div id="paycomet-cvc2" style="height: 34px; padding:0px;"></div>
+                <div id="paycomet-cvc2" style="<?php print $cvc2_div_style ?>"></div>
 
-                <input paycomet-name="cvc2" paycomet-style="border:0px; width: 60px; height: 30px; font-size:18px; padding-left:7px; padding-tap:8px; border: 1px solid #dcd7ca;" class="form-control" required="" type="text">
+                <input paycomet-name="cvc2" paycomet-style="<?php print $cvc2_input_style ?>" class="form-control" required="" type="text">
 
             </div>
         </div>
