@@ -1302,20 +1302,28 @@
 					if (is_int($item["quantity"])) {
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = (int) $item["quantity"];
-						$shoppingCartData[$i]["unitPrice"] = number_format($product->get_price() * 100, 0, '.', '');
+						$shoppingCartData[$i]["unitPrice"] = number_format($product->get_regular_price() * 100, 0, '.', '');
 						$shoppingCartData[$i]["name"] = $item["name"];
 						$shoppingCartData[$i]["category"] = $item["category"];
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
-						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
+						$shoppingCartData[$i]["discountValue"] = 0;
+						if($product->get_sale_price() > 0) {
+							$shoppingCartData[$i]["discountValue"] = number_format(($product->get_regular_price()-$product->get_sale_price()) * 100, 0, '.', '');
+						}
+						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					} else {
 						$quantity = (isset($item["quantity"]))?$item["quantity"]:1;
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = 1;
-						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_price() * $quantity) * 100, 0, '.', '');
+						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_regular_price() * $quantity) * 100, 0, '.', '');
 						$shoppingCartData[$i]["name"] = $item["name"];
 						$shoppingCartData[$i]["category"] = $item["category"];
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
-						$amount += $shoppingCartData[$i]["unitPrice"] * $shoppingCartData[$i]["quantity"];
+						$shoppingCartData[$i]["discountValue"] = 0;
+						if($product->get_sale_price() > 0) {
+							$shoppingCartData[$i]["discountValue"] = number_format(($product->get_regular_price()-$product->get_sale_price()) * 100, 0, '.', '');
+						}
+						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					}
 					$i++;
 				}
