@@ -1299,29 +1299,35 @@
 						}
 					}
 
+					if ($product->get_regular_price() == null || $product->get_regular_price() == ""){
+						$price = $product->get_price();
+					}else{
+						$price = $product->get_regular_price();
+					}
+					
 					if (is_int($item["quantity"])) {
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = (int) $item["quantity"];
-						$shoppingCartData[$i]["unitPrice"] = number_format($product->get_regular_price() * 100, 0, '.', '');
+						$shoppingCartData[$i]["unitPrice"] = number_format((int)$price * 100, 0, '.', '');
 						$shoppingCartData[$i]["name"] = $item["name"];
 						$shoppingCartData[$i]["category"] = $item["category"];
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
-							$shoppingCartData[$i]["discountValue"] = number_format(($product->get_regular_price()-$product->get_sale_price()) * 100, 0, '.', '');
+							$shoppingCartData[$i]["discountValue"] = number_format(((int)$price-$product->get_sale_price()) * 100, 0, '.', '');
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					} else {
 						$quantity = (isset($item["quantity"]))?$item["quantity"]:1;
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = 1;
-						$shoppingCartData[$i]["unitPrice"] = number_format(($product->get_regular_price() * $quantity) * 100, 0, '.', '');
+						$shoppingCartData[$i]["unitPrice"] = number_format(((int)$price * $quantity) * 100, 0, '.', '');
 						$shoppingCartData[$i]["name"] = $item["name"];
 						$shoppingCartData[$i]["category"] = $item["category"];
 						$shoppingCartData[$i]["articleType"] = ($item["is_virtual"] == 1)?8 : 5;
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
-							$shoppingCartData[$i]["discountValue"] = number_format(($product->get_regular_price()-$product->get_sale_price()) * 100, 0, '.', '');
+							$shoppingCartData[$i]["discountValue"] = number_format(((int)$price-$product->get_sale_price()) * 100, 0, '.', '');
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					}
@@ -1329,7 +1335,7 @@
 				}
 
 				// Se calculan los impuestos y gastos de envio
-				$tax = number_format($order->get_total() * 100, 0, '.', '') - $amount;
+				$tax = number_format((int)$order->get_total() * 100, 0, '.', '') - $amount;
 				if($tax > 0) {
 					$shoppingCartData[$i]["sku"] = "1";
 					$shoppingCartData[$i]["quantity"] = 1;
@@ -1936,7 +1942,7 @@
 			$currency_iso_code = $arrTerminalData["currency_iso_code"];
 			$term = $arrTerminalData["term"];
 
-			$importe = number_format($amount * 100, 0, '.', '');
+			$importe = number_format((int)$amount * 100, 0, '.', '');
 
 			$paytpv_order_ref = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
 			$transaction_id = $order->get_transaction_id();

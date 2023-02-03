@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.24
+ * Version: 5.25
  * Tested up to: 6.1.1
- * WC tested up to: 7.1.1
+ * WC tested up to: 7.3
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.24' );
+define( 'PAYTPV_VERSION', '5.25' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -61,17 +61,17 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
 }
 
