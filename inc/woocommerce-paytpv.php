@@ -818,7 +818,7 @@
 					$url = $this->get_return_url( $order );
 				// Si es KO
 				} else {
-					$url = $order->get_cancel_order_url_raw();
+					$url = $order->get_cancel_order_url_racheckw();
 				}
 
 				wp_redirect( $url, 303 );
@@ -826,6 +826,7 @@
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
+				
 				switch ($_POST["TransactionType"]){
 					// add_User
 					case 107:
@@ -909,10 +910,14 @@
 							}
 
 							print "PAYCOMET WC OK";
+							
 							exit;
 						} else {
 							print "PAYCOMET WC KO";
-
+							if($_REQUEST[ 'MethodId' ] == 38){
+								$order->update_status( 'cancelled', '', true );
+							}
+						
 							exit;
 						}
 

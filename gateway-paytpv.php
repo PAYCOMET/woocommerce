@@ -5,7 +5,7 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.25
+ * Version: 5.26
  * Tested up to: 6.1.1
  * WC tested up to: 7.3
  * Text Domain: wc_paytpv
@@ -13,7 +13,7 @@
  */
 
 
-define( 'PAYTPV_VERSION', '5.25' );
+define( 'PAYTPV_VERSION', '5.26' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -57,6 +57,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
@@ -91,6 +92,7 @@ function add_paytpv_gateway( $methods ) {
 	$methods[] = 'Paycomet_Giropay';
 	$methods[] = 'Paycomet_Mybank';
 	$methods[] = 'Paycomet_Multibanco';
+	$methods[] = 'Paycomet_Mbway';
 	$methods[] = 'Paycomet_Trustly';
 	$methods[] = 'Paycomet_Przelewy';
 	$methods[] = 'Paycomet_Bancontact';
