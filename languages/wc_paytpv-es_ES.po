@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2023-02-16 07:11+0000\n"
+"PO-Revision-Date: 2023-02-20 08:22+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -942,6 +942,11 @@ msgstr "Año"
 msgid "Yes"
 msgstr "Si"
 
+#: inc/paycomet-mbway.php:15 inc/paycomet-mbway.php:30
+msgid "You can approve the payment request in the app to complete the order."
+msgstr ""
+"Podréis aprobar la solicitud de pago en la app para completar el pedido."
+
 #: template/myaccount/my-cards.php:123
 msgid "You have no active cards."
 msgstr "No tiene tarjetas almacenadas"
@@ -950,7 +955,7 @@ msgstr "No tiene tarjetas almacenadas"
 msgid "You must accept save card to continue"
 msgstr "Debes aceptar guardar tarjeta para continuar"
 
-#: inc/thankyou.php:23
+#: inc/thankyou.php:25
 msgid ""
 "You must confirm the purchase on MB WAY, through the notice or in the "
 "activity area"
@@ -993,10 +998,6 @@ msgstr "Se te redirigirá a Klarna"
 #: inc/paycomet-klarnapayments.php:15 inc/paycomet-klarnapayments.php:32
 msgid "You will be redirected to KlarnaPayments"
 msgstr "Se te redirigirá a KlarnaPayments"
-
-#: inc/paycomet-mbway.php:15 inc/paycomet-mbway.php:30
-msgid "You will be redirected to MB Way"
-msgstr "Se te redirigirá a MB Way"
 
 #: inc/paycomet-mts.php:15 inc/paycomet-mts.php:32
 msgid "You will be redirected to MTS"

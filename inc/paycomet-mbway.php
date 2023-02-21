@@ -12,7 +12,7 @@ class Paycomet_Mbway extends Paycomet_APM
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 38;
         $this->title = __('Pay with MB Way', 'wc_paytpv' );
-        $this->description = __('You will be redirected to MB Way', 'wc_paytpv' );
+        $this->description = __('You can approve the payment request in the app to complete the order.', 'wc_paytpv' );
 
         $this->supports = array();
         
@@ -26,8 +26,8 @@ class Paycomet_Mbway extends Paycomet_APM
         if ($this->title == "Paga con MB Way") {
             $this->title = __( 'Pay with MB Way', 'wc_paytpv' );
         }
-        if ($this->description == "Se te redirigirá a MB Way") {
-            $this->description = __( 'You will be redirected to MB Way', 'wc_paytpv' );
+        if ($this->description == "Podréis aprobar la solicitud de pago en la app para completar el pedido.") {
+            $this->description = __( 'You can approve the payment request in the app to complete the order.', 'wc_paytpv' );
         }
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
