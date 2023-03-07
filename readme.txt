@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 5.26 =
-Añadir método de pago MB way
+Añadir método de pago MB way y Waylet. Mejoras de código.
 
 = 5.25 =
 Mejoras de código.
