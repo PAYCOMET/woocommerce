@@ -73,6 +73,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
 	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-waylet.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
 }
 
@@ -108,6 +109,7 @@ function add_paytpv_gateway( $methods ) {
 	$methods[] = 'Paycomet_Paysafecard';
 	$methods[] = 'Paycomet_Skrill';
 	$methods[] = 'Paycomet_Webmoney';
+	$methods[] = 'Paycomet_Waylet';
 	$methods[] = 'Paycomet_Instantcredit';
 
 	return $methods;
