@@ -57,7 +57,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';

@@ -818,7 +818,7 @@
 					$url = $this->get_return_url( $order );
 				// Si es KO
 				} else {
-					$url = $order->get_cancel_order_url_racheckw();
+					$url = $order->get_cancel_order_url_raw();
 				}
 
 				wp_redirect( $url, 303 );

@@ -34,8 +34,8 @@ add_filter( 'woocommerce_available_payment_gateways', 'available_paycomet_myinst
 function available_paycomet_myinstantcredit_gateway( $available_gateways ) {
     $cfg = get_option('woocommerce_paycomet_instantcredit_settings');
 
-    if ( (isset($cfg['maxCost']) && WC()->cart->total > $cfg['maxCost'] ) || 
-         (isset($cfg['minCost']) && WC()->cart->total < $cfg['minCost']) 
+    if ( (isset($cfg['maxCost']) && isset(WC()->cart) && WC()->cart->total > $cfg['maxCost'] ) || 
+         (isset($cfg['minCost']) && isset(WC()->cart) && WC()->cart->total < $cfg['minCost'])
     ) {
         unset( $available_gateways['paycomet_instantcredit'] );
     }
