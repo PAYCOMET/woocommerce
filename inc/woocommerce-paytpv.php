@@ -225,9 +225,9 @@
 				if ( $this->description)
 					echo wpautop( wptexturize( $this->description ) );
 				if ($this->isJetIframeActive) {
-					if (defined('DOING_AJAX') && DOING_AJAX) {
+					//if (defined('DOING_AJAX') && DOING_AJAX) {
 						wc_get_template( 'checkout/jetiframe-checkout.php', array('jet_id' => $this->jet_id, 'disable_offer_savecard' => $this->disable_offer_savecard,'pan_div_style' => $this->pan_div_style,'pan_input_style' => $this->pan_input_style,'cvc2_div_style' => $this->cvc2_div_style,'cvc2_input_style' => $this->cvc2_input_style), '', PAYTPV_PLUGIN_DIR . 'template/' );
-					}
+					//}
 				}
 			} else {
 				$this->write_log('Error 1004. ApiKey vacía');
@@ -826,6 +826,7 @@
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
+				
 				switch ($_POST["TransactionType"]){
 					// add_User
 					case 107:
@@ -909,10 +910,14 @@
 							}
 
 							print "PAYCOMET WC OK";
+							
 							exit;
 						} else {
 							print "PAYCOMET WC KO";
-
+							if($_REQUEST[ 'MethodId' ] == 38){
+								$order->update_status( 'cancelled', '', true );
+							}
+						
 							exit;
 						}
 

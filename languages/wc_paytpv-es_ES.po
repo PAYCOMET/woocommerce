@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2022-12-02 09:18+0000\n"
+"PO-Revision-Date: 2023-03-06 10:28+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.6.1; wp-5.9.2"
+"X-Loco-Version: 2.6.3; wp-6.1.1"
 
 #: inc/woocommerce-paytpv.php:602
 msgid "+ Add Terminal"
@@ -222,16 +222,16 @@ msgstr ""
 "no se puede examinar, escanear, utilizar o modificar por cualquier externo "
 "que obtenga acceso a información confidencial."
 
-#: inc/paycomet-apm.php:125 inc/woocommerce-paytpv.php:170
+#: inc/paycomet-apm.php:132 inc/woocommerce-paytpv.php:170
 #: inc/woocommerce-paytpv.php:723 inc/woocommerce-paytpv.php:730
-#: inc/woocommerce-paytpv.php:1407 inc/woocommerce-paytpv.php:1478
-#: inc/woocommerce-paytpv.php:1542 inc/woocommerce-paytpv.php:1575
+#: inc/woocommerce-paytpv.php:1426 inc/woocommerce-paytpv.php:1497
+#: inc/woocommerce-paytpv.php:1561 inc/woocommerce-paytpv.php:1594
 msgid "An error has occurred. Please verify the data entered and try again"
 msgstr ""
 "Se ha producido un error. Por favor, verifica los datos introducidos y "
 "prueba de nuevo."
 
-#: inc/paycomet-apm.php:123
+#: inc/paycomet-apm.php:130
 #| msgid "An error has occurred"
 msgid "An error has occurred: "
 msgstr "Se he producido un error: "
@@ -283,15 +283,15 @@ msgstr "Antes del formulario de variaciones"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: inc/woocommerce-paytpv.php:1708
+#: inc/woocommerce-paytpv.php:1727
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: inc/woocommerce-paytpv.php:1674 template/checkout/jetiframe-checkout.php:10
+#: inc/woocommerce-paytpv.php:1693 template/checkout/jetiframe-checkout.php:10
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1700 template/checkout/jetiframe-checkout.php:98
+#: inc/woocommerce-paytpv.php:1719 template/checkout/jetiframe-checkout.php:98
 #: template/myaccount/my-cards.php:136
 msgid ""
 "Card data is protected by the Payment Card Industry Data Security Standard "
@@ -368,11 +368,11 @@ msgstr "Habilitar/Deshabilitar"
 msgid "Encryption and Data Storage"
 msgstr "Cifrado y almacenamiento de datos"
 
-#: inc/paycomet-apm.php:131 inc/woocommerce-paytpv.php:168
-#: inc/woocommerce-paytpv.php:181 inc/woocommerce-paytpv.php:233
+#: inc/paycomet-apm.php:138 inc/woocommerce-paytpv.php:168
+#: inc/woocommerce-paytpv.php:181 inc/woocommerce-paytpv.php:234
 #: inc/woocommerce-paytpv.php:721 inc/woocommerce-paytpv.php:735
-#: inc/woocommerce-paytpv.php:1405 inc/woocommerce-paytpv.php:1418
-#: inc/woocommerce-paytpv.php:1476 inc/woocommerce-paytpv.php:1573
+#: inc/woocommerce-paytpv.php:1424 inc/woocommerce-paytpv.php:1437
+#: inc/woocommerce-paytpv.php:1495 inc/woocommerce-paytpv.php:1592
 msgid "Error: "
 msgstr "Error: "
 
@@ -505,7 +505,7 @@ msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
-#: inc/woocommerce-paytpv.php:1683 template/checkout/jetiframe-checkout.php:20
+#: inc/woocommerce-paytpv.php:1702 template/checkout/jetiframe-checkout.php:20
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
@@ -548,7 +548,7 @@ msgstr "Estilo PAN Input"
 msgid "Password"
 msgstr "Contraseña"
 
-#: inc/woocommerce-paytpv.php:1689 inc/woocommerce-paytpv.php:1737
+#: inc/woocommerce-paytpv.php:1708 inc/woocommerce-paytpv.php:1756
 msgid "Pay"
 msgstr "Pagar"
 
@@ -596,6 +596,10 @@ msgstr "Paga con Klarna"
 #: inc/paycomet-klarnapayments.php:14 inc/paycomet-klarnapayments.php:29
 msgid "Pay with KlarnaPayments"
 msgstr "Paga con KlarnaPayments"
+
+#: inc/paycomet-mbway.php:14 inc/paycomet-mbway.php:27
+msgid "Pay with MB Way"
+msgstr "Paga con MB Way"
 
 #: inc/paycomet-mts.php:14 inc/paycomet-mts.php:29
 msgid "Pay with MTS"
@@ -645,6 +649,10 @@ msgstr "Paga con Tele2"
 msgid "Pay with Trustly"
 msgstr "Paga con Trustly"
 
+#: inc/paycomet-waylet.php:14 inc/paycomet-waylet.php:30
+msgid "Pay with Waylet"
+msgstr "Paga con Waylet"
+
 #: inc/paycomet-webmoney.php:14 inc/paycomet-webmoney.php:29
 msgid "Pay with WebMoney"
 msgstr "Paga con WebMoney"
@@ -661,7 +669,7 @@ msgstr "PAYCOMET"
 msgid "Paycomet (Full Screen)"
 msgstr "Paycomet (Pantalla Completa)"
 
-#: gateway-paytpv.php:172
+#: gateway-paytpv.php:176
 #, php-format
 #| msgid "PAYCOMET Error: You must define the API Key <a href=\"%s\">here</a>."
 msgid ""
@@ -672,13 +680,14 @@ msgstr "PAYCOMET Error 1004: Debes definir la API Key <a href=\"%s\">aquí</a>."
 #: inc/paycomet-bizum.php:12 inc/paycomet-eps.php:12
 #: inc/paycomet-giropay.php:12 inc/paycomet-ideal.php:12
 #: inc/paycomet-instantcredit.php:117 inc/paycomet-klarna.php:12
-#: inc/paycomet-klarnapayments.php:12 inc/paycomet-mts.php:12
-#: inc/paycomet-multibanco.php:12 inc/paycomet-mybank.php:12
-#: inc/paycomet-paypal.php:12 inc/paycomet-paysafecard.php:12
-#: inc/paycomet-paysera.php:12 inc/paycomet-postfinance.php:12
-#: inc/paycomet-przelewy.php:12 inc/paycomet-qiwi.php:12
-#: inc/paycomet-skrill.php:12 inc/paycomet-tele2.php:12
-#: inc/paycomet-trustly.php:12 inc/paycomet-webmoney.php:12
+#: inc/paycomet-klarnapayments.php:12 inc/paycomet-mbway.php:12
+#: inc/paycomet-mts.php:12 inc/paycomet-multibanco.php:12
+#: inc/paycomet-mybank.php:12 inc/paycomet-paypal.php:12
+#: inc/paycomet-paysafecard.php:12 inc/paycomet-paysera.php:12
+#: inc/paycomet-postfinance.php:12 inc/paycomet-przelewy.php:12
+#: inc/paycomet-qiwi.php:12 inc/paycomet-skrill.php:12
+#: inc/paycomet-tele2.php:12 inc/paycomet-trustly.php:12
+#: inc/paycomet-waylet.php:12 inc/paycomet-webmoney.php:12
 #: inc/paycomet-yandex.php:12
 #, php-format
 msgid "PAYCOMET general data must be configured <a href=\"%s\">here</a>."
@@ -810,7 +819,7 @@ msgstr "Eliminar"
 msgid "Save card"
 msgstr "Guardar Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1700 template/checkout/jetiframe-checkout.php:98
+#: inc/woocommerce-paytpv.php:1719 template/checkout/jetiframe-checkout.php:98
 msgid "Save card for future purchases"
 msgstr "Guardar tarjeta para futuras compras"
 
@@ -867,14 +876,14 @@ msgstr "Terminales"
 msgid "Test"
 msgstr "Test"
 
-#: inc/woocommerce-paytpv.php:1649
+#: inc/woocommerce-paytpv.php:1668
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1652
+#: inc/woocommerce-paytpv.php:1671
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
@@ -925,7 +934,7 @@ msgstr "Esto determina el texto que el usuaurio ve en el proceso de compra"
 msgid "Title"
 msgstr "Título"
 
-#: inc/woocommerce-paytpv.php:1690
+#: inc/woocommerce-paytpv.php:1709
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
@@ -938,6 +947,11 @@ msgstr "Año"
 msgid "Yes"
 msgstr "Si"
 
+#: inc/paycomet-mbway.php:15 inc/paycomet-mbway.php:30
+msgid "You can approve the payment request in the app to complete the order."
+msgstr ""
+"Podréis aprobar la solicitud de pago en la app para completar el pedido."
+
 #: template/myaccount/my-cards.php:123
 msgid "You have no active cards."
 msgstr "No tiene tarjetas almacenadas"
@@ -945,6 +959,14 @@ msgstr "No tiene tarjetas almacenadas"
 #: template/myaccount/my-cards.php:140
 msgid "You must accept save card to continue"
 msgstr "Debes aceptar guardar tarjeta para continuar"
+
+#: inc/thankyou.php:32
+msgid ""
+"You must confirm the purchase on MB WAY, through the notice or in the "
+"activity area"
+msgstr ""
+"Debes confirmar la compra en MB WAY, a través del aviso o en el área de "
+"actividad"
 
 #: inc/woocommerce-paytpv.php:215
 msgid "You must define at least one terminal"
@@ -1029,6 +1051,10 @@ msgstr "Se te redirigirá a Tele2"
 #: inc/paycomet-trustly.php:15 inc/paycomet-trustly.php:32
 msgid "You will be redirected to Trustly"
 msgstr "Se te redirigirá a Trustly"
+
+#: inc/paycomet-waylet.php:15 inc/paycomet-waylet.php:33
+msgid "You will be redirected to Waylet"
+msgstr "Se te redirigirá a Waylet"
 
 #: inc/paycomet-webmoney.php:15 inc/paycomet-webmoney.php:32
 msgid "You will be redirected to WebMoney"

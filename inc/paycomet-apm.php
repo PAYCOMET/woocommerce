@@ -113,6 +113,13 @@ class Paycomet_APM extends WC_Payment_Gateway
             if($apiResponse->errorCode == '0') {
 
                 update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
+
+
+                // Multibanco mostrarmos en el pedido los datos
+                if (isset($apiResponse->methodData->entityNumber) && isset($apiResponse->methodData->referenceNumber)) {
+                    update_post_meta( ( int ) $order->get_id(), 'entityNumber', $apiResponse->methodData->entityNumber);
+                    update_post_meta( ( int ) $order->get_id(), 'referenceNumber', $apiResponse->methodData->referenceNumber);
+                }
                 
                 return array(
                     'result' => 'success',
