@@ -1894,8 +1894,8 @@
 				}
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-					update_post_meta($order->get_id(), 'PayTPV_Referencia', $result['DS_MERCHANT_ORDER']);
-					update_post_meta($order->get_id(), '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);
+					update_post_meta($order->get_id(), 'PayTPV_Referencia', $executePurchaseResponse->order);
+					update_post_meta($order->get_id(), '_transaction_id', $executePurchaseResponse->authCode);
 					update_post_meta($order->get_id(), 'PayTPV_IdUser', $payptv_iduser);
 					update_post_meta($order->get_id(), 'PayTPV_TokenUser', $payptv_tokenuser);
 
