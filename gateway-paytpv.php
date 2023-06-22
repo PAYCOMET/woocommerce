@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.26
+ * Version: 5.27
  * Tested up to: 6.1.1
- * WC tested up to: 7.4
+ * WC tested up to: 7.8
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.26' );
+define( 'PAYTPV_VERSION', '5.27' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -34,6 +34,12 @@ add_action( 'admin_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resource
 add_action( 'wp_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources' ) );
 
 add_action( 'woocommerce_before_my_account', array( 'woocommerce_paytpv', 'get_my_cards_template' ) );
+
+add_action( 'before_woocommerce_init', function() {
+	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+} );
 
 function woocommerce_paytpv_init() {
 
