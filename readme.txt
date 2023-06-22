@@ -2,9 +2,9 @@
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 6.1.1
+Tested up to: 6.2.2
 Requires PHP: 5.6
-Stable tag: 5.26
+Stable tag: 5.27
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 5.27 =
+Compatibilidad con HPOS.
 
 = 5.26 =
 Añadir método de pago Waylet. Mejoras de código.
