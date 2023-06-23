@@ -112,7 +112,7 @@ class Paycomet_APM extends WC_Payment_Gateway
             );
 
             if($apiResponse->errorCode == '0') {
-                if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                     $order->add_meta_data('PayTPV_methodData', $apiResponse->methodData);
                     $order->save();
                 } else {
@@ -122,7 +122,7 @@ class Paycomet_APM extends WC_Payment_Gateway
 
                 // Multibanco mostrarmos en el pedido los datos
                 if (isset($apiResponse->methodData->entityNumber) && isset($apiResponse->methodData->referenceNumber)) {
-                    if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                    if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                         $order->add_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
                         $order->add_meta_data('referenceNumber', $apiResponse->methodData->referenceNumber);
                         $order->save();
