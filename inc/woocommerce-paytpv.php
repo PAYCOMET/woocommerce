@@ -3,6 +3,7 @@
 	 * Pasarela PAYCOMET Gateway Class
 	 *
 	 */
+	use Automattic\WooCommerce\Utilities\OrderUtil;
 	class woocommerce_paytpv extends WC_Payment_Gateway
 	{
 
@@ -806,14 +807,26 @@
 				// Si hay challenge redirigimos al cliente a la URL
 				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {
 
-					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+						$order->add_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+						$order->add_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						$order->save();
+					} else {
+						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+					}
 
 					$url = urldecode($charge[ 'DS_CHALLENGE_URL' ]);
 				// Si es OK
 				} else if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-					update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-					update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+						$order->add_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+						$order->add_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						$order->save();
+					} else {
+						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+					}
 
 					$url = $this->get_return_url( $order );
 				// Si es KO
@@ -862,9 +875,10 @@
 						$currency_iso_code = $arrTerminalData["currency_iso_code"];
 						$term = $arrTerminalData["term"];
 						$pass = $arrTerminalData["pass"];
-						$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
-						$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
-
+						$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
+						$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
+						
+						
 						$mensaje = $this->clientcode .
 								$term .
 								$_REQUEST[ 'TransactionType' ] .
@@ -877,15 +891,23 @@
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK' && ($_REQUEST[ 'NotificationHash' ] == $localSign)) {
 							// Para las operaciones con tarjeta.
 							if (isset($idUser) && $_REQUEST[ 'MethodId' ]==1){
-								$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
+
+								$save_card = $order->get_meta('paytpv_savecard', true );
+							
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
 									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
 								}
 
-								update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
-								update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+									$order->add_meta_data('PayTPV_IdUser', $idUser );
+									$order->add_meta_data('PayTPV_TokenUser', $tokenUser );
+									$order->save();
+								} else {
+									update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
+									update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+								}
 
 								// Si es de una suscripcion actualizamos el token del parent order para usarlo en los pagos sucesivos
 								if ( class_exists( 'WC_Subscriptions_Renewal_Order' )) {
@@ -893,8 +915,14 @@
 										$subscriptions = wcs_get_subscriptions_for_renewal_order($order);
 										$subscription  = array_pop( $subscriptions );
 										if ($subscription && $subscription->get_parent_id()) {
-											update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_IdUser', $idUser);
-											update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_TokenUser', $tokenUser);
+											if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+												$order->add_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
+												$order->add_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+												$order->save();
+											} else {
+												update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_IdUser', $idUser);
+												update_post_meta((int) $subscription->get_parent_id(), 'PayTPV_TokenUser', $tokenUser);
+											}
 										}
 									}
 								}
@@ -903,10 +931,20 @@
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
 							$order->payment_complete($_REQUEST[ 'AuthCode' ]);
 
-							update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$order->add_meta_data('PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+								$order->save();
+							} else {
+								update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+							}
 
 							if ($_REQUEST[ 'MethodName' ]) {
-								update_post_meta( ( int ) $order->get_id(), 'PayTPV_MethodName', $_REQUEST[ 'MethodName' ] );
+								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+									$order->add_meta_data('PayTPV_MethodName', $_REQUEST[ 'MethodName' ] );
+									$order->save();
+								} else {
+									update_post_meta( ( int ) $order->get_id(), 'PayTPV_MethodName', $_REQUEST[ 'MethodName' ] );
+								}
 							}
 
 							print "PAYCOMET WC OK";
@@ -930,7 +968,12 @@
 
 			// Save Card in execute_purchase
 			if ( $_REQUEST[ 'tpvLstr' ] == 'savecard' ) {//NOTIFICACIÓN
-				update_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', $_POST["paytpv_agree"] );
+				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order->add_meta_data('paytpv_savecard', $_POST["paytpv_agree"] );
+					$order->save();
+				} else {
+					update_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', $_POST["paytpv_agree"] );
+				}
 
 				exit;
 			}
@@ -967,7 +1010,9 @@
 		{
 			// Si llega referencia obtenemos la ip
 			if ($ref !== false) {
-				$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
+
+				$DS_ORIGINAL_IP = $order->get_meta('_customer_ip_address', true );
+		
 				if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
 					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
 				}
@@ -1508,9 +1553,16 @@
 
 			$savecard_jetiframe = (isset($_POST["savecard_jetiframe"]))?1:0;
 
-			update_post_meta((int) $order->get_id(), 'paytpv_savecard', $savecard_jetiframe);
-			update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
-			update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+			if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+				$order->add_meta_data('paytpv_savecard', $savecard_jetiframe);
+				$order->add_meta_data('PayTPV_IdUser', $idUser);
+				$order->add_meta_data('PayTPV_TokenUser', $tokenUser);
+				$order->save();
+			} else {
+				update_post_meta((int) $order->get_id(), 'paytpv_savecard', $savecard_jetiframe);
+				update_post_meta((int) $order->get_id(), 'PayTPV_IdUser', $idUser);
+				update_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', $tokenUser);
+			}
 
 			$secure_pay = 1;
 
@@ -1827,8 +1879,8 @@
 				$paytpv_order_ref = $order->get_id();
 				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
-				$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
-				$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
+				$payptv_iduser = $order->get_meta('PayTPV_IdUser', true );
+				$payptv_tokenuser = $order->get_meta('PayTPV_TokenUser', true );
 
 				$ip = $this->getIp();
 
@@ -1894,10 +1946,18 @@
 				}
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-					update_post_meta($order->get_id(), 'PayTPV_Referencia', $result['DS_MERCHANT_ORDER']);
-					update_post_meta($order->get_id(), '_transaction_id', $result['DS_MERCHANT_AUTHCODE']);
-					update_post_meta($order->get_id(), 'PayTPV_IdUser', $payptv_iduser);
-					update_post_meta($order->get_id(), 'PayTPV_TokenUser', $payptv_tokenuser);
+					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+						$order->add_meta_data('PayTPV_Referencia', $executePurchaseResponse->order);
+						$order->add_meta_data('_transaction_id', $executePurchaseResponse->authCode);
+						$order->add_meta_data('PayTPV_IdUser', $payptv_iduser);
+						$order->add_meta_data('PayTPV_TokenUser', $payptv_tokenuser);
+						$order->save();
+					} else {
+						update_post_meta($order->get_id(), 'PayTPV_Referencia', $executePurchaseResponse->order);
+						update_post_meta($order->get_id(), '_transaction_id', $executePurchaseResponse->authCode);
+						update_post_meta($order->get_id(), 'PayTPV_IdUser', $payptv_iduser);
+						update_post_meta($order->get_id(), 'PayTPV_TokenUser', $payptv_tokenuser);
+					}
 
 					WC_Subscriptions_Manager::process_subscription_payments_on_order($order);
 				}
@@ -1949,7 +2009,8 @@
 
 			$importe = number_format((float)$amount * 100, 0, '.', '');
 
-			$paytpv_order_ref = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
+			$paytpv_order_ref = $order->get_meta('PayTPV_Referencia', true);
+
 			$transaction_id = $order->get_transaction_id();
 
 			// REST
