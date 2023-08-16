@@ -178,7 +178,11 @@ class Paycomet_APM extends WC_Payment_Gateway
         $userTerminal = $paytpvBase->paytpv_terminals[0]['term'];
         $currency = $paytpvBase->paytpv_terminals[0]['moneda'] ?? 'EUR';
         $importe = number_format($amount * 100, 0, '.', '');
-        $orderReference = $order->get_meta('PayTPV_Referencia', true);
+        if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+            $orderReference = $order->get_meta('PayTPV_Referencia', true);
+        } else {
+            $orderReference = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
+        }
         $transaction_id = $order->get_transaction_id();
         $notifyDirectPayment = 2; // No notificar HTTP
 
