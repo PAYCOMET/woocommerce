@@ -839,7 +839,7 @@
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
-				
+
 				switch ($_POST["TransactionType"]){
 					// add_User
 					case 107:
@@ -882,10 +882,6 @@
 							$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
 							$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
 						}
-	
-					
-						
-						
 						$mensaje = $this->clientcode .
 								$term .
 								$_REQUEST[ 'TransactionType' ] .
@@ -903,8 +899,8 @@
 								} else {
 									$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
 								}
-								
-							
+
+
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
@@ -959,14 +955,14 @@
 							}
 
 							print "PAYCOMET WC OK";
-							
+
 							exit;
 						} else {
 							print "PAYCOMET WC KO";
 							if($_REQUEST[ 'MethodId' ] == 38){
 								$order->update_status( 'cancelled', '', true );
 							}
-						
+
 							exit;
 						}
 
@@ -1026,8 +1022,8 @@
 				} else {
 					$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
 				}
-				
-		
+
+
 				if (strpos($DS_ORIGINAL_IP, ":") !== false ) {
 					$DS_ORIGINAL_IP = $_SERVER['REMOTE_ADDR'];
 				}
@@ -1369,7 +1365,7 @@
 					}else{
 						$price = (float)$product->get_regular_price();
 					}
-					
+
 					if (is_int($item["quantity"])) {
 						$shoppingCartData[$i]["sku"] = $product_id;
 						$shoppingCartData[$i]["quantity"] = (int) $item["quantity"];
@@ -1899,9 +1895,9 @@
 					$payptv_tokenuser = $order->get_meta('PayTPV_TokenUser', true );
 				} else {
 					$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
-					$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );	
+					$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
 				}
-				
+
 
 				$ip = $this->getIp();
 
@@ -2033,9 +2029,9 @@
 			if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 				$paytpv_order_ref = $order->get_meta('PayTPV_Referencia', true);
 			} else {
-				$paytpv_order_ref = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);	
+				$paytpv_order_ref = get_post_meta((int) $order->get_id(), 'PayTPV_Referencia', true);
 			}
-			
+
 
 			$transaction_id = $order->get_transaction_id();
 
