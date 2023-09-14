@@ -111,14 +111,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                 1
             );
 
-            if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                $order->add_meta_data('ErrorID', $apiResponse->errorCode );
-                $order->save();
-            } else {
-                update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
-            }
-
-            if($apiResponse->errorCode == '0') {
+            if ($apiResponse->errorCode == '0') {
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                     $order->add_meta_data('PayTPV_methodData', $apiResponse->methodData);
                     $order->save();
@@ -138,12 +131,19 @@ class Paycomet_APM extends WC_Payment_Gateway
                         update_post_meta( ( int ) $order->get_id(), 'referenceNumber', $apiResponse->methodData->referenceNumber);
                     }
                 }
-                
+
                 return array(
                     'result' => 'success',
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
+                if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                    $order->add_meta_data('ErrorID', $apiResponse->errorCode );
+                    $order->save();
+                } else {
+                    update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
+                }
+
                 return array(
                     'result' => 'success',
                     'redirect'	=> $this->get_return_url($order)
