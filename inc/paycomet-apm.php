@@ -143,6 +143,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                 } else {
                     update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
                 }
+                $order->update_status( 'failed' );
 
                 return array(
                     'result' => 'success',

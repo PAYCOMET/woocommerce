@@ -724,6 +724,7 @@
 							} else {
 								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
 							}
+							$order->update_status( 'failed' );
 						}
 
 					} catch (exception $e){
@@ -796,6 +797,7 @@
 							} else {
 								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
 							}
+							$order->update_status( 'failed' );
 						}
 
 					} catch (Exception $e) {
@@ -805,7 +807,7 @@
 				}  else {
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
-					$url = $this->get_return_url( $order );
+					$url = $URLKO;
 				}
 
 				// Si hay challenge redirigimos al cliente a la URL
@@ -970,7 +972,6 @@
 									update_post_meta( ( int ) $order->get_id(), 'ErrorID', $_REQUEST[ 'ErrorID' ] );
 								}
 							}
-							// Cambiamos a fallido
 							$order->update_status( 'failed' );
 							print "PAYCOMET WC KO";
 							if($_REQUEST[ 'MethodId' ] == 38){
@@ -1498,6 +1499,7 @@
 						} else {
 							update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
 						}
+						$order->update_status( 'failed' );
 
 						if ($apiResponse->errorCode==1004) {
 							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
@@ -1673,7 +1675,7 @@
 					} else {
 						update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
 					}
-
+					$order->update_status( 'failed' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 					$urlReturn = $URLKO;
 				}

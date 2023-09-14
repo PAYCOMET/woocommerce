@@ -59,7 +59,7 @@ function wpdesk_set_completed_for_paid_orders( $order_id ) {
 
 function hwn_add_thankyou_error($order_id) {
     $order = wc_get_order( $order_id );
-    // Si tiene asciado error
+    // Si tiene asociado error
     if ($order->get_meta("ErrorID") && $order->get_meta("ErrorID") > 0) {
         // Error por defecto
         $error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
