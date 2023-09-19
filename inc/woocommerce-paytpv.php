@@ -675,7 +675,7 @@
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$URLKO = $order->get_cancel_order_url_raw();
+				$URLKO = $this->get_return_url( $order );
 
 				$salida = $URLKO; // Default
 
@@ -718,13 +718,13 @@
 						if ($apiResponse->errorCode==0) {
 							$salida = $apiResponse->challengeUrl;
 						} else {
-							if ($apiResponse->errorCode==1004) {
-								$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$order->add_meta_data('ErrorID', $apiResponse->errorCode );
+								$order->save();
 							} else {
-								$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
 							}
-							wc_add_notice($error_txt, 'error' );
-							$this->write_log('Error ' . $apiResponse->errorCode . " en form");
+							$order->update_status( 'failed' );
 						}
 
 					} catch (exception $e){
@@ -733,8 +733,6 @@
 					}
 
 				} else {
-					wc_add_notice(__( 'Error: ', 'wc_paytpv' ) . "1004", 'error' );
-					$this->write_log('Error 1004. ApiKey vacía');
 					$salida = $URLKO;
 				}
 
@@ -750,7 +748,7 @@
 				if ($this->apiKey != '') {
 
 					$URLOK = $this->get_return_url($order);
-					$URLKO = $order->get_cancel_order_url_raw();
+					$URLKO = $this->get_return_url($order);
 
 					$methodId = 1;
 					$scoring = 0;
@@ -791,7 +789,14 @@
 						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
 
 						if ($executePurchaseResponse->errorCode > 0) {
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$order->add_meta_data('ErrorID', $executePurchaseResponse->errorCode );
+								$order->save();
+							} else {
+								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
+							}
 							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
+							$order->update_status( 'failed' );
 						}
 
 					} catch (Exception $e) {
@@ -801,7 +806,7 @@
 				}  else {
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
-					$this->write_log('Error 1004. ApiKey vacía');
+					$url = $URLKO;
 				}
 
 				// Si hay challenge redirigimos al cliente a la URL
@@ -822,16 +827,18 @@
 					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 						$order->add_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 						$order->add_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						$order->add_meta_data('ErrorID', 0 );
 						$order->save();
 					} else {
 						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0);
 					}
 
 					$url = $this->get_return_url( $order );
 				// Si es KO
 				} else {
-					$url = $order->get_cancel_order_url_raw();
+					$url = $this->get_return_url( $order );
 				}
 
 				wp_redirect( $url, 303 );
@@ -882,6 +889,7 @@
 							$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
 							$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
 						}
+
 						$mensaje = $this->clientcode .
 								$term .
 								$_REQUEST[ 'TransactionType' ] .
@@ -899,7 +907,6 @@
 								} else {
 									$save_card = get_post_meta( ( int ) $order->get_id(), 'paytpv_savecard', true );
 								}
-
 
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
@@ -940,9 +947,11 @@
 
 							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 								$order->add_meta_data('PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+								$order->add_meta_data('ErrorID', 0 );
 								$order->save();
 							} else {
 								update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+								update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0 );
 							}
 
 							if ($_REQUEST[ 'MethodName' ]) {
@@ -958,6 +967,16 @@
 
 							exit;
 						} else {
+							if (isset($_REQUEST['ErrorID']) && $_REQUEST['ErrorID']>0) {
+								$order->update_status( 'failed' );
+								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+									$order->add_meta_data('ErrorID', $_REQUEST[ 'ErrorID' ] );
+									$order->save();
+								} else {
+									update_post_meta( ( int ) $order->get_id(), 'ErrorID', $_REQUEST[ 'ErrorID' ] );
+								}
+							}
+
 							print "PAYCOMET WC KO";
 							if($_REQUEST[ 'MethodId' ] == 38){
 								$order->update_status( 'cancelled', '', true );
@@ -1441,7 +1460,8 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $order->get_cancel_order_url_raw();
+			$URLKO = $this->get_return_url( $order );
+
 
 			// REST
 			if ($this->apiKey != '') {
@@ -1520,7 +1540,7 @@
 			$ip = $this->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$URLOK = $this->get_return_url($order);
-			$URLKO = $order->get_cancel_order_url_raw();
+			$URLKO = $this->get_return_url($order);
 
 
 			// With token Card
@@ -1545,17 +1565,6 @@
 						'ES',
 						$notify
 					);
-
-					if ($addUserResponse->errorCode>0) {
-						if ($addUserResponse->errorCode==1004) {
-							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
-						} else {
-							$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
-						}
-						wc_add_notice($error_txt, 'error' );
-						$this->write_log('Error ' . $addUserResponse->errorCode . " en addUser");
-						return "error";
-					}
 
 					$idUser = $addUserResponse->idUser;
 					$tokenUser = $addUserResponse->tokenUser;
@@ -1595,9 +1604,7 @@
 				if ($dcc == 1) {
 
 					$OPERATION = 116;
-
 					try {
-
 						$apiRest = new PaycometApiRest($this->apiKey);
 						$executePurchaseResponse = $apiRest->form(
                             $OPERATION,
@@ -1619,44 +1626,52 @@
                                 'urlKo' => $URLKO
                             ]
                         );
-
 					} catch (exception $e){
 						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
 						wc_add_notice($error_txt, 'error' );
 					}
-				}else{
-					$apiRest = new PaycometApiRest($this->apiKey);
-					$executePurchaseResponse = $apiRest->executePurchase(
-						$term,
-						$MERCHANT_ORDER,
-						$importe,
-						$currency,
-						$methodId,
-						$ip,
-						$secure_pay,
-						$idUser,
-						$tokenUser,
-						$URLOK,
-						$URLKO,
-						$scoring,
-						'',
-						'',
-						$userInteraction,
-						[],
-						'',
-						'',
-						$merchantData,
-						$notifyDirectPayment
-					);
-				}
-				$urlReturn = $URLOK;
-				if ($executePurchaseResponse->errorCode>0) {
-					if ($executePurchaseResponse->errorCode==1004) {
-						$error_txt = __( 'Error: ', 'wc_paytpv' ) . $executePurchaseResponse->errorCode;
-					} else {
+				} else {
+					try {
+						$apiRest = new PaycometApiRest($this->apiKey);
+						$executePurchaseResponse = $apiRest->executePurchase(
+							$term,
+							$MERCHANT_ORDER,
+							$importe,
+							$currency,
+							$methodId,
+							$ip,
+							$secure_pay,
+							$idUser,
+							$tokenUser,
+							$URLOK,
+							$URLKO,
+							$scoring,
+							'',
+							'',
+							$userInteraction,
+							[],
+							'',
+							'',
+							$merchantData,
+							$notifyDirectPayment
+						);
+					} catch (exception $e){
 						$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+						wc_add_notice($error_txt, 'error' );
 					}
-					wc_add_notice($error_txt, 'error' );
+				}
+
+				$urlReturn = $URLOK;
+
+				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order->add_meta_data('ErrorID', $executePurchaseResponse->errorCode );
+					$order->save();
+				} else {
+					update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
+				}
+
+				if ($executePurchaseResponse->errorCode>0) {
+					$order->update_status( 'failed' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 					$urlReturn = $URLKO;
 				}

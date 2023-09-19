@@ -83,7 +83,7 @@ class Paycomet_APM extends WC_Payment_Gateway
             $secure_pay = 1;
 
             $URLOK = $this->get_return_url($order);
-            $URLKO = $order->get_cancel_order_url_raw();
+            $URLKO = $this->get_return_url($order);
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
             $ip = $paytpvBase->getIp();
@@ -111,7 +111,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                 1
             );
 
-            if($apiResponse->errorCode == '0') {
+            if ($apiResponse->errorCode == '0') {
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                     $order->add_meta_data('PayTPV_methodData', $apiResponse->methodData);
                     $order->save();
@@ -131,24 +131,30 @@ class Paycomet_APM extends WC_Payment_Gateway
                         update_post_meta( ( int ) $order->get_id(), 'referenceNumber', $apiResponse->methodData->referenceNumber);
                     }
                 }
-                
+
                 return array(
                     'result' => 'success',
                     'redirect'	=> $apiResponse->challengeUrl
                 );
             } else {
-                if ($apiResponse->errorCode==1004) {
-                    wc_add_notice(__( 'An error has occurred: ', 'wc_paytpv' ) . $apiResponse->errorCode, 'error' );
+                if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                    $order->add_meta_data('ErrorID', $apiResponse->errorCode );
+                    $order->save();
                 } else {
-				    wc_add_notice(__( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' ));
+                    update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
                 }
-                $paytpvBase->write_log('Error ' . $apiResponse->errorCode . " en APM executePurchase");
-                return;
+                $order->update_status( 'failed' );
+
+                return array(
+                    'result' => 'success',
+                    'redirect'	=> $this->get_return_url($order)
+                );
             }
         } else {
-            $error_txt = __( 'Error: ', 'wc_paytpv' ) . "1004";
-            wc_add_notice($error_txt, 'error');
-            return;
+            return array(
+                'result' => 'success',
+                'redirect'	=> $this->get_return_url($order)
+            );
         }
     }
 
