@@ -675,7 +675,7 @@
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$URLKO = $this->get_return_url($order);
+				$URLKO = $this->get_return_url( $order );
 
 				$salida = $URLKO; // Default
 
@@ -789,14 +789,13 @@
 						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
 
 						if ($executePurchaseResponse->errorCode > 0) {
-							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
-						} else {
 							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 								$order->add_meta_data('ErrorID', $executePurchaseResponse->errorCode );
 								$order->save();
 							} else {
 								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
 							}
+							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 							$order->update_status( 'failed' );
 						}
 
@@ -828,10 +827,12 @@
 					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 						$order->add_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 						$order->add_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						$order->add_meta_data('ErrorID', 0 );
 						$order->save();
 					} else {
 						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
 						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
+						update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0);
 					}
 
 					$url = $this->get_return_url( $order );
@@ -946,9 +947,11 @@
 
 							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 								$order->add_meta_data('PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+								$order->add_meta_data('ErrorID', 0 );
 								$order->save();
 							} else {
 								update_post_meta( ( int ) $order->get_id(), 'PayTPV_Referencia', $_REQUEST[ 'Order' ] );
+								update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0 );
 							}
 
 							if ($_REQUEST[ 'MethodName' ]) {
@@ -965,6 +968,7 @@
 							exit;
 						} else {
 							if (isset($_REQUEST['ErrorID']) && $_REQUEST['ErrorID']>0) {
+								$order->update_status( 'failed' );
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 									$order->add_meta_data('ErrorID', $_REQUEST[ 'ErrorID' ] );
 									$order->save();
@@ -972,7 +976,7 @@
 									update_post_meta( ( int ) $order->get_id(), 'ErrorID', $_REQUEST[ 'ErrorID' ] );
 								}
 							}
-							$order->update_status( 'failed' );
+
 							print "PAYCOMET WC KO";
 							if($_REQUEST[ 'MethodId' ] == 38){
 								$order->update_status( 'cancelled', '', true );
@@ -1456,7 +1460,7 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $this->get_return_url($order);
+			$URLKO = $this->get_return_url( $order );
 
 
 			// REST
@@ -1492,15 +1496,6 @@
 					if ($apiResponse->errorCode==0) {
 						$url = $apiResponse->challengeUrl;
 					} else {
-
-						if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-							$order->add_meta_data('ErrorID', $apiResponse->errorCode );
-							$order->save();
-						} else {
-							update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
-						}
-						$order->update_status( 'failed' );
-
 						if ($apiResponse->errorCode==1004) {
 							$error_txt = __( 'Error: ', 'wc_paytpv' ) . $apiResponse->errorCode;
 						} else {
@@ -1509,7 +1504,6 @@
 						print '<p>' . $error_txt .'</p>';
 						$this->write_log('Error ' . $apiResponse->errorCode . " en form");
 					}
-
 				} catch (exception $e){
 					$url = "";
 				}
@@ -1668,13 +1662,15 @@
 				}
 
 				$urlReturn = $URLOK;
+
+				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order->add_meta_data('ErrorID', $executePurchaseResponse->errorCode );
+					$order->save();
+				} else {
+					update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
+				}
+
 				if ($executePurchaseResponse->errorCode>0) {
-					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-						$order->add_meta_data('ErrorID', $executePurchaseResponse->errorCode );
-						$order->save();
-					} else {
-						update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
-					}
 					$order->update_status( 'failed' );
 					$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
 					$urlReturn = $URLKO;

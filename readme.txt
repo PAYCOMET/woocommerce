@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 5.29 =
-Mejoras pedidos fallidos en pago
+Mejoras pedidos. Pedidos pasan a estado Fallido cuando hay error en el pago para que se puedan volver a reintentar.
 
 = 5.28 =
 Fix HPOS. Mejoras de código
