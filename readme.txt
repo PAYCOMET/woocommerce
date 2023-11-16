@@ -2,9 +2,9 @@
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 6.2.2
+Tested up to: 6.4.1
 Requires PHP: 5.6
-Stable tag: 5.29
+Stable tag: 5.30
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 5.30 =
+Mejoras de código.
 
 = 5.29 =
 Mejoras pedidos. Pedidos pasan a estado Fallido cuando hay error en el pago para que se puedan volver a reintentar.
