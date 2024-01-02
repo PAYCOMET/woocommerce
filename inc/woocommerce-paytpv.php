@@ -689,7 +689,7 @@
 					$userInteraction = 1;
 					$scoring = 0;
 
-					$merchantData = $this->getMerchantData($order);
+					$merchantData = $this->getMerchantData($order,$methodId);
 
 					try {
 
@@ -754,7 +754,7 @@
 					$scoring = 0;
 					$notifyDirectPayment = 1;
 
-					$merchantData = $this->getMerchantData($order);
+					$merchantData = $this->getMerchantData($order,$methodId);
 
 					try {
 
@@ -968,7 +968,10 @@
 							exit;
 						} else {
 							if (isset($_REQUEST['ErrorID']) && $_REQUEST['ErrorID']>0) {
-								$order->update_status( 'failed' );
+								if($order->get_status() != 'completed'){
+									$order->update_status( 'failed' );
+								}
+									
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 									$order->add_meta_data('ErrorID', $_REQUEST[ 'ErrorID' ] );
 									$order->save();
@@ -1353,7 +1356,7 @@
 			return $Merchant_EMV3DS;
 		}
 
-		public function getShoppingCart($order)
+		public function getShoppingCart($order,$methodId)
 		{
 			$shoppingCartData = array();
 
@@ -1395,6 +1398,7 @@
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
 							$shoppingCartData[$i]["discountValue"] = number_format(($price - $product->get_sale_price()) * 100, 0, '.', '');
+							$descuento += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					} else {
@@ -1408,12 +1412,21 @@
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
 							$shoppingCartData[$i]["discountValue"] = number_format(($price - $product->get_sale_price()) * 100, 0, '.', '');
+							$descuento += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					}
 					$i++;
 				}
-
+				// Se calcula descuento
+				if($methodId==10 && $descuento > 0) {
+					$shoppingCartData[$i]["sku"] = "1";
+					$shoppingCartData[$i]["quantity"] = 1;
+					$shoppingCartData[$i]["unitPrice"] = $descuento;
+					$shoppingCartData[$i]["name"] = "Discount";
+					$shoppingCartData[$i]["articleType"] = "4";
+					$shoppingCartData[$i]["discountValue"] = $descuento;;
+				}
 				// Se calculan los impuestos y gastos de envio
 				$tax = number_format((float)$order->get_total() * 100, 0, '.', '') - $amount;
 				if($tax > 0) {
@@ -1431,10 +1444,10 @@
 			return array("shoppingCart"=>array_values($shoppingCartData));
 		}
 
-        public function getMerchantData($order)
+        public function getMerchantData($order,$methodId)
         {
 			$MERCHANT_EMV3DS = $this->getEMV3DS($order);
-			$SHOPPING_CART = $this->getShoppingCart($order);
+			$SHOPPING_CART = $this->getShoppingCart($order,$methodId);
 
 			$datos = array_merge($MERCHANT_EMV3DS,$SHOPPING_CART);
 
@@ -1467,7 +1480,8 @@
 			if ($this->apiKey != '') {
 
 				$userInteraction = 1;
-				$merchantData = $this->getMerchantData($order);
+				$methodId = 1;
+				$merchantData = $this->getMerchantData($order,$methodId);
 				$url = "";
 
 				try {
@@ -1598,7 +1612,7 @@
 				$scoring = 0;
 				$notifyDirectPayment = 1;
 
-				$merchantData = $this->getMerchantData($order);
+				$merchantData = $this->getMerchantData($order,$methodId);
 
 				$dcc = $arrTerminalData["dcc"];
 				if ($dcc == 1) {
@@ -1917,8 +1931,9 @@
 				$ip = $this->getIp();
 
 				$userInteraction = 0;
+				$methodId = 1;
 
-				$merchantData = $this->getMerchantData($order);
+				$merchantData = $this->getMerchantData($order,$methodId);
 
 				// Añadimos información MIT -> R
 				$trxType = "R";
