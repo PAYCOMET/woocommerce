@@ -35,10 +35,38 @@ add_action( 'wp_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources' 
 
 add_action( 'woocommerce_before_my_account', array( 'woocommerce_paytpv', 'get_my_cards_template' ) );
 
+/**
+ * Compatible HPOS and Blocks Checkout
+ * */
+
 add_action( 'before_woocommerce_init', function() {
 	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 	}
+} );
+
+/**
+ * Checkout Blocks
+ * */
+
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+ 
+add_action( 'woocommerce_blocks_loaded', function() {
+
+	if( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+		return;
+	}
+
+	require PAYTPV_PLUGIN_DIR . 'inc/class-wc-dummy-payments-blocks.php';
+	add_action(
+		'woocommerce_blocks_payment_method_type_registration',
+		function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+			$blocks=new WC_MyGateway_Blocks;
+			$payment_method_registry->register($blocks);
+			//print_r($blocks);
+	} );
+
 } );
 
 function woocommerce_paytpv_init() {
@@ -63,24 +91,24 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-waylet.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
 	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
 	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
 	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-waylet.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
+	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
 }
 
 
@@ -89,6 +117,7 @@ function woocommerce_paytpv_init() {
  * Add the gateway to woocommerce
  * */
 function add_paytpv_gateway( $methods ) {
+	$options = get_option( 'woocommerce_dummy_settings', array() );
 	$methods[] = 'woocommerce_paytpv';
 	
 	// APMs
@@ -184,3 +213,4 @@ function my_update_notice() {
 	</div>
 	<?php 
 }
+
