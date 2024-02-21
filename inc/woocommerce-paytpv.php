@@ -1374,7 +1374,7 @@
 
 				$amount=0;
 				$i=0;
-				$descuento=0;
+				$discount=0;
 
 				// The loop to get the order items which are WC_Order_Item_Product objects since WC 3+
 				foreach($order->get_items() as $item) {
@@ -1409,7 +1409,7 @@
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
 							$shoppingCartData[$i]["discountValue"] = number_format(($price - $product->get_sale_price()) * 100, 0, '.', '');
-							$descuento += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
+							$discount += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					} else {
@@ -1423,23 +1423,33 @@
 						$shoppingCartData[$i]["discountValue"] = 0;
 						if($product->get_sale_price() > 0) {
 							$shoppingCartData[$i]["discountValue"] = number_format(($price - $product->get_sale_price()) * 100, 0, '.', '');
-							$descuento += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
+							$discount += $shoppingCartData[$i]["discountValue"] * $shoppingCartData[$i]["quantity"];
 						}
 						$amount += ($shoppingCartData[$i]["unitPrice"] - $shoppingCartData[$i]["discountValue"]) * $shoppingCartData[$i]["quantity"];
 					}
 					$i++;
 				}
+				
+				// Paypal -> calcular cupones
+
+				if($amount>number_format((float)$order->get_total() * 100, 0, '.', '')){
+					$discount += ($amount-number_format((float)$order->get_total() * 100, 0, '.', ''));
+				}
+				
+
 				// Paypal -> se añade descuento
-				if($methodId==10 && $descuento > 0) {
+				if($methodId==10 && $discount > 0) {
 					$shoppingCartData[$i]["sku"] = "1";
 					$shoppingCartData[$i]["quantity"] = 1;
-					$shoppingCartData[$i]["unitPrice"] = $descuento;
+					$shoppingCartData[$i]["unitPrice"] = $discount;
 					$shoppingCartData[$i]["name"] = "Discount";
 					$shoppingCartData[$i]["articleType"] = "4";
-					$shoppingCartData[$i]["discountValue"] = $descuento;
+					$shoppingCartData[$i]["discountValue"] = $discount;
 
 					$i++;
 				}
+
+
 				// Se calculan los impuestos y gastos de envio
 				$tax = number_format((float)$order->get_total() * 100, 0, '.', '') - $amount;
 				
