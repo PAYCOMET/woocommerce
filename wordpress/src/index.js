@@ -1,3 +1,4 @@
+//Array of payment methods
 let methods = [
 "paytpv_data", 
 "paycomet_bancontact_data", 
@@ -21,13 +22,29 @@ let methods = [
 "paycomet_waylet_data"
 ];
 
+//Array of years for expiration date
+const UltimosAniosComponente = () => {
+    const anioActual = new Date().getFullYear();
+    const ultimosAnios = 13; 
+    const anios = [];
+  
+    for (let i = 0; i < ultimosAnios; i++) {
+      const anio = anioActual + i;
+      anios.push(anio);
+    }
+
+    return anios;
+};
+
+const proximosAnios = UltimosAniosComponente();
+
 
 
 for (let i = 0; i < methods.length; i++) {
 
     const payment_data_paytpv = Object(window.wc.wcSettings.getSetting( methods[i], {} ));
 
-
+    console.log(payment_data_paytpv)
     const payment_content_paytpv = () => {
         return window.wp.htmlEntities.decodeEntities( payment_data_paytpv.description );
     };
@@ -47,16 +64,107 @@ for (let i = 0; i < methods.length; i++) {
     const icon = getIcons();
    
     let contenido= Object( window.wp.element.createElement )(payment_content_paytpv,null);
-console.log(payment_data_paytpv.jet_id);
+
+
+    
     if(payment_data_paytpv.name=='paytpv' && payment_data_paytpv.jetiframe==2){
+
         contenido=  (
             <>
                 { Object( window.wp.element.createElement )(payment_content_paytpv,null)}
-                {<p style={{color:"red"}}>Incompatible Blocks</p>}            
+                {<p/>}   
+                <div id="saved_cards" style={{ display: payment_data_paytpv.store_card }}>
+                    <div className="form-group">
+                        <label htmlFor="card">{payment_data_paytpv.text.Card }{" "}</label>
+                        <select name="jet_iframe_card" id="jet_iframe_card" onChange={checkSelectedCard} className="form-group">
+
+                        {payment_data_paytpv.saved_cards.map((card, index) => (
+                            <option key={index} value={card.id}> 
+                                {card.paytpv_cc}{(card.card_desc != null && card.card_desc !="") ? (" - " + card.card_desc) : ""} 
+                            </option>
+                
+                        ))}
+                            <option value="0">{payment_data_paytpv.text.NewCard}</option>
+
+                        </select>
+                    </div>
+                </div>
+              
+                <div id="toHide" style={{display:'none'}}>
+                    <input type="hidden" data-paycomet="jetID" value={payment_data_paytpv.jet_id}/>
+
+                    <input type="hidden" className="form-control" name="username" data-paycomet="cardHolderName" placeholder="" value="NONAME" style={{height:'30px', width: '290px'}}/>
+
+                    <div className="row">
+                        <div className="form-group">
+                            <label htmlFor="cardNumber">{payment_data_paytpv.text.CardNumber}</label>
+                            <div className="input-group">
+                                <div id="paycomet-pan" style={{height:'34px', width: '290px', padding:'0px', border: '1px solid #dcd7ca'}}>  
+                                <input style={{height: '30px', fontSize:'18px', paddingtop:'2px', border:'0px'}} paycomet-name="pan"/>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12 col-md-9" style={{paddingleft:'0px'}}>
+                            <div className="form-group">
+                                <label><span className="hidden-xs">{payment_data_paytpv.text.ExpirationDate}</span> </label>
+                                <div className="form-inline">
+                                    <select className="form-control" style={{height:'34px', width: '142px', border: '1px solid #dcd7ca', fontSize: '18px', padding: '0 0 0 10px'}} data-paycomet="dateMonth">
+                                        <option>{payment_data_paytpv.text.Month}</option>
+                                        <option value="01">{payment_data_paytpv.text.January}</option>
+                                        <option value="02">{payment_data_paytpv.text.February}</option>
+                                        <option value="03">{payment_data_paytpv.text.March}</option>
+                                        <option value="04">{payment_data_paytpv.text.April}</option>
+                                        <option value="05">{payment_data_paytpv.text.May}</option>
+                                        <option value="06">{payment_data_paytpv.text.June}</option>
+                                        <option value="07">{payment_data_paytpv.text.July}</option>
+                                        <option value="08">{payment_data_paytpv.text.August}</option>
+                                        <option value="09">{payment_data_paytpv.text.September}</option>
+                                        <option value="10">{payment_data_paytpv.text.October}</option>
+                                        <option value="11">{payment_data_paytpv.text.November}</option>
+                                        <option value="12">{payment_data_paytpv.text.December}</option>
+                                    </select>
+                                    <select className="form-control" style={{height:'34px', width: '142px', border: '1px solid #dcd7ca', fontSize: '18px', padding: '0 0 0 10px'}} data-paycomet="dateYear">
+                                        <option>{payment_data_paytpv.text.Year}</option>
+                             
+                                    {proximosAnios.map((anio) => (
+                                        <option key={anio} value={anio}>
+                                            {anio}
+                                        </option>
+                                    ))}
+
+                                    </select>
+                                </div> 
+                            </div>
+                        </div>  
+                        <div className="col-xs-12 col-md-3" style={{paddingleft:'0px'}}>
+                            <div className="form-group">
+                                <label data-toggle="tooltip" title=""
+                                    data-original-title="3 digits code on back side of the card">
+                                    CVV <i className="fa fa-question-circle"></i>
+                                </label>
+                                <div id="paycomet-cvc2" style={{height: '34px', padding:'0px'}}>
+                                <input paycomet-name="cvc2" style={{height: '30px', width: '60px', fontsize:'18px', paddingleft:'7px', border: '1px solid #dcd7ca'}} className="form-control" required="" type="text"/>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+                </div> 
+                <div id="storingStep" className="box" style={{display:'none'}}>
+                    <label className="checkbox">
+                        <input type="checkbox" name="jetiframe_savecard" id="jetiframe_savecard"/> {payment_data_paytpv.text.SaveCard}
+                        <span className="paytpv-pci"> {payment_data_paytpv.text.Pci} </span>
+                    </label>
+                </div>  
+
+                <input type="submit" style={{width: '290px', display:'none'}} name="jetiframe-button" id="jetiframe-button" value={payment_data_paytpv.text.MakePayment}></input>
+
+                <div id="paymentErrorMsg" style={{color: '#fff', background: '#b22222', margintop: '10px', textalign: 'center'}}></div>
             </>
         )
     }
-
+    
     const Paytpv = {
         name: payment_data_paytpv.name,
         label: (	
@@ -79,11 +187,30 @@ console.log(payment_data_paytpv.jet_id);
     
 }
 
+function checkSelectedCard() {
+    if (document.getElementById('jet_iframe_card').value != 0){
+        document.getElementById('toHide').style.display = "none";
+        document.getElementById('storingStep').style.display = "none";
+    } else {
+        if (document.getElementById('toHide')) {
+            document.getElementById('toHide').style.display = "block";
+        }
+        if (document.getElementById('storingStep')) {
+            document.getElementById('storingStep').style.display = "block";
+        }
+    }
 
+    document.getElementById('hiddenCardField').value = document.getElementById('jet_iframe_card').value;
+};
 
+function jetIframeValidated(){
+    if (document.getElementById("jetiframe_savecard") != null) {
+        document.getElementById("savecard_jetiframe").checked = document.getElementById("jetiframe_savecard").checked;
+    }
 
+    document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
+    if (jQuery("#jetiframe-token").val() != "") {
+        jQuery('#place_order').parents('form:first').submit();
+    }
 
-
-
-
-
+}

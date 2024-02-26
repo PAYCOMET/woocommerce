@@ -71,7 +71,7 @@
 			$this->disable_offer_savecard = isset($this->settings['disable_offer_savecard']) ? $this->settings['disable_offer_savecard'] : 0;
 			$this->payment_paycomet = isset($this->settings['payment_paycomet']) ? $this->settings['payment_paycomet'] : 0;
 			$this->jet_id = isset($this->settings['jet_id']) ? $this->settings['jet_id'] : '';
-			$this->pan_div_style = (isset($this->settings['pan_div_style']) && $this->settings['pan_div_style'] != "") ? $this->settings['pan_div_style'] : 'width: 290px; padding:0px; height:34px; border: 1px solid #dcd7ca';
+			$this->pan_div_style = (isset($this->settings['pan_div_style']) && $this->settings['pan_div_style'] != "") ? $this->settings['pan_div_style'] : 'width: 290px; padding:0px; height:35px; border: 1px solid #dcd7ca';
 			$this->pan_input_style = (isset($this->settings['pan_input_style']) && $this->settings['pan_input_style'] != "") ? $this->settings['pan_input_style'] : 'height: 30px; font-size:18px; padding-top:2px; border:0px;';
 			$this->cvc2_div_style = (isset($this->settings['cvc2_div_style']) && $this->settings['cvc2_div_style'] != "") ? $this->settings['cvc2_div_style'] : 'height: 34px; padding:0px;';
 			$this->cvc2_input_style = (isset($this->settings['cvc2_input_style']) && $this->settings['cvc2_input_style'] != "") ? $this->settings['cvc2_input_style'] : 'width: 60px; height: 30px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;';

@@ -22,7 +22,6 @@
     </div>
 </div>
 
-
 <div id="toHide" style="display:none;">
     <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
 
