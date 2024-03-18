@@ -1,5 +1,4 @@
 <?php
-add_action( 'woocommerce_thankyou', 'custom_thankyou_function', 10, 1 );
 	/**
 	 * Pasarela PAYCOMET Gateway Class
 	 *
@@ -7,14 +6,7 @@ add_action( 'woocommerce_thankyou', 'custom_thankyou_function', 10, 1 );
 	use Automattic\WooCommerce\Utilities\OrderUtil;
 	class woocommerce_paytpv extends WC_Payment_Gateway
 	{
-		
-		function custom_thankyou_function( $order_id ) {
-			// Evitar que se borre el carrito
-			if ( isset( $_SESSION['preserve_cart'] ) && $_SESSION['preserve_cart'] === true ) {
-				return;
-			}
-			// Resto de tu lógica de la página de agradecimiento aquí
-		}
+
         public function write_log( $log )
         {
 			if ( true === WP_DEBUG ) {
@@ -683,7 +675,7 @@ add_action( 'woocommerce_thankyou', 'custom_thankyou_function', 10, 1 );
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$URLKO =$this->get_return_url( $order );
+				$URLKO = $this->get_return_url( $order );
 
 				$salida = $URLKO; // Default
 
@@ -954,13 +946,6 @@ add_action( 'woocommerce_thankyou', 'custom_thankyou_function', 10, 1 );
 										}
 									}
 								}
-							}
-
-							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-								$order->update_meta_data('AuthCode', $_REQUEST[ 'AuthCode' ] );
-								$order->save();
-							} else {
-								update_post_meta((int) $subscription->get_id(), 'AuthCode', $_REQUEST[ 'AuthCode' ]);						
 							}
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
