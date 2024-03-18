@@ -75,7 +75,8 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 				'MakePayment' => __('Make payment', 'wc_paytpv')
 		
             ),
-			'form' => $this->get_setting('pan_div_style')
+			'form' => $this->get_setting('pan_div_style'),
+			'activo' => $this->get_setting( 'isJetIframeActive')
 		];
 	}
 
