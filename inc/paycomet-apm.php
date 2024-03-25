@@ -107,20 +107,20 @@ class Paycomet_APM extends WC_Payment_Gateway
                 [],
                 '',
                 '',
-                $paytpvBase->getMerchantData($order,$methodId),
+                $paytpvBase->getMerchantData($order, $methodId),
                 1
             );
 
             if ($apiResponse->errorCode == '0') {
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                    $order->add_meta_data('PayTPV_methodData', $apiResponse->methodData);
+                    $order->update_meta_data('PayTPV_methodData', $apiResponse->methodData);
                     $order->save();
                 } else {
                     update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
                 }
 
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                    $order->add_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
+                    $order->update_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
                     $order->save();
                 } else {
                     update_post_meta( ( int ) $order->get_id(), 'entityNumber', $apiResponse->methodData->entityNumber);
@@ -129,8 +129,8 @@ class Paycomet_APM extends WC_Payment_Gateway
                 // Multibanco mostrarmos en el pedido los datos
                 if (isset($apiResponse->methodData->entityNumber) && isset($apiResponse->methodData->referenceNumber)) {
                     if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                        $order->add_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
-                        $order->add_meta_data('referenceNumber', $apiResponse->methodData->referenceNumber);
+                        $order->update_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
+                        $order->update_meta_data('referenceNumber', $apiResponse->methodData->referenceNumber);
                         $order->save();
                     } else {
                         update_post_meta( ( int ) $order->get_id(), 'entityNumber', $apiResponse->methodData->entityNumber);
@@ -144,7 +144,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                 );
             } else {
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                    $order->add_meta_data('ErrorID', $apiResponse->errorCode );
+                    $order->update_meta_data('ErrorID', $apiResponse->errorCode );
                     $order->save();
                 } else {
                     update_post_meta( ( int ) $order->get_id(), 'ErrorID', $apiResponse->errorCode);
