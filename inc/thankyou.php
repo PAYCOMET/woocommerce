@@ -1,9 +1,10 @@
 <?php
 //add_action( 'woocommerce_checkout_order_processed', 'wpdesk_set_completed_for_paid_orders' );
-add_action( 'woocommerce_before_thankyou', 'hwn_add_thankyou_error');
+//add_action( 'woocommerce_before_thankyou', 'hwn_add_thankyou_error');
 add_action( 'woocommerce_order_details_after_order_table', 'hwn_add_thankyou_custom_text');
 add_action( 'woocommerce_email_after_order_table', 'hwn_add_thankyou_custom_text');
 add_action( 'woocommerce_order_details_before_order_table', 'hwn_add_thankyou_mbway_confirm');
+add_action( 'woocommerce_before_checkout_form', 'custom_display_checkout_error_message', 10 );
 
 add_action('woocommerce_endpoint_order-received_title',
 	function( $title ) {
@@ -18,6 +19,16 @@ add_action('woocommerce_endpoint_order-received_title',
 		return $title;
 	}
 );
+
+function custom_display_checkout_error_message() {
+    $order_id = isset( $_GET['order'] ) ? absint( $_GET['order'] ) : 0;
+    print_r($order_id);
+
+    if ( isset( $_GET['error'] ) && $_GET['error'] === 'payment' ) {
+        $error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+        wc_print_notice( $error_txt, 'error' );
+    }
+}
 
 function hwn_add_thankyou_custom_text($order) {
 
@@ -57,6 +68,7 @@ function wpdesk_set_completed_for_paid_orders( $order_id ) {
 }
 */
 
+/*
 function hwn_add_thankyou_error($order_id) {
     $order = wc_get_order( $order_id );
     // Si tiene asociado error
@@ -70,7 +82,6 @@ function hwn_add_thankyou_error($order_id) {
         ?><p><?php echo $error_txt?></p></strong><?php
     }
 }
-
-
+*/
 
 ?>

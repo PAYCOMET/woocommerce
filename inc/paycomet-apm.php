@@ -83,7 +83,8 @@ class Paycomet_APM extends WC_Payment_Gateway
             $secure_pay = 1;
 
             $URLOK = $this->get_return_url($order);
-            $URLKO = $this->get_return_url($order);
+            $url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+				$URLKO = $url;
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
             $ip = $paytpvBase->getIp();

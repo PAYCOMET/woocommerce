@@ -675,7 +675,8 @@
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$URLKO = $this->get_return_url( $order );
+				$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+				$URLKO = $url;
 
 				$salida = $URLKO; // Default
 
@@ -748,7 +749,8 @@
 				if ($this->apiKey != '') {
 
 					$URLOK = $this->get_return_url($order);
-					$URLKO = $this->get_return_url($order);
+					$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+					$URLKO = $url;
 
 					$methodId = 1;
 					$scoring = 0;
@@ -838,7 +840,8 @@
 					$url = $this->get_return_url( $order );
 				// Si es KO
 				} else {
-					$url = $this->get_return_url( $order );
+					$urlError = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+					$url = $urlError;
 				}
 
 				wp_redirect( $url, 303 );
@@ -941,6 +944,14 @@
 									}
 								}
 							}
+
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                                $order->update_meta_data('AuthCode', $_REQUEST[ 'AuthCode' ] );
+                                $order->save();
+                            } else {
+                                update_post_meta((int) $order->get_id(), 'AuthCode', $_REQUEST[ 'AuthCode' ]);                       
+                            }
+
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
 							$order->payment_complete($_REQUEST[ 'AuthCode' ]);
@@ -1487,7 +1498,8 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $this->get_return_url( $order );
+			$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+			$URLKO = $url;
 
 
 			// REST
@@ -1568,7 +1580,8 @@
 			$ip = $this->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$URLOK = $this->get_return_url($order);
-			$URLKO = $this->get_return_url($order);
+			$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+			$URLKO = $url;
 
 
 			// With token Card
