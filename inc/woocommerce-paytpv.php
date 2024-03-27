@@ -675,7 +675,11 @@
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+				$paramsUrl = array(
+					'order' => $order->get_id(),
+					'error' => 'payment'
+				);
+				$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 				$URLKO = $url;
 
 				$salida = $URLKO; // Default
@@ -749,7 +753,11 @@
 				if ($this->apiKey != '') {
 
 					$URLOK = $this->get_return_url($order);
-					$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+					$paramsUrl = array(
+						'order' => $order->get_id(),
+						'error' => 'payment'
+					);
+					$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 					$URLKO = $url;
 
 					$methodId = 1;
@@ -840,7 +848,11 @@
 					$url = $this->get_return_url( $order );
 				// Si es KO
 				} else {
-					$urlError = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+					$paramsUrl = array(
+						'order' => $order->get_id(),
+						'error' => 'payment'
+					);
+					$urlError = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 					$url = $urlError;
 				}
 
@@ -1508,7 +1520,11 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+			$paramsUrl = array(
+				'order' => $order->get_id(),
+				'error' => 'payment'
+			);
+			$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 			$URLKO = $url;
 
 
@@ -1590,7 +1606,11 @@
 			$ip = $this->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$URLOK = $this->get_return_url($order);
-			$url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
+			$paramsUrl = array(
+				'order' => $order->get_id(),
+				'error' => 'payment'
+			);
+			$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 			$URLKO = $url;
 
 

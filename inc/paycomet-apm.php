@@ -83,8 +83,12 @@ class Paycomet_APM extends WC_Payment_Gateway
             $secure_pay = 1;
 
             $URLOK = $this->get_return_url($order);
-            $url = add_query_arg( 'error', 'payment', wc_get_checkout_url() );
-				$URLKO = $url;
+            $paramsUrl = array(
+				'order' => $order_id,
+				'error' => 'payment'
+			);
+			$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
+			$URLKO = $url;
 
             $orderId = str_pad($order_id, 8, "0", STR_PAD_LEFT);
             $ip = $paytpvBase->getIp();
@@ -113,6 +117,12 @@ class Paycomet_APM extends WC_Payment_Gateway
             );
 
             if ($apiResponse->errorCode == '0') {
+               
+                //Cambiar a estado Pendiente de Pago para multibanco y mbway
+                if($order->get_status() == 'failed' && ($methodId == 16 || $methodId == 38)){
+                    $order->update_status( 'pending');
+                }
+             
                 if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                     $order->update_meta_data('PayTPV_methodData', $apiResponse->methodData);
                     $order->save();
@@ -120,14 +130,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                     update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
                 }
 
-                if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                    $order->update_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
-                    $order->save();
-                } else {
-                    update_post_meta( ( int ) $order->get_id(), 'entityNumber', $apiResponse->methodData->entityNumber);
-
-                }
-                // Multibanco mostrarmos en el pedido los datos
+                //Guardar para multibanco entityNumber y referenceNumber
                 if (isset($apiResponse->methodData->entityNumber) && isset($apiResponse->methodData->referenceNumber)) {
                     if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
                         $order->update_meta_data('entityNumber', $apiResponse->methodData->entityNumber);
@@ -136,6 +139,7 @@ class Paycomet_APM extends WC_Payment_Gateway
                     } else {
                         update_post_meta( ( int ) $order->get_id(), 'entityNumber', $apiResponse->methodData->entityNumber);
                         update_post_meta( ( int ) $order->get_id(), 'referenceNumber', $apiResponse->methodData->referenceNumber);
+                      
                     }
                 }
 
