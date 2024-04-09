@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.32
+ * Version: 5.33
  * Tested up to: 6.4.3
- * WC tested up to: 8.6
+ * WC tested up to: 8.7
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.32' );
+define( 'PAYTPV_VERSION', '5.33' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -40,6 +40,8 @@ add_action( 'before_woocommerce_init', function() {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 	}
 } );
+add_action( 'woocommerce_before_checkout_form', 'custom_display_checkout_error_message', 10 );
+
 
 function woocommerce_paytpv_init() {
 
@@ -63,7 +65,7 @@ function woocommerce_paytpv_init() {
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
@@ -183,4 +185,20 @@ function my_update_notice() {
 
 	</div>
 	<?php 
+}
+
+function custom_display_checkout_error_message() {
+    if ( isset( $_GET['order'] )) {
+        $order_id=$_GET['order'];
+        $order = wc_get_order( $order_id );
+    }
+
+    if ( isset( $_GET['error'] ) && $_GET['error'] === 'payment' ) {
+        if ($order->get_meta("ErrorID") == 1004) {
+            $error_txt = __( 'Error: ', 'wc_paytpv' ) . $order->get_meta("ErrorID");
+        }else{
+            $error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+        }
+        wc_print_notice( $error_txt, 'error' );
+    }
 }
