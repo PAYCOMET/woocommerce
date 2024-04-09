@@ -679,8 +679,7 @@
 					'order' => $order->get_id(),
 					'error' => 'payment'
 				);
-				$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-				$URLKO = $url;
+				$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 				$salida = $URLKO; // Default
 
@@ -757,8 +756,7 @@
 						'order' => $order->get_id(),
 						'error' => 'payment'
 					);
-					$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-					$URLKO = $url;
+					$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 					$methodId = 1;
 					$scoring = 0;
@@ -852,8 +850,7 @@
 						'order' => $order->get_id(),
 						'error' => 'payment'
 					);
-					$urlError = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-					$url = $urlError;
+					$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 				}
 
 				wp_redirect( $url, 303 );
@@ -1524,9 +1521,7 @@
 				'order' => $order->get_id(),
 				'error' => 'payment'
 			);
-			$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-			$URLKO = $url;
-
+			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 			// REST
 			if ($this->apiKey != '') {
@@ -1610,9 +1605,7 @@
 				'order' => $order->get_id(),
 				'error' => 'payment'
 			);
-			$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-			$URLKO = $url;
-
+			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 			// With token Card
 			if ($_POST['hiddenCardField'] != 0) {
