@@ -2,6 +2,30 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/generateNextYears.js":
+/*!**********************************!*\
+  !*** ./src/generateNextYears.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   generateNextYears: () => (/* binding */ generateNextYears)
+/* harmony export */ });
+//Array of years for expiration date
+const generateNextYears = () => {
+  const firstYear = new Date().getFullYear();
+  const lastYears = 15;
+  let years = [];
+  for (let i = 0; i < lastYears; i++) {
+    const year = firstYear + i;
+    years.push(year);
+  }
+  return years;
+};
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "React" ***!
@@ -89,23 +113,14 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _generateNextYears__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./generateNextYears */ "./src/generateNextYears.js");
+
+
 
 
 //Array of payment methods
 let methods = ["paytpv_data", "paycomet_bancontact_data", "paycomet_bizum_data", "Paycomet_Eps_data", "paycomet_giropay_data", "paycomet_ideal_data", "paycomet_instantcredit_data", "paycomet_klarna_data", "paycomet_klarnapayments_data", "paycomet_multibanco_data", "paycomet_mybank_data", "paycomet_paypal_data", "paycomet_paysafecard_data", "paycomet_paysera_data", "paycomet_postfinance_data", "paycomet_przelewy_data", "paycomet_qiwi_data", "paycomet_skrill_data", "paycomet_trustly_data", "paycomet_waylet_data"];
-
-//Array of years for expiration date
-const UltimosAniosComponente = () => {
-  const anioActual = new Date().getFullYear();
-  const ultimosAnios = 15;
-  const anios = [];
-  for (let i = 0; i < ultimosAnios; i++) {
-    const anio = anioActual + i;
-    anios.push(anio);
-  }
-  return anios;
-};
-const proximosAnios = UltimosAniosComponente();
+const nextYears = (0,_generateNextYears__WEBPACK_IMPORTED_MODULE_1__.generateNextYears)();
 for (let i = 0; i < methods.length; i++) {
   const payment_data_paytpv = Object(window.wc.wcSettings.getSetting(methods[i], {}));
   const payment_content_paytpv = () => {
@@ -127,18 +142,39 @@ for (let i = 0; i < methods.length; i++) {
   const Contenido = ({
     eventRegistration
   }) => {
-    //onSubmit(
-    //() => 
-    eventRegistration.onPaymentSetup(() => console.log('onPaymentSetup'));
-    //eventRegistration.onPaymentSetup(() => console.log('onPaymentSetup'))
-    // );  
+    const jetiframeButton = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+    const jetiframeInput = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
+    // Función para simular clic en el input de tipo submit
+    const handleClickSubmit = () => {
+      const new_card = document.getElementById('jet_iframe_card').value == 0 ? true : false;
+      if (jetiframeButton.current && new_card) {
+        console.log(document.getElementsByName("paytpvToken")[0]);
+        jetiframeButton.current.click();
+      }
+      jetiframeInput.current.value = "Texto de ejemplo";
+      setInputValue(jetiframeInput.current.value);
+    };
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+      $.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es");
+      eventRegistration.onCheckoutValidation(() => {
+        handleClickSubmit();
+      });
+    }, []);
     let content;
     if (payment_data_paytpv.name == 'paytpv' && payment_data_paytpv.jetiframe == 2) {
-      content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, Object(window.wp.element.createElement)(payment_content_paytpv, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-        type: "hidden",
+      content = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", {
+        name: "paycometPaymentForm",
+        id: "paycometPaymentForm",
+        method: "POST"
+      }, Object(window.wp.element.createElement)(payment_content_paytpv, null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+        type: "text",
         id: "jetiframe-token",
-        name: "jetiframe-token"
+        name: "jetiframe-token",
+        ref: jetiframeInput,
+        style: {
+          display: 'none'
+        }
       }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
         type: "checkbox",
         id: "savecard_jetiframe",
@@ -150,6 +186,7 @@ for (let i = 0; i < methods.length; i++) {
         type: "text",
         id: "hiddenCardField",
         name: "hiddenCardField",
+        defaultValue: payment_data_paytpv.saved_cards.length,
         style: {
           display: 'none'
         }
@@ -209,12 +246,7 @@ for (let i = 0; i < methods.length; i++) {
           border: '1px solid #dcd7ca'
         }
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-        style: {
-          height: '30px',
-          fontSize: '18px',
-          paddingtop: '2px',
-          border: '0px'
-        },
+        "paycomet-style": "height: 30px; font-size:18px; padding-top:2px; border:0px;",
         "paycomet-name": "pan"
       }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "row"
@@ -273,10 +305,10 @@ for (let i = 0; i < methods.length; i++) {
           padding: '0 0 0 10px'
         },
         "data-paycomet": "dateYear"
-      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, payment_data_paytpv.text.Year), proximosAnios.map(anio => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-        key: anio,
-        value: anio
-      }, anio)))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+      }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", null, payment_data_paytpv.text.Year), nextYears.map(year => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+        key: year,
+        value: year.toString().substring(2, 4)
+      }, year)))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "col-xs-12 col-md-3",
         style: {
           paddingleft: '0px'
@@ -298,13 +330,7 @@ for (let i = 0; i < methods.length; i++) {
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
         "paycomet-name": "cvc2",
         maxLength: 4,
-        style: {
-          height: '30px',
-          width: '60px',
-          fontsize: '18px',
-          paddingleft: '7px',
-          border: '1px solid #dcd7ca'
-        },
+        "paycomet-style": "height: 30px; width: 60px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;",
         className: "form-control",
         required: "",
         type: "text"
@@ -315,7 +341,10 @@ for (let i = 0; i < methods.length; i++) {
           display: 'none'
         }
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
-        className: "checkbox"
+        className: "checkbox",
+        style: {
+          display: payment_data_paytpv.disable_offer_savecard
+        }
       }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
         type: "checkbox",
         name: "jetiframe_savecard",
@@ -330,6 +359,7 @@ for (let i = 0; i < methods.length; i++) {
         },
         name: "jetiframe-button",
         id: "jetiframe-button",
+        ref: jetiframeButton,
         value: payment_data_paytpv.text.MakePayment
       }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         id: "paymentErrorMsg",
@@ -339,7 +369,7 @@ for (let i = 0; i < methods.length; i++) {
           margintop: '10px',
           textalign: 'center'
         }
-      }));
+      })));
     } else {
       content = Object(window.wp.element.createElement)(payment_content_paytpv, null);
     }

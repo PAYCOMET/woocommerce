@@ -1,3 +1,6 @@
+import React, { useRef, useEffect } from 'react';
+import { generateNextYears } from './generateNextYears';
+
 //Array of payment methods
 let methods = [
     "paytpv_data", 
@@ -22,23 +25,7 @@ let methods = [
     "paycomet_waylet_data"
     ];
     
-    //Array of years for expiration date
-    const UltimosAniosComponente = () => {
-        const anioActual = new Date().getFullYear();
-        const ultimosAnios = 15; 
-        const anios = [];
-      
-        for (let i = 0; i < ultimosAnios; i++) {
-          const anio = anioActual + i;
-          anios.push(anio);
-        }
-    
-        return anios;
-    };
-    
-    const proximosAnios = UltimosAniosComponente();
-    
-    
+    const nextYears = generateNextYears();
     
     for (let i = 0; i < methods.length; i++) {
     
@@ -60,27 +47,45 @@ let methods = [
         };
         
         const icon = getIcons();
-       
+
         const Contenido= ({eventRegistration}) => {
 
-        //onSubmit(
-            //() => 
-            eventRegistration.onPaymentSetup(() => console.log('onPaymentSetup'));
-                //eventRegistration.onPaymentSetup(() => console.log('onPaymentSetup'))
-       // );  
+            const jetiframeButton = useRef(null);
+            const jetiframeInput = useRef(null);
+            
+            // Función para simular clic en el input de tipo submit
+            const handleClickSubmit = () => {
+                const new_card = (document.getElementById('jet_iframe_card').value == 0)?true:false;
 
-       
+                if (jetiframeButton.current && new_card) {
+                    console.log(document.getElementsByName("paytpvToken")[0]);
+                    jetiframeButton.current.click();
+                  
+                }
+            
+                
+                jetiframeInput.current.value = "Texto de ejemplo";
+                setInputValue(jetiframeInput.current.value);
+               
+            };
+            useEffect(() => {
+                $.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es"); 
+                eventRegistration.onCheckoutValidation(() => {
+                    handleClickSubmit();
+                } );
+                
+            },[])
+            
             let content;
             if(payment_data_paytpv.name=='paytpv' && payment_data_paytpv.jetiframe==2){
             content=
-                <>
-             
+            <>
+                <form name="paycometPaymentForm" id="paycometPaymentForm"  method="POST">
                     { Object( window.wp.element.createElement )(payment_content_paytpv,null)}
                     {<p/>}   
-
-                    <input type="hidden" id="jetiframe-token" name="jetiframe-token"/>
+                    <input type="text" id="jetiframe-token" name="jetiframe-token" ref={jetiframeInput} style={{display:'none'}}/>
                     <input type="checkbox" id="savecard_jetiframe" name="savecard_jetiframe" style={{display:'none'}}/>
-                    <input type="text" id="hiddenCardField" name="hiddenCardField" style={{display:'none'}}/>
+                    <input type="text" id="hiddenCardField" name="hiddenCardField" defaultValue={payment_data_paytpv.saved_cards.length} style={{display:'none'}}/>
 
                     <div id="saved_cards" style={{ display: payment_data_paytpv.store_card }}>
                         <div className="form-group">
@@ -108,7 +113,7 @@ let methods = [
                                 <label htmlFor="cardNumber">{payment_data_paytpv.text.CardNumber}</label>
                                 <div className="input-group">
                                     <div id="paycomet-pan" style={{height:'34px', width: '290px', padding:'0px', border: '1px solid #dcd7ca'}}>  
-                                    <input style={{height: '30px', fontSize:'18px', paddingtop:'2px', border:'0px'}} paycomet-name="pan"/>
+                                    <input paycomet-style="height: 30px; font-size:18px; padding-top:2px; border:0px;" paycomet-name="pan"/>
                                     </div> 
                                 </div>
                             </div>
@@ -136,9 +141,9 @@ let methods = [
                                         <select className="form-control" style={{height:'34px', width: '142px', border: '1px solid #dcd7ca', fontSize: '18px', padding: '0 0 0 10px'}} data-paycomet="dateYear">
                                             <option>{payment_data_paytpv.text.Year}</option>
                                 
-                                        {proximosAnios.map((anio) => (
-                                            <option key={anio} value={anio}>
-                                                {anio}
+                                        {nextYears.map((year) => (
+                                            <option key={year} value={year.toString().substring(2, 4)}>
+                                                {year}
                                             </option>
                                         ))}
 
@@ -153,24 +158,25 @@ let methods = [
                                         CVV <i className="fa fa-question-circle"></i>
                                     </label>
                                     <div id="paycomet-cvc2" style={{height: '34px', padding:'0px'}}>
-                                    <input paycomet-name="cvc2" maxLength={4} style={{height: '30px', width: '60px', fontsize:'18px', paddingleft:'7px', border: '1px solid #dcd7ca'}} className="form-control" required="" type="text"/>
+                                    <input paycomet-name="cvc2" maxLength={4} paycomet-style="height: 30px; width: 60px; font-size:18px; padding-left:7px; border: 1px solid #dcd7ca;" className="form-control" required="" type="text"/>
                                     </div>
                                 </div>
                             </div>  
                         </div>
                     </div> 
+                                      
                     <div id="storingStep" className="box" style={{display:'none'}}>
-                        <label className="checkbox">
+                        <label className="checkbox" style={{ display: payment_data_paytpv.disable_offer_savecard }}>
                             <input type="checkbox" name="jetiframe_savecard" id="jetiframe_savecard"/> {payment_data_paytpv.text.SaveCard}
                             <span className="paytpv-pci"> {payment_data_paytpv.text.Pci} </span>
                         </label>
                     </div>  
 
-                    <input type="submit" style={{width: '290px', display:'none'}} name="jetiframe-button" id="jetiframe-button" value={payment_data_paytpv.text.MakePayment}></input>
-                   
+                    <input type="submit" style={{width: '290px',display:'none'}} name="jetiframe-button" id="jetiframe-button" ref={jetiframeButton} value={payment_data_paytpv.text.MakePayment} ></input>
+        
                     <div id="paymentErrorMsg" style={{color: '#fff', background: '#b22222', margintop: '10px', textalign: 'center'}}></div>
-                  
-                    </>
+                </form>
+            </>
         
             }else{
                 content= Object( window.wp.element.createElement )(payment_content_paytpv,null);
@@ -216,5 +222,6 @@ let methods = [
     };
     
   
+ 
 
     

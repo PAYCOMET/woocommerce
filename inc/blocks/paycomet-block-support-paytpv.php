@@ -31,7 +31,7 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 
 		$saved_cards = Paytpv::savedActiveCards(get_current_user_id());
     	$store_card = (sizeof($saved_cards) == 0) ? "none" : "";
-
+		$disable_offer_savecard = ($this->get_setting( 'disable_offer_savecard' ) == 0 )? "" : "none";
 		return [
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
@@ -76,7 +76,8 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 		
             ),
 			'form' => $this->get_setting('pan_div_style'),
-			'activo' => $this->get_setting( 'isJetIframeActive')
+			'activo' => $this->get_setting( 'isJetIframeActive'),
+			'disable_offer_savecard' => $disable_offer_savecard
 		];
 	}
 
