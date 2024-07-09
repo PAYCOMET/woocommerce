@@ -71,9 +71,40 @@ jQuery(function($) {
         $('#nueva_tarjeta').hide();
         $('#close_vincular').hide();
         $('#open_vincular').show();
+        $('#aviso-tokenizacion').css("display", "none");
+        $("#id_card").val("");
+        $("#option").val("");
     }
 
+    $(".tokenizacion").click(function(){
+  
+        $('#close_vincular').show();
+        $('#aviso-tokenizacion').css("display", "block");
+        $("#id_card").val($(this).attr("id"));
+        $("#option").val("tokenization");
+        if ($('#payment_paycomet').val()!=1) {
+            $('#nueva_tarjeta').show();
+        } else {
+            window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
+        }
 
+        $('#open_vincular').hide();
+    });
+
+    $(".update").click(function(){
+  
+        $('#close_vincular').show();
+        $('#aviso-tokenizacion').css("display", "none");
+        $("#id_card").val($(this).attr("id"));
+        $("#option").val("update");
+        if ($('#payment_paycomet').val()!=1) {
+            $('#nueva_tarjeta').show();
+        } else {
+            window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
+        }
+
+        $('#open_vincular').hide();
+    });
 
     $(".remove_card").on("click", function(e){
         e.preventDefault();
@@ -87,7 +118,6 @@ jQuery(function($) {
 
     $(".save_desc").on("click", function(e){
         e.preventDefault();
-
         card_desc = $("#card_desc_"+$(this).attr("id")).val()
         saveDescriptionCard($(this));
     });
@@ -120,7 +150,7 @@ jQuery(function($) {
 
     window.removeCard = function(element)
     {
-
+       
         $.ajax({
             url: element.attr("href"),
             type: "POST",
@@ -136,6 +166,7 @@ jQuery(function($) {
             },
             dataType:"json"
         });
+        window.location.reload();
     };
 
 

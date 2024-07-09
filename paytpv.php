@@ -115,6 +115,76 @@
 			return $saved_card;
 		}
 
+		public static function existsCOF($paytpv_iduser,$paytpv_tokenuser){
+			global $wpdb;
+
+			$tokenCOF = $wpdb->get_row( $wpdb->prepare( "SELECT tokenCOF FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_iduser = %d AND paytpv_tokenuser = %d  ", $paytpv_iduser, $paytpv_tokenuser ), ARRAY_A );
+
+			return $tokenCOF;
+		}
+
+		public static function saveCOF($tokenCOF,$paytpv_iduser,$paytpv_tokenuser){
+            global $wpdb;
+
+            $saved_card = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}paytpv_customer set tokenCOF = %s WHERE paytpv_iduser = %d AND paytpv_tokenuser = %d ", $tokenCOF, $paytpv_iduser, $paytpv_tokenuser), ARRAY_A );
+
+            return $saved_card;
+        }
+
+		public static function checkCardExistence($user_id, $id_card, $paytpv_cc, $paytpv_brand){
+			global $wpdb;
+
+			$paytpv_cc = '************' . substr($paytpv_cc, -4);
+
+			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "' AND id != '" . $id_card . "'");
+
+			if (count($saved_cards) == 0) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public static function oldSavedCard($id_card){
+			global $wpdb;
+
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id = %d", $id_card ), ARRAY_A );
+
+			return $saved_card;
+		}
+
+		public static function removeCardTokenization($id_card){
+			global $wpdb;
+
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id = %d", $id_card ), ARRAY_A );
+
+			return $saved_card;
+		}
+
+		public static function subscriptionsWithCard($paytpv_iduser){
+			global $wpdb;
+
+			$orders = $wpdb->get_results( $wpdb->prepare( "SELECT t1.order_id FROM {$wpdb->prefix}wc_orders_meta t1 WHERE t1.meta_value = %d AND (SELECT t2.id FROM {$wpdb->prefix}wc_orders t2 WHERE t2.parent_order_id=t1.order_id  limit 1)", $paytpv_iduser ), ARRAY_A );
+
+			return $orders;
+		}
+
+		public static function replaceIdUser($order,$paytpv_iduser){
+            global $wpdb;
+
+            $idUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='PayTPV_IdUser'", $paytpv_iduser,$order ), ARRAY_A );
+
+            return $idUserUpdated;
+        }
+
+		public static function replaceTokenUser($order,$paytpv_tokenuser){
+            global $wpdb;
+
+            $tokenUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='Paytpv_TokenUser'", $paytpv_tokenuser,$order ), ARRAY_A );
+
+            return $tokenUserUpdated;
+        }
+
 		public static function removeCard($id_card){
 			global $wpdb;
 
@@ -136,7 +206,7 @@
 			}
 		}
 
-		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate){
+		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $paytpv_cof){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
@@ -146,9 +216,9 @@
 			if (count($saved_cards) == 0) {
 
 				if ($user_id>0){
-					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date` )
-														VALUES(%d, %s, %s, %s, %s, %d, %s)",
-													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $user_id, date('Y-m-d H:i:s')) );
+					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date`, tokenCOF )
+														VALUES(%d, %s, %s, %s, %s, %d, %s, %s)",
+													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $user_id, date('Y-m-d H:i:s'), $paytpv_cof) );
 					$wpdb->query( $insert_prepared );
 				}
 			}
