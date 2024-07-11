@@ -1,6 +1,8 @@
 <?php
     $saved_cards = Paytpv::savedActiveCards(get_current_user_id());
     $store_card = (sizeof($saved_cards) == 0) ? "none" : "";
+
+    $paytpvBase = new woocommerce_paytpv(false); 
 ?>
 <form role="form" name="aux"></form>
 <form role="form" name="paycometPaymentForm" id="paycometPaymentForm" action="javascript:jetIframeValidated()" method="POST">
@@ -21,7 +23,6 @@
         </select>
     </div>
 </div>
-
 
 <div id="toHide" style="display:none;">
     <input type="hidden" data-paycomet="jetID" value="<?php print $jet_id ?>">
@@ -150,7 +151,7 @@ jQuery( function( $ ) {
 
     // Si esta cargado el formulario jetIframe cargamos el js
     if ($("#paycometPaymentForm").val() == "") {
-        $.getScript("https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=es");
+        $.getScript('https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=<?=strtolower($paytpvBase->_getLanguange("EN"));?>');
     }
 
     $( "#place_order").on('click',function( event ) {
