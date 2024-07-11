@@ -1118,7 +1118,7 @@
 		/**
 		 * Get PAYCOMET language code
 		 * */
-		function _getLanguange()
+		public function _getLanguange($langDefault = "ES")
 		{
 			$lng = substr( get_bloginfo( 'language' ), 0, 2 );
 			if ( function_exists( 'qtrans_getLanguage' ) )
@@ -1128,6 +1128,8 @@
 				$lng = ICL_LANGUAGE_CODE;
 
 			switch ( $lng ) {
+				case 'es':
+					return 'ES';
 				case 'en':
 					return 'EN';
 				case 'fr':
@@ -1139,9 +1141,9 @@
 				case 'ca':
 					return 'CA';
 				default:
-					return 'ES';
+					return $langDefault;
 			}
-			return 'ES';
+			return $langDefault;
 		}
 
 		public function isoCodeToNumber($code)
