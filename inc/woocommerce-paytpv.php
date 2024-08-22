@@ -889,72 +889,6 @@
 
 					// execute_purchase
 					case 1:
-
-						if ( $_REQUEST[ 'TransactionType' ] == '1' && str_contains($_REQUEST["Order"], 'tokenization') && $_REQUEST[ 'Response' ] == 'OK') {
-
-							$id_card = $_REQUEST["Order"];
-
-							$terminal = $this->paytpv_terminals[0];
-							$term = $terminal["term"];
-							$pass = $terminal["pass"];
-							$ip = $this->getIp();
-					
-							
-							// Old card data
-							$old_saved_card = PayTPV::oldSavedCard($id_card);
-							$user_id = $old_saved_card["id_customer"];
-							$old_id_user= $old_saved_card["paytpv_iduser"];
-
-							// Update the parent order token
-
-							$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
-							foreach ($subscriptions_with_old_card as $order) {
-						
-								$result= Paytpv::replaceIdUser($order["order_id"],$_REQUEST[ 'IdUser' ]);
-								$result= Paytpv::replaceTokenUser($order["order_id"],$_REQUEST[ 'TokenUser' ]);
-								
-						
-							}
-
-							// Remove old User Card
-							$result= Paytpv::removeCardTokenization($id_card);
-				
-							// Save new User Card
-							$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],107);
-
-							// Refund Tokenization
-
-							$auth = $_REQUEST["AuthCode"];
-
-							if($this->apiKey != '') {
-
-								$notifyDirectPayment = 2; // No notificar HTTP
-				
-								$apiRest = new PayCometApiRest($this->apiKey);
-								$executeRefundReponse = $apiRest->executeRefund(
-									$id_card,
-									$term,
-									'50',
-									'EUR',
-									$auth,
-									$ip,
-									$notifyDirectPayment
-								);
-				
-								$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
-								$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
-								if ($executeRefundReponse->errorCode == 0) {
-									$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
-								}
-				
-							} 
-		
-						}
-
-						print "PAYCOMET OK";
-
-						exit;
-					break;
 					case 109:
 						$arrTerminalData = $this->TerminalCurrency($order);
 						$currency_iso_code = $arrTerminalData["currency_iso_code"];
@@ -984,6 +918,72 @@
 						}
 
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
+							
+							if (str_contains($_REQUEST["Order"], 'tokenization')) {
+
+								$id_card = $_REQUEST["Order"];
+	
+								$terminal = $this->paytpv_terminals[0];
+								$term = $terminal["term"];
+								$pass = $terminal["pass"];
+								$ip = $this->getIp();
+						
+								
+								// Old card data
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+								$old_id_user= $old_saved_card["paytpv_iduser"];
+	
+								// Update the parent order token
+	
+								$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
+								foreach ($subscriptions_with_old_card as $order) {
+							
+									$result= Paytpv::replaceIdUser($order["order_id"],$_REQUEST[ 'IdUser' ]);
+									$result= Paytpv::replaceTokenUser($order["order_id"],$_REQUEST[ 'TokenUser' ]);
+									
+							
+								}
+	
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+					
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],107);
+	
+								// Refund Tokenization
+	
+								$auth = $_REQUEST["AuthCode"];
+	
+								if($this->apiKey != '') {
+	
+									$notifyDirectPayment = 2; // No notificar HTTP
+					
+									$apiRest = new PayCometApiRest($this->apiKey);
+									$executeRefundReponse = $apiRest->executeRefund(
+										$id_card,
+										$term,
+										'50',
+										'EUR',
+										$auth,
+										$ip,
+										$notifyDirectPayment
+									);
+					
+									$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
+									$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
+									if ($executeRefundReponse->errorCode == 0) {
+										$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
+									}
+					
+								} 
+								print "PAYCOMET OK";
+	
+								exit;
+			
+							}
+	
+							
 							// Para las operaciones con tarjeta.
 							if (isset($idUser) && $_REQUEST[ 'MethodId' ]==1){
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {

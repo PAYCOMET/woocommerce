@@ -124,51 +124,48 @@ if (isset($_POST["paytpvToken"])) {
     <h2><?php _e( 'My Cards', 'wc_paytpv' ); ?></h2>
 
     <div class="span6" id="div_tarjetas">
-
-    <?php if (count($saved_cards)>0) { ?></p>
-            
-                    
-    <style>
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .wide {
-            width: 200px; 
-        }
-
-    </style>
-
+                
     <table>
+        
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            table, th, td {
+                border: 1px solid black;
+            }
+            th, td {
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .wide {
+                width: 200px; 
+            }
+        </style>
+
         <thead>
-        <?php if(count($saved_cards["valid"])>0 || count($saved_cards["invalid"])>0) { ?>  
-            <tr>
-                <th><?php print __('Card', 'wc_paytpv');?></th>
-                <th><?php print __('Brand', 'wc_paytpv');?></th>
-                <th><?php print __('Expiry Date', 'wc_paytpv');?></th>
-                <th><?php print __('Description', 'wc_paytpv');?></th>
-                <th>-------------------</th>
-            </tr>
-        <?php }else{ ?>
-        <p class="no_cards"><?php printf( __( 'You have no active cards.', 'wc_paytpv' ), '<a href="' . apply_filters( 'woocommerce_subscriptions_message_store_url', get_permalink( wc_get_page_id( 'shop' ) ) ) . '">', '</a>' ); ?></p>
+            <?php if(count($saved_cards["valid"])>0 || count($saved_cards["invalid"])>0) { ?>  
+                <tr>
+                    <th><?php print __('Card', 'wc_paytpv');?></th>
+                    <th><?php print __('Brand', 'wc_paytpv');?></th>
+                    <th><?php print __('Expiry Date', 'wc_paytpv');?></th>
+                    <th><?php print __('Description', 'wc_paytpv');?></th>
+                    <th>-------------------</th>
+                </tr>
+            <?php }else{ ?>
+            <p class="no_cards"><?php printf( __( 'You have no active cards.', 'wc_paytpv' ), '<a href="' . apply_filters( 'woocommerce_subscriptions_message_store_url', get_permalink( wc_get_page_id( 'shop' ) ) ) . '">', '</a>' ); ?></p>
+            <?php } ?>
         </thead>
-        <?php } ?>
+
         <tbody>
 
             <tr><td colspan="5" <?php if(count($saved_cards["valid"])<=0) { ?> style="display:none" <?php } ?>><p style="margin: 0 auto;"><?php _e( 'Available cards', 'wc_paytpv' ); ?></p></td></tr> 
             
-            <?php $apiRest = new PaycometApiRest($apiKey);?>   
+            <?php $apiRest = new PaycometApiRest($apiKey); $popup = 0; ?>   
             <?php foreach ($saved_cards["valid"] as $card) :  ?> 
                 <?php
                     $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
@@ -209,15 +206,13 @@ if (isset($_POST["paytpvToken"])) {
                         <label class="button_del">
                             <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card button renew"><?php print __('Remove', 'wc_paytpv');?></a>
                             <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
-                                if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
+                            if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
+
                                 <a href="javascript:void(0);" class=tokenizacion id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
                                     <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
                                 </a>
-                                <div id="popup-informativo" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
-                                    <?php print __('You have cards associated with a subscription that need to be updated. Press Update on the marked card.', 'wc_paytpv'); ?><br>
-                                    <button id="cerrar-popup" style="background-color: #721c24; color: #ffffff; border: none; padding: 5px 10px; margin-left: 10px; cursor: pointer;"><?php print __('Close', 'wc_paytpv'); ?></button>
-                                </div>
-                          
+                                <?php $popup = 1; ?>
+                                
                             <?php } ?>
                             <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
                         </label>
@@ -230,6 +225,32 @@ if (isset($_POST["paytpvToken"])) {
 
             <?php foreach ($saved_cards["invalid"] as $card) : ?> 
             
+                <?php
+                    $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
+               
+                    if (count($subscriptions) > 0) {
+
+                        $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
+
+                        if( $cof[tokenCOF]=="" || $cof[tokenCOF]==null  ){
+                            $infoUserResponse = $apiRest->infoUser(
+                                    $card["paytpv_iduser"],
+                                    $card["paytpv_tokenuser"],
+                                    $term
+                            );
+
+                            if ($infoUserResponse->errorCode==0) {
+                                $result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
+                                Paytpv::saveCOF($result['DS_TOKENCOF'],$card["paytpv_iduser"], $card["paytpv_tokenuser"]);
+                            }
+                        }else{ 
+                            $result['DS_TOKENCOF'] = $cof[tokenCOF];
+                        }        
+
+                    }
+                          
+                ?> 
+
                 <tr>
                     <td><?php print $card["paytpv_cc"]?></td>
                     <td><?php print " (" . $card["paytpv_brand"].") "?></td>
@@ -242,9 +263,19 @@ if (isset($_POST["paytpvToken"])) {
                     <td>
                         <label class="button_del">
                             <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card button renew"><?php print __('Remove', 'wc_paytpv');?></a>       
-                            <a href="javascript:void(0);" class=update id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
-                                <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
-                            </a>
+                            <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
+                            if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
+                            
+                                <a href="javascript:void(0);" class=tokenizacion id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                    <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
+                                </a>
+                                <?php $popup = 1; ?>
+                          
+                            <?php }else{ ?>
+                                <a href="javascript:void(0);" class=update id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                    <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
+                                </a>
+                            <?php } ?>
                             <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
                         </label>
                     </td>
@@ -255,7 +286,28 @@ if (isset($_POST["paytpvToken"])) {
         </tbody>
     </table>
 
-<?php } ?></p>  
+    <?php if($popup == 1) {?>
+        <div id="popup-informativo" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
+            <?php print __('You have cards associated with a subscription that need to be updated. Press Update on the marked card.', 'wc_paytpv'); ?><br>
+            <button id="cerrar-popup" style="background-color: #721c24; color: #ffffff; border: none; padding: 5px 10px; margin-left: 10px; cursor: pointer;"><?php print __('Close', 'wc_paytpv'); ?></button>
+        </div>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                var popup = document.getElementById('popup-informativo');
+                var cerrarPopup = document.getElementById('cerrar-popup');
+
+                // Mostrar el popup después de 1 segundo
+                setTimeout(function() {
+                    popup.style.display = 'block';
+                }, 1000);
+
+                // Cerrar el popup al hacer clic en el botón
+                cerrarPopup.addEventListener('click', function() {
+                    popup.style.display = 'none';
+                });
+            });
+        </script>
+    <?php } ?>
         
 </div>
 
@@ -379,19 +431,3 @@ if (isset($_POST["paytpvToken"])) {
 
 <?php endif; ?>
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var popup = document.getElementById('popup-informativo');
-        var cerrarPopup = document.getElementById('cerrar-popup');
-
-        // Mostrar el popup después de 1 segundo
-        setTimeout(function() {
-            popup.style.display = 'block';
-        }, 1000);
-
-        // Cerrar el popup al hacer clic en el botón
-        cerrarPopup.addEventListener('click', function() {
-            popup.style.display = 'none';
-        });
-    });
-</script>
