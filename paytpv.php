@@ -131,6 +131,37 @@
             return $saved_card;
         }
 
+		public static function get_my_cards_template($id) {
+		
+			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+			$term=$paytpv_terminals[0]["term"];
+			
+			$apiRest = new PaycometApiRest(get_option('woocommerce_paytpv_settings')['apikey']);
+			$apiResponse = $apiRest->form(
+				1,
+				'ES',
+				$term,
+				'',
+				[
+					'terminal' => (int) $term,
+					'methods' => [1],
+					'order' => $id."_tokenization",
+					'amount' => '50',
+					'currency' => 'EUR',
+					'secure' => 1,
+					'urlOk' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+					'urlKo' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+				]
+			);
+			if ($apiResponse->errorCode==0) {
+				$url_paytpv = $apiResponse->challengeUrl;
+			}else{
+				$url_paytpv=true;
+			}
+
+			return $url_paytpv;
+		}
+
 		public static function checkCardExistence($user_id, $id_card, $paytpv_cc, $paytpv_brand){
 			global $wpdb;
 

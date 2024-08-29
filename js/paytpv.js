@@ -55,6 +55,7 @@ jQuery(function($) {
 
     window.vincularTarjeta = function(){
 
+        $("#ifr-paytpv-container-acount").attr('src',url_paytpv);
         $('#savecard').attr("disabled", true);
         $('#close_vincular').show();
         if ($('#payment_paycomet').val()!=1) {
@@ -76,34 +77,34 @@ jQuery(function($) {
         $("#option").val("");
     }
 
-    $(".tokenizacion").click(function(){
-  
+    $(".tokenizacion").click(function(e){
+        e.preventDefault();
+        getUrlIframe($(this));
         $('#close_vincular').show();
-        $('#aviso-tokenizacion').css("display", "block");
         $("#id_card").val($(this).attr("id"));
         $("#option").val("tokenization");
         if ($('#payment_paycomet').val()!=1) {
+            $('#aviso-tokenizacion').css("display", "block");
             $('#nueva_tarjeta').show();
-        } else {
-            window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
-        }
-
+        } 
         $('#open_vincular').hide();
+        
+
     });
 
     $(".update").click(function(){
-  
+        $("#ifr-paytpv-container-acount").attr('src',url_paytpv);
         $('#close_vincular').show();
-        $('#aviso-tokenizacion').css("display", "none");
         $("#id_card").val($(this).attr("id"));
         $("#option").val("update");
         if ($('#payment_paycomet').val()!=1) {
+            $('#aviso-tokenizacion').css("display", "none");
             $('#nueva_tarjeta').show();
         } else {
             window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
         }
-
         $('#open_vincular').hide();
+        
     });
 
     $(".remove_card").on("click", function(e){
@@ -168,6 +169,32 @@ jQuery(function($) {
         });
         window.location.reload();
     };
+
+
+    window.getUrlIframe = function(element)
+    {
+  
+        $.ajax({
+            url: element.attr("href"),
+            type: "POST",
+            data: {
+                'tpvLstr': 'getUrlIframe',
+                'card_id': element.attr("id"),
+                'ajax': true
+            },
+            success: function(result)
+            {
+                if (result.resp == '0')
+                {
+                    $("#ifr-paytpv-container-acount").attr('src',result.url);
+                    if ($('#payment_paycomet').val()==1) {
+                        window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
+                    }
+                }
+            },
+            dataType:"json"
+        })
+    }
 
 
 });

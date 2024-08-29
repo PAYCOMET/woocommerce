@@ -1126,6 +1126,17 @@
 				exit;
 			}
 
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframe' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::get_my_cards_template($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
+
 			print "PAYCOMET WC ERROR 2";
 
 			exit;

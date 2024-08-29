@@ -1,5 +1,5 @@
 <?php
-// jetIFrame
+// jetIFrame 
 
 if (isset($_POST["paytpvToken"])) {
 
@@ -59,9 +59,6 @@ if (isset($_POST["paytpvToken"])) {
                     if (Paytpv::checkCardExistence($user_id,$id_card,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND'])){
                         $url_mi_cuenta = get_permalink( get_option('woocommerce_myaccount_page_id') );
 
-                        $paytpvBase = new woocommerce_paytpv(false);
-                        $ip = $paytpvBase->getIp();
-
                         $executePurchaseResponse = $apiRest->executePurchase(
                             $term,
                             $id_card."_tokenization",
@@ -87,6 +84,8 @@ if (isset($_POST["paytpvToken"])) {
                             $salida = $executePurchaseResponse->challengeUrl;
                             header('Location: '. $salida);
                             exit;
+                        }else{
+                            $error = true;
                         }
                     }else {
                         $error = true;
@@ -124,7 +123,12 @@ if (isset($_POST["paytpvToken"])) {
     <h2><?php _e( 'My Cards', 'wc_paytpv' ); ?></h2>
 
     <div class="span6" id="div_tarjetas">
-                
+    
+    <script type="text/javascript">
+        // Pasar variable a paytpv.js
+        var url_paytpv = "<?php echo $url_paytpv; ?>";
+    </script>
+
     <table>
         
         <style>
@@ -174,7 +178,7 @@ if (isset($_POST["paytpvToken"])) {
 
                         $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
 
-                        if( $cof[tokenCOF]=="" || $cof[tokenCOF]==null  ){
+                        if( $cof["tokenCOF"]=="" || $cof["tokenCOF"]==null  ){
                             $infoUserResponse = $apiRest->infoUser(
                                     $card["paytpv_iduser"],
                                     $card["paytpv_tokenuser"],
@@ -186,7 +190,7 @@ if (isset($_POST["paytpvToken"])) {
                                 Paytpv::saveCOF($result['DS_TOKENCOF'],$card["paytpv_iduser"], $card["paytpv_tokenuser"]);
                             }
                         }else{ 
-                            $result['DS_TOKENCOF'] = $cof[tokenCOF];
+                            $result['DS_TOKENCOF'] = $cof["tokenCOF"];
                         }        
 
                     }
@@ -208,7 +212,7 @@ if (isset($_POST["paytpvToken"])) {
                             <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
                             if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
 
-                                <a href="javascript:void(0);" class=tokenizacion id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframe','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="tokenizacion" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
                                     <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
                                 </a>
                                 <?php $popup = 1; ?>
@@ -232,7 +236,7 @@ if (isset($_POST["paytpvToken"])) {
 
                         $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
 
-                        if( $cof[tokenCOF]=="" || $cof[tokenCOF]==null  ){
+                        if( $cof["tokenCOF"]=="" || $cof["tokenCOF"]==null  ){
                             $infoUserResponse = $apiRest->infoUser(
                                     $card["paytpv_iduser"],
                                     $card["paytpv_tokenuser"],
@@ -244,7 +248,7 @@ if (isset($_POST["paytpvToken"])) {
                                 Paytpv::saveCOF($result['DS_TOKENCOF'],$card["paytpv_iduser"], $card["paytpv_tokenuser"]);
                             }
                         }else{ 
-                            $result['DS_TOKENCOF'] = $cof[tokenCOF];
+                            $result['DS_TOKENCOF'] = $cof["tokenCOF"];
                         }        
 
                     }
@@ -266,13 +270,13 @@ if (isset($_POST["paytpvToken"])) {
                             <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
                             if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
                             
-                                <a href="javascript:void(0);" class=tokenizacion id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframe','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="tokenizacion" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
                                     <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
                                 </a>
                                 <?php $popup = 1; ?>
                           
                             <?php }else{ ?>
-                                <a href="javascript:void(0);" class=update id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                <a class=update id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
                                     <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
                                 </a>
                             <?php } ?>
@@ -285,7 +289,7 @@ if (isset($_POST["paytpvToken"])) {
 
         </tbody>
     </table>
-
+    
     <?php if($popup == 1) {?>
         <div id="popup-informativo" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
             <?php print __('You have cards associated with a subscription that need to be updated. Press Update on the marked card.', 'wc_paytpv'); ?><br>
