@@ -162,6 +162,33 @@
 			return $url_paytpv;
 		}
 
+		public static function get_my_cards_template_expired($id) {
+		
+			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+			$term=$paytpv_terminals[0]["term"];
+			
+			$apiRest = new PaycometApiRest(get_option('woocommerce_paytpv_settings')['apikey']);
+			$apiResponse = $apiRest->form(
+				107,
+				'ES',
+				$term,
+				'',
+				[
+					'terminal' => (int) $term,
+					'order' => $id."_tokenization",
+					'urlOk' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+					'urlKo' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+				]
+			);
+			if ($apiResponse->errorCode==0) {
+				$url_paytpv = $apiResponse->challengeUrl;
+			}else{
+				$url_paytpv=true;
+			}
+
+			return $url_paytpv;
+		}
+
 		public static function checkCardExistence($user_id, $id_card, $paytpv_cc, $paytpv_brand){
 			global $wpdb;
 
@@ -243,7 +270,7 @@
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
 
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "'");
-
+			
 			if (count($saved_cards) == 0) {
 
 				if ($user_id>0){

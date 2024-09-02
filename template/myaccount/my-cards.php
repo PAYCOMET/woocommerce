@@ -276,7 +276,7 @@ if (isset($_POST["paytpvToken"])) {
                                 <?php $popup = 1; ?>
                           
                             <?php }else{ ?>
-                                <a class=update id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframeExpired','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="update" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
                                     <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
                                 </a>
                             <?php } ?>

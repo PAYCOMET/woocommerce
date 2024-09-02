@@ -875,6 +875,23 @@
 
 						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
 
+							if (str_contains($_REQUEST["Order"], 'tokenization')) {
+								
+								$id_card = $_REQUEST["Order"];
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+		
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+				
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],107);
+								
+								print "PAYCOMET OK";
+								exit;
+
+							}
+
 							if (isset($_REQUEST[ 'IdUser' ])){
 								// Save User Card
 								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
@@ -1130,6 +1147,18 @@
 			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframe' ) {//NOTIFICACIÓN
 				$id_card = $_GET["id"];
 				$url_paytpv = PayTPV::get_my_cards_template($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
+
+
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframeExpired' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::get_my_cards_template_expired($id_card); 
 				
 				$res["resp"] = 0;
 				$res["url"] = $url_paytpv;
