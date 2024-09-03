@@ -876,7 +876,7 @@
 						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
 
 							if (str_contains($_REQUEST["Order"], 'tokenization')) {
-								
+
 								$id_card = $_REQUEST["Order"];
 								$old_saved_card = PayTPV::oldSavedCard($id_card);
 								$user_id = $old_saved_card["id_customer"];
@@ -907,33 +907,34 @@
 					// execute_purchase
 					case 1:
 					case 109:
-						$arrTerminalData = $this->TerminalCurrency($order);
-						$currency_iso_code = $arrTerminalData["currency_iso_code"];
-						$term = $arrTerminalData["term"];
-						$pass = $arrTerminalData["pass"];
-						if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-							$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
-						} else {
-							$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+						if (!str_contains($_REQUEST["Order"], 'tokenization')) {
+							$arrTerminalData = $this->TerminalCurrency($order);
+							$currency_iso_code = $arrTerminalData["currency_iso_code"];
+							$term = $arrTerminalData["term"];
+							$pass = $arrTerminalData["pass"];
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
+							} else {
+								$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+							}
+						
+							$mensaje = $this->clientcode .
+									$term .
+									$_REQUEST[ 'TransactionType' ] .
+									$_REQUEST[ 'Order' ] .
+									$_REQUEST[ 'Amount' ] .
+									$currency_iso_code;
+
+							$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
+
+							// Validacion firma
+							if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
+								print "PAYCOMET WC KO Firma";
+								exit;
+							}
 						}
-
-						$mensaje = $this->clientcode .
-								$term .
-								$_REQUEST[ 'TransactionType' ] .
-								$_REQUEST[ 'Order' ] .
-								$_REQUEST[ 'Amount' ] .
-								$currency_iso_code;
-
-						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
-
-						// Validacion firma
-						if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
-							print "PAYCOMET WC KO Firma";
-							exit;
-						}
-
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
 							
 							if (str_contains($_REQUEST["Order"], 'tokenization')) {
