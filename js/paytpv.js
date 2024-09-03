@@ -60,6 +60,8 @@ jQuery(function($) {
         $('#close_vincular').show();
         if ($('#payment_paycomet').val()!=1) {
             $('#nueva_tarjeta').show();
+            scrollToCard();
+            
         } else {
             window.open($('#ifr-paytpv-container-acount').attr('src'),'_self');
         }
@@ -77,6 +79,16 @@ jQuery(function($) {
         $("#option").val("");
     }
 
+
+    window.scrollToCard = function () {        
+        $('html').animate(
+            {
+              scrollTop: $('#nueva_tarjeta').offset().top,
+            },
+            800 //speed
+          );
+    }
+
     $(".tokenizacion").click(function(e){
         e.preventDefault();
         getUrlIframe($(this));
@@ -86,6 +98,8 @@ jQuery(function($) {
         if ($('#payment_paycomet').val()!=1) {
             $('#aviso-tokenizacion').css("display", "block");
             $('#nueva_tarjeta').show();
+            scrollToCard();  
+            
         } 
         $('#open_vincular').hide();
         
@@ -100,7 +114,8 @@ jQuery(function($) {
         $("#option").val("update");
         if ($('#payment_paycomet').val()!=1) {
             $('#aviso-tokenizacion').css("display", "none");
-            $('#nueva_tarjeta').show();
+            $('#nueva_tarjeta').show();            
+            scrollToCard(); 
         }
         $('#open_vincular').hide();
         

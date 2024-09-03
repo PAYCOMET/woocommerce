@@ -57,7 +57,8 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
 
 
 .woocommerce_paytpv_cards .card_desc{
-	min-width: 200px;
+	min-width: 160px;
+    font-size: 0.8em;
 }
 
 #storingStepUser h4, #storingStep h4{
