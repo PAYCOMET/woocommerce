@@ -875,9 +875,9 @@
 
 						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
 
-							if (str_contains($_REQUEST["Order"], 'tokenization')) {
-
-								$id_card = $_REQUEST["Order"];
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
 								$old_saved_card = PayTPV::oldSavedCard($id_card);
 								$user_id = $old_saved_card["id_customer"];
 		
@@ -885,7 +885,7 @@
 								$result= Paytpv::removeCardTokenization($id_card);
 				
 								// Save new User Card
-								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],107);
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107);
 								
 								print "PAYCOMET OK";
 								exit;
@@ -907,7 +907,7 @@
 					// execute_purchase
 					case 1:
 					case 109:
-						if (!str_contains($_REQUEST["Order"], 'tokenization')) {
+						if (!str_contains($_REQUEST["Order"], '_tokenization')) {
 							$arrTerminalData = $this->TerminalCurrency($order);
 							$currency_iso_code = $arrTerminalData["currency_iso_code"];
 							$term = $arrTerminalData["term"];
@@ -937,40 +937,35 @@
 						}
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
 							
-							if (str_contains($_REQUEST["Order"], 'tokenization')) {
-
-								$id_card = $_REQUEST["Order"];
-	
+							// Notificacion para tokenizacion
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
+								
 								$terminal = $this->paytpv_terminals[0];
 								$term = $terminal["term"];
 								$pass = $terminal["pass"];
 								$ip = $this->getIp();
-						
-								
+														
 								// Old card data
 								$old_saved_card = PayTPV::oldSavedCard($id_card);
 								$user_id = $old_saved_card["id_customer"];
 								$old_id_user= $old_saved_card["paytpv_iduser"];
 	
 								// Update the parent order token
-	
 								$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
-								foreach ($subscriptions_with_old_card as $order) {
-							
-									$result= Paytpv::replaceIdUser($order["order_id"],$_REQUEST[ 'IdUser' ]);
-									$result= Paytpv::replaceTokenUser($order["order_id"],$_REQUEST[ 'TokenUser' ]);
-									
-							
+								foreach ($subscriptions_with_old_card as $order) {							
+									$result= Paytpv::replaceIdUser($order["order_id"], $_REQUEST[ 'IdUser' ]);
+									$result= Paytpv::replaceTokenUser($order["order_id"], $_REQUEST[ 'TokenUser' ]);																
 								}
 	
 								// Remove old User Card
 								$result= Paytpv::removeCardTokenization($id_card);
 					
 								// Save new User Card
-								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],107);
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107);
 	
 								// Refund Tokenization
-	
 								$auth = $_REQUEST["AuthCode"];
 	
 								if($this->apiKey != '') {
@@ -979,7 +974,7 @@
 					
 									$apiRest = new PayCometApiRest($this->apiKey);
 									$executeRefundReponse = $apiRest->executeRefund(
-										$id_card,
+										$_REQUEST["Order"],
 										$term,
 										'50',
 										'EUR',
@@ -989,13 +984,12 @@
 									);
 					
 									$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
-									$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode;
-									if ($executeRefundReponse->errorCode == 0) {
-										$result['DS_MERCHANT_AUTHCODE'] = $executeRefundReponse->authCode;
-									}
+									$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode ?? 0;
+
+									print "PAYCOMET OK TOKENIZATION REFUND " . $result["DS_ERROR_ID"];									
 					
 								} 
-								print "PAYCOMET OK";
+								print "PAYCOMET OK TOKENIZATION";
 	
 								exit;
 			

@@ -2,7 +2,7 @@
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
 Requires at least: 3.0.1
-Tested up to: 6.5.5
+Tested up to: 6.6.1
 Requires PHP: 5.6
 Stable tag: 5.35
 License: GPLv2 or later

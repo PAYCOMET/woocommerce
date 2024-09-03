@@ -61,7 +61,7 @@ if (isset($_POST["paytpvToken"])) {
 
                         $executePurchaseResponse = $apiRest->executePurchase(
                             $term,
-                            $id_card."_tokenization",
+                            $id_card ."_" . rand() . "_tokenization",
                             '50',
                             'EUR', 
                             1,

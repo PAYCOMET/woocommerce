@@ -145,7 +145,7 @@
 				[
 					'terminal' => (int) $term,
 					'methods' => [1],
-					'order' => $id."_tokenization",
+					'order' => $id . "_" . rand() . "_tokenization",
 					'amount' => '50',
 					'currency' => 'EUR',
 					'secure' => 1,
@@ -175,7 +175,7 @@
 				'',
 				[
 					'terminal' => (int) $term,
-					'order' => $id."_tokenization",
+					'order' => $id . "_" . rand() . "_tokenization",
 					'urlOk' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
 					'urlKo' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
 				]
