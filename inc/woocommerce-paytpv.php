@@ -33,7 +33,9 @@
 				'subscription_suspension',
 				'subscription_reactivation',
 				'subscription_amount_changes',
-				'subscription_date_changes'
+				'subscription_date_changes',
+				'multiple_subscriptions'
+
 			);
 			// Load the form fields
 			$this->init_form_fields();
