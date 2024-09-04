@@ -118,7 +118,7 @@
 		public static function existsCOF($paytpv_iduser,$paytpv_tokenuser){
 			global $wpdb;
 
-			$tokenCOF = $wpdb->get_row( $wpdb->prepare( "SELECT tokenCOF FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_iduser = %d AND paytpv_tokenuser = %d  ", $paytpv_iduser, $paytpv_tokenuser ), ARRAY_A );
+			$tokenCOF = $wpdb->get_row( $wpdb->prepare( "SELECT tokenCOF FROM {$wpdb->prefix}paytpv_customer WHERE id_customer = %d and paytpv_iduser = %d AND paytpv_tokenuser = %d  ", get_current_user_id(), $paytpv_iduser, $paytpv_tokenuser ), ARRAY_A );
 
 			return $tokenCOF;
 		}
@@ -126,12 +126,12 @@
 		public static function saveCOF($tokenCOF,$paytpv_iduser,$paytpv_tokenuser){
             global $wpdb;
 
-            $saved_card = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}paytpv_customer set tokenCOF = %s WHERE paytpv_iduser = %d AND paytpv_tokenuser = %d ", $tokenCOF, $paytpv_iduser, $paytpv_tokenuser), ARRAY_A );
+            $saved_card = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}paytpv_customer set tokenCOF = %s WHERE id_customer = %d and paytpv_iduser = %d AND paytpv_tokenuser = %d ", $tokenCOF, get_current_user_id(), $paytpv_iduser, $paytpv_tokenuser), ARRAY_A );
 
             return $saved_card;
         }
 
-		public static function get_my_cards_template($id) {
+		public static function getMyCardsTemplateUrl($id) {
 		
 			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
 			$term=$paytpv_terminals[0]["term"];
@@ -162,7 +162,7 @@
 			return $url_paytpv;
 		}
 
-		public static function get_my_cards_template_expired($id) {
+		public static function getMyCardsTemplateExpiredUrl($id) {
 		
 			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
 			$term=$paytpv_terminals[0]["term"];
@@ -222,7 +222,7 @@
 		public static function subscriptionsWithCard($paytpv_iduser){
 			global $wpdb;
 
-			$orders = $wpdb->get_results( $wpdb->prepare( "SELECT t1.order_id FROM {$wpdb->prefix}wc_orders_meta t1 WHERE t1.meta_value = %d AND (SELECT t2.id FROM {$wpdb->prefix}wc_orders t2 WHERE t2.parent_order_id=t1.order_id  limit 1)", $paytpv_iduser ), ARRAY_A );
+			$orders = $wpdb->get_results( $wpdb->prepare( "SELECT t1.order_id FROM {$wpdb->prefix}wc_orders_meta t1 WHERE meta_key='PayTPV_IdUser' and t1.meta_value = %d AND (SELECT t2.id FROM {$wpdb->prefix}wc_orders t2 WHERE t2.parent_order_id=t1.order_id  limit 1)", $paytpv_iduser ), ARRAY_A );
 
 			return $orders;
 		}
@@ -230,7 +230,7 @@
 		public static function replaceIdUser($order,$paytpv_iduser){
             global $wpdb;
 
-            $idUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='PayTPV_IdUser'", $paytpv_iduser,$order ), ARRAY_A );
+            $idUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='PayTPV_IdUser'", $paytpv_iduser, $order ), ARRAY_A );
 
             return $idUserUpdated;
         }
@@ -238,7 +238,7 @@
 		public static function replaceTokenUser($order,$paytpv_tokenuser){
             global $wpdb;
 
-            $tokenUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='Paytpv_TokenUser'", $paytpv_tokenuser,$order ), ARRAY_A );
+            $tokenUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='Paytpv_TokenUser'", $paytpv_tokenuser, $order ), ARRAY_A );
 
             return $tokenUserUpdated;
         }
@@ -246,7 +246,7 @@
 		public static function removeCard($id_card){
 			global $wpdb;
 
-			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id_customer = %d AND id = %d", get_current_user_id(),$id_card ), ARRAY_A );
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id_customer = %d AND id = %d", get_current_user_id(), $id_card ), ARRAY_A );
 
 			return $saved_card;
 		}

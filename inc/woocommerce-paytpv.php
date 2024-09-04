@@ -959,6 +959,7 @@
 								foreach ($subscriptions_with_old_card as $order) {							
 									$result= Paytpv::replaceIdUser($order["order_id"], $_REQUEST[ 'IdUser' ]);
 									$result= Paytpv::replaceTokenUser($order["order_id"], $_REQUEST[ 'TokenUser' ]);																
+									print "PAYCOMET OK TOKENIZATION UPDATE ORDER " . $order["order_id"] . ", idUserAnt: " . $old_id_user . ", idUserNew: " . $_REQUEST[ 'IdUser' ];
 								}
 	
 								// Remove old User Card
@@ -1143,7 +1144,7 @@
 			// Get Iframe Url (my_cards)
 			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframe' ) {//NOTIFICACIÓN
 				$id_card = $_GET["id"];
-				$url_paytpv = PayTPV::get_my_cards_template($id_card); 
+				$url_paytpv = PayTPV::getMyCardsTemplateUrl($id_card); 
 				
 				$res["resp"] = 0;
 				$res["url"] = $url_paytpv;
@@ -1155,7 +1156,7 @@
 			// Get Iframe Url (my_cards)
 			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframeExpired' ) {//NOTIFICACIÓN
 				$id_card = $_GET["id"];
-				$url_paytpv = PayTPV::get_my_cards_template_expired($id_card); 
+				$url_paytpv = PayTPV::getMyCardsTemplateExpiredUrl($id_card); 
 				
 				$res["resp"] = 0;
 				$res["url"] = $url_paytpv;
@@ -2077,8 +2078,8 @@
 				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-					$payptv_iduser = $order->get_meta('PayTPV_IdUser', true );
-					$payptv_tokenuser = $order->get_meta('PayTPV_TokenUser', true );
+					$payptv_iduser = $parent_order->get_meta('PayTPV_IdUser', true );
+					$payptv_tokenuser = $parent_order->get_meta('PayTPV_TokenUser', true );
 				} else {
 					$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
 					$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
@@ -2148,6 +2149,9 @@
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
 				}
+
+				$this->write_log('Error ' . json_encode($charge));
+
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
 					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
