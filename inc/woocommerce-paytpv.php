@@ -1174,6 +1174,7 @@
 			// Si llega referencia obtenemos la ip
 			if ($ref !== false) {
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order = wc_get_order( ( int ) $ref );
 					$DS_ORIGINAL_IP = $order->get_meta('_customer_ip_address', true );
 				} else {
 					$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
