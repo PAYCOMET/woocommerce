@@ -1070,6 +1070,7 @@
 			// Si llega referencia obtenemos la ip
 			if ($ref !== false) {
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order = wc_get_order( ( int ) $ref );
 					$DS_ORIGINAL_IP = $order->get_meta('_customer_ip_address', true );
 				} else {
 					$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
@@ -1972,8 +1973,8 @@
 				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-					$payptv_iduser = $order->get_meta('PayTPV_IdUser', true );
-					$payptv_tokenuser = $order->get_meta('PayTPV_TokenUser', true );
+					$payptv_iduser = $parent_order->get_meta('PayTPV_IdUser', true );
+					$payptv_tokenuser = $parent_order->get_meta('PayTPV_TokenUser', true );
 				} else {
 					$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
 					$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
