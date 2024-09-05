@@ -4,7 +4,7 @@ Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pa
 Requires at least: 3.0.1
 Tested up to: 6.6.1
 Requires PHP: 5.6
-Stable tag: 5.35
+Stable tag: 5.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,8 +42,11 @@ Funcionalidades del módulo:
 
 == Changelog ==
 
-= 5.35 =
+= 5.36 =
 Mejoras de código. Actualización de tarjetas.
+
+= 5.35 =
+Fix ejecucion pagos suscripcion HPOS.
 
 = 5.34 =
 Mejoras de código. Cambios en traducciones.
