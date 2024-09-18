@@ -1,5 +1,5 @@
 <?php
-// jetIFrame 
+// jetIFrame
 
 if (isset($_POST["paytpvToken"])) {
 
@@ -54,16 +54,17 @@ if (isset($_POST["paytpvToken"])) {
                     $result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
                     $result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
                 }
-                
+
                 if ($id_card!="" && $option=="tokenization"){
-                    if (Paytpv::checkCardExistence($user_id,$id_card,$result['DS_MERCHANT_PAN'],$result['DS_CARD_BRAND'])){
+                    if (Paytpv::checkCardExistence($user_id, $id_card, $result['DS_MERCHANT_PAN'], $result['DS_CARD_BRAND'])){
+
                         $url_mi_cuenta = get_permalink( get_option('woocommerce_myaccount_page_id') );
 
                         $executePurchaseResponse = $apiRest->executePurchase(
                             $term,
                             $id_card ."_" . rand() . "_tokenization",
                             '50',
-                            'EUR', 
+                            'EUR',
                             1,
                             $ip,
                             1,
@@ -80,10 +81,12 @@ if (isset($_POST["paytpvToken"])) {
                             '',
                             1
                         );
+
+
                         if ($executePurchaseResponse->errorCode==0) {
                             $salida = $executePurchaseResponse->challengeUrl;
-                            header('Location: '. $salida);
-                            exit;
+                            wp_redirect( $salida, 303);
+                            exit();
                         }else{
                             $error = true;
                         }
@@ -123,16 +126,49 @@ if (isset($_POST["paytpvToken"])) {
     <h2><?php _e( 'My Cards', 'wc_paytpv' ); ?></h2>
 
     <div class="span6" id="div_tarjetas">
-    
+
     <script type="text/javascript">
         // Pasar variable a paytpv.js
         var url_paytpv = "<?php echo $url_paytpv; ?>";
     </script>
 
+    <?php
+        // Procesamos la tarjetas para ver si están asociadas a una suscripcion y agruparlas en "Tarjetas de suscripción"
+        $apiRest = new PaycometApiRest($apiKey); $popup = 0;
+        foreach ($saved_cards["valid"] as $cardInd => $card) {
+            $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
+
+            if (count($subscriptions) > 0) {
+                $card["expired"] = 0; // Tarjeta no Caducada
+                // Si es una tarjeta de suscripcion la mostraremos en el gurpo de tarjetas de suscripcion
+                $saved_cards["suscription"][] = $card;
+
+                // Eliminamos la tarjeta de las Validas
+                unset($saved_cards["valid"][$cardInd]);
+                continue;
+            }
+        }
+
+        foreach ($saved_cards["invalid"] as $cardInd => $card) {
+            $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
+
+            if (count($subscriptions) > 0) {
+                $card["expired"] = 1; // Tarjeta Caducada
+                // Si es una tarjeta de suscripcion la mostraremos en el gurpo de tarjetas de suscripcion
+                $saved_cards["suscription"][] = $card;
+
+                // Eliminamos la tarjeta de las Validas
+                unset($saved_cards["invalid"][$cardInd]);
+                continue;
+            }
+        }
+    ?>
+
+
     <table class="my_account_orders woocommerce-orders-table woocommerce-MyAccount-subscriptions shop_table shop_table_responsive">
-        
+
         <thead>
-            <?php if(count($saved_cards["valid"])>0 || count($saved_cards["invalid"])>0) { ?>  
+            <?php if(count($saved_cards["valid"])>0 || count($saved_cards["invalid"])>0 || count($saved_cards["suscription"])>0) { ?>
                 <tr>
                     <th class="class="order-number woocommerce-orders-table__header woocommerce-orders-table__header-order-number"><?php print __('Card', 'wc_paytpv');?></th>
                     <th class="class="order-number woocommerce-orders-table__header woocommerce-orders-table__header-order-number"><?php print __('Brand', 'wc_paytpv');?></th>
@@ -147,18 +183,65 @@ if (isset($_POST["paytpvToken"])) {
 
         <tbody>
 
-            <tr><td colspan="5" <?php if(count($saved_cards["valid"])<=0) { ?> style="display:none" <?php } ?>><p style="margin: 0 auto;"><?php _e( 'Available cards', 'wc_paytpv' ); ?></p></td></tr> 
-            
-            <?php $apiRest = new PaycometApiRest($apiKey); $popup = 0; ?>   
-            <?php foreach ($saved_cards["valid"] as $card) :  ?> 
-                <?php
-                    $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
-               
-                    if (count($subscriptions) > 0) {
+            <?php if(count($saved_cards["valid"])>0) : ?>
+
+                <tr><td colspan="5"><strong><?php _e( 'Available cards', 'wc_paytpv' ); ?></strong></td></tr>
+
+                <?php foreach ($saved_cards["valid"] as $card) :  ?>
+                    <tr class="woocommerce-orders-table__row">
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_cc"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
+                        <td class="woocommerce-orders-table__cell">
+                            <input type="text" class="card_desc" maxlength="32" id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                        </td>
+
+                        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
+
+                            <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc woocommerce-button wp-element-button button  renew "><?php print __('Save Description', 'wc_paytpv');?></a>
+                            <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card woocommerce-button wp-element-button button  renew"><?php print __('Remove', 'wc_paytpv');?></a>
+                            <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
+                        </td>
+                    </tr>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <?php if(count($saved_cards["invalid"])>0) : ?>
+                <tr><td colspan="5"><strong><?php _e( 'Inactive cards', 'wc_paytpv' ); ?></strong></td></tr>
+                <?php foreach ($saved_cards["invalid"] as $card) : ?>
+
+                    <tr class="woocommerce-orders-table__row">
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_cc"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
+                        <td class="woocommerce-orders-table__cell">
+                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                        </td>
+
+                        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
+                        <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc woocommerce-button wp-element-button button  renew"><?php print __('Save Description', 'wc_paytpv');?></a>
+                            <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card woocommerce-button wp-element-button button  renew"><?php print __('Remove', 'wc_paytpv');?></a>
+                            <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframeExpired','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="update woocommerce-button wp-element-button button " id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
+                            </a>
+                            <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
+                        </td>
+                    </tr>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            <?php if(count($saved_cards["suscription"])>0) : ?>
+                <tr><td colspan="5"><strong><?php _e( 'Subscriptions cards', 'wc_paytpv' ); ?></strong></td></tr>
+                <?php foreach ($saved_cards["suscription"] as $card) : ?>
+
+                    <?php
+                        $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
 
                         $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
-
-                        if( $cof["tokenCOF"]=="" || $cof["tokenCOF"]==null  ){
+                        // Si la tarjeta de suscripción y no tiene COF verifico en PA
+                        if( $cof["tokenCOF"] != 1){
                             $infoUserResponse = $apiRest->infoUser(
                                     $card["paytpv_iduser"],
                                     $card["paytpv_tokenuser"],
@@ -168,110 +251,49 @@ if (isset($_POST["paytpvToken"])) {
                             if ($infoUserResponse->errorCode==0) {
                                 $result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
                                 Paytpv::saveCOF($result['DS_TOKENCOF'],$card["paytpv_iduser"], $card["paytpv_tokenuser"]);
+                                $cof["tokenCOF"] = $result['DS_TOKENCOF'];
                             }
-                        }else{ 
+                        }else{
                             $result['DS_TOKENCOF'] = $cof["tokenCOF"];
-                        }        
+                        }
+                    ?>
 
-                    }
-                          
-                ?> 
-                
-                <tr class="woocommerce-orders-table__row">
-                    <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_cc"]?></td>
-                    <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
-                    <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
-                    <td class="woocommerce-orders-table__cell">
-                        <input type="text" class="card_desc" maxlength="32" id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">                        
-                    </td>
-                    
-                    <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
-                        
-                        <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc woocommerce-button wp-element-button button button-smal renew "><?php print __('Save Description', 'wc_paytpv');?></a>
-                        <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card woocommerce-button wp-element-button button renew"><?php print __('Remove', 'wc_paytpv');?></a>
-                        <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
-                        if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
+                    <tr class="woocommerce-orders-table__row">
 
-                            <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframe','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="tokenizacion woocommerce-button wp-element-button button" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
-                                <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
-                            </a>
-                            <?php $popup = 1; ?>
-                            
-                        <?php } ?>
-                        <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
-                    </td>
-                </tr>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_cc"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
+                        <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
+                        <td class="woocommerce-orders-table__cell">
+                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                        </td>
 
-            <?php endforeach; ?>
+                        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
+                        <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc woocommerce-button wp-element-button button renew"><?php print __('Save Description', 'wc_paytpv');?></a>
+                            <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card woocommerce-button wp-element-button button renew"><?php print __('Remove', 'wc_paytpv');?></a>
+                            <?php
+                            if($card["expired"] || $cof["tokenCOF"]== "0"){ ?>
 
-            <tr><td colspan="5" <?php if(count($saved_cards["invalid"])<=0) { ?> style="display:none" <?php } ?>><p style="margin: 0 auto;"><?php _e( 'Inactive cards', 'wc_paytpv' ); ?></p></td></tr>  
+                                <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframe','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="tokenizacion woocommerce-button wp-element-button button" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
+                                    <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
+                                </a>
+                                <?php $popup = 1; ?>
+                            <?php } ?>
+                            <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">
+                        </td>
+                    </tr>
 
-            <?php foreach ($saved_cards["invalid"] as $card) : ?> 
-            
-                <?php
-                    $subscriptions = PayTPV::subscriptionsWithCard($card["paytpv_iduser"]);
-               
-                    if (count($subscriptions) > 0) {
-
-                        $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
-
-                        if( $cof["tokenCOF"]=="" || $cof["tokenCOF"]==null  ){
-                            $infoUserResponse = $apiRest->infoUser(
-                                    $card["paytpv_iduser"],
-                                    $card["paytpv_tokenuser"],
-                                    $term
-                            );
-
-                            if ($infoUserResponse->errorCode==0) {
-                                $result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
-                                Paytpv::saveCOF($result['DS_TOKENCOF'],$card["paytpv_iduser"], $card["paytpv_tokenuser"]);
-                            }
-                        }else{ 
-                            $result['DS_TOKENCOF'] = $cof["tokenCOF"];
-                        }        
-
-                    }
-                          
-                ?> 
-
-                <tr class="woocommerce-orders-table__row">
-                    <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_cc"]?></td>
-                    <td class="woocommerce-orders-table__cell"><?php print " (" . $card["paytpv_brand"].") "?></td>
-                    <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
-                    <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
-                        <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">                        
-                    </td>
-                    
-                    <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
-                    <a href="<?php print add_query_arg( array('tpvLstr'=>'saveDesc','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="save_desc woocommerce-button wp-element-button button button-smal renew"><?php print __('Save Description', 'wc_paytpv');?></a>
-                        <a href="<?php print add_query_arg( array('tpvLstr'=>'removeCard','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" id="<?php print $card["id"]?>" class="remove_card woocommerce-button wp-element-button button renew"><?php print __('Remove', 'wc_paytpv');?></a>       
-                        <?php $cof=PayTPV::existsCOF($card["paytpv_iduser"],$card["paytpv_tokenuser"]);
-                        if($cof["tokenCOF"]== "0" && count($subscriptions) > 0){ ?>
-                        
-                            <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframe','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="tokenizacion woocommerce-button wp-element-button button" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
-                                <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
-                            </a>
-                            <?php $popup = 1; ?>
-                        
-                        <?php }else{ ?>
-                            <a href="<?php print add_query_arg( array('tpvLstr'=>'getUrlIframeExpired','id'=>$card["id"],'wc-api'=>'woocommerce_paytpv'), home_url( '/' )  );?>" class="update woocommerce-button wp-element-button button" id="<?php print __($card["id"])?>"  title="<?php print __('Update', 'wc_paytpv');?>">
-                                <span><?php print __('Update', 'wc_paytpv');?><i></i></span>
-                            </a>
-                        <?php } ?>
-                        <input type="hidden" name="cc_<?php print $card["id"]?>" id="cc_<?php print $card["id"]?>" value="<?php print $card["paytpv_cc"]?>">                    
-                    </td>
-                </tr>
-    
-            <?php endforeach; ?>
-
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
-    
+
     <?php if($popup == 1) {?>
-        <div id="popup-informativo" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
+        <div class="woocommerce-notices-wrapper">
+            <div id="popup-informativo" class="woocommerce-message" role="alert"
+            style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;">
             <?php print __('You have cards associated with a subscription that need to be updated. Press Update on the marked card.', 'wc_paytpv'); ?><br>
-            <button id="cerrar-popup" style="background-color: #721c24; color: #ffffff; border: none; padding: 5px 10px; margin-left: 10px; cursor: pointer;"><?php print __('Close', 'wc_paytpv'); ?></button>
-        </div>
+            <button class="woocommerce-button wp-element-button button" id="cerrar-popup"><?php print __('Close', 'wc_paytpv'); ?></button>
+        </div></div>
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
                 var popup = document.getElementById('popup-informativo');
@@ -289,7 +311,7 @@ if (isset($_POST["paytpvToken"])) {
             });
         </script>
     <?php } ?>
-        
+
 </div>
 
     <div id="storingStepUser" class="box">
@@ -328,7 +350,7 @@ if (isset($_POST["paytpvToken"])) {
                     <div class="form-group">
                         <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
                         <div class="input-group">
-                            <div id="paycomet-pan" style="<?php print $pan_div_style ?>"></div>   
+                            <div id="paycomet-pan" style="<?php print $pan_div_style ?>"></div>
                             <input paycomet-style="<?php print $pan_input_style ?>" paycomet-name="pan">
                         </div>
                     </div>
@@ -339,7 +361,7 @@ if (isset($_POST["paytpvToken"])) {
                                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                                 <div class="form-inline">
 
-                                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
+                                    <select class="form-control" style="height:auto; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
                                         <option><?php print __('Month', 'wc_paytpv');?></option>
                                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -355,7 +377,7 @@ if (isset($_POST["paytpvToken"])) {
                                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                                     </select>
 
-                                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
+                                    <select class="form-control" style="height:auto; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
                                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                                         <?php

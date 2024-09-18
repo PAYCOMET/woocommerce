@@ -51,6 +51,7 @@
 			$saved_cards_validated = [];
         	$saved_cards_validated["valid"] = [];
         	$saved_cards_validated["invalid"] = [];
+			$saved_cards_validated["suscription"] = [];
 
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer>0 and id_customer = ". $user_id  . " order by date desc", ARRAY_A);
 
@@ -264,14 +265,14 @@
 			}
 		}
 
-		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $paytpv_cof){
+		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $paytpv_cof, $forceSave = 0){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
 
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "'");
 			
-			if (count($saved_cards) == 0) {
+			if (count($saved_cards) == 0 || $forceSave == 1) {
 
 				if ($user_id>0){
 					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date`, tokenCOF )

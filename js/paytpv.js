@@ -83,7 +83,7 @@ jQuery(function($) {
     window.scrollToCard = function () {        
         $('html').animate(
             {
-              scrollTop: $('#nueva_tarjeta').offset().top,
+              scrollTop: $('#storingStepUser').offset().top,
             },
             800 //speed
           );

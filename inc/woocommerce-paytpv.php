@@ -887,7 +887,7 @@
 								$result= Paytpv::removeCardTokenization($id_card);
 				
 								// Save new User Card
-								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107);
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
 								
 								print "PAYCOMET OK";
 								exit;
@@ -896,7 +896,7 @@
 
 							if (isset($_REQUEST[ 'IdUser' ])){
 								// Save User Card
-								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
+								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"], 0);
 							}
 						}
 
@@ -966,7 +966,7 @@
 								$result= Paytpv::removeCardTokenization($id_card);
 					
 								// Save new User Card
-								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107);
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
 	
 								// Refund Tokenization
 								$auth = $_REQUEST["AuthCode"];
@@ -994,8 +994,7 @@
 								} 
 								print "PAYCOMET OK TOKENIZATION";
 	
-								exit;
-			
+								exit;			
 							}
 	
 							
@@ -1010,7 +1009,7 @@
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
-									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
+									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"], 0);
 								}
 
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
@@ -2008,7 +2007,7 @@
 			return $html;
 		}
 
-		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType)
+		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType, $forceSave = 0)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
@@ -2043,7 +2042,8 @@
 					$result['DS_MERCHANT_PAN'],
 					$result['DS_CARD_BRAND'],
 					$result['DS_CARD_EXPIRYDATE'],
-					$result['DS_TOKENCOF']
+					$result['DS_TOKENCOF'],
+					$forceSave
 				);
 
 			}else{
