@@ -85,8 +85,18 @@ if (isset($_POST["paytpvToken"])) {
 
                         if ($executePurchaseResponse->errorCode==0) {
                             $salida = $executePurchaseResponse->challengeUrl;
-                            wp_redirect( $salida, 303);
-                            exit();
+                            if ( ! headers_sent() ) {
+                                header('Location: '. $salida);
+                                exit;
+                            }else{
+                                echo '<script type="text/javascript">';
+                                echo 'window.location.href="' . $salida . '";';
+                                echo '</script>';
+                                echo '<noscript>';
+                                echo '<meta http-equiv="refresh" content="0;url=' . $salida . '" />';
+                                echo '</noscript>';
+                                exit;
+                            }
                         }else{
                             $error = true;
                         }
