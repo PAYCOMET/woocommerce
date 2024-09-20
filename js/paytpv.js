@@ -45,7 +45,8 @@ jQuery(function($) {
 
 
 
-jQuery(function($) {
+jQuery(function($) {    
+    $('#form_paytpv #card').select2(); 
 
     function alert(msg) {
         lightcase.start({

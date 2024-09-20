@@ -1939,7 +1939,7 @@
 					<div id="saved_cards" style="display:'.$store_card.'">
 	                    <div class="form-group">
 	                        <label for="card">'.__('Card', 'wc_paytpv' ).':</label>
-	                        <select name="card" id="card" onChange="checkCard()" class="form-control">';
+	                        <select name="card" id="card" onChange="checkCard()" class="form-control select2" aria-hidden="true" style="width:100%">';
 
 			foreach ($saved_cards as $card){
 				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
