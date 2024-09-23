@@ -6,8 +6,8 @@
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
  * Version: 5.36
- * Tested up to: 6.6.1
- * WC tested up to: 9.2.3
+ * Tested up to: 6.6.2
+ * WC tested up to: 9.3.2
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
