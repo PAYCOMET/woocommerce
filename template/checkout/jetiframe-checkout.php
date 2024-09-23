@@ -9,17 +9,17 @@
 
 <div id="saved_cards" style="display:<?=$store_card;?>">
     <div class="form-group">
-        <label for="card"><?php print __('Card', 'wc_paytpv'); ?></label>
-        <select name="jet_iframe_card" id="jet_iframe_card" onChange="checkSelectedCard()" class="form-control">
-            <?php
-                foreach ($saved_cards as $card){
-                    $card_desc = ($card["card_desc"] != "") ? (" - " . $card["card_desc"]) : "";
-            ?>
-                <option value="<?= $card['id'] ?>"><?= $card['paytpv_cc'] . $card_desc ?></option>
-            <?php
-                }
-            ?>
-                <option value="0"><?php print __('NEW CARD', 'wc_paytpv') ?></option>
+        <label for="card"><?php print __('Card', 'wc_paytpv'); ?></label>        
+        <select name="jet_iframe_card" id="jet_iframe_card" onChange="checkSelectedCard()" class="form-control select2" aria-hidden="true" style="width:100%">
+        <?php
+            foreach ($saved_cards as $card){
+                $card_desc = ($card["card_desc"] != "") ? (" - " . $card["card_desc"]) : "";
+        ?>
+            <option value="<?= $card['id'] ?>"><?= $card['paytpv_cc'] . $card_desc ?></option>
+        <?php
+            }
+        ?>
+            <option value="0"><?php print __('NEW CARD', 'wc_paytpv') ?></option>
         </select>
     </div>
 </div>
@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                 <div class="form-inline">
-                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
+                    <select id="paycomet_card_month" class="form-control" class="form-control select2" aria-hidden="true" style="width:142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateMonth">
                         <option><?php print __('Month', 'wc_paytpv');?></option>
                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -59,12 +59,12 @@
                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                     </select>
 
-                    <select class="form-control" style="height:34px; width: 142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;" data-paycomet="dateYear">
+                    <select id="paycomet_card_year" class="form-control" class="form-control select2" aria-hidden="true" style="width:142px; border: 1px solid #dcd7ca; font-size: 18px; padding: 0 0 0 10px!important;"data-paycomet="dateYear">
                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                         <?php
                             $firstYear = (int) date('Y');
-                            for($i = 0; $i <= 14; $i++) { ?>
+                            for($i = 0; $i <= 8; $i++) { ?>
                             <option value="<?= substr($firstYear, 2, 2) ?>"><?= $firstYear?></option>
                         <?php
                                 $firstYear++;
@@ -75,6 +75,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
 
         <div class="col-xs-12 col-md-3" style="padding-left:0px;">
 
@@ -148,6 +150,9 @@ function enablePlaceOrder() {
 
 // formSubmit
 jQuery( function( $ ) {
+
+    $('#jet_iframe_card, #paycomet_card_month, #paycomet_card_year').select2();   
+    
 
     // Si esta cargado el formulario jetIframe cargamos el js
     if ($("#paycometPaymentForm").val() == "") {
