@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2024-09-17 11:59+0000\n"
+"PO-Revision-Date: 2024-09-23 10:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -31,47 +31,47 @@ msgstr "+ Añadir Terminal"
 msgid "- Remove Terminal"
 msgstr "- Eliminar Terminal"
 
-#: template/myaccount/my-cards.php:347
+#: template/myaccount/my-cards.php:379
 #: template/checkout/jetiframe-checkout.php:48
 msgid "01 - January"
 msgstr "01 - Enero"
 
-#: template/myaccount/my-cards.php:348
+#: template/myaccount/my-cards.php:380
 #: template/checkout/jetiframe-checkout.php:49
 msgid "02 - February"
 msgstr "02 - Febrero"
 
-#: template/myaccount/my-cards.php:349
+#: template/myaccount/my-cards.php:381
 #: template/checkout/jetiframe-checkout.php:50
 msgid "03 - March"
 msgstr "03 - Marzo"
 
-#: template/myaccount/my-cards.php:350
+#: template/myaccount/my-cards.php:382
 #: template/checkout/jetiframe-checkout.php:51
 msgid "04 - April"
 msgstr "04- Abril"
 
-#: template/myaccount/my-cards.php:351
+#: template/myaccount/my-cards.php:383
 #: template/checkout/jetiframe-checkout.php:52
 msgid "05 - May"
 msgstr "05 - Mayo"
 
-#: template/myaccount/my-cards.php:352
+#: template/myaccount/my-cards.php:384
 #: template/checkout/jetiframe-checkout.php:53
 msgid "06 - June"
 msgstr "06 - Junio"
 
-#: template/myaccount/my-cards.php:353
+#: template/myaccount/my-cards.php:385
 #: template/checkout/jetiframe-checkout.php:54
 msgid "07 - July"
 msgstr "07 - Julio"
 
-#: template/myaccount/my-cards.php:354
+#: template/myaccount/my-cards.php:386
 #: template/checkout/jetiframe-checkout.php:55
 msgid "08 - August"
 msgstr "08 - Agosto"
 
-#: template/myaccount/my-cards.php:355
+#: template/myaccount/my-cards.php:387
 #: template/checkout/jetiframe-checkout.php:56
 msgid "09 - September"
 msgstr "09 - Septiembre"
@@ -84,7 +84,7 @@ msgstr "1"
 msgid "10"
 msgstr "10"
 
-#: template/myaccount/my-cards.php:356
+#: template/myaccount/my-cards.php:388
 #: template/checkout/jetiframe-checkout.php:57
 msgid "10 - October"
 msgstr "10 - Octubre"
@@ -93,7 +93,7 @@ msgstr "10 - Octubre"
 msgid "11"
 msgstr "11"
 
-#: template/myaccount/my-cards.php:357
+#: template/myaccount/my-cards.php:389
 #: template/checkout/jetiframe-checkout.php:58
 msgid "11 - November"
 msgstr "11 - Noviembre"
@@ -102,7 +102,7 @@ msgstr "11 - Noviembre"
 msgid "12"
 msgstr "12"
 
-#: template/myaccount/my-cards.php:358
+#: template/myaccount/my-cards.php:390
 #: template/checkout/jetiframe-checkout.php:59
 msgid "12 - December"
 msgstr "12 - Diciembre"
@@ -174,22 +174,22 @@ msgstr "9"
 #: inc/woocommerce-paytpv.php:250
 #| msgid ""
 #| "<a href=\"https://www.paycomet.com\">PAYCOMET Online</a> payment gateway "
-#| "for Woocommerce enables credit card payment in your shop. Al you need is "
+#| "for Woocommerce enables credit card payment in your shop. All you need is "
 #| "a PAYCOMET merchant account and access to <a href=\"https://dashboard."
 #| "paycomet.com/cp_control\">customer area</a>"
 msgid ""
 "<a href=\"https://www.paycomet.com\">PAYCOMET Online</a> payment gateway for "
 "Woocommerce enables credit card payment in your shop. All you need is a "
-"PAYCOMET merchant account and access to <a href=\"https://dashboard.paycomet."
-"com/cp_control\">customer area</a>"
+"PAYCOMET merchant account and access to <a href=\"https://lens.paycomet."
+"com\">customer area</a>"
 msgstr ""
 "<a href=\"https://www.paycomet.com\">PAYCOMET</a> pasarela de pago para "
 "Woocommerce le permitirá dar la opción de pago con tarjeta de crédito o "
 "débito en su comercio. Para ello necesitara una cuenta en PAYCOMET y acceso "
-"al <a href=\"https://dashboard.paycomet.com/cp_control\">Área de clientes</a>"
+"al <a href=\"https://lens.paycomet.com\">Área de clientes</a>"
 
-#: template/myaccount/my-cards.php:172 template/myaccount/my-cards.php:205
-#: template/myaccount/my-cards.php:249
+#: template/myaccount/my-cards.php:209 template/myaccount/my-cards.php:232
+#: template/myaccount/my-cards.php:280
 msgid "Add a description"
 msgstr "Añadir descripción"
 
@@ -224,8 +224,8 @@ msgstr ""
 "que obtenga acceso a información confidencial."
 
 #: gateway-paytpv.php:200 inc/woocommerce-paytpv.php:173
-#: inc/woocommerce-paytpv.php:737 inc/woocommerce-paytpv.php:1670
-#: inc/woocommerce-paytpv.php:1801 inc/woocommerce-paytpv.php:1830
+#: inc/woocommerce-paytpv.php:737 inc/woocommerce-paytpv.php:1669
+#: inc/woocommerce-paytpv.php:1800 inc/woocommerce-paytpv.php:1829
 msgid "An error has occurred. Please verify the data entered and try again"
 msgstr ""
 "Se ha producido un error. Por favor, verifica los datos introducidos y "
@@ -246,7 +246,7 @@ msgstr ""
 "tarjetas vinculadas\\\" donde se mostrarán las tarjetas almacenadas y podrán "
 "ser eliminadas."
 
-#: template/myaccount/my-cards.php:150
+#: template/myaccount/my-cards.php:201
 msgid "Available cards"
 msgstr "Tarjetas disponibles"
 
@@ -274,25 +274,25 @@ msgstr "Antes de variación"
 msgid "before_variations_form"
 msgstr "Antes del formulario de variaciones"
 
-#: template/myaccount/my-cards.php:138
+#: template/myaccount/my-cards.php:187
 msgid "Brand"
 msgstr "Marca"
 
-#: template/myaccount/my-cards.php:303 template/myaccount/my-cards.php:304
+#: template/myaccount/my-cards.php:335 template/myaccount/my-cards.php:336
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: inc/woocommerce-paytpv.php:1976
+#: inc/woocommerce-paytpv.php:1975
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: inc/woocommerce-paytpv.php:1942 template/myaccount/my-cards.php:137
+#: inc/woocommerce-paytpv.php:1941 template/myaccount/my-cards.php:186
 #: template/checkout/jetiframe-checkout.php:12
 msgid "Card"
 msgstr "Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1968 template/myaccount/my-cards.php:307
-#: template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1967 template/myaccount/my-cards.php:339
+#: template/checkout/jetiframe-checkout.php:101
 msgid ""
 "Card data is protected by the Payment Card Industry Data Security Standard "
 "(PCI DSS)"
@@ -300,7 +300,7 @@ msgstr ""
 "Los datos de tarjetas se protegen mediante el Estándar de Seguridad de Datos "
 "para la Industria de Tarjeta de Pago (PCI DSS)"
 
-#: template/myaccount/my-cards.php:332
+#: template/myaccount/my-cards.php:364
 #: template/checkout/jetiframe-checkout.php:34
 msgid "Card number"
 msgstr "Número de tarjeta"
@@ -315,7 +315,7 @@ msgstr ""
 msgid "Client code"
 msgstr "Código Cliente"
 
-#: template/myaccount/my-cards.php:276
+#: template/myaccount/my-cards.php:308
 msgid "Close"
 msgstr "Cerrar"
 
@@ -341,11 +341,11 @@ msgid "Default"
 msgstr "Por defecto"
 
 #: inc/paycomet-apm.php:53 inc/woocommerce-paytpv.php:444
-#: template/myaccount/my-cards.php:140
+#: template/myaccount/my-cards.php:189
 msgid "Description"
 msgstr "Descripción"
 
-#: template/myaccount/my-cards.php:316
+#: template/myaccount/my-cards.php:348
 msgid "Description stored successfully"
 msgstr "Descripción almacenada con éxito"
 
@@ -375,7 +375,7 @@ msgstr "Cifrado y almacenamiento de datos"
 
 #: gateway-paytpv.php:198 inc/woocommerce-paytpv.php:171
 #: inc/woocommerce-paytpv.php:184 inc/woocommerce-paytpv.php:237
-#: inc/woocommerce-paytpv.php:1668 inc/woocommerce-paytpv.php:1681
+#: inc/woocommerce-paytpv.php:1667 inc/woocommerce-paytpv.php:1680
 msgid "Error: "
 msgstr "Error: "
 
@@ -393,12 +393,12 @@ msgstr ""
 msgid "ERROR: Unable to activate payment method."
 msgstr "ERROR:  No se puede activar el método de pago."
 
-#: template/myaccount/my-cards.php:342
+#: template/myaccount/my-cards.php:374
 #: template/checkout/jetiframe-checkout.php:44
 msgid "Expiration date"
 msgstr "Fecha de expiración"
 
-#: template/myaccount/my-cards.php:139
+#: template/myaccount/my-cards.php:188
 msgid "Expiry Date"
 msgstr "Caducidad"
 
@@ -422,7 +422,7 @@ msgstr "Altura del Iframe (pixels)"
 msgid "Iframe height in pixels (Min 440)"
 msgstr "Altura del iframe en pixels (Mínimo 440)"
 
-#: template/myaccount/my-cards.php:185
+#: template/myaccount/my-cards.php:224
 msgid "Inactive cards"
 msgstr "Tarjetas inactivas"
 
@@ -446,7 +446,7 @@ msgstr "Jet Iframe"
 msgid "JetId"
 msgstr "JetId"
 
-#: template/myaccount/my-cards.php:300 template/myaccount/my-cards.php:301
+#: template/myaccount/my-cards.php:332 template/myaccount/my-cards.php:333
 msgid "Link card"
 msgstr "Vincular tarjetas"
 
@@ -454,7 +454,7 @@ msgstr "Vincular tarjetas"
 msgid "Links to banking institutions"
 msgstr "Enlaces con entidades bancarias"
 
-#: template/checkout/jetiframe-checkout.php:104
+#: template/checkout/jetiframe-checkout.php:106
 msgid "Make payment"
 msgstr "Realizar pedido"
 
@@ -490,29 +490,31 @@ msgstr "Modificar el estilo del PAN Div"
 msgid "Modify the style of the PAN Input"
 msgstr "Modificar el estilo del PAN Input"
 
-#: template/myaccount/my-cards.php:346
+#: template/myaccount/my-cards.php:378
 #: template/checkout/jetiframe-checkout.php:47
 msgid "Month"
 msgstr "Mes"
 
 #: inc/paycomet-apm.php:34
+#| msgid ""
+#| "Must be activated from your Paycomet Control Panel <a href=\"https:"
+#| "//dashboard.paycomet.com/cp_control/\" target=\"_blank\">here</a>"
 msgid ""
-"Must be activated from your Paycomet Control Panel <a href=\"https:"
-"//dashboard.paycomet.com/cp_control/\" target=\"_blank\">here</a>"
+"Must be activated from your Paycomet Control Panel <a href=\"https://lens."
+"paycomet.com\" target=\"_blank\">here</a>"
 msgstr ""
 "Debe estar activo en los ajustes de tu Panel de Control de Paycomet <a "
-"href=\"https://dashboard.paycomet.com/cp_control/\" target=\"_blank\">"
-"aquí</a>"
+"href=\"https://lens.paycomet.com\" target=\"_blank\">aquí</a>"
 
 #: inc/woocommerce-paytpv.php:612
 msgid "Must have at least one terminal configured to process payments."
 msgstr "Debe tener al menos un terminal configurado para procesar los pagos."
 
-#: template/myaccount/my-cards.php:123
+#: template/myaccount/my-cards.php:133
 msgid "My Cards"
 msgstr "Mis Tarjetas"
 
-#: inc/woocommerce-paytpv.php:1951 template/checkout/jetiframe-checkout.php:22
+#: inc/woocommerce-paytpv.php:1950 template/checkout/jetiframe-checkout.php:22
 msgid "NEW CARD"
 msgstr "NUEVA TARJETA"
 
@@ -555,7 +557,7 @@ msgstr "Estilo PAN Input"
 msgid "Password"
 msgstr "Contraseña"
 
-#: inc/woocommerce-paytpv.php:1957 inc/woocommerce-paytpv.php:2005
+#: inc/woocommerce-paytpv.php:1956 inc/woocommerce-paytpv.php:2004
 msgid "Pay"
 msgstr "Pagar"
 
@@ -818,21 +820,21 @@ msgstr ""
 msgid "Related Cards"
 msgstr "Tarjetas Disponibles"
 
-#: template/myaccount/my-cards.php:178 template/myaccount/my-cards.php:210
-#: template/myaccount/my-cards.php:254
+#: template/myaccount/my-cards.php:215 template/myaccount/my-cards.php:237
+#: template/myaccount/my-cards.php:285
 msgid "Remove"
 msgstr "Eliminar"
 
-#: template/myaccount/my-cards.php:397
+#: template/myaccount/my-cards.php:430
 msgid "Save card"
 msgstr "Guardar Tarjeta"
 
-#: inc/woocommerce-paytpv.php:1968 template/checkout/jetiframe-checkout.php:99
+#: inc/woocommerce-paytpv.php:1967 template/checkout/jetiframe-checkout.php:101
 msgid "Save card for future purchases"
 msgstr "Guardar tarjeta para futuras compras"
 
-#: template/myaccount/my-cards.php:177 template/myaccount/my-cards.php:209
-#: template/myaccount/my-cards.php:253
+#: template/myaccount/my-cards.php:214 template/myaccount/my-cards.php:236
+#: template/myaccount/my-cards.php:284
 msgid "Save Description"
 msgstr "Guardar"
 
@@ -869,7 +871,7 @@ msgstr "Sumario del producto"
 msgid "single_variation"
 msgstr "Variación simple"
 
-#: template/myaccount/my-cards.php:220
+#: template/myaccount/my-cards.php:249
 msgid "Subscriptions cards"
 msgstr "Tarjetas asociadas a suscripción"
 
@@ -889,14 +891,14 @@ msgstr "Terminales"
 msgid "Test"
 msgstr "Test"
 
-#: inc/woocommerce-paytpv.php:1917
+#: inc/woocommerce-paytpv.php:1916
 msgid ""
 "Thanks for your order, please fill the data below to process the payment."
 msgstr ""
 "Gracias por su pedido, por favor, rellene los datos a continuación para "
 "procesar el pago."
 
-#: inc/woocommerce-paytpv.php:1920
+#: inc/woocommerce-paytpv.php:1919
 msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
@@ -947,16 +949,16 @@ msgstr "Esto determina el texto que el usuaurio ve en el proceso de compra"
 msgid "Title"
 msgstr "Título"
 
-#: template/myaccount/my-cards.php:211 template/myaccount/my-cards.php:212
-#: template/myaccount/my-cards.php:258 template/myaccount/my-cards.php:259
+#: template/myaccount/my-cards.php:238 template/myaccount/my-cards.php:239
+#: template/myaccount/my-cards.php:289 template/myaccount/my-cards.php:290
 msgid "Update"
 msgstr "Actualizar"
 
-#: inc/woocommerce-paytpv.php:1958
+#: inc/woocommerce-paytpv.php:1957
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
-#: template/myaccount/my-cards.php:362
+#: template/myaccount/my-cards.php:394
 #: template/checkout/jetiframe-checkout.php:63
 msgid "Year"
 msgstr "Año"
@@ -970,7 +972,7 @@ msgid "You can approve the payment request in the app to complete the order."
 msgstr ""
 "Podréis aprobar la solicitud de pago en la app para completar el pedido."
 
-#: template/myaccount/my-cards.php:275
+#: template/myaccount/my-cards.php:307
 msgid ""
 "You have cards associated with a subscription that need to be updated. Press "
 "Update on the marked card."
@@ -978,11 +980,11 @@ msgstr ""
 "Tiene tarjetas asociadas a una suscripción que deben ser actualizadas. Pulse "
 "'Actualizar' sobre la tarjeta marcada."
 
-#: template/myaccount/my-cards.php:144
+#: template/myaccount/my-cards.php:193
 msgid "You have no active cards."
 msgstr "No tiene tarjetas almacenadas"
 
-#: template/myaccount/my-cards.php:315
+#: template/myaccount/my-cards.php:347
 msgid "You must accept save card to continue"
 msgstr "Debes aceptar guardar tarjeta para continuar"
 
@@ -998,7 +1000,7 @@ msgstr ""
 msgid "You must define at least one terminal"
 msgstr "Debe definir por lo menos un terminal"
 
-#: template/myaccount/my-cards.php:311
+#: template/myaccount/my-cards.php:343
 msgid "You will be charged 0.50 cents that will be returned immediately."
 msgstr ""
 "Se realizará un pequeño cargo de 0,5€ con el fin de validar la tarjeta. Este "
