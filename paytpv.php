@@ -190,20 +190,6 @@
 			return $url_paytpv;
 		}
 
-		public static function checkCardExistence($user_id, $id_card, $paytpv_cc, $paytpv_brand){
-			global $wpdb;
-
-			$paytpv_cc = '************' . substr($paytpv_cc, -4);
-
-			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "' AND id != '" . $id_card . "'");
-
-			if (count($saved_cards) == 0) {
-				return true;
-			}else{
-				return false;
-			}
-		}
-
 		public static function oldSavedCard($id_card){
 			global $wpdb;
 

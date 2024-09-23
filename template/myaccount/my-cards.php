@@ -56,53 +56,50 @@ if (isset($_POST["paytpvToken"])) {
                 }
 
                 if ($id_card!="" && $option=="tokenization"){
-                    if (Paytpv::checkCardExistence($user_id, $id_card, $result['DS_MERCHANT_PAN'], $result['DS_CARD_BRAND'])){
+                    
 
-                        $url_mi_cuenta = get_permalink( get_option('woocommerce_myaccount_page_id') );
+                    $url_mi_cuenta = get_permalink( get_option('woocommerce_myaccount_page_id') );
 
-                        $executePurchaseResponse = $apiRest->executePurchase(
-                            $term,
-                            $id_card ."_" . rand() . "_tokenization",
-                            '50',
-                            'EUR',
-                            1,
-                            $ip,
-                            1,
-                            $idUser,
-                            $tokenUser,
-                            $url_mi_cuenta,
-                            $url_mi_cuenta,
-                            0,
-                            '',
-                            '',
-                            1,
-                            [],
-                            '',
-                            '',
-                            1
-                        );
+                    $executePurchaseResponse = $apiRest->executePurchase(
+                        $term,
+                        $id_card ."_" . rand() . "_tokenization",
+                        '50',
+                        'EUR',
+                        1,
+                        $ip,
+                        1,
+                        $idUser,
+                        $tokenUser,
+                        $url_mi_cuenta,
+                        $url_mi_cuenta,
+                        0,
+                        '',
+                        '',
+                        1,
+                        [],
+                        '',
+                        '',
+                        1
+                    );
 
 
-                        if ($executePurchaseResponse->errorCode==0) {
-                            $salida = $executePurchaseResponse->challengeUrl;
-                            if ( ! headers_sent() ) {
-                                header('Location: '. $salida);
-                                exit;
-                            }else{
-                                echo '<script type="text/javascript">';
-                                echo 'window.location.href="' . $salida . '";';
-                                echo '</script>';
-                                echo '<noscript>';
-                                echo '<meta http-equiv="refresh" content="0;url=' . $salida . '" />';
-                                echo '</noscript>';
-                                exit;
-                            }
+                    if ($executePurchaseResponse->errorCode==0) {
+                        $salida = $executePurchaseResponse->challengeUrl;
+                        if ( ! headers_sent() ) {
+                            header('Location: '. $salida);
+                            exit;
                         }else{
-                            $error = true;
+                            echo '<script type="text/javascript">';
+                            echo 'window.location.href="' . $salida . '";';
+                            echo '</script>';
+                            echo '<noscript>';
+                            echo '<meta http-equiv="refresh" content="0;url=' . $salida . '" />';
+                            echo '</noscript>';
+                            exit;
                         }
-                    }else {
+                    }else{
                         $error = true;
-                    }
+                    }                    
                 }
 
                 if ($id_card!="" && $option=="update"){
@@ -140,6 +137,12 @@ if (isset($_POST["paytpvToken"])) {
     <script type="text/javascript">
         // Pasar variable a paytpv.js
         var url_paytpv = "<?php echo $url_paytpv; ?>";
+
+        // formSubmit
+        jQuery( function( $ ) {
+            $('#paycomet_card_month, #paycomet_card_year').select2();   
+        });
+
     </script>
 
     <?php
@@ -366,12 +369,12 @@ if (isset($_POST["paytpvToken"])) {
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-xs-12 col-md-9">
                             <div class="form-group">
                                 <label><span class="hidden-xs"><?php print __('Expiration date', 'wc_paytpv');?></span> </label>
                                 <div class="form-inline">
 
-                                    <select class="form-control" style="height:auto; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateMonth">
+                                    <select id="paycomet_card_month" class="form-control select2" style="height:auto; width: 142px;" data-paycomet="dateMonth">
                                         <option><?php print __('Month', 'wc_paytpv');?></option>
                                         <option value="01"><?php print __('01 - January', 'wc_paytpv');?></option>
                                         <option value="02"><?php print __('02 - February', 'wc_paytpv');?></option>
@@ -387,7 +390,7 @@ if (isset($_POST["paytpvToken"])) {
                                         <option value="12"><?php print __('12 - December', 'wc_paytpv');?></option>
                                     </select>
 
-                                    <select class="form-control" style="height:auto; width: 142px; border: 1px solid #dcd7ca; font-size: 18px;" data-paycomet="dateYear">
+                                    <select id="paycomet_card_year" class="form-control  select2" style="height:auto; width: 142px;" data-paycomet="dateYear">
                                         <option><?php print __('Year', 'wc_paytpv');?></option>
 
                                         <?php
@@ -403,8 +406,9 @@ if (isset($_POST["paytpvToken"])) {
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-3">
 
                             <div class="form-group">
 
