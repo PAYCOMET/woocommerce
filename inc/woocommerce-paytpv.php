@@ -33,7 +33,9 @@
 				'subscription_suspension',
 				'subscription_reactivation',
 				'subscription_amount_changes',
-				'subscription_date_changes'
+				'subscription_date_changes',
+				'multiple_subscriptions'
+
 			);
 			// Load the form fields
 			$this->init_form_fields();
@@ -245,7 +247,7 @@
 			?>
 			<h3><?php _e( 'PAYCOMET Payment Gateway', 'wc_paytpv' ); ?></h3>
 			<p>
-				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. All you need is a PAYCOMET merchant account and access to <a href="https://dashboard.paycomet.com/cp_control">customer area</a>', 'wc_paytpv'  ); ?>
+				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. All you need is a PAYCOMET merchant account and access to <a href="https://lens.paycomet.com">customer area</a>', 'wc_paytpv'  ); ?>
 			</p>
 			<p>
 				<?php _e( 'There you should configure "Tipo de notificación del cobro:" as "Notificación por URL" set ther teh following URL:', 'wc_paytpv'  ); ?> <?php echo add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) ); ?></p>
@@ -875,9 +877,26 @@
 
 						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
 
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+		
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+				
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
+								
+								print "PAYCOMET OK";
+								exit;
+
+							}
+
 							if (isset($_REQUEST[ 'IdUser' ])){
 								// Save User Card
-								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
+								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"], 0);
 							}
 						}
 
@@ -890,34 +909,95 @@
 					// execute_purchase
 					case 1:
 					case 109:
-						$arrTerminalData = $this->TerminalCurrency($order);
-						$currency_iso_code = $arrTerminalData["currency_iso_code"];
-						$term = $arrTerminalData["term"];
-						$pass = $arrTerminalData["pass"];
-						if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-							$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
-						} else {
-							$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+						if (!str_contains($_REQUEST["Order"], '_tokenization')) {
+							$arrTerminalData = $this->TerminalCurrency($order);
+							$currency_iso_code = $arrTerminalData["currency_iso_code"];
+							$term = $arrTerminalData["term"];
+							$pass = $arrTerminalData["pass"];
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
+							} else {
+								$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+							}
+						
+							$mensaje = $this->clientcode .
+									$term .
+									$_REQUEST[ 'TransactionType' ] .
+									$_REQUEST[ 'Order' ] .
+									$_REQUEST[ 'Amount' ] .
+									$currency_iso_code;
+
+							$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
+
+							// Validacion firma
+							if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
+								print "PAYCOMET WC KO Firma";
+								exit;
+							}
 						}
-
-						$mensaje = $this->clientcode .
-								$term .
-								$_REQUEST[ 'TransactionType' ] .
-								$_REQUEST[ 'Order' ] .
-								$_REQUEST[ 'Amount' ] .
-								$currency_iso_code;
-
-						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
-
-						// Validacion firma
-						if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
-							print "PAYCOMET WC KO Firma";
-							exit;
-						}
-
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
+							
+							// Notificacion para tokenizacion
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
+								
+								$terminal = $this->paytpv_terminals[0];
+								$term = $terminal["term"];
+								$pass = $terminal["pass"];
+								$ip = $this->getIp();
+														
+								// Old card data
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+								$old_id_user= $old_saved_card["paytpv_iduser"];
+	
+								// Update the parent order token
+								$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
+								foreach ($subscriptions_with_old_card as $order) {							
+									$result= Paytpv::replaceIdUser($order["order_id"], $_REQUEST[ 'IdUser' ]);
+									$result= Paytpv::replaceTokenUser($order["order_id"], $_REQUEST[ 'TokenUser' ]);																
+									print "PAYCOMET OK TOKENIZATION UPDATE ORDER " . $order["order_id"] . ", idUserAnt: " . $old_id_user . ", idUserNew: " . $_REQUEST[ 'IdUser' ];
+								}
+	
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+					
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
+	
+								// Refund Tokenization
+								$auth = $_REQUEST["AuthCode"];
+	
+								if($this->apiKey != '') {
+	
+									$notifyDirectPayment = 2; // No notificar HTTP
+					
+									$apiRest = new PayCometApiRest($this->apiKey);
+									$executeRefundReponse = $apiRest->executeRefund(
+										$_REQUEST["Order"],
+										$term,
+										'50',
+										'EUR',
+										$auth,
+										$ip,
+										$notifyDirectPayment
+									);
+					
+									$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
+									$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode ?? 0;
+
+									print "PAYCOMET OK TOKENIZATION REFUND " . $result["DS_ERROR_ID"];									
+					
+								} 
+								print "PAYCOMET OK TOKENIZATION";
+	
+								exit;			
+							}
+	
+							
 							// Para las operaciones con tarjeta.
 							if (isset($idUser) && $_REQUEST[ 'MethodId' ]==1){
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
@@ -929,7 +1009,7 @@
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
-									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
+									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"], 0);
 								}
 
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
@@ -1059,6 +1139,29 @@
 				print json_encode($res);
 				exit;
 			}
+
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframe' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::getMyCardsTemplateUrl($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
+
+
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframeExpired' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::getMyCardsTemplateExpiredUrl($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
 
 			print "PAYCOMET WC ERROR 2";
 
@@ -1836,7 +1939,7 @@
 					<div id="saved_cards" style="display:'.$store_card.'">
 	                    <div class="form-group">
 	                        <label for="card">'.__('Card', 'wc_paytpv' ).':</label>
-	                        <select name="card" id="card" onChange="checkCard()" class="form-control">';
+	                        <select name="card" id="card" onChange="checkCard()" class="form-control select2" aria-hidden="true" style="width:100%">';
 
 			foreach ($saved_cards as $card){
 				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
@@ -1904,7 +2007,7 @@
 			return $html;
 		}
 
-		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType)
+		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType, $forceSave = 0)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
@@ -1929,6 +2032,7 @@
 					$result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
 					$result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
 					$result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
+					$result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
 				}
 
 				return PayTPV::saveCard(
@@ -1937,7 +2041,9 @@
 					$paytpv_tokenuser,
 					$result['DS_MERCHANT_PAN'],
 					$result['DS_CARD_BRAND'],
-					$result['DS_CARD_EXPIRYDATE']
+					$result['DS_CARD_EXPIRYDATE'],
+					$result['DS_TOKENCOF'],
+					$forceSave
 				);
 
 			}else{
@@ -2044,6 +2150,9 @@
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
 				}
+
+				$this->write_log('Error ' . json_encode($charge));
+
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
 					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {

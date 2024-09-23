@@ -31,7 +31,7 @@ class Paycomet_APM extends WC_Payment_Gateway
         $this->form_fields = array(
 
             'activation'  => array(
-                'description' => __( 'Must be activated from your Paycomet Control Panel <a href="https://dashboard.paycomet.com/cp_control/" target="_blank">here</a>', 'wc_paytpv' ),
+                'description' => __( 'Must be activated from your Paycomet Control Panel <a href="https://lens.paycomet.com" target="_blank">here</a>', 'wc_paytpv' ),
                 'type'        => 'title',
             ),
 

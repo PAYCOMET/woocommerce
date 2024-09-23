@@ -51,6 +51,7 @@
 			$saved_cards_validated = [];
         	$saved_cards_validated["valid"] = [];
         	$saved_cards_validated["invalid"] = [];
+			$saved_cards_validated["suscription"] = [];
 
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id_customer>0 and id_customer = ". $user_id  . " order by date desc", ARRAY_A);
 
@@ -115,10 +116,124 @@
 			return $saved_card;
 		}
 
+		public static function existsCOF($paytpv_iduser,$paytpv_tokenuser){
+			global $wpdb;
+
+			$tokenCOF = $wpdb->get_row( $wpdb->prepare( "SELECT tokenCOF FROM {$wpdb->prefix}paytpv_customer WHERE id_customer = %d and paytpv_iduser = %d AND paytpv_tokenuser = %d  ", get_current_user_id(), $paytpv_iduser, $paytpv_tokenuser ), ARRAY_A );
+
+			return $tokenCOF;
+		}
+
+		public static function saveCOF($tokenCOF,$paytpv_iduser,$paytpv_tokenuser){
+            global $wpdb;
+
+            $saved_card = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}paytpv_customer set tokenCOF = %s WHERE id_customer = %d and paytpv_iduser = %d AND paytpv_tokenuser = %d ", $tokenCOF, get_current_user_id(), $paytpv_iduser, $paytpv_tokenuser), ARRAY_A );
+
+            return $saved_card;
+        }
+
+		public static function getMyCardsTemplateUrl($id) {
+		
+			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+			$term=$paytpv_terminals[0]["term"];
+			
+			$apiRest = new PaycometApiRest(get_option('woocommerce_paytpv_settings')['apikey']);
+			$apiResponse = $apiRest->form(
+				1,
+				'ES',
+				$term,
+				'',
+				[
+					'terminal' => (int) $term,
+					'methods' => [1],
+					'order' => $id . "_" . rand() . "_tokenization",
+					'amount' => '50',
+					'currency' => 'EUR',
+					'secure' => 1,
+					'urlOk' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+					'urlKo' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+				]
+			);
+			if ($apiResponse->errorCode==0) {
+				$url_paytpv = $apiResponse->challengeUrl;
+			}else{
+				$url_paytpv=true;
+			}
+
+			return $url_paytpv;
+		}
+
+		public static function getMyCardsTemplateExpiredUrl($id) {
+		
+			$paytpv_terminals = get_option('woocommerce_paytpv_terminals');
+			$term=$paytpv_terminals[0]["term"];
+			
+			$apiRest = new PaycometApiRest(get_option('woocommerce_paytpv_settings')['apikey']);
+			$apiResponse = $apiRest->form(
+				107,
+				'ES',
+				$term,
+				'',
+				[
+					'terminal' => (int) $term,
+					'order' => $id . "_" . rand() . "_tokenization",
+					'urlOk' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+					'urlKo' => (string) get_permalink( get_option('woocommerce_myaccount_page_id') ),
+				]
+			);
+			if ($apiResponse->errorCode==0) {
+				$url_paytpv = $apiResponse->challengeUrl;
+			}else{
+				$url_paytpv=true;
+			}
+
+			return $url_paytpv;
+		}
+
+		public static function oldSavedCard($id_card){
+			global $wpdb;
+
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE id = %d", $id_card ), ARRAY_A );
+
+			return $saved_card;
+		}
+
+		public static function removeCardTokenization($id_card){
+			global $wpdb;
+
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id = %d", $id_card ), ARRAY_A );
+
+			return $saved_card;
+		}
+
+		public static function subscriptionsWithCard($paytpv_iduser){
+			global $wpdb;
+
+			$orders = $wpdb->get_results( $wpdb->prepare( "SELECT t1.order_id FROM {$wpdb->prefix}wc_orders_meta t1 WHERE meta_key='PayTPV_IdUser' and t1.meta_value = %d AND (SELECT t2.id FROM {$wpdb->prefix}wc_orders t2 WHERE t2.parent_order_id=t1.order_id  limit 1)", $paytpv_iduser ), ARRAY_A );
+
+			return $orders;
+		}
+
+		public static function replaceIdUser($order,$paytpv_iduser){
+            global $wpdb;
+
+            $idUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='PayTPV_IdUser'", $paytpv_iduser, $order ), ARRAY_A );
+
+            return $idUserUpdated;
+        }
+
+		public static function replaceTokenUser($order,$paytpv_tokenuser){
+            global $wpdb;
+
+            $tokenUserUpdated = $wpdb->get_row( $wpdb->prepare( "update {$wpdb->prefix}wc_orders_meta set meta_value = %s  WHERE order_id = %d and meta_key='Paytpv_TokenUser'", $paytpv_tokenuser, $order ), ARRAY_A );
+
+            return $tokenUserUpdated;
+        }
+
 		public static function removeCard($id_card){
 			global $wpdb;
 
-			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id_customer = %d AND id = %d", get_current_user_id(),$id_card ), ARRAY_A );
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id_customer = %d AND id = %d", get_current_user_id(), $id_card ), ARRAY_A );
 
 			return $saved_card;
 		}
@@ -136,19 +251,19 @@
 			}
 		}
 
-		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate){
+		public static function saveCard($user_id, $paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $paytpv_cof, $forceSave = 0){
 			global $wpdb;
 
 			$paytpv_cc = '************' . substr($paytpv_cc, -4);
 
 			$saved_cards = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}paytpv_customer WHERE paytpv_brand = '" . $paytpv_brand . "' AND paytpv_cc = '" . $paytpv_cc . "' AND id_customer = '" . $user_id . "'");
-
-			if (count($saved_cards) == 0) {
+			
+			if (count($saved_cards) == 0 || $forceSave == 1) {
 
 				if ($user_id>0){
-					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date` )
-														VALUES(%d, %s, %s, %s, %s, %d, %s)",
-													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $user_id, date('Y-m-d H:i:s')) );
+					$insert_prepared = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}paytpv_customer(paytpv_iduser, paytpv_tokenuser, paytpv_cc, paytpv_brand, paytpv_expirydate, id_customer, `date`, tokenCOF )
+														VALUES(%d, %s, %s, %s, %s, %d, %s, %s)",
+													array($paytpv_iduser, $paytpv_tokenuser, $paytpv_cc, $paytpv_brand, $paytpv_expirydate, $user_id, date('Y-m-d H:i:s'), $paytpv_cof) );
 					$wpdb->query( $insert_prepared );
 				}
 			}
