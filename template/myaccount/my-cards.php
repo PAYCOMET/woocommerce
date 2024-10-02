@@ -140,7 +140,9 @@ if (isset($_POST["paytpvToken"])) {
 
         // formSubmit
         jQuery( function( $ ) {
-            $('#paycomet_card_month, #paycomet_card_year').select2();   
+            if (typeof $.fn.select2 !== 'undefined') {
+                $('#paycomet_card_month, #paycomet_card_year').select2();
+            }
         });
 
     </script>
