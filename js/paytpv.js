@@ -45,8 +45,10 @@ jQuery(function($) {
 
 
 
-jQuery(function($) {    
-    $('#form_paytpv #card').select2(); 
+jQuery(function($) {
+    if (typeof $.fn.select2 !== 'undefined') {
+        $('#form_paytpv #card').select2(); 
+    }
 
     function alert(msg) {
         lightcase.start({
