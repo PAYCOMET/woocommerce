@@ -696,6 +696,22 @@
 					$scoring = 0;
 
 					$merchantData = $this->getMerchantData($order, $methodId);
+					$trxType = "";
+				
+					foreach ( $order->get_items() as $item ) {
+						// Obtener el ID del producto.
+						$product_id = $item->get_product_id();
+						$product = wc_get_product( $product_id );
+				
+						if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+							$trxType = "R";
+							$dateAux = new \DateTime("now");
+							$dateAux->modify('+10 year');
+							$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+							$merchantData["recurringExpiry"] = $recurringExpiry;
+							$merchantData["recurringFrequency"] = "1";
+						}	
+					}
 
 					try {
 
@@ -715,6 +731,7 @@
                                 'tokenUser' => $saved_card["paytpv_tokenuser"],
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -786,7 +803,7 @@
 							'',
 							$userInteraction,
 							[],
-							'',
+							$trxType,
 							'',
 							$merchantData,
 							$notifyDirectPayment
@@ -1635,6 +1652,22 @@
 				$userInteraction = 1;
 				$methodId = 1;
 				$merchantData = $this->getMerchantData($order, $methodId);
+				$trxType = "";
+				
+				foreach ( $order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$trxType = "R";
+						$dateAux = new \DateTime("now");
+						$dateAux->modify('+10 year');
+						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+						$merchantData["recurringExpiry"] = $recurringExpiry;
+						$merchantData["recurringFrequency"] = "1";
+					}	
+				}
 				$url = "";
 
 				try {
@@ -1653,6 +1686,7 @@
 							'currency' => $MERCHANT_CURRENCY,
 							'userInteraction' => $userInteraction,
 							'secure' => $secure_pay,
+							'trxType' => $trxType,
 							'merchantData' => $merchantData,
 							'urlOk' => $URLOK,
 							'urlKo' => $URLKO
@@ -1769,7 +1803,23 @@
 				$notifyDirectPayment = 1;
 
 				$merchantData = $this->getMerchantData($order, $methodId);
+				$trxType = "";
 
+				foreach ( $order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$trxType = "R";
+						$dateAux = new \DateTime("now");
+						$dateAux->modify('+10 year');
+						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+						$merchantData["recurringExpiry"] = $recurringExpiry;
+						$merchantData["recurringFrequency"] = "1";
+					}	
+				}
+			
 				$dcc = $arrTerminalData["dcc"];
 				if ($dcc == 1) {
 
@@ -1791,6 +1841,7 @@
                                 'tokenUser' => $tokenUser,
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -1820,7 +1871,7 @@
 							'',
 							$userInteraction,
 							[],
-							'',
+							$trxType,
 							'',
 							$merchantData,
 							$notifyDirectPayment
