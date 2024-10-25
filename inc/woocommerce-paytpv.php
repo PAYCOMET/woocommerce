@@ -704,12 +704,34 @@
 						$product = wc_get_product( $product_id );
 				
 						if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+							$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+							$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+
+							switch ($billing_period) {
+								case 'day':
+									$billing_interval *= 1;  // Días
+									break;
+								case 'week':
+									$billing_interval *= 7;  // Semanas
+									break;
+								case 'month':
+									$billing_interval *= 30; // Meses
+									break;
+								case 'year':
+									$billing_interval *= 365; // Años
+									break;
+								default:
+									// Opcional: manejar períodos desconocidos
+									$billing_interval = 1;
+									break;
+							}
+
 							$trxType = "R";
 							$dateAux = new \DateTime("now");
 							$dateAux->modify('+10 year');
 							$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
 							$merchantData["recurringExpiry"] = $recurringExpiry;
-							$merchantData["recurringFrequency"] = "1";
+							$merchantData["recurringFrequency"] = (string)$billing_interval;
 						}	
 					}
 
@@ -1660,12 +1682,34 @@
 					$product = wc_get_product( $product_id );
 			
 					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+		
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+						
 						$trxType = "R";
 						$dateAux = new \DateTime("now");
 						$dateAux->modify('+10 year');
 						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
 						$merchantData["recurringExpiry"] = $recurringExpiry;
-						$merchantData["recurringFrequency"] = "1";
+						$merchantData["recurringFrequency"] = (string)$billing_interval;
 					}	
 				}
 				$url = "";
@@ -1811,12 +1855,34 @@
 					$product = wc_get_product( $product_id );
 			
 					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+	
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+						
 						$trxType = "R";
 						$dateAux = new \DateTime("now");
 						$dateAux->modify('+10 year');
 						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
 						$merchantData["recurringExpiry"] = $recurringExpiry;
-						$merchantData["recurringFrequency"] = "1";
+						$merchantData["recurringFrequency"] = (string)$billing_interval;
 					}	
 				}
 			
@@ -2153,8 +2219,39 @@
 				$dateAux->modify('+10 year');
 				$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
 				$merchantData["recurringExpiry"] = $recurringExpiry;
-				$merchantData["recurringFrequency"] = "1";
 
+				//Obtener recurringFrequency del parentOrder
+				foreach ( $parent_order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+	
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+						
+						$merchantData["recurringFrequency"] = (string)$billing_interval;
+					}	
+				}
 				// REST
 				if($this->apiKey != '') {
 
