@@ -696,43 +696,10 @@
 					$scoring = 0;
 
 					$merchantData = $this->getMerchantData($order, $methodId);
+
 					$trxType = "";
-				
-					foreach ( $order->get_items() as $item ) {
-						// Obtener el ID del producto.
-						$product_id = $item->get_product_id();
-						$product = wc_get_product( $product_id );
-				
-						if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
-							$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
-							$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
-
-							switch ($billing_period) {
-								case 'day':
-									$billing_interval *= 1;  // Días
-									break;
-								case 'week':
-									$billing_interval *= 7;  // Semanas
-									break;
-								case 'month':
-									$billing_interval *= 30; // Meses
-									break;
-								case 'year':
-									$billing_interval *= 365; // Años
-									break;
-								default:
-									// Opcional: manejar períodos desconocidos
-									$billing_interval = 1;
-									break;
-							}
-
-							$trxType = "R";
-							$dateAux = new \DateTime("now");
-							$dateAux->modify('+10 year');
-							$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-							$merchantData["recurringExpiry"] = $recurringExpiry;
-							$merchantData["recurringFrequency"] = (string)$billing_interval;
-						}	
+					if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+						$trxType = "R";
 					}
 
 					try {
@@ -1525,6 +1492,44 @@
 												($order->get_shipping_address_2() == $order->get_billing_address_2())) ? "Y" : "N";
 
 				$Merchant_EMV3DS["challengeWindowSize"] = 05;
+
+				// Suscripciones
+				foreach ( $order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+
+						$dateAux = new \DateTime("now");
+						$dateAux->modify('+10 year');
+						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+
+						$Merchant_EMV3DS["recurringExpiry"] = $recurringExpiry;
+						$Merchant_EMV3DS["recurringFrequency"] = (string)$billing_interval;
+					}	
+				}
 			} catch (exception $e){
 				// If exception send empty $Merchant_EMV3DS
 			}
@@ -1674,44 +1679,12 @@
 				$userInteraction = 1;
 				$methodId = 1;
 				$merchantData = $this->getMerchantData($order, $methodId);
-				$trxType = "";
-				
-				foreach ( $order->get_items() as $item ) {
-					// Obtener el ID del producto.
-					$product_id = $item->get_product_id();
-					$product = wc_get_product( $product_id );
 			
-					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
-						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
-						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
-		
-						switch ($billing_period) {
-							case 'day':
-								$billing_interval *= 1;  // Días
-								break;
-							case 'week':
-								$billing_interval *= 7;  // Semanas
-								break;
-							case 'month':
-								$billing_interval *= 30; // Meses
-								break;
-							case 'year':
-								$billing_interval *= 365; // Años
-								break;
-							default:
-								// Opcional: manejar períodos desconocidos
-								$billing_interval = 1;
-								break;
-						}
-						
-						$trxType = "R";
-						$dateAux = new \DateTime("now");
-						$dateAux->modify('+10 year');
-						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-						$merchantData["recurringExpiry"] = $recurringExpiry;
-						$merchantData["recurringFrequency"] = (string)$billing_interval;
-					}	
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
 				}
+
 				$url = "";
 
 				try {
@@ -1847,45 +1820,12 @@
 				$notifyDirectPayment = 1;
 
 				$merchantData = $this->getMerchantData($order, $methodId);
-				$trxType = "";
 
-				foreach ( $order->get_items() as $item ) {
-					// Obtener el ID del producto.
-					$product_id = $item->get_product_id();
-					$product = wc_get_product( $product_id );
-			
-					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
-						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
-						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
-	
-						switch ($billing_period) {
-							case 'day':
-								$billing_interval *= 1;  // Días
-								break;
-							case 'week':
-								$billing_interval *= 7;  // Semanas
-								break;
-							case 'month':
-								$billing_interval *= 30; // Meses
-								break;
-							case 'year':
-								$billing_interval *= 365; // Años
-								break;
-							default:
-								// Opcional: manejar períodos desconocidos
-								$billing_interval = 1;
-								break;
-						}
-						
-						$trxType = "R";
-						$dateAux = new \DateTime("now");
-						$dateAux->modify('+10 year');
-						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-						$merchantData["recurringExpiry"] = $recurringExpiry;
-						$merchantData["recurringFrequency"] = (string)$billing_interval;
-					}	
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
 				}
-			
+
 				$dcc = $arrTerminalData["dcc"];
 				if ($dcc == 1) {
 
@@ -2214,44 +2154,7 @@
 				// Añadimos información MIT -> R
 				$trxType = "R";
 				$scaException = "MIT";
-
-				$dateAux = new \DateTime("now");
-				$dateAux->modify('+10 year');
-				$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-				$merchantData["recurringExpiry"] = $recurringExpiry;
-
-				//Obtener recurringFrequency del parentOrder
-				foreach ( $parent_order->get_items() as $item ) {
-					// Obtener el ID del producto.
-					$product_id = $item->get_product_id();
-					$product = wc_get_product( $product_id );
-			
-					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
-						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
-						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
-	
-						switch ($billing_period) {
-							case 'day':
-								$billing_interval *= 1;  // Días
-								break;
-							case 'week':
-								$billing_interval *= 7;  // Semanas
-								break;
-							case 'month':
-								$billing_interval *= 30; // Meses
-								break;
-							case 'year':
-								$billing_interval *= 365; // Años
-								break;
-							default:
-								// Opcional: manejar períodos desconocidos
-								$billing_interval = 1;
-								break;
-						}
-						
-						$merchantData["recurringFrequency"] = (string)$billing_interval;
-					}	
-				}
+		
 				// REST
 				if($this->apiKey != '') {
 
