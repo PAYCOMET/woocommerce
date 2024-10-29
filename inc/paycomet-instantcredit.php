@@ -108,6 +108,17 @@ function woocommerce_paycomet_instantcredit_show_instantcredit_calculator(){
 class Paycomet_Instantcredit extends Paycomet_APM
 {
     // Setup our Gateway's id, description and other values
+    public $id;
+    public $icon;
+    public $has_fields;
+    public $method_title;
+    public $method_description;
+    public $methodId;
+    public $title;
+    public $description;
+    public $supports;
+    public $form_fields_instantcredit;
+    
     public function __construct()
     {
         $this->id = 'paycomet_instantcredit';

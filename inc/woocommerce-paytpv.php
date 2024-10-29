@@ -18,6 +18,26 @@
 			}
 		}
 
+		public $id;
+		public $icon;
+		public $has_fields;
+		public $method_title;
+		public $method_description;
+		public $supports;
+		public $iframeurl;
+		public $clientcode;
+		public $apiKey;
+		public $paytpv_terminals;
+		public $disable_offer_savecard;
+		public $payment_paycomet;
+		public $jet_id;
+		public $pan_div_style;
+		public $pan_input_style;
+		public $cvc2_div_style;
+		public $cvc2_input_style;
+		public $iframe_height;
+		public $isJetIframeActive;
+
 		public function __construct($loadHooks = true)
 		{
 			$this->id = 'paytpv';
