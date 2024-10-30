@@ -118,6 +118,7 @@ class Paycomet_Instantcredit extends Paycomet_APM
     public $description;
     public $supports;
     public $form_fields_instantcredit;
+    public $form_fields;
     
     public function __construct()
     {

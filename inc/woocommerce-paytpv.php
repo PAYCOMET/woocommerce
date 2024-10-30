@@ -25,6 +25,9 @@
 		public $method_description;
 		public $supports;
 		public $iframeurl;
+		public $enabled;
+		public $title;
+		public $description;
 		public $clientcode;
 		public $apiKey;
 		public $paytpv_terminals;
@@ -37,6 +40,7 @@
 		public $cvc2_input_style;
 		public $iframe_height;
 		public $isJetIframeActive;
+		public $jetiframeOkUrl;
 
 		public function __construct($loadHooks = true)
 		{
@@ -1357,7 +1361,7 @@
 				if ($isGuest){
 					$acctInfoData["chAccAgeInd"] = "01";
 				} else {
-					$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
+					$date_customer = new DateTime((new DateTime($customer->user_registered))->format('Ymd'));
 					$diff = $date_now->diff($date_customer);
 					$dias = $diff->days;
 
@@ -1389,7 +1393,7 @@
 						$acctInfoData["chAccChangeInd"] = "04";
 					}
 
-					$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
+					$acctInfoData["chAccDate"] = (new DateTime($customer->user_registered))->format('Ymd');
 
 					$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") <= 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
 
@@ -1409,7 +1413,7 @@
 				if ($firstAddressDelivery != "") {
 					$acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
 
-					$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
+					$date_firstAddressDelivery = new DateTime((new DateTime($firstAddressDelivery))->format('Ymd'));
 					$diff = $date_now->diff($date_firstAddressDelivery);
 					$dias_firstAddressDelivery = $diff->days;
 
