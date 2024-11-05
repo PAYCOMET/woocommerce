@@ -121,14 +121,14 @@ class Paycomet_APM extends WC_Payment_Gateway
                 if($order->get_status() == 'failed' && ($methodId == 16 || $methodId == 38)){
                     $order->update_status( 'pending');
                 }
-             
-                if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-                    $order->update_meta_data('PayTPV_methodData', $apiResponse->methodData);
-                    $order->save();
-                } else {
-                    update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
+                if (isset($apiResponse->methodData)) {
+                    if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                        $order->update_meta_data('PayTPV_methodData', $apiResponse->methodData);
+                        $order->save();
+                    } else {
+                        update_post_meta( ( int ) $order->get_id(), 'PayTPV_methodData', $apiResponse->methodData);
+                    }
                 }
-
                 //Guardar para multibanco entityNumber y referenceNumber
                 if (isset($apiResponse->methodData->entityNumber) && isset($apiResponse->methodData->referenceNumber)) {
                     if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {

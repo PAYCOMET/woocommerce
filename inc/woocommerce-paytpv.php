@@ -18,6 +18,30 @@
 			}
 		}
 
+		public $id;
+		public $icon;
+		public $has_fields;
+		public $method_title;
+		public $method_description;
+		public $supports;
+		public $iframeurl;
+		public $enabled;
+		public $title;
+		public $description;
+		public $clientcode;
+		public $apiKey;
+		public $paytpv_terminals;
+		public $disable_offer_savecard;
+		public $payment_paycomet;
+		public $jet_id;
+		public $pan_div_style;
+		public $pan_input_style;
+		public $cvc2_div_style;
+		public $cvc2_input_style;
+		public $iframe_height;
+		public $isJetIframeActive;
+		public $jetiframeOkUrl;
+
 		public function __construct($loadHooks = true)
 		{
 			$this->id = 'paytpv';
@@ -697,6 +721,11 @@
 
 					$merchantData = $this->getMerchantData($order, $methodId);
 
+					$trxType = "";
+					if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+						$trxType = "R";
+					}
+
 					try {
 
 						$apiRest = new PaycometApiRest($this->apiKey);
@@ -715,6 +744,7 @@
                                 'tokenUser' => $saved_card["paytpv_tokenuser"],
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -743,120 +773,7 @@
 				}
 
 				header('Location: '. $salida);
-				exit;
-
-				// PAGO NO SEGURO --------------------------------------------------------------------------
-				$ip = $this->getIp();
-
-				$userInteraction = 1;
-
-				// REST
-				if ($this->apiKey != '') {
-
-					$URLOK = $this->get_return_url($order);
-					$paramsUrl = array(
-						'order' => $order->get_id(),
-						'error' => 'payment'
-					);
-					$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-
-					$methodId = 1;
-					$scoring = 0;
-					$notifyDirectPayment = 1;
-
-					$merchantData = $this->getMerchantData($order, $methodId);
-
-					try {
-
-						$apiRest = new PaycometApiRest($this->apiKey);
-						$executePurchaseResponse = $apiRest->executePurchase(
-							$term,
-							$paytpv_order_ref,
-							$importe,
-							$currency_iso_code,
-							$methodId,
-							$ip,
-							$secure_pay,
-							$saved_card["paytpv_iduser"],
-							$saved_card["paytpv_tokenuser"],
-							$URLOK,
-							$URLKO,
-							$scoring,
-							'',
-							'',
-							$userInteraction,
-							[],
-							'',
-							'',
-							$merchantData,
-							$notifyDirectPayment
-						);
-
-						$charge["DS_RESPONSE"] 			= ($executePurchaseResponse->errorCode > 0)? 0 : 1;
-						$charge["DS_ERROR_ID"] 			= $executePurchaseResponse->errorCode;
-						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode ?? '';
-						$charge["DS_MERCHANT_AMOUNT"] 	= $executePurchaseResponse->amount ?? 0;
-						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
-
-						if ($executePurchaseResponse->errorCode > 0) {
-							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-								$order->update_meta_data('ErrorID', $executePurchaseResponse->errorCode );
-								$order->save();
-							} else {
-								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
-							}
-							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
-							$order->update_status( 'failed' );
-						}
-
-					} catch (Exception $e) {
-						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
-					}
-
-				}  else {
-					$charge["DS_RESPONSE"] = 0;
-					$charge["DS_ERROR_ID"] = 1004;
-					$url = $URLKO;
-				}
-
-				// Si hay challenge redirigimos al cliente a la URL
-				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {
-
-					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-						$order->update_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						$order->update_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						$order->save();
-					} else {
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-					}
-
-					$url = urldecode($charge[ 'DS_CHALLENGE_URL' ]);
-				// Si es OK
-				} else if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-						$order->update_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						$order->update_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						$order->update_meta_data('ErrorID', 0 );
-						$order->save();
-					} else {
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0);
-					}
-
-					$url = $this->get_return_url( $order );
-				// Si es KO
-				} else {
-					$paramsUrl = array(
-						'order' => $order->get_id(),
-						'error' => 'payment'
-					);
-					$url = add_query_arg( $paramsUrl, wc_get_checkout_url() );
-				}
-
-				wp_redirect( $url, 303 );
-				exit;
+				exit;				
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
@@ -1331,7 +1248,7 @@
 				if ($isGuest){
 					$acctInfoData["chAccAgeInd"] = "01";
 				} else {
-					$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
+					$date_customer = new DateTime((new DateTime($customer->user_registered))->format('Ymd'));
 					$diff = $date_now->diff($date_customer);
 					$dias = $diff->days;
 
@@ -1363,7 +1280,7 @@
 						$acctInfoData["chAccChangeInd"] = "04";
 					}
 
-					$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
+					$acctInfoData["chAccDate"] = (new DateTime($customer->user_registered))->format('Ymd');
 
 					$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") <= 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
 
@@ -1383,7 +1300,7 @@
 				if ($firstAddressDelivery != "") {
 					$acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
 
-					$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
+					$date_firstAddressDelivery = new DateTime((new DateTime($firstAddressDelivery))->format('Ymd'));
 					$diff = $date_now->diff($date_firstAddressDelivery);
 					$dias_firstAddressDelivery = $diff->days;
 
@@ -1486,6 +1403,44 @@
 												($order->get_shipping_address_2() == $order->get_billing_address_2())) ? "Y" : "N";
 
 				$Merchant_EMV3DS["challengeWindowSize"] = 05;
+
+				// Suscripciones
+				foreach ( $order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+
+						$dateAux = new \DateTime("now");
+						$dateAux->modify('+10 year');
+						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+
+						$Merchant_EMV3DS["recurringExpiry"] = $recurringExpiry;
+						$Merchant_EMV3DS["recurringFrequency"] = (string)$billing_interval;
+					}	
+				}
 			} catch (exception $e){
 				// If exception send empty $Merchant_EMV3DS
 			}
@@ -1635,6 +1590,12 @@
 				$userInteraction = 1;
 				$methodId = 1;
 				$merchantData = $this->getMerchantData($order, $methodId);
+			
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
+				}
+
 				$url = "";
 
 				try {
@@ -1653,6 +1614,7 @@
 							'currency' => $MERCHANT_CURRENCY,
 							'userInteraction' => $userInteraction,
 							'secure' => $secure_pay,
+							'trxType' => $trxType,
 							'merchantData' => $merchantData,
 							'urlOk' => $URLOK,
 							'urlKo' => $URLKO
@@ -1770,6 +1732,11 @@
 
 				$merchantData = $this->getMerchantData($order, $methodId);
 
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
+				}
+
 				$dcc = $arrTerminalData["dcc"];
 				if ($dcc == 1) {
 
@@ -1791,6 +1758,7 @@
                                 'tokenUser' => $tokenUser,
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -1820,7 +1788,7 @@
 							'',
 							$userInteraction,
 							[],
-							'',
+							$trxType,
 							'',
 							$merchantData,
 							$notifyDirectPayment
@@ -2097,13 +2065,7 @@
 				// Añadimos información MIT -> R
 				$trxType = "R";
 				$scaException = "MIT";
-
-				$dateAux = new \DateTime("now");
-				$dateAux->modify('+10 year');
-				$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-				$merchantData["recurringExpiry"] = $recurringExpiry;
-				$merchantData["recurringFrequency"] = "1";
-
+		
 				// REST
 				if($this->apiKey != '') {
 

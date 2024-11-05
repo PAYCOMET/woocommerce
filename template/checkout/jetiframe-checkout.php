@@ -150,10 +150,10 @@ function enablePlaceOrder() {
 
 // formSubmit
 jQuery( function( $ ) {
-
-    $('#jet_iframe_card, #paycomet_card_month, #paycomet_card_year').select2();   
+    if (typeof $.fn.select2 !== 'undefined') {
+        $('#jet_iframe_card, #paycomet_card_month, #paycomet_card_year').select2();
+    }
     
-
     // Si esta cargado el formulario jetIframe cargamos el js
     if ($("#paycometPaymentForm").val() == "") {
         $.getScript('https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=<?=strtolower($paytpvBase->_getLanguange("EN"));?>');

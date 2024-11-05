@@ -3,6 +3,16 @@
 class Paycomet_Przelewy extends Paycomet_APM
 {
     // Setup our Gateway's id, description and other values
+    public $id;
+    public $icon;
+    public $has_fields;
+    public $method_title;
+    public $method_description;
+    public $methodId;
+    public $title;
+    public $description;
+    public $supports;
+    
     public function __construct()
     {
         $this->id = 'paycomet_przelewy';
