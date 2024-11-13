@@ -13,7 +13,7 @@
  */
 
 
-define( 'PAYTPV_VERSION', '5.38' );
+define( 'PAYTPV_VERSION', '5.39' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
