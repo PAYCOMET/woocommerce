@@ -1698,6 +1698,15 @@
 						$notify
 					);
 
+					if (isset($addUserResponse->errorCode) && $addUserResponse->errorCode>0) {
+                        if ($addUserResponse->errorCode==1004) {
+                            $error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
+                        } else {
+                            $error_txt = $addUserResponse->errorCode . ":" . __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+                        }                       
+                        wc_add_notice($error_txt, 'error' );
+                        return false;
+                    }
 					$idUser = $addUserResponse->idUser;
 					$tokenUser = $addUserResponse->tokenUser;
 				}
