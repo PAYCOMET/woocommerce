@@ -193,7 +193,7 @@ function custom_display_checkout_error_message() {
         $order = wc_get_order( $order_id );
     }
 
-    if ( isset( $_GET['paycomet_error'] ) && $_GET['paycomet_error'] === 'payment' ) {
+    if ( $order && isset( $_GET['paycomet_error'] ) && $_GET['paycomet_error'] === 'payment' ) {
         if ($order->get_meta("ErrorID") == 1004) {
             $error_txt = __( 'Error: ', 'wc_paytpv' ) . $order->get_meta("ErrorID");
         }else{
