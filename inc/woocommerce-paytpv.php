@@ -703,7 +703,7 @@
 				$URLOK = $this->get_return_url( $order );
 				$paramsUrl = array(
 					'order' => $order->get_id(),
-					'error' => 'payment'
+					'paycomet_error' => 'payment'
 				);
 				$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
@@ -1580,7 +1580,7 @@
 			$URLOK = $this->get_return_url( $order );
 			$paramsUrl = array(
 				'order' => $order->get_id(),
-				'error' => 'payment'
+				'paycomet_error' => 'payment'
 			);
 			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
@@ -1671,7 +1671,7 @@
 			$URLOK = $this->get_return_url($order);
 			$paramsUrl = array(
 				'order' => $order->get_id(),
-				'error' => 'payment'
+				'paycomet_error' => 'payment'
 			);
 			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
