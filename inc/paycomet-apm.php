@@ -85,7 +85,7 @@ class Paycomet_APM extends WC_Payment_Gateway
             $URLOK = $this->get_return_url($order);
             $paramsUrl = array(
 				'order' => $order_id,
-				'error' => 'payment'
+				'paycomet_error' => 'payment'
 			);
 			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
