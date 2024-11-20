@@ -204,7 +204,7 @@ function custom_display_checkout_error_message() {
 		$error_code = $order->get_meta("ErrorID");
         $error_description = get_error_description($error_code);
 		/**
-		 * Formateamos un mensaje de error descriptivo para el usuario
+		 * Formateamos un mensaje de error descriptivo para guardar en logs
 		 */
         $error_txt = sprintf(
             __('Payment error: %s (%d)', 'wc_paytpv'),
@@ -213,7 +213,6 @@ function custom_display_checkout_error_message() {
         );
 		if ( true === WP_DEBUG ) {
 			error_log($error_txt);
-			//wc_get_logger()->log('error', $error_txt);
 		}
 		
     }
