@@ -18,6 +18,30 @@
 			}
 		}
 
+		public $id;
+		public $icon;
+		public $has_fields;
+		public $method_title;
+		public $method_description;
+		public $supports;
+		public $iframeurl;
+		public $enabled;
+		public $title;
+		public $description;
+		public $clientcode;
+		public $apiKey;
+		public $paytpv_terminals;
+		public $disable_offer_savecard;
+		public $payment_paycomet;
+		public $jet_id;
+		public $pan_div_style;
+		public $pan_input_style;
+		public $cvc2_div_style;
+		public $cvc2_input_style;
+		public $iframe_height;
+		public $isJetIframeActive;
+		public $jetiframeOkUrl;
+
 		public function __construct($loadHooks = true)
 		{
 			$this->id = 'paytpv';
@@ -33,7 +57,9 @@
 				'subscription_suspension',
 				'subscription_reactivation',
 				'subscription_amount_changes',
-				'subscription_date_changes'
+				'subscription_date_changes',
+				'multiple_subscriptions'
+
 			);
 			// Load the form fields
 			$this->init_form_fields();
@@ -245,7 +271,7 @@
 			?>
 			<h3><?php _e( 'PAYCOMET Payment Gateway', 'wc_paytpv' ); ?></h3>
 			<p>
-				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. All you need is a PAYCOMET merchant account and access to <a href="https://dashboard.paycomet.com/cp_control">customer area</a>', 'wc_paytpv'  ); ?>
+				<?php _e( '<a href="https://www.paycomet.com">PAYCOMET Online</a> payment gateway for Woocommerce enables credit card payment in your shop. All you need is a PAYCOMET merchant account and access to <a href="https://lens.paycomet.com">customer area</a>', 'wc_paytpv'  ); ?>
 			</p>
 			<p>
 				<?php _e( 'There you should configure "Tipo de notificación del cobro:" as "Notificación por URL" set ther teh following URL:', 'wc_paytpv'  ); ?> <?php echo add_query_arg( 'tpvLstr', 'notify', add_query_arg( 'wc-api', 'woocommerce_' . $this->id, home_url( '/' ) ) ); ?></p>
@@ -675,7 +701,11 @@
 				$secure_pay = 1;
 
 				$URLOK = $this->get_return_url( $order );
-				$URLKO = $this->get_return_url( $order );
+				$paramsUrl = array(
+					'order' => $order->get_id(),
+					'paycomet_error' => 'payment'
+				);
+				$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 				$salida = $URLKO; // Default
 
@@ -690,6 +720,11 @@
 					$scoring = 0;
 
 					$merchantData = $this->getMerchantData($order, $methodId);
+
+					$trxType = "";
+					if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+						$trxType = "R";
+					}
 
 					try {
 
@@ -709,6 +744,7 @@
                                 'tokenUser' => $saved_card["paytpv_tokenuser"],
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -737,112 +773,7 @@
 				}
 
 				header('Location: '. $salida);
-				exit;
-
-				// PAGO NO SEGURO --------------------------------------------------------------------------
-				$ip = $this->getIp();
-
-				$userInteraction = 1;
-
-				// REST
-				if ($this->apiKey != '') {
-
-					$URLOK = $this->get_return_url($order);
-					$URLKO = $this->get_return_url($order);
-
-					$methodId = 1;
-					$scoring = 0;
-					$notifyDirectPayment = 1;
-
-					$merchantData = $this->getMerchantData($order, $methodId);
-
-					try {
-
-						$apiRest = new PaycometApiRest($this->apiKey);
-						$executePurchaseResponse = $apiRest->executePurchase(
-							$term,
-							$paytpv_order_ref,
-							$importe,
-							$currency_iso_code,
-							$methodId,
-							$ip,
-							$secure_pay,
-							$saved_card["paytpv_iduser"],
-							$saved_card["paytpv_tokenuser"],
-							$URLOK,
-							$URLKO,
-							$scoring,
-							'',
-							'',
-							$userInteraction,
-							[],
-							'',
-							'',
-							$merchantData,
-							$notifyDirectPayment
-						);
-
-						$charge["DS_RESPONSE"] 			= ($executePurchaseResponse->errorCode > 0)? 0 : 1;
-						$charge["DS_ERROR_ID"] 			= $executePurchaseResponse->errorCode;
-						$charge["DS_MERCHANT_AUTHCODE"] = $executePurchaseResponse->authCode ?? '';
-						$charge["DS_MERCHANT_AMOUNT"] 	= $executePurchaseResponse->amount ?? 0;
-						$charge["DS_CHALLENGE_URL"] 	= $executePurchaseResponse->challengeUrl ?? '';
-
-						if ($executePurchaseResponse->errorCode > 0) {
-							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-								$order->update_meta_data('ErrorID', $executePurchaseResponse->errorCode );
-								$order->save();
-							} else {
-								update_post_meta( ( int ) $order->get_id(), 'ErrorID', $executePurchaseResponse->errorCode);
-							}
-							$this->write_log('Error ' . $executePurchaseResponse->errorCode . " en executePurchase");
-							$order->update_status( 'failed' );
-						}
-
-					} catch (Exception $e) {
-						$charge["DS_ERROR_ID"] = $executePurchaseResponse->errorCode;
-					}
-
-				}  else {
-					$charge["DS_RESPONSE"] = 0;
-					$charge["DS_ERROR_ID"] = 1004;
-					$url = $URLKO;
-				}
-
-				// Si hay challenge redirigimos al cliente a la URL
-				if ($charge[ 'DS_CHALLENGE_URL' ] != '') {
-
-					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-						$order->update_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						$order->update_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						$order->save();
-					} else {
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-					}
-
-					$url = urldecode($charge[ 'DS_CHALLENGE_URL' ]);
-				// Si es OK
-				} else if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
-					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-						$order->update_meta_data('PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						$order->update_meta_data('PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						$order->update_meta_data('ErrorID', 0 );
-						$order->save();
-					} else {
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_IdUser', $saved_card["paytpv_iduser"] );
-						update_post_meta( ( int ) $order->get_id(), 'PayTPV_TokenUser', $saved_card["paytpv_tokenuser"] );
-						update_post_meta( ( int ) $order->get_id(), 'ErrorID', 0);
-					}
-
-					$url = $this->get_return_url( $order );
-				// Si es KO
-				} else {
-					$url = $this->get_return_url( $order );
-				}
-
-				wp_redirect( $url, 303 );
-				exit;
+				exit;				
 			}
 
 			if ($_REQUEST[ 'tpvLstr' ] == 'notify' && isset($_POST["TransactionType"])) {//NOTIFICACIÓN
@@ -863,9 +794,26 @@
 
 						if ( $_REQUEST[ 'TransactionType' ] == '107' && $_REQUEST[ 'Response' ] == 'OK' && ($sign == $localSign)) {
 
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+		
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+				
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
+								
+								print "PAYCOMET OK";
+								exit;
+
+							}
+
 							if (isset($_REQUEST[ 'IdUser' ])){
 								// Save User Card
-								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"]);
+								$result = $this->saveCard(null, $user_id,$_REQUEST[ 'IdUser' ],$_REQUEST[ 'TokenUser' ],$_POST["TransactionType"], 0);
 							}
 						}
 
@@ -878,34 +826,95 @@
 					// execute_purchase
 					case 1:
 					case 109:
-						$arrTerminalData = $this->TerminalCurrency($order);
-						$currency_iso_code = $arrTerminalData["currency_iso_code"];
-						$term = $arrTerminalData["term"];
-						$pass = $arrTerminalData["pass"];
-						if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-							$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
-						} else {
-							$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
-							$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+						if (!str_contains($_REQUEST["Order"], '_tokenization')) {
+							$arrTerminalData = $this->TerminalCurrency($order);
+							$currency_iso_code = $arrTerminalData["currency_iso_code"];
+							$term = $arrTerminalData["term"];
+							$pass = $arrTerminalData["pass"];
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+								$idUser = $_REQUEST['IdUser'] ?? $order->get_meta('PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? $order->get_meta('PayTPV_TokenUser', true);
+							} else {
+								$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
+								$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
+							}
+						
+							$mensaje = $this->clientcode .
+									$term .
+									$_REQUEST[ 'TransactionType' ] .
+									$_REQUEST[ 'Order' ] .
+									$_REQUEST[ 'Amount' ] .
+									$currency_iso_code;
+
+							$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
+
+							// Validacion firma
+							if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
+								print "PAYCOMET WC KO Firma";
+								exit;
+							}
 						}
-
-						$mensaje = $this->clientcode .
-								$term .
-								$_REQUEST[ 'TransactionType' ] .
-								$_REQUEST[ 'Order' ] .
-								$_REQUEST[ 'Amount' ] .
-								$currency_iso_code;
-
-						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
-
-						// Validacion firma
-						if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
-							print "PAYCOMET WC KO Firma";
-							exit;
-						}
-
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
+							
+							// Notificacion para tokenizacion
+							if (str_contains($_REQUEST["Order"], '_tokenization')) {
+								
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
+								
+								$terminal = $this->paytpv_terminals[0];
+								$term = $terminal["term"];
+								$pass = $terminal["pass"];
+								$ip = $this->getIp();
+														
+								// Old card data
+								$old_saved_card = PayTPV::oldSavedCard($id_card);
+								$user_id = $old_saved_card["id_customer"];
+								$old_id_user= $old_saved_card["paytpv_iduser"];
+	
+								// Update the parent order token
+								$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
+								foreach ($subscriptions_with_old_card as $order) {							
+									$result= Paytpv::replaceIdUser($order["order_id"], $_REQUEST[ 'IdUser' ]);
+									$result= Paytpv::replaceTokenUser($order["order_id"], $_REQUEST[ 'TokenUser' ]);																
+									print "PAYCOMET OK TOKENIZATION UPDATE ORDER " . $order["order_id"] . ", idUserAnt: " . $old_id_user . ", idUserNew: " . $_REQUEST[ 'IdUser' ];
+								}
+	
+								// Remove old User Card
+								$result= Paytpv::removeCardTokenization($id_card);
+					
+								// Save new User Card
+								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
+	
+								// Refund Tokenization
+								$auth = $_REQUEST["AuthCode"];
+	
+								if($this->apiKey != '') {
+	
+									$notifyDirectPayment = 2; // No notificar HTTP
+					
+									$apiRest = new PayCometApiRest($this->apiKey);
+									$executeRefundReponse = $apiRest->executeRefund(
+										$_REQUEST["Order"],
+										$term,
+										'50',
+										'EUR',
+										$auth,
+										$ip,
+										$notifyDirectPayment
+									);
+					
+									$result["DS_RESPONSE"] = ($executeRefundReponse->errorCode > 0)? 0 : 1;
+									$result["DS_ERROR_ID"] = $executeRefundReponse->errorCode ?? 0;
+
+									print "PAYCOMET OK TOKENIZATION REFUND " . $result["DS_ERROR_ID"];									
+					
+								} 
+								print "PAYCOMET OK TOKENIZATION";
+	
+								exit;			
+							}
+	
+							
 							// Para las operaciones con tarjeta.
 							if (isset($idUser) && $_REQUEST[ 'MethodId' ]==1){
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
@@ -917,7 +926,7 @@
 								// Guardamos el token cuando el cliente lo ha marcado y cuando la opción Deshabilitar Almacenar Tarjeta esta desactivada.
 								if (isset($save_card) && $save_card=="1" && $this->disable_offer_savecard==0){
 									// Save User Card
-									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"]);
+									$result = $this->saveCard($order, $order->get_user_id(), $idUser, $tokenUser, $_POST["TransactionType"], 0);
 								}
 
 								if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
@@ -947,6 +956,14 @@
 									}
 								}
 							}
+
+							if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                                $order->update_meta_data('AuthCode', $_REQUEST[ 'AuthCode' ] );
+                                $order->save();
+                            } else {
+                                update_post_meta((int) $order->get_id(), 'AuthCode', $_REQUEST[ 'AuthCode' ]);                       
+                            }
+
 
 							$order->add_order_note( __( 'PAYCOMET payment completed', 'woocommerce' ) );
 							$order->payment_complete($_REQUEST[ 'AuthCode' ]);
@@ -1040,6 +1057,29 @@
 				exit;
 			}
 
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframe' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::getMyCardsTemplateUrl($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
+
+
+			// Get Iframe Url (my_cards)
+			if ( $_REQUEST[ 'tpvLstr' ] == 'getUrlIframeExpired' ) {//NOTIFICACIÓN
+				$id_card = $_GET["id"];
+				$url_paytpv = PayTPV::getMyCardsTemplateExpiredUrl($id_card); 
+				
+				$res["resp"] = 0;
+				$res["url"] = $url_paytpv;
+				print json_encode($res);
+				exit;
+			}   
+
 			print "PAYCOMET WC ERROR 2";
 
 			exit;
@@ -1050,6 +1090,7 @@
 			// Si llega referencia obtenemos la ip
 			if ($ref !== false) {
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
+					$order = wc_get_order( ( int ) $ref );
 					$DS_ORIGINAL_IP = $order->get_meta('_customer_ip_address', true );
 				} else {
 					$DS_ORIGINAL_IP = get_post_meta( ( int ) $ref, '_customer_ip_address', true );
@@ -1098,7 +1139,7 @@
 		/**
 		 * Get PAYCOMET language code
 		 * */
-		function _getLanguange()
+		public function _getLanguange($langDefault = "ES")
 		{
 			$lng = substr( get_bloginfo( 'language' ), 0, 2 );
 			if ( function_exists( 'qtrans_getLanguage' ) )
@@ -1108,6 +1149,8 @@
 				$lng = ICL_LANGUAGE_CODE;
 
 			switch ( $lng ) {
+				case 'es':
+					return 'ES';
 				case 'en':
 					return 'EN';
 				case 'fr':
@@ -1119,9 +1162,9 @@
 				case 'ca':
 					return 'CA';
 				default:
-					return 'ES';
+					return $langDefault;
 			}
-			return 'ES';
+			return $langDefault;
 		}
 
 		public function isoCodeToNumber($code)
@@ -1205,7 +1248,7 @@
 				if ($isGuest){
 					$acctInfoData["chAccAgeInd"] = "01";
 				} else {
-					$date_customer = new DateTime(strftime('%Y%m%d', strtotime($customer->user_registered)));
+					$date_customer = new DateTime((new DateTime($customer->user_registered))->format('Ymd'));
 					$diff = $date_now->diff($date_customer);
 					$dias = $diff->days;
 
@@ -1237,7 +1280,7 @@
 						$acctInfoData["chAccChangeInd"] = "04";
 					}
 
-					$acctInfoData["chAccDate"] = strftime('%Y%m%d', strtotime($customer->user_registered));
+					$acctInfoData["chAccDate"] = (new DateTime($customer->user_registered))->format('Ymd');
 
 					$acctInfoData["nbPurchaseAccount"] = $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") <= 9999 ? $this->numPurchaseCustomer(get_current_user_id(), 1, 6, "MONTH") : 9999;
 
@@ -1257,7 +1300,7 @@
 				if ($firstAddressDelivery != "") {
 					$acctInfoData["shipAddressUsage"] = date("Ymd", strtotime($firstAddressDelivery));
 
-					$date_firstAddressDelivery = new DateTime(strftime('%Y%m%d', strtotime($firstAddressDelivery)));
+					$date_firstAddressDelivery = new DateTime((new DateTime($firstAddressDelivery))->format('Ymd'));
 					$diff = $date_now->diff($date_firstAddressDelivery);
 					$dias_firstAddressDelivery = $diff->days;
 
@@ -1360,6 +1403,44 @@
 												($order->get_shipping_address_2() == $order->get_billing_address_2())) ? "Y" : "N";
 
 				$Merchant_EMV3DS["challengeWindowSize"] = 05;
+
+				// Suscripciones
+				foreach ( $order->get_items() as $item ) {
+					// Obtener el ID del producto.
+					$product_id = $item->get_product_id();
+					$product = wc_get_product( $product_id );
+			
+					if ( $product && ($product->is_type( 'subscription' ) || $product->is_type( 'variable-subscription' )) ) {
+						$billing_interval = $product->get_meta( '_subscription_period_interval' );  // Intervalo de facturación (1, 2, etc.)
+						$billing_period = $product->get_meta( '_subscription_period' ); // Período de facturación ('day', 'week', 'month', 'year')
+
+						switch ($billing_period) {
+							case 'day':
+								$billing_interval *= 1;  // Días
+								break;
+							case 'week':
+								$billing_interval *= 7;  // Semanas
+								break;
+							case 'month':
+								$billing_interval *= 30; // Meses
+								break;
+							case 'year':
+								$billing_interval *= 365; // Años
+								break;
+							default:
+								// Opcional: manejar períodos desconocidos
+								$billing_interval = 1;
+								break;
+						}
+
+						$dateAux = new \DateTime("now");
+						$dateAux->modify('+10 year');
+						$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
+
+						$Merchant_EMV3DS["recurringExpiry"] = $recurringExpiry;
+						$Merchant_EMV3DS["recurringFrequency"] = (string)$billing_interval;
+					}	
+				}
 			} catch (exception $e){
 				// If exception send empty $Merchant_EMV3DS
 			}
@@ -1497,8 +1578,11 @@
 			$MERCHANT_AMOUNT = $importe;
 			$MERCHANT_CURRENCY = $currency_iso_code;
 			$URLOK = $this->get_return_url( $order );
-			$URLKO = $this->get_return_url( $order );
-
+			$paramsUrl = array(
+				'order' => $order->get_id(),
+				'paycomet_error' => 'payment'
+			);
+			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 			// REST
 			if ($this->apiKey != '') {
@@ -1506,6 +1590,12 @@
 				$userInteraction = 1;
 				$methodId = 1;
 				$merchantData = $this->getMerchantData($order, $methodId);
+			
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
+				}
+
 				$url = "";
 
 				try {
@@ -1524,6 +1614,7 @@
 							'currency' => $MERCHANT_CURRENCY,
 							'userInteraction' => $userInteraction,
 							'secure' => $secure_pay,
+							'trxType' => $trxType,
 							'merchantData' => $merchantData,
 							'urlOk' => $URLOK,
 							'urlKo' => $URLKO
@@ -1578,8 +1669,11 @@
 			$ip = $this->getIp();
 			$arrTerminalData = $this->TerminalCurrency($order);
 			$URLOK = $this->get_return_url($order);
-			$URLKO = $this->get_return_url($order);
-
+			$paramsUrl = array(
+				'order' => $order->get_id(),
+				'paycomet_error' => 'payment'
+			);
+			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 			// With token Card
 			if ($_POST['hiddenCardField'] != 0) {
@@ -1604,6 +1698,15 @@
 						$notify
 					);
 
+					if (isset($addUserResponse->errorCode) && $addUserResponse->errorCode>0) {
+                        if ($addUserResponse->errorCode==1004) {
+                            $error_txt = __( 'Error: ', 'wc_paytpv' ) . $addUserResponse->errorCode;
+                        } else {
+                            $error_txt = $addUserResponse->errorCode . ":" . __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+                        }                       
+                        wc_add_notice($error_txt, 'error' );
+                        return false;
+                    }
 					$idUser = $addUserResponse->idUser;
 					$tokenUser = $addUserResponse->tokenUser;
 				}
@@ -1638,6 +1741,11 @@
 
 				$merchantData = $this->getMerchantData($order, $methodId);
 
+				$trxType = "";
+				if(isset($merchantData["recurringExpiry"]) && isset($merchantData["recurringFrequency"])){
+					$trxType = "R";
+				}
+
 				$dcc = $arrTerminalData["dcc"];
 				if ($dcc == 1) {
 
@@ -1659,6 +1767,7 @@
                                 'tokenUser' => $tokenUser,
                                 'userInteraction' => $userInteraction,
                                 'secure' => $secure_pay,
+								'trxType' => $trxType,
                                 'merchantData' => $merchantData,
                                 'urlOk' => $URLOK,
                                 'urlKo' => $URLKO
@@ -1688,7 +1797,7 @@
 							'',
 							$userInteraction,
 							[],
-							'',
+							$trxType,
 							'',
 							$merchantData,
 							$notifyDirectPayment
@@ -1807,7 +1916,7 @@
 					<div id="saved_cards" style="display:'.$store_card.'">
 	                    <div class="form-group">
 	                        <label for="card">'.__('Card', 'wc_paytpv' ).':</label>
-	                        <select name="card" id="card" onChange="checkCard()" class="form-control">';
+	                        <select name="card" id="card" onChange="checkCard()" class="form-control select2" aria-hidden="true" style="width:100%">';
 
 			foreach ($saved_cards as $card){
 				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
@@ -1875,7 +1984,7 @@
 			return $html;
 		}
 
-		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType)
+		public function saveCard($order, $user_id, $paytpv_iduser, $paytpv_tokenuser, $TransactionType, $forceSave = 0)
 		{
 			// Si es una operción de add_user o no existe el token asociado al usuario lo guardamos
 			if ($TransactionType==107 || !PayTPV::existsCard($paytpv_iduser,$user_id)){
@@ -1900,6 +2009,7 @@
 					$result['DS_MERCHANT_PAN'] = $infoUserResponse->pan;
 					$result['DS_CARD_BRAND'] = $infoUserResponse->cardBrand;
 					$result['DS_CARD_EXPIRYDATE'] = $infoUserResponse->expiryDate;
+					$result['DS_TOKENCOF'] = $infoUserResponse->tokenCOF;
 				}
 
 				return PayTPV::saveCard(
@@ -1908,7 +2018,9 @@
 					$paytpv_tokenuser,
 					$result['DS_MERCHANT_PAN'],
 					$result['DS_CARD_BRAND'],
-					$result['DS_CARD_EXPIRYDATE']
+					$result['DS_CARD_EXPIRYDATE'],
+					$result['DS_TOKENCOF'],
+					$forceSave
 				);
 
 			}else{
@@ -1944,8 +2056,8 @@
 				$paytpv_order_ref = str_pad($paytpv_order_ref, 8, "0", STR_PAD_LEFT);
 
 				if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-					$payptv_iduser = $order->get_meta('PayTPV_IdUser', true );
-					$payptv_tokenuser = $order->get_meta('PayTPV_TokenUser', true );
+					$payptv_iduser = $parent_order->get_meta('PayTPV_IdUser', true );
+					$payptv_tokenuser = $parent_order->get_meta('PayTPV_TokenUser', true );
 				} else {
 					$payptv_iduser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_IdUser', true );
 					$payptv_tokenuser = get_post_meta( ( int ) $parent_order->get_id(), 'PayTPV_TokenUser', true );
@@ -1962,13 +2074,7 @@
 				// Añadimos información MIT -> R
 				$trxType = "R";
 				$scaException = "MIT";
-
-				$dateAux = new \DateTime("now");
-				$dateAux->modify('+10 year');
-				$recurringExpiry = $dateAux->format('Ymd'); // Fecha actual + 10 años.
-				$merchantData["recurringExpiry"] = $recurringExpiry;
-				$merchantData["recurringFrequency"] = "1";
-
+		
 				// REST
 				if($this->apiKey != '') {
 
@@ -2015,6 +2121,9 @@
 					$charge["DS_RESPONSE"] = 0;
 					$charge["DS_ERROR_ID"] = 1004;
 				}
+
+				$this->write_log('Error ' . json_encode($charge));
+
 
 				if (( int ) $charge[ 'DS_RESPONSE' ] == 1 ) {
 					if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {

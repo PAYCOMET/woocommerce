@@ -57,7 +57,8 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
 
 
 .woocommerce_paytpv_cards .card_desc{
-	min-width: 200px;
+	min-width: 155px;
+    font-size: 0.8em;
 }
 
 #storingStepUser h4, #storingStep h4{
@@ -90,4 +91,5 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
 #paycometPaymentForm .row{
     margin-left: 0px !important;
     margin-right: 0px !important;
+    margin-top: 5px !important;    
 }

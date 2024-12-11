@@ -21,6 +21,7 @@ function payptv_upgrade( $new_ver, $old_ver ) {
 		`id_customer` INT(10) UNSIGNED NOT NULL,
 		`date` DATETIME NOT NULL,
 		`card_desc` VARCHAR(32) NULL DEFAULT NULL,
+		`tokenCOF` VARCHAR(32) NULL DEFAULT NULL,
 		PRIMARY KEY (`id`)
 		) $charset_collate;";
 
@@ -32,8 +33,14 @@ function payptv_upgrade( $new_ver, $old_ver ) {
 			ADD COLUMN IF NOT EXISTS paytpv_expirydate VARCHAR(7) NOT NULL 
 			AFTER paytpv_brand;";
 
+			$sql1 = "ALTER TABLE $table_name
+			ADD COLUMN IF NOT EXISTS tokenCOF VARCHAR(7) NULL DEFAULT NULL
+			AFTER card_desc;";
+
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			$query_result = $wpdb->query( $sql );
+			$query_result = $wpdb->query( $sql1 );
+			
 		} catch (execption $e) {}
 	}
 }
