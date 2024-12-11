@@ -35,12 +35,28 @@ add_action( 'wp_enqueue_scripts', array( 'woocommerce_paytpv', 'load_resources' 
 
 add_action( 'woocommerce_before_my_account', array( 'woocommerce_paytpv', 'get_my_cards_template' ) );
 
+/**
+ * Compatible HPOS and Blocks Checkout
+ * */
+
 add_action( 'before_woocommerce_init', function() {
 	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 	}
 } );
 add_action( 'woocommerce_before_checkout_form', 'custom_display_checkout_error_message', 10 );
+
+
+/**
+ * Inicializar Wordpress Blocks
+ * */
+
+function wordpress_wordpress_block_init() {
+	register_block_type( __DIR__ . '/build' );
+}
+
+add_action( 'init', 'wordpress_wordpress_block_init' );
 
 
 function woocommerce_paytpv_init() {
@@ -187,6 +203,103 @@ function my_update_notice() {
 	<?php 
 }
 
+//Checkout Blocks Compatibility
+
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+ 
+add_action( 'woocommerce_blocks_loaded', function() {
+ 
+	if( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+		return;
+	}
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paytpv.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-bancontact.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-bizum.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-eps.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-giropay.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-ideal.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-instantcredit.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarna.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarnapayments.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-multibanco.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-mybank.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paypal.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paysafecard.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paysera.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-postfinance.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-przelewy.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-qiwi.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-skrill.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-trustly.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-waylet.php';
+
+	add_action(
+		'woocommerce_blocks_payment_method_type_registration',
+		function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
+	
+			$blocks=new Paycomet_Block_Support_Paytpv();
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Bancontact;
+			$payment_method_registry->register($blocks);
+			
+			$blocks=new Paycomet_Block_Support_Bizum();
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Eps;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Giropay;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Ideal;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Instantcredit;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Klarna;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Klarnapayments;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Multibanco;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Mybank;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Paypal;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Paysafecard;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Paysera;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Postfinance;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Przelewy;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Qiwi;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Skrill;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Trustly;
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Waylet;
+			$payment_method_registry->register($blocks);
+	} );
+
+	
+} );
 function custom_display_checkout_error_message() {
     if ( isset( $_GET['order'] )) {
         $order_id=$_GET['order'];
