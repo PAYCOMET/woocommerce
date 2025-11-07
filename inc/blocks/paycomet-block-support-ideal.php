@@ -18,7 +18,7 @@ final class Paycomet_Block_Support_Ideal extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 		wp_register_script(
 			'wc-mygateway-blocks-integration',
-			PAYTPV_PLUGIN_URL . 'wordpress/build/index.js',
+			PAYTPV_PLUGIN_URL . 'js/index.js',
 			array(),
 			1,
 			true

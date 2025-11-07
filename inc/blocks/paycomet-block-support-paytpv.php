@@ -19,8 +19,8 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 		
 		wp_register_script(
 			'wc-mygateway-blocks-integration',
-			PAYTPV_PLUGIN_URL . 'wordpress/build/index.js',
-			array(),
+			PAYTPV_PLUGIN_URL . 'js/index.js',
+			['wp-hooks'],
 			1,
 			true
 		);
@@ -31,7 +31,10 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 
 		$saved_cards = Paytpv::savedActiveCards(get_current_user_id());
     	$store_card = (sizeof($saved_cards) == 0) ? "none" : "";
-		$disable_offer_savecard = ($this->get_setting( 'disable_offer_savecard' ) == 0 )? "" : "none";
+		$disable_offer_savecard = ($this->get_setting( 'disable_offer_savecard' ) == 0 && get_current_user_id() > 0)? true : false;
+
+		$paytpvBase = new woocommerce_paytpv(false); 
+
 		return [
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
@@ -47,16 +50,18 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 				'subscription_date_changes'
 			),
 			'name' => 'paytpv',
-			'jetiframe' => $this->get_setting( 'payment_paycomet' ),
+			'payment_paycomet' => $this->get_setting( 'payment_paycomet' ),
+			'getLanguage' => strtolower($paytpvBase->_getLanguange("EN")),
 			'saved_cards' => $saved_cards,
 			'store_card' => $store_card,
+			'disable_offer_savecard' => $disable_offer_savecard,
 			'jet_id' => $this->get_setting( 'jet_id' ),
 			'text' => array(
 				'Card' => __('Card', 'wc_paytpv'),
 				'NewCard' => __('NEW CARD', 'wc_paytpv'),
+				'ExpirationDate' => __('Expiration date', 'wc_paytpv'),
 				'CardNumber' => __('Card number', 'wc_paytpv'),
 				'Month' => __('Month', 'wc_paytpv'),
-				'ExpirationDate' => __('Expiration date', 'wc_paytpv'),
                 'January' => __('01 - January', 'wc_paytpv'),
 				'February' => __('02 - February', 'wc_paytpv'),
 				'March' => __('03 - March', 'wc_paytpv'),
@@ -75,9 +80,10 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 				'MakePayment' => __('Make payment', 'wc_paytpv')
 		
             ),
-			'form' => $this->get_setting('pan_div_style'),
-			'activo' => $this->get_setting( 'isJetIframeActive'),
-			'disable_offer_savecard' => $disable_offer_savecard
+			'pan_div_style' => $this->get_setting('pan_div_style'),
+			'pan_input_style' => $this->get_setting('pan_input_style'),
+			'cvc2_div_style' => $this->get_setting('cvc2_div_style'),
+			'cvc2_input_style' => $this->get_setting('cvc2_input_style')
 		];
 	}
 
