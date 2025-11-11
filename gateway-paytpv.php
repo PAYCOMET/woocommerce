@@ -48,17 +48,6 @@ add_action( 'before_woocommerce_init', function() {
 add_action( 'woocommerce_before_checkout_form', 'custom_display_checkout_error_message', 10 );
 
 
-/**
- * Inicializar Wordpress Blocks
- * */
-
-function wordpress_wordpress_block_init() {
-	register_block_type( __DIR__ . '/build' );
-}
-
-add_action( 'init', 'wordpress_wordpress_block_init' );
-
-
 function woocommerce_paytpv_init() {
 
 	/**
