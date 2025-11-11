@@ -136,18 +136,20 @@
 				}
 
 				//JetIframe integration Blocks
-				add_action( 'woocommerce_store_api_checkout_update_order_from_request', function($order, $request){
-					$data = $request->get_json_params();
-					if(isset($data['hiddenCardField'])) {
-						$order->update_meta_data('hiddenCardField', sanitize_text_field($data['hiddenCardField']));
-					}
-					if(isset($data['jetToken'])) {
-						$order->update_meta_data('jetToken', sanitize_text_field($data['jetToken']));
-					}
-					if(isset($data['saveCard'])) {
-						$order->update_meta_data('saveCard', sanitize_text_field($data['saveCard']));
-					}
-				}, 10, 2 );
+				if ($this->isJetIframeActive) {
+					add_action( 'woocommerce_store_api_checkout_update_order_from_request', function($order, $request){
+						$data = $request->get_json_params();
+						if(isset($data['hiddenCardField'])) {
+							$order->update_meta_data('hiddenCardField', sanitize_text_field($data['hiddenCardField']));
+						}
+						if(isset($data['jetToken'])) {
+							$order->update_meta_data('jetToken', sanitize_text_field($data['jetToken']));
+						}
+						if(isset($data['saveCard'])) {
+							$order->update_meta_data('saveCard', sanitize_text_field($data['saveCard']));
+						}
+					}, 10, 2 );
+				}
 			}
 		}
 
