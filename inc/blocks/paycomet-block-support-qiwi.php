@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Qiwi extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'qiwi'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/qiwi.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with QIWI Wallet', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

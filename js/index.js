@@ -6,12 +6,13 @@ const PAYMENT_METHODS = [
     'paytpv_data',
     'paycomet_bancontact_data',
     'paycomet_bizum_data',
-    'paycomet_eps_data',
+    'Paycomet_Eps_data',
     'paycomet_giropay_data',
     'paycomet_ideal_data',
     'paycomet_instantcredit_data',
     'paycomet_klarna_data',
     'paycomet_klarnapayments_data',
+    'paycomet_mbway_data',
     'paycomet_multibanco_data',
     'paycomet_mybank_data',
     'paycomet_paypal_data',
@@ -136,7 +137,7 @@ function createPaycometForm(portal) {
         <div id="toHide" style="display:none;">
             <div class="row">
                 <div class="form-group">
-                    <label for="cardNumber">${settings.text.CardNumber}</label>
+                    <label>${settings.text.CardNumber}</label>
                     <div class="input-group">
                         <div id="paycomet-pan" style="${settings.pan_div_style}"></div>
                         <input paycomet-style="${settings.pan_input_style}" paycomet-name="pan">

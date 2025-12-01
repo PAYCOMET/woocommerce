@@ -41,9 +41,9 @@ final class Paycomet_Block_Support_Giropay extends AbstractPaymentMethodType {
 
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'giropay'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/giropay.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Giropay', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

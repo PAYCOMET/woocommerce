@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Trustly extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'trustly'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/trustly.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Trustly', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

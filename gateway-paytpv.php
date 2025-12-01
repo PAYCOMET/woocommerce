@@ -210,6 +210,7 @@ add_action( 'woocommerce_blocks_loaded', function() {
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-instantcredit.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarna.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarnapayments.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-mbway.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-multibanco.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-mybank.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paypal.php';
@@ -229,61 +230,64 @@ add_action( 'woocommerce_blocks_loaded', function() {
 			$blocks=new Paycomet_Block_Support_Paytpv();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Bancontact;
+			$blocks=new Paycomet_Block_Support_Bancontact();
 			$payment_method_registry->register($blocks);
 			
 			$blocks=new Paycomet_Block_Support_Bizum();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Eps;
+			$blocks=new Paycomet_Block_Support_Eps();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Giropay;
+			$blocks=new Paycomet_Block_Support_Giropay();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Ideal;
+			$blocks=new Paycomet_Block_Support_Ideal();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Instantcredit;
+			$blocks=new Paycomet_Block_Support_Instantcredit();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Klarna;
+			$blocks=new Paycomet_Block_Support_Klarna();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Klarnapayments;
+			$blocks=new Paycomet_Block_Support_Klarnapayments();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Multibanco;
+			$blocks=new Paycomet_Block_Support_Mbway();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Mybank;
+			$blocks=new Paycomet_Block_Support_Multibanco();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Paypal;
+			$blocks=new Paycomet_Block_Support_Mybank();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Paysafecard;
+			$blocks=new Paycomet_Block_Support_Paypal();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Paysera;
+			$blocks=new Paycomet_Block_Support_Paysafecard();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Postfinance;
+			$blocks=new Paycomet_Block_Support_Paysera();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Przelewy;
+			$blocks=new Paycomet_Block_Support_Postfinance();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Qiwi;
+			$blocks=new Paycomet_Block_Support_Przelewy();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Skrill;
+			$blocks=new Paycomet_Block_Support_Qiwi();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Trustly;
+			$blocks=new Paycomet_Block_Support_Skrill();
 			$payment_method_registry->register($blocks);
 
-			$blocks=new Paycomet_Block_Support_Waylet;
+			$blocks=new Paycomet_Block_Support_Trustly();
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Waylet();
 			$payment_method_registry->register($blocks);
 	} );
 

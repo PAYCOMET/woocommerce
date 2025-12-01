@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Eps extends AbstractPaymentMethodType {
 
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'eps'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/eps.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with EPS', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Paypal extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'paypal'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/paypal.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Paypal', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

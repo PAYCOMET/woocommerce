@@ -38,9 +38,9 @@ final class Paycomet_Block_Support_Paysafecard extends AbstractPaymentMethodType
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'paysafecard'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/paysafecard.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with PaySafeCard', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

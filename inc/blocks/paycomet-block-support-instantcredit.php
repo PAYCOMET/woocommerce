@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Instantcredit extends AbstractPaymentMethodTy
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'instantcredit'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/instantcredit.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Instant Credit', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

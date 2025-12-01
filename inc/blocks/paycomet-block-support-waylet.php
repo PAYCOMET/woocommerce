@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Waylet extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'waylet'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/waylet.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Waylet', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Paysera extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'paysera'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/paysera.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Paysera', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

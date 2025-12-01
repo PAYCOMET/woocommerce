@@ -41,9 +41,9 @@ final class Paycomet_Block_Support_Postfinance extends AbstractPaymentMethodType
 
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'postfinance'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/postfinance.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with PostFinance', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

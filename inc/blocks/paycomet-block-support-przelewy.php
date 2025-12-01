@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Przelewy extends AbstractPaymentMethodType {
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'przelewy24'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/przelewy24.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with Przelewy24', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;

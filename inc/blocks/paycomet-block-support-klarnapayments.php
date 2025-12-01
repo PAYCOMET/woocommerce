@@ -40,9 +40,9 @@ final class Paycomet_Block_Support_Klarnapayments extends AbstractPaymentMethodT
 	}
 	private function get_icons() {
 		$icon_src = [
-			'visa'       => [
+			'klarnapayments'       => [
 				'src' => PAYTPV_PLUGIN_URL . 'images/apms/klarnapayments.svg',
-				'alt' => __( 'Pay with card', 'wc_paytpv' ),
+				'alt' => __( 'Pay with KlarnaPayments', 'wc_paytpv' ),
 			],
 		];
 		return $icon_src;
