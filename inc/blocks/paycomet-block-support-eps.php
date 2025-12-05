@@ -5,10 +5,10 @@ use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodTyp
 final class Paycomet_Block_Support_Eps extends AbstractPaymentMethodType {
 
 	private $gateway;
-	protected $name = 'Paycomet_Eps';
+	protected $name = 'Paycomet_eps';
 
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_paycomet_Eps_settings', array() );
+		$this->settings = get_option( 'woocommerce_paycomet_eps_settings', array() );
 	}
 	
 	public function is_active() {
@@ -34,7 +34,7 @@ final class Paycomet_Block_Support_Eps extends AbstractPaymentMethodType {
 			'supports'    => array(
 				'refunds',
 			),
-			'name' => 'Paycomet_Eps'
+			'name' => 'Paycomet_eps'
 		];
 	}
 
