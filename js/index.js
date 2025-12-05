@@ -6,7 +6,7 @@ const PAYMENT_METHODS = [
     'paytpv_data',
     'paycomet_bancontact_data',
     'paycomet_bizum_data',
-    'Paycomet_eps_data',
+    'paycomet_eps_data',
     'paycomet_giropay_data',
     'paycomet_ideal_data',
     'paycomet_instantcredit_data',
