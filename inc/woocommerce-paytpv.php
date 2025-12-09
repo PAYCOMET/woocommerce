@@ -134,6 +134,22 @@
 					add_action('woocommerce_pay_order_before_submit', array($this, 'addFieldForJetiframeToken'));
 					add_filter('woocommerce_pay_order_button_html', array( $this, 'woocommerce_pay_order_button_html_filter'), 10, 4 );
 				}
+
+				//JetIframe integration Blocks
+				if ($this->isJetIframeActive) {
+					add_action( 'woocommerce_store_api_checkout_update_order_from_request', function($order, $request){
+						$data = $request->get_json_params();
+						if(isset($data['hiddenCardField'])) {
+							$order->update_meta_data('hiddenCardField', sanitize_text_field($data['hiddenCardField']));
+						}
+						if(isset($data['jetToken'])) {
+							$order->update_meta_data('jetToken', sanitize_text_field($data['jetToken']));
+						}
+						if(isset($data['saveCard'])) {
+							$order->update_meta_data('saveCard', sanitize_text_field($data['saveCard']));
+						}
+					}, 10, 2 );
+				}
 			}
 		}
 
@@ -1676,8 +1692,16 @@
 			$URLKO = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
 			// With token Card
-			if ($_POST['hiddenCardField'] != 0) {
-				$saved_card = PayTPV::savedCard($order->get_user_id(), $_POST['hiddenCardField']);
+			$hiddenCardField = 0;
+
+			if (isset($_POST['hiddenCardField'])) {
+				$hiddenCardField = sanitize_text_field($_POST['hiddenCardField']); // checkout clásico
+			} else {
+				$hiddenCardField = $order->get_meta('hiddenCardField'); // Woo Blocks
+			}
+
+			if ($hiddenCardField != 0) {
+				$saved_card = PayTPV::savedCard($order->get_user_id(), $hiddenCardField);
 				$idUser = $saved_card["paytpv_iduser"];
 				$tokenUser = $saved_card["paytpv_tokenuser"];
 
@@ -1688,10 +1712,17 @@
 
 					$notify = 2; // No notificar HTTP
 
+					$jetToken = '';
+					if (isset($_POST['jetiframe-token'])) {
+						$jetToken = sanitize_text_field($_POST['jetiframe-token']); // checkout clásico
+					} else {
+						$jetToken = $order->get_meta('jetToken'); // checkout con Woo Blocks
+					}
+
 					$apiRest = new PaycometApiRest($this->apiKey);
 					$addUserResponse = $apiRest->addUser(
 						$arrTerminalData['term'],
-						$_POST['jetiframe-token'],
+						$jetToken,
 						$order->get_id(),
 						'',
 						'ES',
@@ -1712,7 +1743,13 @@
 				}
 			}
 
-			$savecard_jetiframe = (isset($_POST["savecard_jetiframe"]))?1:0;
+			$saveCardMeta = $order->get_meta('saveCard');
+
+			if ($saveCardMeta !== '' && $saveCardMeta !== null) {
+				$savecard_jetiframe = $saveCardMeta; // checkout con Woo Blocks
+			} else {
+				$savecard_jetiframe = isset($_POST['savecard_jetiframe']) ? 1 : 0; // checkout clásico
+			}
 
 			if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
 				$order->update_meta_data('paytpv_savecard', $savecard_jetiframe);
