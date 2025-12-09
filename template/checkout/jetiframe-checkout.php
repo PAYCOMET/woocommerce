@@ -9,7 +9,7 @@
 
 <div id="saved_cards" style="display:<?=$store_card;?>">
     <div class="form-group">
-        <label for="card"><?php print __('Card', 'wc_paytpv'); ?></label>        
+        <label for="jet_iframe_card"><?php print __('Card', 'wc_paytpv'); ?></label>        
         <select name="jet_iframe_card" id="jet_iframe_card" onChange="checkSelectedCard()" class="form-control select2" aria-hidden="true" style="width:100%">
         <?php
             foreach ($saved_cards as $card){
@@ -31,7 +31,7 @@
 
     <div class="row">
         <div class="form-group">
-            <label for="cardNumber"><?php print __('Card number', 'wc_paytpv');?></label>
+            <label><?php print __('Card number', 'wc_paytpv');?></label>
             <div class="input-group">
                 <div id="paycomet-pan" style="<?php print $pan_div_style ?>"></div>   
                 <input paycomet-style="<?php print $pan_input_style ?>" paycomet-name="pan">

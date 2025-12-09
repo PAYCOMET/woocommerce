@@ -15,7 +15,7 @@ class Paycomet_Eps extends Paycomet_APM
     
     public function __construct()
     {
-        $this->id = 'Paycomet_Eps';
+        $this->id = 'paycomet_eps';
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/eps.svg';
         $this->has_fields = false;
         $this->method_title = 'PAYCOMET - EPS';
