@@ -1,5 +1,5 @@
-<svg width="64" height="40" viewBox="0 0 282 108" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="0" y="-40" width="282" height="190" rx="50" fill="white"/>
+<svg width="50" height="34" viewBox="0 0 282 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 16C0 7.16343 7.16344 0 16 0H266C274.837 0 282 7.16344 282 16V91.9259C282 100.762 274.837 107.926 266 107.926H16C7.16345 107.926 0 100.762 0 91.9259V16Z" fill="white"/>
 <g clip-path="url(#clip0_2622_492)">
 <mask id="mask0_2622_492" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="20" y="20" width="242" height="67">
 <path d="M261.584 20.8889H20.8889V86.3843H261.584V20.8889Z" fill="white"/>
