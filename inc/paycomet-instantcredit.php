@@ -128,7 +128,7 @@ class Paycomet_Instantcredit extends Paycomet_APM
         $this->method_title = 'PAYCOMET - Instant Credit';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 33;
-        $this->title = __('Buy now, pay later', 'wc_paytpv' );
+        $this->title = __('Instant installment payment', 'wc_paytpv' );
         $this->description = __('Quick and paperless process with the confidence of Banco Sabadell. Have your ID at hand to process the financing.', 'wc_paytpv' );
 
         $this->supports = array(
@@ -142,8 +142,8 @@ class Paycomet_Instantcredit extends Paycomet_APM
 
         $this->loadProp();
 
-        if ($this->title == "Compra ahora y paga después") {
-            $this->title = __( 'Buy now, pay later', 'wc_paytpv' );
+        if ($this->title == "Pago a plazos instantáneo") {
+            $this->title = __( 'Instant installment payment', 'wc_paytpv' );
         }
         if ($this->description == "Proceso rápido y sin papeles con la confianza de Banco Sabadell. Ten a mano tu DNI para tramitar la financiación.") {
             $this->description = __( 'Quick and paperless process with the confidence of Banco Sabadell. Have your ID at hand to process the financing.', 'wc_paytpv' );
