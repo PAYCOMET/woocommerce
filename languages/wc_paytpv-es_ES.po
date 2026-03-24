@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2026-03-23 18:05+0000\n"
+"PO-Revision-Date: 2026-03-24 07:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -1713,12 +1713,12 @@ msgstr "Paga con Giropay"
 
 #: inc/paycomet-ideal.php:24 inc/paycomet-ideal.php:40
 #: inc/blocks/paycomet-block-support-ideal.php:46
-msgid "Pay with iDeal"
-msgstr "Paga con iDeal"
+msgid "Pay with iDEAL | Wero"
+msgstr "Paga con iDEAL | Wero"
 
 #: inc/blocks/paycomet-block-support-instantcredit.php:45
 msgid "Pay with Instant Credit"
-msgstr ""
+msgstr "Paga con Instant Credit"
 
 #: inc/paycomet-klarna.php:24 inc/paycomet-klarna.php:39
 #: inc/blocks/paycomet-block-support-klarna.php:46
@@ -2858,8 +2858,9 @@ msgid "You will be redirected to Giropay"
 msgstr "Se te redirigirá a Giropay"
 
 #: inc/paycomet-ideal.php:25 inc/paycomet-ideal.php:43
-msgid "You will be redirected to iDeal"
-msgstr "Se te redirigirá a iDeal"
+#| msgid "You will be redirected to iDeal"
+msgid "You will be redirected to iDEAL | Wero"
+msgstr "Se te redirigirá a iDEAL | Wero"
 
 #: inc/paycomet-klarna.php:25 inc/paycomet-klarna.php:42
 msgid "You will be redirected to Klarna"
