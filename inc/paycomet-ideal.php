@@ -18,7 +18,7 @@ class Paycomet_Ideal extends Paycomet_APM
         $this->id = 'paycomet_ideal';
         $this->icon = PAYTPV_PLUGIN_URL . 'images/apms/ideal.svg';
         $this->has_fields = false;
-        $this->method_title = 'PAYCOMET - iDeal';
+        $this->method_title = 'PAYCOMET - iDeal | Wero';
         $this->method_description = sprintf( __( 'PAYCOMET general data must be configured <a href="%s">here</a>.', 'wc_paytpv' ), admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' ) );
         $this->methodId = 12;
         $this->title = __('Pay with iDEAL | Wero', 'wc_paytpv' );
@@ -35,6 +35,10 @@ class Paycomet_Ideal extends Paycomet_APM
         $this->init_settings();
 
         $this->loadProp();
+
+        if ($this->title == "Paga con iDeal") {
+            $this->title = __( 'Pay with iDEAL | Wero', 'wc_paytpv' );
+        }
 
         if ($this->title == "Paga con iDEAL | Wero") {
             $this->title = __( 'Pay with iDEAL | Wero', 'wc_paytpv' );
