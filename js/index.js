@@ -23,7 +23,8 @@ const PAYMENT_METHODS = [
     'paycomet_qiwi_data',
     'paycomet_skrill_data',
     'paycomet_trustly_data',
-    'paycomet_waylet_data'
+    'paycomet_waylet_data',
+    'paycomet_applepay_data'
 ];
 
 /**

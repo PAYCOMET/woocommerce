@@ -5,15 +5,15 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.43
- * Tested up to: 6.9
- * WC tested up to: 10.6.1
+ * Version: 5.44
+ * Tested up to: 7.0
+ * WC tested up to: 10.8.1
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
 
-define( 'PAYTPV_VERSION', '5.43' );
+define( 'PAYTPV_VERSION', '5.44' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -88,6 +88,7 @@ function woocommerce_paytpv_init() {
 	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-waylet.php';
 	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
+	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-applepay.php';
 }
 
 
@@ -124,6 +125,7 @@ function add_paytpv_gateway( $methods ) {
 	$methods[] = 'Paycomet_Webmoney';
 	$methods[] = 'Paycomet_Waylet';
 	$methods[] = 'Paycomet_Instantcredit';
+	$methods[] = 'Paycomet_Applepay';
 
 	return $methods;
 }
@@ -222,6 +224,7 @@ add_action( 'woocommerce_blocks_loaded', function() {
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-skrill.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-trustly.php';
 	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-waylet.php';
+	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-applepay.php';
 
 	add_action(
 		'woocommerce_blocks_payment_method_type_registration',
@@ -288,6 +291,9 @@ add_action( 'woocommerce_blocks_loaded', function() {
 			$payment_method_registry->register($blocks);
 
 			$blocks=new Paycomet_Block_Support_Waylet();
+			$payment_method_registry->register($blocks);
+
+			$blocks=new Paycomet_Block_Support_Applepay();
 			$payment_method_registry->register($blocks);
 	} );
 

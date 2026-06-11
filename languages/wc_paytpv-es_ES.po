@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Pasarela de pago Woocommerce para PAYCOMET\n"
 "POT-Creation-Date: 2021-03-03 12:17+0000\n"
-"PO-Revision-Date: 2026-03-24 07:48+0000\n"
+"PO-Revision-Date: 2026-06-11 07:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: Español\n"
 "Language: es_ES\n"
@@ -158,7 +158,7 @@ msgstr "20"
 msgid "3"
 msgstr "3"
 
-#: gateway-paytpv.php:733
+#: gateway-paytpv.php:739
 msgid "3DS authentication process error"
 msgstr "Error en el proceso de autenticación 3DS"
 
@@ -203,39 +203,39 @@ msgstr ""
 "débito en su comercio. Para ello necesitara una cuenta en PAYCOMET y acceso "
 "al <a href=\"https://lens.paycomet.com\">Área de clientes</a>"
 
-#: gateway-paytpv.php:659
+#: gateway-paytpv.php:665
 msgid "[DS_]AGENT_FEE parameter is not in a correct format"
 msgstr "El parámetro [DS_]AGENT_FEE no tienen el formato correcto"
 
-#: gateway-paytpv.php:658
+#: gateway-paytpv.php:664
 msgid "[DS_]AGENT_FEE parameter missing"
 msgstr "No se encuentra el parámetro [DS_]AGENT_FEE"
 
-#: gateway-paytpv.php:798
+#: gateway-paytpv.php:804
 msgid "A timeout has occurred in command execution"
 msgstr "Se ha producido un timeout en la ejecución del comando"
 
-#: gateway-paytpv.php:526
+#: gateway-paytpv.php:532
 msgid "ACCOUNT field error"
 msgstr "Error en el campo ACCOUNT"
 
-#: gateway-paytpv.php:501
+#: gateway-paytpv.php:507
 msgid "Account not active. Please contact PayCOMET"
 msgstr "La cuenta no se encuentra activa. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:588
+#: gateway-paytpv.php:594
 msgid "Account not found"
 msgstr "No se encuentra la cuenta de cliente"
 
-#: gateway-paytpv.php:473
+#: gateway-paytpv.php:479
 msgid "Account not found. Review your settings"
 msgstr "Cuenta no encontrada. Revise su configuración"
 
-#: gateway-paytpv.php:502
+#: gateway-paytpv.php:508
 msgid "Account still not certified. Please contact PayCOMET"
 msgstr "La cuenta no se encuentra certificada. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:591
+#: gateway-paytpv.php:597
 msgid "Account without products"
 msgstr "No existen productos asociados a la cuenta"
 
@@ -244,14 +244,14 @@ msgstr "No existen productos asociados a la cuenta"
 msgid "Add a description"
 msgstr "Añadir descripción"
 
-#: gateway-paytpv.php:472
+#: gateway-paytpv.php:478
 msgid ""
 "AFT data validation failed. The data sent does not meet the specifications"
 msgstr ""
 "Error en la validación de datos AFT. Los datos enviados no cumplen las "
 "especificaciones"
 
-#: gateway-paytpv.php:471
+#: gateway-paytpv.php:477
 msgid ""
 "AFT data validation failed. Wrong type of operation or sector of activity"
 msgstr ""
@@ -270,7 +270,7 @@ msgstr "Después de cantidad a añadir al carrito"
 msgid "after_single_product_summary"
 msgstr "Después de la descripción del producto"
 
-#: gateway-paytpv.php:799
+#: gateway-paytpv.php:805
 msgid "All messaging retries have failed"
 msgstr "Han fallado todos los reintentos de la mensajería"
 
@@ -292,15 +292,15 @@ msgstr ""
 "no se puede examinar, escanear, utilizar o modificar por cualquier externo "
 "que obtenga acceso a información confidencial."
 
-#: gateway-paytpv.php:531
+#: gateway-paytpv.php:537
 msgid "AMOUNT field error"
 msgstr "Error en el campo AMOUNT"
 
-#: gateway-paytpv.php:383
+#: gateway-paytpv.php:389
 msgid "Amount zero or not valid"
 msgstr "Cantidad cero o no válida"
 
-#: gateway-paytpv.php:306 inc/woocommerce-paytpv.php:213
+#: gateway-paytpv.php:312 inc/woocommerce-paytpv.php:213
 #: inc/woocommerce-paytpv.php:783 inc/woocommerce-paytpv.php:1647
 #: inc/woocommerce-paytpv.php:1736 inc/woocommerce-paytpv.php:1814
 #: inc/woocommerce-paytpv.php:1843
@@ -324,19 +324,19 @@ msgstr ""
 "tarjetas vinculadas\\\" donde se mostrarán las tarjetas almacenadas y podrán "
 "ser eliminadas."
 
-#: gateway-paytpv.php:632
+#: gateway-paytpv.php:638
 msgid "Authcode / errorCode parameter missing"
 msgstr "Falta el parámetro authCode o errorCode"
 
-#: gateway-paytpv.php:385
+#: gateway-paytpv.php:391
 msgid "Authentification error"
 msgstr "Error de autenticación"
 
-#: gateway-paytpv.php:673
+#: gateway-paytpv.php:679
 msgid "Authorisations for carrying out the operation not available"
 msgstr "No dispone de permisos para realizar la operación"
 
-#: gateway-paytpv.php:605
+#: gateway-paytpv.php:611
 msgid "Authorization from different country than card issuer, not allowed"
 msgstr "Transacción desde país distinto al emisor de la tarjeta no admitida"
 
@@ -344,15 +344,15 @@ msgstr "Transacción desde país distinto al emisor de la tarjeta no admitida"
 msgid "Available cards"
 msgstr "Tarjetas disponibles"
 
-#: gateway-paytpv.php:703
+#: gateway-paytpv.php:709
 msgid "Bank account still not certified."
 msgstr "La cuenta bancaria no está certificada."
 
-#: gateway-paytpv.php:720
+#: gateway-paytpv.php:726
 msgid "Bank account type is not IBAN"
 msgstr "El tipo de cuenta bancaria no es IBAN"
 
-#: gateway-paytpv.php:653
+#: gateway-paytpv.php:659
 msgid "bankName parameter missing"
 msgstr "Falta el parámetro bankName"
 
@@ -380,35 +380,39 @@ msgstr "Antes de variación"
 msgid "before_variations_form"
 msgstr "Antes del formulario de variaciones"
 
-#: gateway-paytpv.php:767
+#: gateway-paytpv.php:773
 msgid "Bizum could not authenticate user"
 msgstr "Bizum no ha podido autenticar el usuario"
 
-#: gateway-paytpv.php:747
+#: gateway-paytpv.php:753
 msgid "Bizum. Authentication failed. Lock after three attempts."
 msgstr "Bizum. Fallo en la autenticación. Bloqueo tras tres intentos."
 
-#: gateway-paytpv.php:750
+#: gateway-paytpv.php:756
 msgid "Bizum. Charge rejected by originator."
 msgstr "Bizum. Cargo rechazado por ordenante."
 
-#: gateway-paytpv.php:752
+#: gateway-paytpv.php:758
 msgid "Bizum. Insufficient available balance."
 msgstr "Bizum. Saldo disponible insuficiente."
 
-#: gateway-paytpv.php:749
+#: gateway-paytpv.php:755
 msgid "Bizum. Payment rejected by beneficiary."
 msgstr "Bizum. Abono rechazado por beneficiario."
 
-#: gateway-paytpv.php:751
+#: gateway-paytpv.php:757
 msgid "Bizum. The processor rejects the operation."
 msgstr "Bizum. El procesador rechaza la operación."
 
-#: gateway-paytpv.php:748
+#: gateway-paytpv.php:754
 msgid "Bizum. Transaction cancelled. The user does not wish to continue."
 msgstr "Bizum. Operación cancelada. El usuario no desea seguir."
 
-#: gateway-paytpv.php:817
+#: inc/paycomet-applepay.php:67
+msgid "Black"
+msgstr "Negro"
+
+#: gateway-paytpv.php:823
 msgid "Blacklisted or suspected fraud card"
 msgstr "Tarjeta en Lista Negra o sospechosa de fraude"
 
@@ -416,55 +420,67 @@ msgstr "Tarjeta en Lista Negra o sospechosa de fraude"
 msgid "Brand"
 msgstr "Marca"
 
+#: inc/paycomet-applepay.php:63
+msgid "Button color"
+msgstr "Color del botón"
+
+#: inc/paycomet-applepay.php:58
+msgid "Button height"
+msgstr "Altura del botón"
+
+#: inc/paycomet-applepay.php:53
+msgid "Button width (%)"
+msgstr "Ancho del botón (%)"
+
 #: inc/paycomet-instantcredit.php:131 inc/paycomet-instantcredit.php:146
 msgid "Buy now, pay later"
 msgstr "Compra ahora y paga después"
 
-#: gateway-paytpv.php:664
+#: gateway-paytpv.php:670
 msgid "Call terminated by the client"
 msgstr "Llamada finalizada por el cliente"
 
-#: gateway-paytpv.php:665
+#: gateway-paytpv.php:671
 msgid "Call terminated, incorrect attempts exceeded"
 msgstr "Llamada finalizada, intentos incorrectos excedidos"
 
-#: gateway-paytpv.php:666
+#: gateway-paytpv.php:672
 msgid "Call terminated, operation attempts exceeded"
 msgstr "Llamada finalizada, intentos de operación excedidos"
 
-#: gateway-paytpv.php:813
+#: gateway-paytpv.php:819
 msgid "Call the issuer"
 msgstr "Llamar al emisor"
 
-#: gateway-paytpv.php:685
+#: gateway-paytpv.php:691
 msgid "Can not create an operation token"
 msgstr "No ha sido posible generar un token de operación"
 
-#: gateway-paytpv.php:553
+#: gateway-paytpv.php:559
 msgid "Can not find any of the PAYTPV_OPERATIONS_TERMINAL"
 msgstr "No se encuentra alguno de los PAYTPV_OPERATIONS_TERMINAL"
 
-#: gateway-paytpv.php:639
+#: gateway-paytpv.php:645
 msgid "Can not find the associated account information"
 msgstr "No se encuentra información de la cuenta asociada"
 
-#: gateway-paytpv.php:656
+#: gateway-paytpv.php:662
 msgid "Can not find the associated FUC"
 msgstr "No se encuentra el FUC enviado"
 
-#: gateway-paytpv.php:640
+#: gateway-paytpv.php:646
 msgid "Can not find the associated product information"
 msgstr "No se encuentra información del producto asociado"
 
-#: gateway-paytpv.php:641
+#: gateway-paytpv.php:647
 msgid "Can not find the associated user information"
 msgstr "No se encuentra información del usuario asociado"
 
-#: gateway-paytpv.php:647 gateway-paytpv.php:648 gateway-paytpv.php:650
+#: gateway-paytpv.php:653 gateway-paytpv.php:654 gateway-paytpv.php:656
 msgid "Can not initialize the service"
 msgstr "No puede inicializarse el servicio"
 
-#: gateway-paytpv.php:614
+#: gateway-paytpv.php:620
 msgid "Can not perform the operation"
 msgstr "No ha sido posible realizar la operación"
 
@@ -476,15 +492,15 @@ msgstr "Cancelar"
 msgid "Cancel order"
 msgstr "Cancelar pedido"
 
-#: gateway-paytpv.php:662
+#: gateway-paytpv.php:668
 msgid "CANCEL_URL parameter is not in a correct format"
 msgstr "El parámetro CANCEL_URL no es correcto"
 
-#: gateway-paytpv.php:661
+#: gateway-paytpv.php:667
 msgid "CANCEL_URL parameter missing"
 msgstr "No se encuentra el parámetro CANCEL_URL"
 
-#: gateway-paytpv.php:786
+#: gateway-paytpv.php:792
 msgid ""
 "Cancellation is not accepted. The HCP did not find the operation to be "
 "canceled"
@@ -492,24 +508,24 @@ msgstr ""
 "No se acepta la anulación. El HCP no encontró la operación que se quiere "
 "anular"
 
-#: gateway-paytpv.php:818
+#: gateway-paytpv.php:824
 msgid "Cancellation not allowed. Authorization already refunded"
 msgstr "Anulación no permitida. Operación ya devuelta"
 
-#: gateway-paytpv.php:369
+#: gateway-paytpv.php:375
 msgid "Cannot close right now"
 msgstr "No es posible cerrar en este momento"
 
-#: gateway-paytpv.php:395
+#: gateway-paytpv.php:401
 msgid "Cannot find requested data"
 msgstr "No se encontraron los datos solicitados"
 
-#: gateway-paytpv.php:396
+#: gateway-paytpv.php:402
 msgid "Cannot operate with given credit card"
 msgstr ""
 "No se puede realizar la operación con la tarjeta de crédito proporcionada"
 
-#: gateway-paytpv.php:498
+#: gateway-paytpv.php:504
 msgid "Cannot register available resources to complete current operation"
 msgstr ""
 "No se pudo registrar ningún recurso disponible para completar la operación"
@@ -521,11 +537,11 @@ msgstr ""
 msgid "Card"
 msgstr "Tarjeta"
 
-#: gateway-paytpv.php:603
+#: gateway-paytpv.php:609
 msgid "Card brand not allowed"
 msgstr "Marca de la tarjeta no admitida"
 
-#: gateway-paytpv.php:604
+#: gateway-paytpv.php:610
 msgid "Card Category not allowed"
 msgstr "Categoría de la tarjeta no admitida"
 
@@ -540,19 +556,19 @@ msgstr ""
 "Los datos de tarjetas se protegen mediante el Estándar de Seguridad de Datos "
 "para la Industria de Tarjeta de Pago (PCI DSS)"
 
-#: gateway-paytpv.php:525
+#: gateway-paytpv.php:531
 msgid "Card diary limit exceeds"
 msgstr "Limite diario por tarjeta excedido"
 
-#: gateway-paytpv.php:359
+#: gateway-paytpv.php:365
 msgid "Card issuer could not validate card owner"
 msgstr "El emisor de la tarjeta no pudo identificar al propietario"
 
-#: gateway-paytpv.php:414
+#: gateway-paytpv.php:420
 msgid "Card issuer not available right now. Please try again later"
 msgstr "No es posible contactar con el banco emisor. Inténtelo más tarde"
 
-#: gateway-paytpv.php:807
+#: gateway-paytpv.php:813
 msgid "Card not supported by the system"
 msgstr "Tarjeta no soportada por el sistema"
 
@@ -562,21 +578,21 @@ msgstr "Tarjeta no soportada por el sistema"
 msgid "Card number"
 msgstr "Número de tarjeta"
 
-#: gateway-paytpv.php:816
+#: gateway-paytpv.php:822
 msgid "Card on Black List or suspected of fraud, include in Black List file"
 msgstr ""
 "Tarjeta en Lista Negra o sospechosa de fraude, incluir en fichero de Lista "
 "Negra"
 
-#: gateway-paytpv.php:602
+#: gateway-paytpv.php:608
 msgid "Card type (credit / debit) not allowed"
 msgstr "Tipo de tarjeta (crédito / débito) no admitido"
 
-#: gateway-paytpv.php:731
+#: gateway-paytpv.php:737
 msgid "Challenge required and user not present"
 msgstr "Challenge requerido y usuario no presente"
 
-#: gateway-paytpv.php:728
+#: gateway-paytpv.php:734
 msgid "Challenge required to complete the operation"
 msgstr "Se requiere challenge para finalizar la operación"
 
@@ -590,7 +606,7 @@ msgstr ""
 msgid "Client code"
 msgstr "Código Cliente"
 
-#: gateway-paytpv.php:522 gateway-paytpv.php:535
+#: gateway-paytpv.php:528 gateway-paytpv.php:541
 msgid "Client not found"
 msgstr "No se encuentra el cliente"
 
@@ -598,99 +614,99 @@ msgstr "No se encuentra el cliente"
 msgid "Close"
 msgstr "Cerrar"
 
-#: gateway-paytpv.php:367
+#: gateway-paytpv.php:373
 msgid "Closing with agreement"
 msgstr "Cierre con acuerdo"
 
-#: gateway-paytpv.php:368
+#: gateway-paytpv.php:374
 msgid "Closing without agreement"
 msgstr "Cierre sin acuerdo"
 
-#: gateway-paytpv.php:787
+#: gateway-paytpv.php:793
 msgid ""
 "Collection rejected. Not found any of the original operations referenced"
 msgstr ""
 "Rechazada la Colecta. No encontrada alguna de las operaciones originales "
 "referenciadas"
 
-#: gateway-paytpv.php:663
+#: gateway-paytpv.php:669
 msgid ""
 "Commerce with secure cardholder and cardholder without secure purchase key"
 msgstr "Comercio con titular seguro y titular sin clave de compra segura"
 
-#: gateway-paytpv.php:704
+#: gateway-paytpv.php:710
 msgid "companyNameCreditor parameter missing."
 msgstr "Falta el parámetro companyNameCreditor."
 
-#: gateway-paytpv.php:408
+#: gateway-paytpv.php:414
 msgid "Confirmation data not valid"
 msgstr "Datos de confirmación no válidos"
 
-#: gateway-paytpv.php:484
+#: gateway-paytpv.php:490
 msgid "Could not connect to host"
 msgstr "No se pudo conectar con el host"
 
-#: gateway-paytpv.php:494
+#: gateway-paytpv.php:500
 msgid "Could not connect to SSL host"
 msgstr "No se pudo conectar al servidor SSL"
 
-#: gateway-paytpv.php:394
+#: gateway-paytpv.php:400
 msgid "Could not find any preauthorization with given data"
 msgstr "No se pudo encontrar la preautorización"
 
-#: gateway-paytpv.php:488
+#: gateway-paytpv.php:494
 msgid "Could not find HTTP resource"
 msgstr "No se ha encontrado el recurso HTTP"
 
-#: gateway-paytpv.php:457
+#: gateway-paytpv.php:463
 msgid "Could not find the previous operation"
 msgstr "No se pudo encontrar la operación previa"
 
-#: gateway-paytpv.php:486
+#: gateway-paytpv.php:492
 msgid "Could not resolve host"
 msgstr "No se pudo resolver el host"
 
-#: gateway-paytpv.php:485
+#: gateway-paytpv.php:491
 msgid "Could not resolve proxy address"
 msgstr "No se pudo resolver el proxy"
 
-#: gateway-paytpv.php:483
+#: gateway-paytpv.php:489
 msgid "Could not send cancellation. Please try again later"
 msgstr "No se pudo enviar la devolución. Por favor reinténtelo más tarde"
 
-#: gateway-paytpv.php:601
+#: gateway-paytpv.php:607
 msgid "Country (customer IP address) not allowed"
 msgstr "País no admitido (dirección IP del cliente)"
 
-#: gateway-paytpv.php:345
+#: gateway-paytpv.php:351
 msgid "Credit card blacklisted"
 msgstr "Tarjeta en lista negra"
 
-#: gateway-paytpv.php:362
+#: gateway-paytpv.php:368
 msgid "Credit card blacklisted. Please capture card"
 msgstr "Tarjeta en lista negra. Por favor retenga físicamente la tarjeta"
 
-#: gateway-paytpv.php:464
+#: gateway-paytpv.php:470
 msgid "Credit card does not allow preauthorizations"
 msgstr "La tarjeta no admite preautorizaciones"
 
-#: gateway-paytpv.php:382
+#: gateway-paytpv.php:388
 msgid "Credit card does not exist"
 msgstr "Tarjeta inexistente"
 
-#: gateway-paytpv.php:363
+#: gateway-paytpv.php:369
 msgid "Credit card lost or stolen. Please capture card"
 msgstr "Tarjeta perdida o robada. Por favor retenga físicamente la tarjeta"
 
-#: gateway-paytpv.php:350
+#: gateway-paytpv.php:356
 msgid "Credit card not registered or not logged by the issuer"
 msgstr "Tarjeta no dada de alta o no registrada por el banco emisor"
 
-#: gateway-paytpv.php:357 gateway-paytpv.php:379
+#: gateway-paytpv.php:363 gateway-paytpv.php:385
 msgid "Credit card not valid"
 msgstr "Tarjeta de crédito no válida"
 
-#: gateway-paytpv.php:654
+#: gateway-paytpv.php:660
 msgid "csb parameter missing"
 msgstr "Falta el parámetro csb"
 
@@ -698,15 +714,15 @@ msgstr "Falta el parámetro csb"
 msgid "Currency"
 msgstr "Moneda"
 
-#: gateway-paytpv.php:532
+#: gateway-paytpv.php:538
 msgid "CURRENCY field error"
 msgstr "Error en el campo CURRENCY"
 
-#: gateway-paytpv.php:541
+#: gateway-paytpv.php:547
 msgid "Current currency conversion invalid"
 msgstr "Conversión de la moneda actual no válida"
 
-#: gateway-paytpv.php:355 gateway-paytpv.php:378
+#: gateway-paytpv.php:361 gateway-paytpv.php:384
 msgid "CVC2 block incorrect"
 msgstr "Bloque CVC2 incorrecto"
 
@@ -718,39 +734,39 @@ msgstr "Estilo CVC2 Div"
 msgid "CVC2 Input Style"
 msgstr "Estilo CVC2 Input"
 
-#: gateway-paytpv.php:596
+#: gateway-paytpv.php:602
 msgid "Daily limit not allowed"
 msgstr "Límite máximo diario no permitido"
 
-#: gateway-paytpv.php:354
+#: gateway-paytpv.php:360
 msgid "Data error"
 msgstr "Error en los datos"
 
-#: gateway-paytpv.php:351
+#: gateway-paytpv.php:357
 msgid "Data error. Validation Code"
 msgstr "Error de formato en los datos capturados. CodValid"
 
-#: gateway-paytpv.php:480
+#: gateway-paytpv.php:486
 msgid "Data error: Expiration date"
 msgstr "Error en el campo Fecha de Caducidad"
 
-#: gateway-paytpv.php:479
+#: gateway-paytpv.php:485
 msgid "Data error: Validation code"
 msgstr "Error en el campo Código de Validación"
 
-#: gateway-paytpv.php:458
+#: gateway-paytpv.php:464
 msgid "Data inconsistency in cancellation validation"
 msgstr "Inconsistencia de datos en la validación de la cancelación"
 
-#: gateway-paytpv.php:465
+#: gateway-paytpv.php:471
 msgid "Data inconsistency in confirmation"
 msgstr "Inconsistencia de datos en confirmación"
 
-#: gateway-paytpv.php:792
+#: gateway-paytpv.php:798
 msgid "Date and time not synchronized"
 msgstr "Fecha y Hora no sincronizada"
 
-#: gateway-paytpv.php:600
+#: gateway-paytpv.php:606
 msgid "Day / IP address limit (all cards) not allowed"
 msgstr ""
 "Límite de transacciones por dirección IP /día (diferentes tarjetas) no "
@@ -765,58 +781,58 @@ msgstr "DCC"
 msgid "Default"
 msgstr "Por defecto"
 
-#: gateway-paytpv.php:459
+#: gateway-paytpv.php:465
 msgid "Delayed payment code does not exists"
 msgstr "El pago diferido no existe"
 
-#: gateway-paytpv.php:386
+#: gateway-paytpv.php:392
 msgid "Denegation by security level"
 msgstr "Denegado debido al nivel de seguridad"
 
-#: gateway-paytpv.php:732
+#: gateway-paytpv.php:738
 msgid "Denial by security controls on the processor"
 msgstr "Denegación por controles de seguridad en el procesador"
 
-#: gateway-paytpv.php:808
+#: gateway-paytpv.php:814
 msgid "Denied for various reasons"
 msgstr "Denegada por diversos motivos"
 
-#: gateway-paytpv.php:470
+#: gateway-paytpv.php:476
 msgid "Denied operation"
 msgstr "Operación denegada"
 
-#: gateway-paytpv.php:399
+#: gateway-paytpv.php:405
 msgid "Denied operation for card data sent"
 msgstr "Operación denegada para los datos de tarjeta enviados"
 
-#: gateway-paytpv.php:810
+#: gateway-paytpv.php:816
 msgid "Denied. Authentication amount exceeded"
 msgstr "Denegada. Excedido importe de la autenticación"
 
-#: gateway-paytpv.php:708
+#: gateway-paytpv.php:714
 msgid "Denied. Filter same IP last 24 hours."
 msgstr ""
 "Operación denegada. Filtro límite de operaciones por IP últimas 24 horas."
 
-#: gateway-paytpv.php:606
+#: gateway-paytpv.php:612
 msgid "Denied. Filter: Card country issuer not allowed"
 msgstr "Operación denegada. Filtro país emisor de la tarjeta no admitido"
 
-#: gateway-paytpv.php:609
+#: gateway-paytpv.php:615
 msgid "Denied. Filter: same card, different country last 24 h."
 msgstr ""
 "Operación denegada. Filtro misma tarjeta, distinto país en las últimas 24 "
 "horas"
 
-#: gateway-paytpv.php:809
+#: gateway-paytpv.php:815
 msgid "Denied. It is not possible to verify authentication by Reference"
 msgstr "Denegada. No es posible verificar autenticación por Referencia"
 
-#: gateway-paytpv.php:709
+#: gateway-paytpv.php:715
 msgid "Denied. Max amount same IP last 24 hours."
 msgstr "Operación denegada. Filtro acumulado importe por IP últimas 24 horas."
 
-#: gateway-paytpv.php:806
+#: gateway-paytpv.php:812
 msgid "Denied. Operation with clear card data in SNCP merchant"
 msgstr "Denegada. Operación con datos de tarjeta en claro en comercio SNCP"
 
@@ -829,7 +845,7 @@ msgstr "Descripción"
 msgid "Description stored successfully"
 msgstr "Descripción almacenada con éxito"
 
-#: gateway-paytpv.php:717
+#: gateway-paytpv.php:723
 msgid "Different IP / Reference limit not allowed"
 msgstr "Límite de operaciones por referencia / diferente IP no permitido"
 
@@ -841,11 +857,11 @@ msgstr "Deshabilitar Almacenar Tarjetas"
 msgid "Disaster Recovery"
 msgstr "Recuperación de desastres"
 
-#: gateway-paytpv.php:660
+#: gateway-paytpv.php:666
 msgid "DS_AGENT_FEE parameter is not correct"
 msgstr "El parámetro DS_AGENT_FEE no es correcto"
 
-#: gateway-paytpv.php:548
+#: gateway-paytpv.php:554
 msgid ""
 "DS_EXECUTE can not be true if DS_SUBSCRIPTION_STARTDATE is different from "
 "today."
@@ -853,15 +869,15 @@ msgstr ""
 "DS_EXECUTE no puede ser true si DS_SUBSCRIPTION_STARTDATE es diferente de "
 "hoy."
 
-#: gateway-paytpv.php:742
+#: gateway-paytpv.php:748
 msgid "DS_MERCHANT_IDENTIFIER parameter is not correct"
 msgstr "El parámetro DS_MERCHANT_IDENTIFIER no es correcto"
 
-#: gateway-paytpv.php:741
+#: gateway-paytpv.php:747
 msgid "DS_MERCHANT_IDENTIFIER parameter missing"
 msgstr "No se encuentra el parámetro DS_MERCHANT_IDENTIFIER"
 
-#: gateway-paytpv.php:785
+#: gateway-paytpv.php:791
 msgid ""
 "Duplicate 1X2X message received (another message with the same RTS has "
 "already been processed)"
@@ -869,27 +885,27 @@ msgstr ""
 "Recibido mensaje 1X2X duplicado (ya ha sido procesado otro mensaje con el "
 "mismo RTS)"
 
-#: gateway-paytpv.php:657
+#: gateway-paytpv.php:663
 msgid "Duplicate xref. Pending operation."
 msgstr "Referencia externa duplicada. Operación en curso."
 
-#: gateway-paytpv.php:499
+#: gateway-paytpv.php:505
 msgid "Duplicated external reference"
 msgstr "Referencia externa duplicada"
 
-#: gateway-paytpv.php:372
+#: gateway-paytpv.php:378
 msgid "Duplicated internal reference"
 msgstr "Referencia interna duplicada"
 
-#: gateway-paytpv.php:389
+#: gateway-paytpv.php:395
 msgid "Duplicated transaction"
 msgstr "Transacción duplicada"
 
-#: gateway-paytpv.php:740
+#: gateway-paytpv.php:746
 msgid "Email address not configured for Sandbox email sending"
 msgstr "Email no configurado para el envío de Emails en Sandbox"
 
-#: gateway-paytpv.php:735
+#: gateway-paytpv.php:741
 msgid "Email sending failed"
 msgstr "Ha fallado el envío del email"
 
@@ -909,51 +925,51 @@ msgstr "Habilitar/Deshabilitar"
 msgid "Encryption and Data Storage"
 msgstr "Cifrado y almacenamiento de datos"
 
-#: gateway-paytpv.php:343
+#: gateway-paytpv.php:349
 msgid "Error"
 msgstr "Error"
 
-#: gateway-paytpv.php:723
+#: gateway-paytpv.php:729
 msgid "Error downloading documents"
 msgstr "Error en la descarga de documentos"
 
-#: gateway-paytpv.php:365
+#: gateway-paytpv.php:371
 msgid "Error en Pre-Transaction process. Try again later."
 msgstr "Error en el proceso pre-transacción. Inténtelo más tarde"
 
-#: gateway-paytpv.php:364
+#: gateway-paytpv.php:370
 msgid "Error in CVC2. Please capture card"
 msgstr "Error en CVC2. Por favor retenga físicamente la tarjeta"
 
-#: gateway-paytpv.php:508
+#: gateway-paytpv.php:514
 msgid "Error in field operation origin IP"
 msgstr "Error en el campo IP de origen de la operación"
 
-#: gateway-paytpv.php:376
+#: gateway-paytpv.php:382
 msgid "Error in message format"
 msgstr "Error en formato del mensaje"
 
-#: gateway-paytpv.php:387
+#: gateway-paytpv.php:393
 msgid "Error in PUC message. Please contact PayCOMET"
 msgstr "Error en el mensaje PUC. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:557
+#: gateway-paytpv.php:563
 msgid "Error in the amounts of the search"
 msgstr "Error en los importes de la búsqueda"
 
-#: gateway-paytpv.php:554
+#: gateway-paytpv.php:560
 msgid "Error in the date range requested"
 msgstr "Error en el intervalo de fechas solicitado"
 
-#: gateway-paytpv.php:509
+#: gateway-paytpv.php:515
 msgid "Error in XML format"
 msgstr "Error en formato XML"
 
-#: gateway-paytpv.php:722
+#: gateway-paytpv.php:728
 msgid "Error uploading documents"
 msgstr "Error en la subida de documentos"
 
-#: gateway-paytpv.php:304 inc/woocommerce-paytpv.php:211
+#: gateway-paytpv.php:310 inc/woocommerce-paytpv.php:211
 #: inc/woocommerce-paytpv.php:224 inc/woocommerce-paytpv.php:277
 #: inc/woocommerce-paytpv.php:1645 inc/woocommerce-paytpv.php:1658
 #: inc/woocommerce-paytpv.php:1734
@@ -974,7 +990,7 @@ msgstr ""
 msgid "ERROR: Unable to activate payment method."
 msgstr "ERROR:  No se puede activar el método de pago."
 
-#: gateway-paytpv.php:795
+#: gateway-paytpv.php:801
 msgid "Existing rule violation to make a refund"
 msgstr "Violación de norma existentes para realizar una devolución"
 
@@ -984,7 +1000,7 @@ msgstr "Violación de norma existentes para realizar una devolución"
 msgid "Expiration date"
 msgstr "Fecha de expiración"
 
-#: gateway-paytpv.php:793
+#: gateway-paytpv.php:799
 msgid ""
 "Expiration Date of the card does not coincide with the one that the Issuer "
 "has on file"
@@ -992,15 +1008,15 @@ msgstr ""
 "Fecha de Caducidad de la tarjeta no coincide con la que el Emisor tiene en "
 "sus archivos"
 
-#: gateway-paytpv.php:344
+#: gateway-paytpv.php:350
 msgid "Expired credit card"
 msgstr "Tarjeta caducada"
 
-#: gateway-paytpv.php:361
+#: gateway-paytpv.php:367
 msgid "Expired credit card. Please capture card"
 msgstr "Tarjeta caducada. Por favor retenga físicamente la tarjeta"
 
-#: gateway-paytpv.php:374
+#: gateway-paytpv.php:380
 msgid "Expired preauthorization"
 msgstr "Preautorización caducada"
 
@@ -1008,87 +1024,87 @@ msgstr "Preautorización caducada"
 msgid "Expiry Date"
 msgstr "Caducidad"
 
-#: gateway-paytpv.php:353
+#: gateway-paytpv.php:359
 msgid "Expiry date error"
 msgstr "Error en FechaCaducidad"
 
-#: gateway-paytpv.php:628
+#: gateway-paytpv.php:634
 msgid "ExpiryDate parameter missing"
 msgstr "Falta el parámetro expiryDate"
 
-#: gateway-paytpv.php:475
+#: gateway-paytpv.php:481
 msgid "External provider signature error. Contact your service provider"
 msgstr "Error en respuesta de pasarela. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:801
+#: gateway-paytpv.php:807
 msgid "Failed to stop worker"
 msgstr "No se ha podido detener el worker"
 
-#: gateway-paytpv.php:511
+#: gateway-paytpv.php:517
 msgid "Field DS_MERCHANT_AMOUNT incorrect"
 msgstr "Campo DS_MERCHANT_AMOUNT incorrecto"
 
-#: gateway-paytpv.php:514
+#: gateway-paytpv.php:520
 msgid "Field DS_MERCHANT_CURRENCY incorrect"
 msgstr "Campo DS_MERCHANT_CURRENCY incorrecto"
 
-#: gateway-paytpv.php:516
+#: gateway-paytpv.php:522
 msgid "Field DS_MERCHANT_CVV2 incorrect"
 msgstr "Campo DS_MERCHANT_CVV2 incorrecto"
 
-#: gateway-paytpv.php:519
+#: gateway-paytpv.php:525
 msgid "Field DS_MERCHANT_EXPIRYDATE incorrect"
 msgstr "Campo DS_MERCHANT_EXPIRYDATE incorrecto"
 
-#: gateway-paytpv.php:513
+#: gateway-paytpv.php:519
 msgid "Field DS_MERCHANT_MERCHANTCODE incorrect"
 msgstr "Campo DS_MERCHANT_MERCHANTCODE incorrecto"
 
-#: gateway-paytpv.php:520
+#: gateway-paytpv.php:526
 msgid "Field DS_MERCHANT_MERCHANTSIGNATURE incorrect"
 msgstr "Campo DS_MERCHANT_MERCHANTSIGNATURE incorrecto"
 
-#: gateway-paytpv.php:512
+#: gateway-paytpv.php:518
 msgid "Field DS_MERCHANT_ORDER incorrect"
 msgstr "Campo DS_MERCHANT_ORDER incorrecto"
 
-#: gateway-paytpv.php:515
+#: gateway-paytpv.php:521
 msgid "Field DS_MERCHANT_PAN incorrect"
 msgstr "Campo DS_MERCHANT_PAN incorrecto"
 
-#: gateway-paytpv.php:518
+#: gateway-paytpv.php:524
 msgid "Field DS_MERCHANT_TERMINAL incorrect"
 msgstr "Campo DS_MERCHANT_TERMINAL incorrecto"
 
-#: gateway-paytpv.php:517
+#: gateway-paytpv.php:523
 msgid "Field DS_MERCHANT_TRANSACTIONTYPE incorrect"
 msgstr "Campo DS_MERCHANT_TRANSACTIONTYPE incorrecto"
 
-#: gateway-paytpv.php:521
+#: gateway-paytpv.php:527
 msgid "Field DS_ORIGINAL_IP incorrect"
 msgstr "Campo DS_ORIGINAL_IP incorrecto"
 
-#: gateway-paytpv.php:713
+#: gateway-paytpv.php:719
 msgid "fileContent parameter missing."
 msgstr "Falta el parámetro fileContent."
 
-#: gateway-paytpv.php:477
+#: gateway-paytpv.php:483
 msgid "Forbidden access"
 msgstr "Acceso no permitido"
 
-#: gateway-paytpv.php:563
+#: gateway-paytpv.php:569
 msgid "Frequency error in the subscription"
 msgstr "Error en la periodicidad de la suscripción"
 
-#: gateway-paytpv.php:381
+#: gateway-paytpv.php:387
 msgid "Gateway format error"
 msgstr "Error en formato de pasarela"
 
-#: gateway-paytpv.php:380
+#: gateway-paytpv.php:386
 msgid "Gateway message error"
 msgstr "Error en mensaje de pasarela"
 
-#: gateway-paytpv.php:496
+#: gateway-paytpv.php:502
 msgid "Given URL is not correctly formatted and cannot be used"
 msgstr "La URL dada no está bien formateada y no puede usarse"
 
@@ -1116,23 +1132,23 @@ msgstr "Altura del iframe en pixels (Mínimo 440)"
 msgid "Inactive cards"
 msgstr "Tarjetas inactivas"
 
-#: gateway-paytpv.php:546
+#: gateway-paytpv.php:552
 msgid "Info button corrupt"
 msgstr "Información del botón corrupta"
 
-#: gateway-paytpv.php:487
+#: gateway-paytpv.php:493
 msgid "Initialization failed"
 msgstr "Inicialización fallida"
 
-#: gateway-paytpv.php:349
+#: gateway-paytpv.php:355
 msgid "Insufficient funds"
 msgstr "Crédito insuficiente para realizar el cargo"
 
-#: gateway-paytpv.php:493
+#: gateway-paytpv.php:499
 msgid "Insufficient memory"
 msgstr "Sin memoria"
 
-#: gateway-paytpv.php:504
+#: gateway-paytpv.php:510
 msgid "Insufficient rights"
 msgstr "Permisos insuficientes"
 
@@ -1144,197 +1160,197 @@ msgstr "Integración con"
 msgid "Internal security"
 msgstr "Seguridad interna"
 
-#: gateway-paytpv.php:542
+#: gateway-paytpv.php:548
 msgid "Invalid amount"
 msgstr "Cantidad no válida"
 
-#: gateway-paytpv.php:393
+#: gateway-paytpv.php:399
 msgid "Invalid card expiration date"
 msgstr "Fecha de caducidad no válida"
 
-#: gateway-paytpv.php:565
+#: gateway-paytpv.php:571
 msgid "Invalid codigoCliente"
 msgstr "Falta el parámetro codigoCliente"
 
-#: gateway-paytpv.php:705
+#: gateway-paytpv.php:711
 msgid "Invalid companyTypeCreditor parameter."
 msgstr "El parámetro companyTypeCreditor no es válido."
 
-#: gateway-paytpv.php:587
+#: gateway-paytpv.php:593
 msgid "Invalid credentials"
 msgstr "El usuario no tiene permisos para acceder al método altaUsario"
 
-#: gateway-paytpv.php:478
+#: gateway-paytpv.php:484
 msgid "Invalid credit card format"
 msgstr "Formato de tarjeta de crédito no válido"
 
-#: gateway-paytpv.php:714
+#: gateway-paytpv.php:720
 msgid "Invalid document extension."
 msgstr "Extensión de documento no válida."
 
-#: gateway-paytpv.php:716
+#: gateway-paytpv.php:722
 msgid "Invalid document type."
 msgstr "El tipo de documento no es válido."
 
-#: gateway-paytpv.php:572
+#: gateway-paytpv.php:578
 msgid "Invalid email"
 msgstr "Falta el parámetro email"
 
-#: gateway-paytpv.php:579
+#: gateway-paytpv.php:585
 msgid "Invalid email. Format not allowed"
 msgstr "El parámetro email no parece una dirección válida"
 
-#: gateway-paytpv.php:567
+#: gateway-paytpv.php:573
 msgid "Invalid firma parameter"
 msgstr "Falta el parámetro firma"
 
-#: gateway-paytpv.php:583
+#: gateway-paytpv.php:589
 msgid "Invalid format for maxamount parameter"
 msgstr "El formato del parámetro maxamount no está permitido"
 
-#: gateway-paytpv.php:574
+#: gateway-paytpv.php:580
 msgid "Invalid language"
 msgstr "Falta el parámetro language"
 
-#: gateway-paytpv.php:575
+#: gateway-paytpv.php:581
 msgid "Invalid maxamount"
 msgstr "Falta el parámetro maxamount o su valor no puede ser 0"
 
-#: gateway-paytpv.php:712
+#: gateway-paytpv.php:718
 msgid "Invalid merchantCustomerIban parameter."
 msgstr "El parámetro merchantCustomerIban no es válido."
 
-#: gateway-paytpv.php:576
+#: gateway-paytpv.php:582
 msgid "Invalid multicurrency"
 msgstr "Falta el parámetro multicurrency"
 
-#: gateway-paytpv.php:584
+#: gateway-paytpv.php:590
 msgid "Invalid multicurrency. Format not allowed"
 msgstr "El valor del parámetro multicurrency no está admitido"
 
-#: gateway-paytpv.php:570
+#: gateway-paytpv.php:576
 msgid "Invalid name"
 msgstr "Falta el parámetro name"
 
-#: gateway-paytpv.php:539
+#: gateway-paytpv.php:545
 msgid "Invalid operation in a currency other than product currency"
 msgstr ""
 "Operación no válida con una moneda distinta de la fijada en el producto"
 
-#: gateway-paytpv.php:545
+#: gateway-paytpv.php:551
 msgid "Invalid operation with a different currency than product currency"
 msgstr ""
 "Operación no válida con una moneda distinta de la fijada en el producto"
 
-#: gateway-paytpv.php:544
+#: gateway-paytpv.php:550
 msgid "Invalid operation with the current currency"
 msgstr "Operación no válida con la moneda actual"
 
-#: gateway-paytpv.php:370
+#: gateway-paytpv.php:376
 msgid "Invalid parameter"
 msgstr "Parámetro no válido"
 
-#: gateway-paytpv.php:573
+#: gateway-paytpv.php:579
 msgid "Invalid password"
 msgstr "Falta el parámetro password"
 
-#: gateway-paytpv.php:593
+#: gateway-paytpv.php:599
 msgid "Invalid permission_id -permissions_products. Not allowed"
 msgstr ""
 "El valor del parámetro permission_id -permissions_products no está admitido"
 
-#: gateway-paytpv.php:585
+#: gateway-paytpv.php:591
 msgid "Invalid permission_id – permissions_specs. Not allowed"
 msgstr ""
 "El valor del parámetro permission_id - permissions_specs no está admitido"
 
-#: gateway-paytpv.php:578
+#: gateway-paytpv.php:584
 msgid "Invalid permissions_products. Format not allowed"
 msgstr "El parámetro permissions_products no tiene el formato correcto"
 
-#: gateway-paytpv.php:577
+#: gateway-paytpv.php:583
 msgid "Invalid permissions_specs. Format not allowed"
 msgstr "El parámetro permissions_specs no tiene el formato correcto"
 
-#: gateway-paytpv.php:592
+#: gateway-paytpv.php:598
 msgid "Invalid product_id - permissions_products. Not allowed"
 msgstr ""
 "El valor del parámetro product_id - permissions_products no está autorizado"
 
-#: gateway-paytpv.php:686
+#: gateway-paytpv.php:692
 msgid "Invalid scoring value"
 msgstr "Valor de scoring no válido"
 
-#: gateway-paytpv.php:590
+#: gateway-paytpv.php:596
 msgid "Invalid signature"
 msgstr "La firma no es correcta"
 
-#: gateway-paytpv.php:537
+#: gateway-paytpv.php:543
 msgid "Invalid signature. Please check your configuration"
 msgstr "Firma no válida. Por favor, revise su configuración"
 
-#: gateway-paytpv.php:571
+#: gateway-paytpv.php:577
 msgid "Invalid surname"
 msgstr "Falta el parámetro surname"
 
-#: gateway-paytpv.php:706
+#: gateway-paytpv.php:712
 msgid "Invalid swiftCodeCreditor parameter."
 msgstr "El parámetro swiftCodeCreditor no es válido."
 
-#: gateway-paytpv.php:745
+#: gateway-paytpv.php:751
 msgid "Invalid terminal configuration"
 msgstr "Configuración de terminales incorrecta"
 
-#: gateway-paytpv.php:569
+#: gateway-paytpv.php:575
 msgid "Invalid type"
 msgstr "Falta el parámetro type"
 
-#: gateway-paytpv.php:586
+#: gateway-paytpv.php:592
 msgid "Invalid user"
 msgstr "No existe el usuario"
 
-#: gateway-paytpv.php:566
+#: gateway-paytpv.php:572
 msgid "Invalid usuarios parameter"
 msgstr "Falta el parámetro usuarios"
 
-#: gateway-paytpv.php:568
+#: gateway-paytpv.php:574
 msgid "Invalid usuarios parameter format"
 msgstr "El parámetro usuarios no tiene el formato correcto"
 
-#: gateway-paytpv.php:564
+#: gateway-paytpv.php:570
 msgid "Invalid usuarioXML"
 msgstr "Falta el parámetro usuarioXML"
 
-#: gateway-paytpv.php:582
+#: gateway-paytpv.php:588
 msgid "Invalid value for language parameter"
 msgstr "El valor del parámetro language no está admitido"
 
-#: gateway-paytpv.php:581
+#: gateway-paytpv.php:587
 msgid "Invalid value for type parameter"
 msgstr "El valor del parámetro type no está admitido"
 
-#: gateway-paytpv.php:726
+#: gateway-paytpv.php:732
 msgid "Invoice state is not COMPLETE"
 msgstr "El estado de la factura no es COMPLETE"
 
-#: gateway-paytpv.php:668
+#: gateway-paytpv.php:674
 msgid "It has not been possible to establish the IVR session"
 msgstr "No ha sido posible establecer la sesión IVR"
 
-#: gateway-paytpv.php:697
+#: gateway-paytpv.php:703
 msgid "It has not been possible to record the (split) transfer operation"
 msgstr "No ha sido posible grabar la operación (split) transfer"
 
-#: gateway-paytpv.php:701
+#: gateway-paytpv.php:707
 msgid ""
 "It has not been possible to record the (split) transfer reversal operation"
 msgstr "No ha sido posible grabar la operación (split) transfer reversal"
 
-#: gateway-paytpv.php:683 gateway-paytpv.php:684
+#: gateway-paytpv.php:689 gateway-paytpv.php:690
 msgid "It has not been possible to record the SEPA operation"
 msgstr "No ha sido posible grabar la operación SEPA"
 
-#: gateway-paytpv.php:507
+#: gateway-paytpv.php:513
 msgid "It was not possible to send the refund request"
 msgstr "No ha sido posible enviar la petición de devolución"
 
@@ -1354,7 +1370,11 @@ msgstr "Vincular tarjetas"
 msgid "Links to banking institutions"
 msgstr "Enlaces con entidades bancarias"
 
-#: gateway-paytpv.php:390
+#: inc/paycomet-applepay.php:207
+msgid "Loading Apple Pay…"
+msgstr "Cargando Apple Pay…"
+
+#: gateway-paytpv.php:396
 msgid "MAC error"
 msgstr "Error de MAC"
 
@@ -1363,15 +1383,15 @@ msgstr "Error de MAC"
 msgid "Make payment"
 msgstr "Realizar pedido"
 
-#: gateway-paytpv.php:803
+#: gateway-paytpv.php:809
 msgid "Mandatory PIN"
 msgstr "Pin obligatorio"
 
-#: gateway-paytpv.php:599
+#: gateway-paytpv.php:605
 msgid "Max amount (same card / last 24 h. / same IP address) not allowed"
 msgstr "Cantidad máxima por tarjeta / 24h. / misma dirección IP no permitida"
 
-#: gateway-paytpv.php:598
+#: gateway-paytpv.php:604
 msgid "Max amount (same card / last 24 h.) not allowed"
 msgstr "Cantidad máxima por tarjeta / 24h. no permitida"
 
@@ -1379,11 +1399,11 @@ msgstr "Cantidad máxima por tarjeta / 24h. no permitida"
 msgid "Max. product price"
 msgstr "Max. precio"
 
-#: gateway-paytpv.php:738
+#: gateway-paytpv.php:744
 msgid "Maximum requests per minute reached"
 msgstr "Alcanzado límite de peticiones por minuto"
 
-#: gateway-paytpv.php:595
+#: gateway-paytpv.php:601
 msgid "Maximun limit not allowed"
 msgstr "Límite máximo por operación no permitido"
 
@@ -1391,27 +1411,27 @@ msgstr "Límite máximo por operación no permitido"
 msgid "Maximun purchase value."
 msgstr "Precio máximo de compra"
 
-#: gateway-paytpv.php:669
+#: gateway-paytpv.php:675
 msgid "merchantCode parameter missing"
 msgstr "Falta el parámetro merchantCode"
 
-#: gateway-paytpv.php:711
+#: gateway-paytpv.php:717
 msgid "merchantCustomerId parameter missing."
 msgstr "Falta el parámetro merchantCustomerId."
 
-#: gateway-paytpv.php:618
+#: gateway-paytpv.php:624
 msgid "MerchatID parameter missing"
 msgstr "Falta el parámetro merchatID"
 
-#: gateway-paytpv.php:377
+#: gateway-paytpv.php:383
 msgid "Message not recognized by the system"
 msgstr "Mensaje no reconocido por el sistema"
 
-#: gateway-paytpv.php:796
+#: gateway-paytpv.php:802
 msgid "Message response timed out"
 msgstr "Se ha acabado el tiempo de espera en la respuesta a un mensaje"
 
-#: gateway-paytpv.php:649
+#: gateway-paytpv.php:655
 msgid "Method not implemented"
 msgstr "Método no implementado"
 
@@ -1419,7 +1439,7 @@ msgstr "Método no implementado"
 msgid "Min. cart price"
 msgstr "Min. precio"
 
-#: gateway-paytpv.php:594
+#: gateway-paytpv.php:600
 msgid "Minimun limit not allowed"
 msgstr "Límite mínimo por operación no permitido"
 
@@ -1449,7 +1469,7 @@ msgstr "Modificar el estilo del PAN Input"
 msgid "Month"
 msgstr "Mes"
 
-#: gateway-paytpv.php:597
+#: gateway-paytpv.php:603
 msgid "Monthly limit not allowed"
 msgstr "Límite máximo mensual no permitido"
 
@@ -1482,23 +1502,23 @@ msgstr "NUEVA TARJETA"
 msgid "No"
 msgstr "No"
 
-#: gateway-paytpv.php:721
+#: gateway-paytpv.php:727
 msgid "No documents found"
 msgstr "No se han encontrado documentos"
 
-#: gateway-paytpv.php:342
+#: gateway-paytpv.php:348
 msgid "No error"
 msgstr "Sin error"
 
-#: gateway-paytpv.php:725
+#: gateway-paytpv.php:731
 msgid "Not allowed. Currency is not EUR"
 msgstr "No permitido. La moneda no es EUR"
 
-#: gateway-paytpv.php:440
+#: gateway-paytpv.php:446
 msgid "Not cancelable operation"
 msgstr "Operación no cancelable"
 
-#: gateway-paytpv.php:744
+#: gateway-paytpv.php:750
 msgid "Notification URL does not have the correct response"
 msgstr "Ruta de notificación no responde correctamente"
 
@@ -1510,19 +1530,19 @@ msgstr ""
 "La URL de Notificación no está definida en la configuración del producto de "
 "su cuenta de PAYCOMET."
 
-#: gateway-paytpv.php:610
+#: gateway-paytpv.php:616
 msgid "Number of erroneous consecutive attempts with the same card exceeded"
 msgstr ""
 "Número de intentos consecutivos erróneos con la misma tarjeta excedidos"
 
-#: gateway-paytpv.php:611
+#: gateway-paytpv.php:617
 msgid ""
 "Number of failed attempts (last 30 minutes) from the same ip address exceeded"
 msgstr ""
 "Número de intentos fallidos (últimos 30 minutos) desde la misma dirección ip "
 "excedidos"
 
-#: gateway-paytpv.php:802
+#: gateway-paytpv.php:808
 msgid "Number of PIN attempts exceeded"
 msgstr "Excedido el número de intentos del PIN"
 
@@ -1541,111 +1561,111 @@ msgstr ""
 "    bancarias realizan auditorías con regularidad para garantizar la "
 "protección de los datos."
 
-#: gateway-paytpv.php:469
+#: gateway-paytpv.php:475
 msgid "Online communication incorrect"
 msgstr "Comunicación online incorrecta"
 
-#: gateway-paytpv.php:384
+#: gateway-paytpv.php:390
 msgid "Operation canceled"
 msgstr "Operación cancelada"
 
-#: gateway-paytpv.php:400
+#: gateway-paytpv.php:406
 msgid "Operation denied. Do not repeat before 72 hours"
 msgstr "Operación denegada. No repetir antes de 72 horas"
 
-#: gateway-paytpv.php:398
+#: gateway-paytpv.php:404
 msgid "Operation denied. No repeat"
 msgstr "Operación denegada. No repetir"
 
-#: gateway-paytpv.php:366
+#: gateway-paytpv.php:372
 msgid "Operation denied. Please capture card"
 msgstr "Operación denegada. Por favor retenga físicamente la tarjeta"
 
-#: gateway-paytpv.php:529
+#: gateway-paytpv.php:535
 msgid "OPERATION field error"
 msgstr "Error en el campo OPERATION"
 
-#: gateway-paytpv.php:346
+#: gateway-paytpv.php:352
 msgid "Operation not allowed for the credit card type"
 msgstr "Operación no permitida para el tipo de tarjeta"
 
-#: gateway-paytpv.php:538
+#: gateway-paytpv.php:544
 msgid "Operation not available with the specified user"
 msgstr "Operación no disponible con el usuario especificado"
 
-#: gateway-paytpv.php:375
+#: gateway-paytpv.php:381
 msgid "Operation not valid with selected currency"
 msgstr "Operación no válida con la moneda actual"
 
-#: gateway-paytpv.php:492
+#: gateway-paytpv.php:498
 msgid "Operation timeout exceeded"
 msgstr "Se agotó el tiempo de espera en la petición"
 
-#: gateway-paytpv.php:534
+#: gateway-paytpv.php:540
 msgid "Operation unavailable"
 msgstr "Operación no disponible"
 
-#: gateway-paytpv.php:623
+#: gateway-paytpv.php:629
 msgid "OperationAmount parameter missing"
 msgstr "Falta el parámetro operationAmount"
 
-#: gateway-paytpv.php:652
+#: gateway-paytpv.php:658
 msgid "OperationCode parameter missing"
 msgstr "Falta el parámetro operationCode"
 
-#: gateway-paytpv.php:624
+#: gateway-paytpv.php:630
 msgid "OperationCurrency parameter missing"
 msgstr "Falta el parámetro operationCurrency"
 
-#: gateway-paytpv.php:625
+#: gateway-paytpv.php:631
 msgid "OperationDatetime parameter missing"
 msgstr "Falta el parámetro operationDatetime"
 
-#: gateway-paytpv.php:678
+#: gateway-paytpv.php:684
 msgid "operationOrder parameter missing"
 msgstr "Falta el parámetro operationOrder"
 
-#: gateway-paytpv.php:622
+#: gateway-paytpv.php:628
 msgid "OperationResult parameter missing"
 msgstr "Falta el parámetro operationResult"
 
-#: gateway-paytpv.php:779
+#: gateway-paytpv.php:785
 msgid "Operations between sandbox and production environments are not allowed"
 msgstr "No se admiten operaciones entre entorno sandbox y entorno real"
 
-#: gateway-paytpv.php:616
+#: gateway-paytpv.php:622
 msgid "Operations parameter missing or not in a correct format"
 msgstr "Falta el parámetro operaciones o no tiene el formato correcto"
 
-#: gateway-paytpv.php:621
+#: gateway-paytpv.php:627
 msgid "OperationType parameter missing"
 msgstr "Falta el parámetro operationType"
 
-#: gateway-paytpv.php:530
+#: gateway-paytpv.php:536
 msgid "ORDER field error"
 msgstr "Error en el campo ORDER"
 
-#: gateway-paytpv.php:699
+#: gateway-paytpv.php:705
 msgid "Original (split) tansfer not found"
 msgstr "(Split) Transfer original no encontrada"
 
-#: gateway-paytpv.php:373
+#: gateway-paytpv.php:379
 msgid "Original operation not found. Could not refund"
 msgstr "Operación anterior no encontrada. No se pudo ejecutar la devolución"
 
-#: gateway-paytpv.php:698
+#: gateway-paytpv.php:704
 msgid "Original payment's date cannot exceed 90 days"
 msgstr "La fecha de la operación original no puede superar 90 días"
 
-#: gateway-paytpv.php:626
+#: gateway-paytpv.php:632
 msgid "OriginalAmount parameter missing"
 msgstr "Falta el parámetro originalAmount"
 
-#: gateway-paytpv.php:631
+#: gateway-paytpv.php:637
 msgid "OriginalIP parameter missing or not in a correct format"
 msgstr "Falta el parámetro originalIP o no tiene el formato correcto"
 
-#: gateway-paytpv.php:352
+#: gateway-paytpv.php:358
 msgid "PAN Check Error"
 msgstr "Error en el número de la tarjeta"
 
@@ -1657,11 +1677,11 @@ msgstr "Estilo PAN Div"
 msgid "PAN Input Style"
 msgstr "Estilo PAN Input"
 
-#: gateway-paytpv.php:627
+#: gateway-paytpv.php:633
 msgid "Pan parameter missing"
 msgstr "Falta el parámetro pan"
 
-#: gateway-paytpv.php:734
+#: gateway-paytpv.php:740
 msgid "Parameter error: must be EMAIL or SMS"
 msgstr "Error en la recepción de parámetros: debe ser EMAIL o SMS"
 
@@ -1680,6 +1700,11 @@ msgstr "Pagar en Iframe, en la Página de Paycomet o con JetIframe"
 #: inc/woocommerce-paytpv.php:81 inc/woocommerce-paytpv.php:488
 msgid "Pay using your credit card in a secure way"
 msgstr "Pague con tarjeta de crédito de la forma más segura"
+
+#: inc/paycomet-applepay.php:25 inc/paycomet-applepay.php:37
+#: inc/blocks/paycomet-block-support-applepay.php:43
+msgid "Pay with Apple Pay"
+msgstr "Paga con Apple Pay"
 
 #: inc/paycomet-bancontact.php:24 inc/paycomet-bancontact.php:37
 #: inc/blocks/paycomet-block-support-bancontact.php:45
@@ -1814,7 +1839,7 @@ msgstr "PAYCOMET"
 msgid "Paycomet (Full Screen)"
 msgstr "Paycomet (Pantalla Completa)"
 
-#: gateway-paytpv.php:189
+#: gateway-paytpv.php:191
 #, php-format
 #| msgid "PAYCOMET Error: You must define the API Key <a href=\"%s\">here</a>."
 msgid ""
@@ -1824,16 +1849,16 @@ msgstr "PAYCOMET Error 1004: Debes definir la API Key <a href=\"%s\">aquí</a>."
 #: inc/paycomet-yandex.php:22 inc/paycomet-klarna.php:22
 #: inc/paycomet-bizum.php:22 inc/paycomet-skrill.php:22
 #: inc/paycomet-paypal.php:22 inc/paycomet-waylet.php:22
-#: inc/paycomet-przelewy.php:22 inc/paycomet-qiwi.php:22
-#: inc/paycomet-instantcredit.php:129 inc/paycomet-bancontact.php:22
-#: inc/paycomet-tele2.php:22 inc/paycomet-webmoney.php:22
-#: inc/paycomet-postfinance.php:22 inc/paycomet-paysera.php:22
-#: inc/paycomet-mts.php:22 inc/paycomet-multibanco.php:22
-#: inc/paycomet-beeline.php:22 inc/paycomet-klarnapayments.php:22
-#: inc/paycomet-mybank.php:22 inc/paycomet-giropay.php:22
-#: inc/paycomet-mbway.php:22 inc/paycomet-trustly.php:22
-#: inc/paycomet-eps.php:22 inc/paycomet-paysafecard.php:22
-#: inc/paycomet-ideal.php:22
+#: inc/paycomet-przelewy.php:22 inc/paycomet-applepay.php:23
+#: inc/paycomet-qiwi.php:22 inc/paycomet-instantcredit.php:129
+#: inc/paycomet-bancontact.php:22 inc/paycomet-tele2.php:22
+#: inc/paycomet-webmoney.php:22 inc/paycomet-postfinance.php:22
+#: inc/paycomet-paysera.php:22 inc/paycomet-mts.php:22
+#: inc/paycomet-multibanco.php:22 inc/paycomet-beeline.php:22
+#: inc/paycomet-klarnapayments.php:22 inc/paycomet-mybank.php:22
+#: inc/paycomet-giropay.php:22 inc/paycomet-mbway.php:22
+#: inc/paycomet-trustly.php:22 inc/paycomet-eps.php:22
+#: inc/paycomet-paysafecard.php:22 inc/paycomet-ideal.php:22
 #, php-format
 msgid "PAYCOMET general data must be configured <a href=\"%s\">here</a>."
 msgstr ""
@@ -1914,15 +1939,15 @@ msgstr ""
 msgid "PAYCOMET Woocommerce"
 msgstr "PAYCOMET Woocommerce"
 
-#: gateway-paytpv.php:778
+#: gateway-paytpv.php:784
 msgid "paycometId parameter missing"
 msgstr "No se encuentra el parámetro paycometId"
 
-#: gateway-paytpv.php:617
+#: gateway-paytpv.php:623
 msgid "PaycometMerchant parameter missing"
 msgstr "Falta el parámetro paycometMerchant"
 
-#: gateway-paytpv.php:316
+#: gateway-paytpv.php:322
 #, php-format
 msgid "Payment error: %s (%d)"
 msgstr "Error en el pago: %s (%d)"
@@ -1935,19 +1960,19 @@ msgstr ""
 "Pasarela de pago para pagos con tarjeta de crédito. Configuración de "
 "PayComet y métodos de pago alternativos."
 
-#: gateway-paytpv.php:746
+#: gateway-paytpv.php:752
 msgid "Payment method not available"
 msgstr "Método de pago no disponible"
 
-#: gateway-paytpv.php:360
+#: gateway-paytpv.php:366
 msgid "Payment not allowed in off-line authorization"
 msgstr "Pago no permitido en operaciones fuera de línea"
 
-#: gateway-paytpv.php:776
+#: gateway-paytpv.php:782
 msgid "PayPal - Operation cancelled by user."
 msgstr "PayPal - Operación cancelada por el usuario."
 
-#: gateway-paytpv.php:768
+#: gateway-paytpv.php:774
 msgid ""
 "PayPal - The instrument presented has been declined. Please select another "
 "one."
@@ -1955,7 +1980,7 @@ msgstr ""
 "PayPal - El método de pago seleccionado ha sido rechazado. Por favor "
 "seleccione otro distinto."
 
-#: gateway-paytpv.php:769
+#: gateway-paytpv.php:775
 msgid ""
 "PayPal - The sum of the amount of the cart items doesn't match the order "
 "total amount."
@@ -1963,27 +1988,27 @@ msgstr ""
 "PayPal - La suma de los importes de los productos del carrito no corresponde "
 "con el importe total del pedido."
 
-#: gateway-paytpv.php:549
+#: gateway-paytpv.php:555
 msgid "PAYTPV_OPERATIONS_MERCHANTCODE field error"
 msgstr "Error en el campo PAYTPV_OPERATIONS_MERCHANTCODE"
 
-#: gateway-paytpv.php:551
+#: gateway-paytpv.php:557
 msgid "PAYTPV_OPERATIONS_OPERATIONS must be Array"
 msgstr "PAYTPV_OPERATIONS_OPERATIONS debe ser Array"
 
-#: gateway-paytpv.php:552
+#: gateway-paytpv.php:558
 msgid "PAYTPV_OPERATIONS_SIGNATURE field error"
 msgstr "Error en el campo PAYTPV_OPERATIONS_SIGNATURE"
 
-#: gateway-paytpv.php:560
+#: gateway-paytpv.php:566
 msgid "PAYTPV_OPERATIONS_SORTORDER unrecognized"
 msgstr "PAYTPV_OPERATIONS_SORTORDER no válido"
 
-#: gateway-paytpv.php:550
+#: gateway-paytpv.php:556
 msgid "PAYTPV_OPERATIONS_TERMINAL must be Array"
 msgstr "PAYTPV_OPERATIONS_TERMINAL debe ser Array"
 
-#: gateway-paytpv.php:739
+#: gateway-paytpv.php:745
 msgid "Phone number not configured for Sandbox SMS sending"
 msgstr "Móvil no configurado para el envío de SMS en Sandbox"
 
@@ -2001,11 +2026,11 @@ msgstr ""
 "Por favor, rellene los siguientes campos: API Key, Código de Cliente, "
 "Terminal y Contraseña."
 
-#: gateway-paytpv.php:347 gateway-paytpv.php:356
+#: gateway-paytpv.php:353 gateway-paytpv.php:362
 msgid "Please, call the credit card issuer"
 msgstr "Por favor, contacte con el banco emisor"
 
-#: gateway-paytpv.php:523
+#: gateway-paytpv.php:529
 msgid ""
 "Preauthorization amount cannot be greater than previous preauthorization "
 "amount"
@@ -2013,19 +2038,19 @@ msgstr ""
 "La nueva cantidad a preautorizar no puede superar la cantidad de la "
 "preautorización original"
 
-#: gateway-paytpv.php:482
+#: gateway-paytpv.php:488
 msgid "Preauthorization data could not be found"
 msgstr "Datos de preautorización no encontrados"
 
-#: gateway-paytpv.php:481
+#: gateway-paytpv.php:487
 msgid "Preauthorization reference not found"
 msgstr "Referencia de preautorización no encontrada"
 
-#: gateway-paytpv.php:781
+#: gateway-paytpv.php:787
 msgid "Previous operation already canceled"
 msgstr "Operación anterior ya anulada"
 
-#: gateway-paytpv.php:780
+#: gateway-paytpv.php:786
 msgid "Previous operation not found. Cancellation could not be executed"
 msgstr "Operación anterior no encontrada. No se pudo ejecutar la anulación"
 
@@ -2033,23 +2058,23 @@ msgstr "Operación anterior no encontrada. No se pudo ejecutar la anulación"
 msgid "Priority simulator"
 msgstr "Prioridad simulador"
 
-#: gateway-paytpv.php:506
+#: gateway-paytpv.php:512
 msgid "Product cannot be used under production environment"
 msgstr "El producto no puede ser utilizado en el entorno de producción"
 
-#: gateway-paytpv.php:505
+#: gateway-paytpv.php:511
 msgid "Product cannot be used under test environment"
 msgstr "El producto no puede ser utilizado en el entorno de pruebas"
 
-#: gateway-paytpv.php:503
+#: gateway-paytpv.php:509
 msgid "Product is marked for deletion and cannot be used"
 msgstr "El producto está marcado para eliminar y no puede ser utilizado"
 
-#: gateway-paytpv.php:543
+#: gateway-paytpv.php:549
 msgid "Product not found"
 msgstr "No se encuentra el producto"
 
-#: gateway-paytpv.php:633
+#: gateway-paytpv.php:639
 msgid "Product of the operation missing"
 msgstr "No se encuentra el producto de la operación"
 
@@ -2057,27 +2082,27 @@ msgstr "No se encuentra el producto de la operación"
 msgid "Production"
 msgstr "Producción"
 
-#: gateway-paytpv.php:495
+#: gateway-paytpv.php:501
 msgid "Protocol not supported"
 msgstr "Protocolo no soportado"
 
-#: gateway-paytpv.php:615
+#: gateway-paytpv.php:621
 msgid "ProviderID not available"
 msgstr "providerID no disponible"
 
-#: gateway-paytpv.php:755
+#: gateway-paytpv.php:761
 msgid "PSD2: BillAddrCountry field must be in ISO 3166-1 alpha-3 format"
 msgstr "PSD2: Campo billAddrCountry debe ser en formato ISO 3166-1 alfa-3"
 
-#: gateway-paytpv.php:753
+#: gateway-paytpv.php:759
 msgid "PSD2: BillAddrCountry field not included with supplied billAddrState"
 msgstr "PSD2: Campo billAddrCountry no incluido con billAddrState suministrado"
 
-#: gateway-paytpv.php:756
+#: gateway-paytpv.php:762
 msgid "PSD2: BillAddrState field must be in ISO 3166-2 format"
 msgstr "PSD2: Campo billAddrState debe ser en formato ISO 3166-2"
 
-#: gateway-paytpv.php:762
+#: gateway-paytpv.php:768
 msgid ""
 "PSD2: Mandatory purchaseInstalData, recurringExpiry, and recurringFrequency "
 "fields in Instalment operation (MERCHANT_TRX_TYPE = I)"
@@ -2085,7 +2110,7 @@ msgstr ""
 "PSD2: Campos purchaseInstalData, recurringExpiry y recurringFrequency "
 "obligatorios en operación Instalment (MERCHANT_TRX_TYPE = I)"
 
-#: gateway-paytpv.php:763
+#: gateway-paytpv.php:769
 msgid ""
 "PSD2: Mandatory purchaseInstalData, recurringExpiry, and recurringFrequency "
 "fields in Recurring operation (MERCHANT_TRX_TYPE = R)"
@@ -2093,15 +2118,15 @@ msgstr ""
 "PSD2: Campos purchaseInstalData, recurringExpiry y recurringFrequency "
 "obligatorios en operación Recurring (MERCHANT_TRX_TYPE = R)"
 
-#: gateway-paytpv.php:759
+#: gateway-paytpv.php:765
 msgid "PSD2: MERCHANT_SCA_EXCEPTION field with incorrect value"
 msgstr "PSD2: Campo MERCHANT_SCA_EXCEPTION con valor incorrecto"
 
-#: gateway-paytpv.php:761
+#: gateway-paytpv.php:767
 msgid "PSD2: MERCHANT_TRX_TYPE field with incorrect value"
 msgstr "PSD2: Campo MERCHANT_TRX_TYPE con valor incorrecto"
 
-#: gateway-paytpv.php:760
+#: gateway-paytpv.php:766
 msgid ""
 "PSD2: MERCHANT_TRX_TYPE not supplied required with MERCHANT_SCA_EXCEPTION = "
 "MIT"
@@ -2109,27 +2134,27 @@ msgstr ""
 "PSD2: No se suministra MERCHANT_TRX_TYPE obligatorio con "
 "MERCHANT_SCA_EXCEPTION=MIT"
 
-#: gateway-paytpv.php:757
+#: gateway-paytpv.php:763
 msgid "PSD2: ShipAddrCountry field must be in ISO 3166-1 alpha-3 format"
 msgstr "PSD2: Campo shipAddrCountry debe ser en formato ISO 3166-1 alfa-3"
 
-#: gateway-paytpv.php:754
+#: gateway-paytpv.php:760
 msgid "PSD2: ShipAddrCountry field not included with supplied shipAddrState"
 msgstr "PSD2: Campo shipAddrCountry no incluido con shipAddrState suministrado"
 
-#: gateway-paytpv.php:758
+#: gateway-paytpv.php:764
 msgid "PSD2: ShipAddrState field must be in ISO 3166-2 format"
 msgstr "PSD2: Campo shipAddrState debe ser en formato ISO 3166-2"
 
-#: gateway-paytpv.php:764
+#: gateway-paytpv.php:770
 msgid "PSD2: The purchaseInstalData value must be greater than 1"
 msgstr "PSD2: El valor purchaseInstalData debe ser mayor que 1"
 
-#: gateway-paytpv.php:765
+#: gateway-paytpv.php:771
 msgid "PSD2: The recurringExpiry value must be in the format YYYYMMDD"
 msgstr "PSD2: El valor recurringExpiry debe tener el formato AAAAMMDD"
 
-#: gateway-paytpv.php:540
+#: gateway-paytpv.php:546
 msgid "Quantity zero or invalid"
 msgstr "Cantidad cero o no válida"
 
@@ -2141,14 +2166,14 @@ msgstr ""
 "Proceso rápido y sin papeles con la confianza de Banco Sabadell. Ten a mano "
 "tu DNI para tramitar la financiación."
 
-#: gateway-paytpv.php:789
+#: gateway-paytpv.php:795
 msgid ""
 "Received 1200 to an operation already canceled which was answered with 914 "
 "or 481"
 msgstr ""
 "Recibido 1200 a una operación ya anulada a la que se contestó con 914 o 481"
 
-#: gateway-paytpv.php:791
+#: gateway-paytpv.php:797
 msgid ""
 "Reception at the HCP of a communication message (1X2X) when a previous one "
 "is still being processed (1X2X/X)"
@@ -2156,19 +2181,19 @@ msgstr ""
 "Recepción en el HCP de un mensaje de comunicación (1X2X) cuando aún se "
 "está procesando una previa (1X2X/X)"
 
-#: gateway-paytpv.php:629
+#: gateway-paytpv.php:635
 msgid "Reference parameter missing"
 msgstr "Falta el parámetro reference"
 
-#: gateway-paytpv.php:777
+#: gateway-paytpv.php:783
 msgid "Refund card does not match the authorization one"
 msgstr "La tarjeta de la devolución no coincide con la de la autorización"
 
-#: gateway-paytpv.php:412
+#: gateway-paytpv.php:418
 msgid "Refund is not possible"
 msgstr "No es posible la devolución"
 
-#: gateway-paytpv.php:468
+#: gateway-paytpv.php:474
 msgid "Refund operation not correctly specified"
 msgstr "Operación de devolución no definida correctamente"
 
@@ -2181,30 +2206,30 @@ msgstr "Tarjetas Disponibles"
 msgid "Remove"
 msgstr "Eliminar"
 
-#: gateway-paytpv.php:811
+#: gateway-paytpv.php:817
 msgid ""
 "Repeat operation with CHIP reading, using contacts, or double TAP plus PIN"
 msgstr ""
 "Repita operación con lectura CHIP, utilizando contactos, o doble TAP más PIN"
 
-#: gateway-paytpv.php:812
+#: gateway-paytpv.php:818
 msgid "Repeat operation with CHIP reading, using contacts, or request PIN only"
 msgstr ""
 "Repita operación con lectura CHIP, utilizando contactos, o solicite solo PIN"
 
-#: gateway-paytpv.php:724
+#: gateway-paytpv.php:730
 msgid "Required documentation is not complete"
 msgstr "La documentación requerida está incompleta"
 
-#: gateway-paytpv.php:402
+#: gateway-paytpv.php:408
 msgid "Requires SCA authentication"
 msgstr "Requiere autenticación SCA"
 
-#: gateway-paytpv.php:784
+#: gateway-paytpv.php:790
 msgid "Resolver Center not available. Local authorization"
 msgstr "Centro Resolutor no disponible. Autorización local"
 
-#: gateway-paytpv.php:510
+#: gateway-paytpv.php:516
 msgid "Root element is not correct"
 msgstr "El elemento raíz no es correcto"
 
@@ -2223,7 +2248,7 @@ msgstr "Guardar tarjeta para futuras compras"
 msgid "Save Description"
 msgstr "Guardar"
 
-#: gateway-paytpv.php:607
+#: gateway-paytpv.php:613
 msgid "Scoring limit exceeded"
 msgstr "Superado el límite de scoring"
 
@@ -2240,55 +2265,55 @@ msgstr "Seleccione la posición para mostrar la calculadora de Instant Credit"
 msgid "Select priority of Instant Credit calculator"
 msgstr "Seleccione la prioridad de la calculadora de Instant Credit"
 
-#: gateway-paytpv.php:718
+#: gateway-paytpv.php:724
 msgid "SEPA Credit Transfer denied"
 msgstr "Operación SEPA Credit Transfer denegada"
 
-#: gateway-paytpv.php:651
+#: gateway-paytpv.php:657
 msgid "Service can not be completed"
 msgstr "No puede finalizarse el servicio"
 
-#: gateway-paytpv.php:790
+#: gateway-paytpv.php:796
 msgid "Session not allowed"
 msgstr "Sesión no permitida"
 
-#: gateway-paytpv.php:391
+#: gateway-paytpv.php:397
 msgid "Settlement rejected"
 msgstr "Liquidación rechazada"
 
-#: gateway-paytpv.php:774
+#: gateway-paytpv.php:780
 msgid "shipping.shipAddrCity parameter required."
 msgstr "El parámetro shipping.shipAddrCity es obligatorio."
 
-#: gateway-paytpv.php:773
+#: gateway-paytpv.php:779
 msgid "shipping.shipAddrCountry parameter required."
 msgstr "El parámetro shipping.shipAddrCountry es obligatorio."
 
-#: gateway-paytpv.php:775
+#: gateway-paytpv.php:781
 msgid "shipping.shipAddrPostCode parameter required."
 msgstr "El parámetro shipping.shipAddrPostCode es obligatorio."
 
-#: gateway-paytpv.php:770
+#: gateway-paytpv.php:776
 msgid "shoppingCart[].name parameter required"
 msgstr "El parámetro shoppingCart[].name es obligatorio."
 
-#: gateway-paytpv.php:771
+#: gateway-paytpv.php:777
 msgid "shoppingCart[].quantity parameter required."
 msgstr "El parámetro shoppingCart[].quantity es obligatorio."
 
-#: gateway-paytpv.php:772
+#: gateway-paytpv.php:778
 msgid "shoppingCart[].unitPrice parameter required."
 msgstr "El parámetro shoppingCart[].unitPrice es obligatorio."
 
-#: gateway-paytpv.php:533
+#: gateway-paytpv.php:539
 msgid "SIGNATURE field error"
 msgstr "Error en el campo SIGNATURE"
 
-#: gateway-paytpv.php:476
+#: gateway-paytpv.php:482
 msgid "Signature not valid. Please review your settings"
 msgstr "Firma no válida. Por favor, revise su configuración"
 
-#: gateway-paytpv.php:630
+#: gateway-paytpv.php:636
 msgid "Signature parameter missing"
 msgstr "Falta el parámetro signature"
 
@@ -2312,23 +2337,23 @@ msgstr "Sumario del producto"
 msgid "single_variation"
 msgstr "Variación simple"
 
-#: gateway-paytpv.php:736
+#: gateway-paytpv.php:742
 msgid "SMS sending failed"
 msgstr "Ha fallado el envío del SMS"
 
-#: gateway-paytpv.php:559
+#: gateway-paytpv.php:565
 msgid "Sort Order unrecognized"
 msgstr "Tipo de ordenación no reconocido"
 
-#: gateway-paytpv.php:667
+#: gateway-paytpv.php:673
 msgid "stationID not available"
 msgstr "stationID no disponible"
 
-#: gateway-paytpv.php:562
+#: gateway-paytpv.php:568
 msgid "Subscription end date wrong"
 msgstr "Fecha de final de suscripción errónea"
 
-#: gateway-paytpv.php:561
+#: gateway-paytpv.php:567
 msgid "Subscription start date wrong"
 msgstr "Fecha de inicio de suscripción errónea"
 
@@ -2336,11 +2361,11 @@ msgstr "Fecha de inicio de suscripción errónea"
 msgid "Subscriptions cards"
 msgstr "Tarjetas asociadas a suscripción"
 
-#: gateway-paytpv.php:392
+#: gateway-paytpv.php:398
 msgid "System date/time not synchronized"
 msgstr "Fecha/hora del sistema no sincronizada"
 
-#: gateway-paytpv.php:388 gateway-paytpv.php:783
+#: gateway-paytpv.php:394 gateway-paytpv.php:789
 msgid "System error"
 msgstr "Error del sistema"
 
@@ -2348,11 +2373,11 @@ msgstr "Error del sistema"
 msgid "System Safety"
 msgstr "Seguridad en los sistemas"
 
-#: gateway-paytpv.php:737
+#: gateway-paytpv.php:743
 msgid "Template not found"
 msgstr "Plantilla no encontrada"
 
-#: gateway-paytpv.php:528
+#: gateway-paytpv.php:534
 msgid "TERMINAL field error"
 msgstr "Error en el campo TERMINAL"
 
@@ -2360,15 +2385,15 @@ msgstr "Error en el campo TERMINAL"
 msgid "Terminal Number"
 msgstr "Número Terminal"
 
-#: gateway-paytpv.php:619
+#: gateway-paytpv.php:625
 msgid "TerminalID parameter missing"
 msgstr "Falta el parámetro terminalID"
 
-#: gateway-paytpv.php:672
+#: gateway-paytpv.php:678
 msgid "terminalIDCreditor parameter missing"
 msgstr "Falta el parámetro terminalIDCreditor"
 
-#: gateway-paytpv.php:671
+#: gateway-paytpv.php:677
 msgid "terminalIDDebtor parameter missing"
 msgstr "Falta el parámetro terminalIDDebtor"
 
@@ -2392,95 +2417,95 @@ msgid "Thanks for your order, please press the button to pay."
 msgstr ""
 "Gracias por su pedido, por favor, pulse el botón para realizar el pago."
 
-#: gateway-paytpv.php:710
+#: gateway-paytpv.php:716
 msgid "The account isn't set up correctly."
 msgstr "La cuenta no está configurada correctamente."
 
-#: gateway-paytpv.php:643
+#: gateway-paytpv.php:649
 msgid "The amount of the transaction is not in a correct format"
 msgstr "La cantidad de la operación no tiene el formato correcto"
 
-#: gateway-paytpv.php:555
+#: gateway-paytpv.php:561
 msgid "The application can not have a length greater than 6 months"
 msgstr "La solicitud no puede tener un intervalo mayor a 6 meses"
 
-#: gateway-paytpv.php:401
+#: gateway-paytpv.php:407
 msgid "The authentication process was canceled"
 msgstr "El proceso de autenticación fue cancelado"
 
-#: gateway-paytpv.php:677
+#: gateway-paytpv.php:683
 msgid "The BicCode of the Iban account (terminalIDCreditor) is invalid"
 msgstr "El BicCode de la cuenta Iban (terminalIDCreditor) no es válido"
 
-#: gateway-paytpv.php:676
+#: gateway-paytpv.php:682
 msgid "The BicCode of the Iban account (terminalIDDebtor) is invalid"
 msgstr "El BicCode de la cuenta Iban (terminalIDDebtor) no es válido"
 
-#: gateway-paytpv.php:645 gateway-paytpv.php:689
+#: gateway-paytpv.php:651 gateway-paytpv.php:695
 msgid "The card does not have the correct format"
 msgstr "La tarjeta no tiene el formato correcto"
 
-#: gateway-paytpv.php:688
+#: gateway-paytpv.php:694
 msgid "The cardholder name is not in a correct format"
 msgstr "El formato del Titular de la tarjeta no es correcto"
 
-#: gateway-paytpv.php:358
+#: gateway-paytpv.php:364
 msgid "The credit card has credit restrictions"
 msgstr "La tarjeta tiene restricciones de crédito"
 
-#: gateway-paytpv.php:692
+#: gateway-paytpv.php:698
 msgid "The cvc2 does not have the correct format"
 msgstr "El formato del cvc2 no es correcto"
 
-#: gateway-paytpv.php:637
+#: gateway-paytpv.php:643
 msgid "The date of the transaction is not in a correct format"
 msgstr "La fecha de la operación no tiene el formato correcto"
 
-#: gateway-paytpv.php:715
+#: gateway-paytpv.php:721
 msgid "The document exceeds the maximum file size."
 msgstr "El documento excede el tamaño máximo."
 
-#: gateway-paytpv.php:730
+#: gateway-paytpv.php:736
 msgid "The DS_USER_INTERACTION parameter is not valid"
 msgstr "El parámetro DS_USER_INTERACTION no es válido"
 
-#: gateway-paytpv.php:727
+#: gateway-paytpv.php:733
 msgid "The exception sent is not enabled"
 msgstr "La excepción enviada no esta habilitada"
 
-#: gateway-paytpv.php:646
+#: gateway-paytpv.php:652
 msgid "The expiry date of the card is not in a correct format"
 msgstr "La fecha de caducidad de la tarjeta no tiene el formato correcto"
 
-#: gateway-paytpv.php:489
+#: gateway-paytpv.php:495
 msgid "The HTTP options range is not valid"
 msgstr "El rango de opciones no es válido para la transferencia HTTP"
 
-#: gateway-paytpv.php:675
+#: gateway-paytpv.php:681
 msgid "The Iban account (terminalIDCreditor) is invalid"
 msgstr "La cuenta Iban (terminalIDCreditor) no es válida"
 
-#: gateway-paytpv.php:674
+#: gateway-paytpv.php:680
 msgid "The Iban account (terminalIDDebtor) is invalid"
 msgstr "La cuenta Iban (terminalIDDebtor) no es válida"
 
-#: gateway-paytpv.php:693
+#: gateway-paytpv.php:699
 msgid "The JETID parameter is not in a correct format"
 msgstr "El formato del parámetro JETID no es correcto"
 
-#: gateway-paytpv.php:687
+#: gateway-paytpv.php:693
 msgid "The language parameter is not in a correct format"
 msgstr "El formato del parámetro idioma no es correcto"
 
-#: gateway-paytpv.php:729
+#: gateway-paytpv.php:735
 msgid "The mandatory information of the MERCHANT_DATA has not been sent"
 msgstr "La información obligatoria del MERCHANT_DATA no se ha enviado"
 
-#: gateway-paytpv.php:670
+#: gateway-paytpv.php:676
 msgid "The merchantCode parameter is incorrect"
 msgstr "El parámetro merchantCode no es correcto"
 
-#: gateway-paytpv.php:690
+#: gateway-paytpv.php:696
 msgid "The month does not have the correct format"
 msgstr "El formato del mes no es correcto"
 
@@ -2493,19 +2518,19 @@ msgstr ""
 "cuenta de PAYCOMET no responde de forma correcta. Verifique que la ha "
 "definido así: "
 
-#: gateway-paytpv.php:707
+#: gateway-paytpv.php:713
 msgid "The number of operations per request has been exceeded."
 msgstr "Se ha excedido el número de operaciones por petición."
 
-#: gateway-paytpv.php:556
+#: gateway-paytpv.php:562
 msgid "The operation state is incorrect"
 msgstr "El estado de la operación es incorrecto"
 
-#: gateway-paytpv.php:680
+#: gateway-paytpv.php:686
 msgid "The operationAmount parameter does not have the correct format"
 msgstr "El parámetro operationAmount no tiene el formato correcto"
 
-#: gateway-paytpv.php:682
+#: gateway-paytpv.php:688
 msgid ""
 "The operationConcept parameter contains invalid characters or exceeds 140 "
 "characters"
@@ -2513,15 +2538,15 @@ msgstr ""
 "El parámetro operationConcept contiene caracteres inválidos o excede de 140 "
 "caracteres"
 
-#: gateway-paytpv.php:681
+#: gateway-paytpv.php:687
 msgid "The operationDatetime parameter does not have the correct format"
 msgstr "El parámetro operationDatetime no tiene el formato correcto"
 
-#: gateway-paytpv.php:679
+#: gateway-paytpv.php:685
 msgid "The operationOrder parameter does not have the correct format"
 msgstr "El parámetro operationOrder no tiene el formato correcto"
 
-#: gateway-paytpv.php:644
+#: gateway-paytpv.php:650
 msgid "The original amount of the transaction is not in a correct format"
 msgstr "La cantidad original de la operación no tiene el formato correcto"
 
@@ -2529,56 +2554,56 @@ msgstr "La cantidad original de la operación no tiene el formato correcto"
 msgid "The PAYCOMET payment gateway for WooCommerce"
 msgstr "La pasarela de pago PAYCOMET para WooCommerce"
 
-#: gateway-paytpv.php:490
+#: gateway-paytpv.php:496
 msgid "The POST is not correctly built"
 msgstr "No se construyó correctamente el POST"
 
-#: gateway-paytpv.php:642
+#: gateway-paytpv.php:648
 msgid "The product is not set as multicurrency"
 msgstr "El producto no está configurado como multimoneda"
 
-#: gateway-paytpv.php:635
+#: gateway-paytpv.php:641
 msgid "The result of the operation is not supported"
 msgstr "El resultado de la operación no está admitido"
 
-#: gateway-paytpv.php:638
+#: gateway-paytpv.php:644
 msgid "The signature is not correct"
 msgstr "La firma no es correcta"
 
-#: gateway-paytpv.php:800
+#: gateway-paytpv.php:806
 msgid "The specified EndPointWorker does not exist"
 msgstr "El EndPointWorker especificado no existe"
 
-#: gateway-paytpv.php:695
+#: gateway-paytpv.php:701
 msgid "The splitId parameter is not allowed"
 msgstr "Parámetro splitId no autorizado"
 
-#: gateway-paytpv.php:694
+#: gateway-paytpv.php:700
 msgid "The splitId parameter is not valid"
 msgstr "Parámetro splitId no válido"
 
-#: gateway-paytpv.php:547
+#: gateway-paytpv.php:553
 msgid "The subscription may not exceed the expiration date of the card"
 msgstr ""
 "La subscripción no puede ser mayor de la fecha de caducidad de la tarjeta"
 
-#: gateway-paytpv.php:636
+#: gateway-paytpv.php:642
 msgid "The transaction currency is not supported"
 msgstr "La moneda de la operación no está admitida"
 
-#: gateway-paytpv.php:634
+#: gateway-paytpv.php:640
 msgid "The type of operation is not supported"
 msgstr "El tipo de la operación no está admitido"
 
-#: gateway-paytpv.php:558
+#: gateway-paytpv.php:564
 msgid "The type of operation requested does not exist"
 msgstr "El tipo de operación solicitado no existe"
 
-#: gateway-paytpv.php:491
+#: gateway-paytpv.php:497
 msgid "The username is not correctly formatted"
 msgstr "El nombre de usuario no se encuentra bien formateado"
 
-#: gateway-paytpv.php:691
+#: gateway-paytpv.php:697
 msgid "The year does not have the correct format"
 msgstr "El formato del año no es correcto"
 
@@ -2586,7 +2611,7 @@ msgstr "El formato del año no es correcto"
 msgid "There can be two terminals configured with the same currency."
 msgstr "No puede haber dos terminales configurados con la misma moneda."
 
-#: gateway-paytpv.php:719
+#: gateway-paytpv.php:725
 msgid "There is not payment_info"
 msgstr "No existe payment_info"
 
@@ -2615,15 +2640,15 @@ msgstr "La descripción que el cliente verá en el proceso de compra"
 msgid "This controls the title which the user sees during checkout."
 msgstr "Esto determina el texto que el usuaurio ve en el proceso de compra"
 
-#: gateway-paytpv.php:397
+#: gateway-paytpv.php:403
 msgid "This method requires activation of the VHASH protocol"
 msgstr "Este método requiere la activación del protocolo VHASH"
 
-#: gateway-paytpv.php:696
+#: gateway-paytpv.php:702
 msgid "This terminal don't allow (split) transfers"
 msgstr "Este terminal no permite (split) transfers"
 
-#: gateway-paytpv.php:797
+#: gateway-paytpv.php:803
 msgid "Timeout error when performing a communication test (1804)"
 msgstr "Error de timeout al realizar una prueba de comunicación (1804)"
 
@@ -2631,73 +2656,73 @@ msgstr "Error de timeout al realizar una prueba de comunicación (1804)"
 msgid "Title"
 msgstr "Título"
 
-#: gateway-paytpv.php:500
+#: gateway-paytpv.php:506
 msgid "Total refunds cannot exceed original payment"
 msgstr "El total de las devoluciones no puede superar la operación original"
 
-#: gateway-paytpv.php:700
+#: gateway-paytpv.php:706
 msgid "Total reversal cannot exceed original (split) transfer"
 msgstr ""
 "El total de las revocaciones no puede superar el (split) transfer original"
 
-#: gateway-paytpv.php:620
+#: gateway-paytpv.php:626
 msgid "TpvID parameter missing"
 msgstr "Falta el parámetro tpvID"
 
-#: gateway-paytpv.php:406
+#: gateway-paytpv.php:412
 msgid "Transaction already cancelled"
 msgstr "Transacción cancelada previamente"
 
-#: gateway-paytpv.php:407
+#: gateway-paytpv.php:413
 msgid "Transaction originally denied"
 msgstr "Transacción original denegada"
 
-#: gateway-paytpv.php:410
+#: gateway-paytpv.php:416
 msgid "Transaction still in process"
 msgstr "Transacción aún en proceso"
 
-#: gateway-paytpv.php:814
+#: gateway-paytpv.php:820
 msgid "Transactional identifiers data not found"
 msgstr "Datos de transacción no encontrados"
 
-#: gateway-paytpv.php:815
+#: gateway-paytpv.php:821
 msgid "TransactionId do not match"
 msgstr "TransactionId no coincide con el suministrado"
 
-#: gateway-paytpv.php:371
+#: gateway-paytpv.php:377
 msgid "Transactions were not accomplished"
 msgstr "Las transacciones no fueron finalizadas"
 
-#: gateway-paytpv.php:429
+#: gateway-paytpv.php:435
 msgid "TransactionType unknown"
 msgstr "Tipo de transacción desconocido"
 
-#: gateway-paytpv.php:348 gateway-paytpv.php:403 gateway-paytpv.php:404
-#: gateway-paytpv.php:405 gateway-paytpv.php:409 gateway-paytpv.php:411
-#: gateway-paytpv.php:413 gateway-paytpv.php:415 gateway-paytpv.php:416
-#: gateway-paytpv.php:417 gateway-paytpv.php:418 gateway-paytpv.php:419
-#: gateway-paytpv.php:420 gateway-paytpv.php:421 gateway-paytpv.php:422
+#: gateway-paytpv.php:354 gateway-paytpv.php:409 gateway-paytpv.php:410
+#: gateway-paytpv.php:411 gateway-paytpv.php:415 gateway-paytpv.php:417
+#: gateway-paytpv.php:419 gateway-paytpv.php:421 gateway-paytpv.php:422
 #: gateway-paytpv.php:423 gateway-paytpv.php:424 gateway-paytpv.php:425
 #: gateway-paytpv.php:426 gateway-paytpv.php:427 gateway-paytpv.php:428
-#: gateway-paytpv.php:430 gateway-paytpv.php:431 gateway-paytpv.php:432
-#: gateway-paytpv.php:433 gateway-paytpv.php:434 gateway-paytpv.php:435
+#: gateway-paytpv.php:429 gateway-paytpv.php:430 gateway-paytpv.php:431
+#: gateway-paytpv.php:432 gateway-paytpv.php:433 gateway-paytpv.php:434
 #: gateway-paytpv.php:436 gateway-paytpv.php:437 gateway-paytpv.php:438
-#: gateway-paytpv.php:439 gateway-paytpv.php:441 gateway-paytpv.php:442
-#: gateway-paytpv.php:443 gateway-paytpv.php:444 gateway-paytpv.php:445
-#: gateway-paytpv.php:446 gateway-paytpv.php:447 gateway-paytpv.php:448
+#: gateway-paytpv.php:439 gateway-paytpv.php:440 gateway-paytpv.php:441
+#: gateway-paytpv.php:442 gateway-paytpv.php:443 gateway-paytpv.php:444
+#: gateway-paytpv.php:445 gateway-paytpv.php:447 gateway-paytpv.php:448
 #: gateway-paytpv.php:449 gateway-paytpv.php:450 gateway-paytpv.php:451
 #: gateway-paytpv.php:452 gateway-paytpv.php:453 gateway-paytpv.php:454
-#: gateway-paytpv.php:455 gateway-paytpv.php:456 gateway-paytpv.php:460
-#: gateway-paytpv.php:461 gateway-paytpv.php:462 gateway-paytpv.php:463
-#: gateway-paytpv.php:466 gateway-paytpv.php:467 gateway-paytpv.php:524
+#: gateway-paytpv.php:455 gateway-paytpv.php:456 gateway-paytpv.php:457
+#: gateway-paytpv.php:458 gateway-paytpv.php:459 gateway-paytpv.php:460
+#: gateway-paytpv.php:461 gateway-paytpv.php:462 gateway-paytpv.php:466
+#: gateway-paytpv.php:467 gateway-paytpv.php:468 gateway-paytpv.php:469
+#: gateway-paytpv.php:472 gateway-paytpv.php:473 gateway-paytpv.php:530
 msgid "Unexpected error"
 msgstr "Error inesperado"
 
-#: gateway-paytpv.php:702
+#: gateway-paytpv.php:708
 msgid "uniqueIdCreditor parameter missing"
 msgstr "Falta el parámetro uniqueIdCreditor"
 
-#: gateway-paytpv.php:336 gateway-paytpv.php:820
+#: gateway-paytpv.php:342 gateway-paytpv.php:826
 msgid "Unknown error"
 msgstr "Error desconocido"
 
@@ -2706,31 +2731,31 @@ msgstr "Error desconocido"
 msgid "Update"
 msgstr "Actualizar"
 
-#: gateway-paytpv.php:497
+#: gateway-paytpv.php:503
 msgid "URL user is not correctly formatted"
 msgstr "El usuario en la URL se formateó de manera incorrecta"
 
-#: gateway-paytpv.php:589
+#: gateway-paytpv.php:595
 msgid "User not found"
 msgstr "No se pudo cargar el usuario de la cuenta"
 
-#: gateway-paytpv.php:536
+#: gateway-paytpv.php:542
 msgid "User not found. Contact PayCOMET"
 msgstr "Usuario no encontrado. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:474
+#: gateway-paytpv.php:480
 msgid "User not found. Please contact your administrator"
 msgstr "Usuario no encontrado. Contacte con PAYCOMET"
 
-#: gateway-paytpv.php:527
+#: gateway-paytpv.php:533
 msgid "USERCODE field error"
 msgstr "Error en el campo USERCODE"
 
-#: gateway-paytpv.php:655
+#: gateway-paytpv.php:661
 msgid "userReference parameter missing"
 msgstr "Falta el parámetro userReference"
 
-#: gateway-paytpv.php:794
+#: gateway-paytpv.php:800
 msgid "Violation of existing regulations to perform a local authorization"
 msgstr ""
 "Violación de las normas existentes para realizar una autorización local"
@@ -2739,17 +2764,17 @@ msgstr ""
 msgid "Wait, please..."
 msgstr "Espere por favor..."
 
-#: gateway-paytpv.php:580
+#: gateway-paytpv.php:586
 msgid "Weak or invalid password"
 msgstr "El parámetro password no tiene la fortaleza suficiente"
 
-#: gateway-paytpv.php:608
+#: gateway-paytpv.php:614
 msgid "Week / IP address limit (all cards) not allowed"
 msgstr ""
 "Límite de transacciones por dirección IP /semana (diferentes tarjetas) no "
 "permitido"
 
-#: gateway-paytpv.php:766
+#: gateway-paytpv.php:772
 msgid ""
 "When the same card has several payments in \"flight\" at the time that one "
 "is finalized, the rest are denied with this code. This restriction is for "
@@ -2759,31 +2784,39 @@ msgstr ""
 "se finaliza uno el resto se deniegan con este código. Esta restricción se "
 "realiza por seguridad."
 
-#: gateway-paytpv.php:788
+#: inc/paycomet-applepay.php:68
+msgid "White"
+msgstr "Blanco"
+
+#: inc/paycomet-applepay.php:69
+msgid "White outline"
+msgstr "Contorno blanco"
+
+#: gateway-paytpv.php:794
 msgid "Wrong MAC"
 msgstr "MAC erróneo"
 
-#: gateway-paytpv.php:782
+#: gateway-paytpv.php:788
 msgid "Wrong message format"
 msgstr "Formato de mensaje erróneo"
 
-#: gateway-paytpv.php:612
+#: gateway-paytpv.php:618
 msgid "Wrong or not configured credentials"
 msgstr "Las credenciales no son válidas o no están configuradas"
 
-#: gateway-paytpv.php:743
+#: gateway-paytpv.php:749
 msgid "Wrong or not configured notification URL"
 msgstr "Ruta de notificación no configurada"
 
-#: gateway-paytpv.php:804
+#: gateway-paytpv.php:810
 msgid "Wrong PIN"
 msgstr "PIN incorrecto"
 
-#: gateway-paytpv.php:805
+#: gateway-paytpv.php:811
 msgid "Wrong PIN Block"
 msgstr "Bloque de PIN erróneo"
 
-#: gateway-paytpv.php:613
+#: gateway-paytpv.php:619
 msgid "Wrong token received"
 msgstr "Recibido token incorrecto"
 
@@ -2836,6 +2869,10 @@ msgstr ""
 "Se realizará un pequeño cargo de 0,5€ con el fin de validar la tarjeta. Este "
 "cargo será reembolsado automáticamente una vez finalizado el proceso de "
 "validación."
+
+#: inc/paycomet-applepay.php:26 inc/paycomet-applepay.php:40
+msgid "You will be redirected to Apple Pay"
+msgstr "Se te redirigirá a Apple Pay"
 
 #: inc/paycomet-bancontact.php:25 inc/paycomet-bancontact.php:40
 msgid "You will be redirected to Bancontact"

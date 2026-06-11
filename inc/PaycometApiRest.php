@@ -151,6 +151,30 @@ class PaycometApiRest
         return $this->executeRequest('/v1/payments', $params);
     }
 
+    public function applePayButton( $terminal, $language, $operationType, $payment )
+    {
+        $params = [
+            'terminal'      => (int) $terminal,
+            'language'      => (string) $language,
+            'operationType' => (int) $operationType,
+            'payment'       => [
+                'terminal'           => (int) $payment['terminal'],
+                'methodId'           => (int) $payment['methodId'],
+                'originalIp'         => (string) $payment['originalIp'],
+                'amount'             => (int) $payment['amount'],
+                'order'              => (string) $payment['order'],
+                'currency'           => (string) $payment['currency'],
+                'secure'             => (int) $payment['secure'],
+                'productDescription' => (string) $payment['productDescription'],
+                'userInteraction'    => (int) $payment['userInteraction'],
+                'width'              => (int) $payment['width'],
+                'height'             => (int) $payment['height'],
+                'color'              => (string) $payment['color'],
+            ],
+        ];
+
+        return $this->executeRequest( '/v1/payments/applepaybutton', $params );
+    }
 
     public function createPreautorization(
         $terminal,
