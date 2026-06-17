@@ -1,6 +1,18 @@
 const { createElement, Fragment } = window.wp.element;
 const { __ } = window.wp.i18n;
 
+function getPaytpvSettings() {
+    if (window.wc && window.wc.wcSettings && typeof window.wc.wcSettings.getSetting === 'function') {
+        return window.wc.wcSettings.getSetting('paytpv_data', {});
+    }
+    return window.paytpvOrderPaySettings || {};
+}
+
+function isOrderPayPage() {
+    const href = window.location.href || '';
+    return href.includes('order-pay=') || href.includes('pay_for_order=true') || document.body?.classList?.contains('woocommerce-order-pay');
+}
+
 // Lista de métodos Paycomet
 const PAYMENT_METHODS = [
     'paytpv_data',
@@ -93,22 +105,68 @@ function createPaycometForm(portal) {
         return; 
     }
 
-    const settings = window.wc.wcSettings.getSetting('paytpv_data', {});
+    const settings = getPaytpvSettings();
 
     let hiddenContainer = document.getElementById('paycometHiddenFieldsContainer');
 
     if (!hiddenContainer) {
-        hiddenContainer = document.createElement('div');
-        hiddenContainer.id = 'paycometHiddenFieldsContainer';
-        hiddenContainer.innerHTML = `
-            <input type="hidden" id="jetiframe-token" name="jetiframe-token">
-            <input type="checkbox" id="savecard_jetiframe" name="savecard_jetiframe" style="display:none">
-            <input type="hidden" id="hiddenCardField" name="hiddenCardField" value="" data-field="paycomet_universal_message" >
-        `;
-        document.body.appendChild(hiddenContainer);
+        if (isOrderPayPage()) {
+            hiddenContainer = document.createElement('div');
+            hiddenContainer.id = 'paycometHiddenFieldsContainer';
+            hiddenContainer.style.display = 'none';
+
+            // Reusar inputs existentes si WooCommerce/PHP ya los pintó (evita POST duplicado con valores distintos).
+            const existingJetToken = document.getElementById('jetiframe-token');
+            const existingSaveCard = document.getElementById('savecard_jetiframe');
+            const existingHiddenCardField = document.getElementById('hiddenCardField');
+
+            if (existingJetToken) {
+                hiddenContainer.appendChild(existingJetToken);
+            } else {
+                const jetTokenInput = document.createElement('input');
+                jetTokenInput.type = 'hidden';
+                jetTokenInput.id = 'jetiframe-token';
+                jetTokenInput.name = 'jetiframe-token';
+                hiddenContainer.appendChild(jetTokenInput);
+            }
+
+            if (existingSaveCard) {
+                hiddenContainer.appendChild(existingSaveCard);
+            } else {
+                const saveCardInput = document.createElement('input');
+                saveCardInput.type = 'checkbox';
+                saveCardInput.id = 'savecard_jetiframe';
+                saveCardInput.name = 'savecard_jetiframe';
+                saveCardInput.style.display = 'none';
+                hiddenContainer.appendChild(saveCardInput);
+            }
+
+            if (existingHiddenCardField) {
+                hiddenContainer.appendChild(existingHiddenCardField);
+            } else {
+                const hiddenCardInput = document.createElement('input');
+                hiddenCardInput.type = 'hidden';
+                hiddenCardInput.id = 'hiddenCardField';
+                hiddenCardInput.name = 'hiddenCardField';
+                hiddenCardInput.value = '';
+                hiddenCardInput.setAttribute('data-field', 'paycomet_universal_message');
+                hiddenContainer.appendChild(hiddenCardInput);
+            }
+
+            portal.appendChild(hiddenContainer);
+        } else {
+            hiddenContainer = document.createElement('div');
+            hiddenContainer.id = 'paycometHiddenFieldsContainer';
+            hiddenContainer.innerHTML = `
+                <input type="hidden" id="jetiframe-token" name="jetiframe-token">
+                <input type="checkbox" id="savecard_jetiframe" name="savecard_jetiframe" style="display:none">
+                <input type="hidden" id="hiddenCardField" name="hiddenCardField" value="" data-field="paycomet_universal_message" >
+            `;
+            document.body.appendChild(hiddenContainer);
+        }
+    } else {
+        portal.appendChild(hiddenContainer);
     }
-    
-    portal.appendChild(hiddenContainer);
 
     const form = document.createElement('form');
     form.id = 'paycometPaymentForm';
@@ -167,7 +225,7 @@ function createPaycometForm(portal) {
 
                             <select id="paycomet_card_year" class="form-control" aria-hidden="true" data-paycomet="dateYear" style="width:142px;border:1px solid #dcd7ca;font-size:18px;padding:0 0 0 10px">
                                 <option value="" selected disabled>${settings.text.Year}</option>
-                                ${Array.from({length:9}, (_,i)=>`<option value="${String(new Date().getFullYear()+i).slice(2)}">${new Date().getFullYear()+i}</option>`).join('')}
+                                ${Array.from({length:21}, (_,i)=>`<option value="${String(new Date().getFullYear()+i).slice(2)}">${new Date().getFullYear()+i}</option>`).join('')}
                             </select>
                         </div>
                     </div>
@@ -236,9 +294,24 @@ function jetIframeValidated(){
         document.getElementById("savecard_jetiframe").checked = document.getElementById("jetiframe_savecard").checked;
     }
 
-    document.getElementById("jetiframe-token").value = document.getElementsByName("paytpvToken")[0].value;
+    const paytpvTokenInput = document.getElementsByName("paytpvToken")[0];
+    const jetTokenInput = document.getElementById("jetiframe-token");
+    if (!paytpvTokenInput || !jetTokenInput) {
+        return;
+    }
+    jetTokenInput.value = paytpvTokenInput.value;
 
     if (jQuery("#jetiframe-token").val() !== "") {
+        if (isOrderPayPage()) {
+            const placeOrderBtn = document.getElementById('place_order');
+            if (placeOrderBtn) {
+                const form = placeOrderBtn.closest('form');
+                if (form) {
+                    form.submit();
+                    return;
+                }
+            }
+        }
 
         const placeOrderBtn = document.querySelector(
             '.wc-block-components-button.wp-element-button.wc-block-components-checkout-place-order-button.contained'
@@ -275,6 +348,17 @@ function checkSelectedCard() {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (isOrderPayPage()) {
+        const settings = getPaytpvSettings();
+        const portal = document.getElementById('paycometOrderPayPortal');
+        if (portal && settings.payment_paycomet == 2) {
+            createPaycometForm(portal);
+            if (typeof window.PAYCOMETIFRAME === 'undefined' && typeof jQuery !== 'undefined') {
+                jQuery.getScript(`https://api.paycomet.com/gateway/paycomet.jetiframe.js?lang=${settings.getLanguage}`);
+            }
+        }
+        return;
+    }
 
     setTimeout(registerAllPaycometMethods, 50);
 
@@ -310,6 +394,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //JET-IFRAME (CONTROLAMOS SUBMIT)
 document.addEventListener('DOMContentLoaded', () => {
+    if (isOrderPayPage()) {
+        const placeOrderBtn = document.getElementById('place_order');
+        const jetBtn = document.getElementById('jetiframe-button');
+        if (placeOrderBtn && jetBtn) {
+            placeOrderBtn.onclick = function(e) {
+                const selectedCard = document.getElementById('jet_iframe_card')?.value ?? 0;
+                if (selectedCard == 0) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    jetBtn.click();
+                } else {
+                    const hiddenField = document.getElementById('hiddenCardField');
+                    if (hiddenField) {
+                        hiddenField.value = selectedCard;
+                    }
+                }
+            };
+        }
+        return;
+    }
 
     const observer = new MutationObserver(() => {
 
