@@ -77,7 +77,7 @@ class Paycomet_Applepay extends Paycomet_APM
             return;
         }
 
-        $stored_html = $order->get_meta( 'PayTPV_applePayButtonHtml' );
+        $stored_html = $this->generate_paytpv_form( $order_id );       
 
         wp_enqueue_style( 'paytpv.css', PAYTPV_PLUGIN_URL . 'css/paytpv.css', array(), PAYTPV_VERSION );
         wp_enqueue_script( 'jquery' );
@@ -118,9 +118,14 @@ class Paycomet_Applepay extends Paycomet_APM
 
         return $result;
     }
+    
 
-    public function process_payment( $order_id )
+    /**
+     * Generate the paytpv button link
+     * */
+    function generate_paytpv_form($order_id)
     {
+
         list( $width, $height, $color ) = $this->buttonOptions();
 
         $paytpvBase = new woocommerce_paytpv( false );
@@ -144,20 +149,24 @@ class Paycomet_Applepay extends Paycomet_APM
             $height,
             $color,
             $order
-        );
+        );        
 
-        if ( $html !== '' ) {
-            $this->saveApplePayButtonHtml( $order, $html );
-        } elseif ( $order->get_meta( 'ErrorID' ) ) {
-            $order->update_status( 'failed' );
-        }
-
-        return array(
-            'result'   => 'success',
-            'redirect' => $order->get_checkout_payment_url( true ),
-        );
+        return $html;
     }
 
+    function process_payment($order_id)
+    {
+        $order = new WC_Order($order_id);
+
+        $result = "success";        
+
+        return array(
+            'result' => $result,
+            'redirect'	=> $order->get_checkout_payment_url( true )
+        );
+    }
+    
+    
     public function can_refund_order( $order )
     {
         return parent::canRefundOrder( $this->methodId );
@@ -176,6 +185,13 @@ class Paycomet_Applepay extends Paycomet_APM
     {
         $terminal = (int) $paytpvBase->paytpv_terminals[0]['term'];
 
+        $urlOk = $this->get_return_url($order);
+        $paramsUrl = array(
+            'order' => $order->get_id(),
+            'paycomet_error' => 'payment'
+        );
+        $urlKo = add_query_arg( $paramsUrl, wc_get_checkout_url() );
+
         $payment = array(
             'terminal'           => $terminal,
             'methodId'           => (int) $methodId,
@@ -186,10 +202,12 @@ class Paycomet_Applepay extends Paycomet_APM
             'secure'             => 1,
             'productDescription' => (string) $product_description,
             'userInteraction'    => 1,
+            'urlOk'              => (string) $urlOk,
+            'urlKo'              => (string) $urlKo,
             'width'              => (int) $width,
             'height'             => (int) $height,
             'color'              => (string) $color,
-        );
+        );        
 
         $apiRest     = new PaycometApiRest( $paytpvBase->settings['apikey'] );
         $apiResponse = $apiRest->applePayButton( $terminal, 'ES', 1, $payment );
@@ -209,14 +227,5 @@ class Paycomet_Applepay extends Paycomet_APM
 
         return '';
     }
-
-    private function saveApplePayButtonHtml( $order, $html )
-    {
-        if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && OrderUtil::custom_orders_table_usage_is_enabled() ) {
-            $order->update_meta_data( 'PayTPV_applePayButtonHtml', $html );
-            $order->save();
-        } else {
-            update_post_meta( (int) $order->get_id(), 'PayTPV_applePayButtonHtml', $html );
-        }
-    }
+    
 }
