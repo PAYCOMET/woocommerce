@@ -43,7 +43,7 @@ Funcionalidades del módulo:
 == Changelog ==
 
 = 5.44 =
-Añadir método de pago ApplePay. Mejoras de código.
+Mejoras de código.
 
 = 5.43 =
 Actualización logos y textos.
