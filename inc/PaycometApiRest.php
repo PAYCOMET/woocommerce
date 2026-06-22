@@ -169,6 +169,8 @@ class PaycometApiRest
                 'userInteraction'    => (int) $payment['userInteraction'],
                 'width'              => (int) $payment['width'],
                 'height'             => (int) $payment['height'],
+                'urlOk'              => (string) $payment['urlOk'],
+                'urlKo'              => (string) $payment['urlKo'],
                 'color'              => (string) $payment['color'],
             ],
         ];
