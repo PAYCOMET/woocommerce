@@ -1633,7 +1633,8 @@
 							'trxType' => $trxType,
 							'merchantData' => $merchantData,
 							'urlOk' => $URLOK,
-							'urlKo' => $URLKO
+							'urlKo' => $URLKO,
+							'excludedXpays' => ["all"]			
 						],
 						[]
 					);
