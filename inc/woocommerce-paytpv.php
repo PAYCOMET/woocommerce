@@ -1617,25 +1617,30 @@
 				try {
 
 					$apiRest = new PaycometApiRest($this->apiKey);
+					$formParams = [
+						'terminal' => $term,
+						'methods' => [1],
+						'order' => $MERCHANT_ORDER,
+						'amount' => $MERCHANT_AMOUNT,
+						'currency' => $MERCHANT_CURRENCY,
+						'userInteraction' => $userInteraction,
+						'secure' => $secure_pay,
+						'trxType' => $trxType,
+						'merchantData' => $merchantData,
+						'urlOk' => $URLOK,
+						'urlKo' => $URLKO,
+					];
+
+					if (in_array((int) $this->payment_paycomet, [0, 2], true)) {
+						$formParams['excludedXpays'] = ["all"];
+					}
+
 					$apiResponse = $apiRest->form(
 						$OPERATION,
 						$this->_getLanguange(),
 						$arrTerminalData['term'],
 						'',
-						[
-							'terminal' => $term,
-							'methods' => [1],
-							'order' => $MERCHANT_ORDER,
-							'amount' => $MERCHANT_AMOUNT,
-							'currency' => $MERCHANT_CURRENCY,
-							'userInteraction' => $userInteraction,
-							'secure' => $secure_pay,
-							'trxType' => $trxType,
-							'merchantData' => $merchantData,
-							'urlOk' => $URLOK,
-							'urlKo' => $URLKO,
-							'excludedXpays' => ["all"]
-						],
+						$formParams,
 						[]
 					);
 
