@@ -93,3 +93,18 @@ table.wc_input_table td input[type=text], table.wc_input_table td input[type=num
     margin-right: 0px !important;
     margin-top: 5px !important;    
 }
+
+.paycomet-applepay-portal apple-pay-button,
+#paycometApplePayPortal apple-pay-button {
+    display: inline-block !important;
+    min-width: 120px;
+    min-height: 44px;
+    margin-top: 12px;
+}
+
+li.wc_payment_method.payment_method_paycomet_applepay img,
+.woocommerce-checkout #payment .payment_method_paycomet_applepay img {
+    max-height: 24px !important;
+    width: auto !important;
+    vertical-align: middle;
+}
