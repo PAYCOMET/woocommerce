@@ -881,11 +881,7 @@
 							// Notificacion para tokenizacion
 							if (str_contains($_REQUEST["Order"], '_tokenization')) {
 
-								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
-
-								$terminal = $this->paytpv_terminals[0];
-								$term = $terminal["term"];
-								$pass = $terminal["pass"];
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));																							
 								$ip = $this->getIp();
 
 								// Old card data
