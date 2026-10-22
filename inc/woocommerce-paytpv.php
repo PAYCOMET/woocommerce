@@ -817,7 +817,7 @@
 								$user_id = $old_saved_card["id_customer"];
 
 								// Remove old User Card
-								$result= Paytpv::removeCardTokenization($id_card);
+								$result= Paytpv::removeCardTokenization($id_card, $user_id);
 
 								// Save new User Card
 								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
@@ -842,7 +842,12 @@
 					// execute_purchase
 					case 1:
 					case 109:
-						if (!str_contains($_REQUEST["Order"], '_tokenization')) {
+						if (str_contains($_REQUEST["Order"], '_tokenization')) {
+							$terminal = $this->paytpv_terminals[0];
+							$term = $terminal["term"];
+							$pass = $terminal["pass"];
+							$currency_iso_code = 'EUR';
+						} else {
 							$arrTerminalData = $this->TerminalCurrency($order);
 							$currency_iso_code = $arrTerminalData["currency_iso_code"];
 							$term = $arrTerminalData["term"];
@@ -854,32 +859,29 @@
 								$idUser = $_REQUEST['IdUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_IdUser', true);
 								$tokenUser = $_REQUEST['TokenUser'] ?? get_post_meta((int) $order->get_id(), 'PayTPV_TokenUser', true);
 							}
-
-							$mensaje = $this->clientcode .
-									$term .
-									$_REQUEST[ 'TransactionType' ] .
-									$_REQUEST[ 'Order' ] .
-									$_REQUEST[ 'Amount' ] .
-									$currency_iso_code;
-
-							$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
-
-							// Validacion firma
-							if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
-								print "PAYCOMET WC KO Firma";
-								exit;
-							}
 						}
+
+						$mensaje = $this->clientcode .
+								$term .
+								$_REQUEST[ 'TransactionType' ] .
+								$_REQUEST[ 'Order' ] .
+								$_REQUEST[ 'Amount' ] .
+								$currency_iso_code;
+
+						$localSign = hash('sha512', $mensaje . md5( $pass ) . $_REQUEST[ 'BankDateTime' ] . $_REQUEST[ 'Response' ] );
+
+						// Validacion firma
+						if ($_REQUEST[ 'NotificationHash' ] != $localSign) {
+							print "PAYCOMET WC KO Firma";
+							exit;
+						}
+
 						if ( ($_REQUEST[ 'TransactionType' ] == '1' || $_REQUEST[ 'TransactionType' ] == '109')  && $_REQUEST[ 'Response' ] == 'OK') {
 
 							// Notificacion para tokenizacion
 							if (str_contains($_REQUEST["Order"], '_tokenization')) {
 
-								$id_card = array_shift(explode("_", $_REQUEST["Order"]));
-
-								$terminal = $this->paytpv_terminals[0];
-								$term = $terminal["term"];
-								$pass = $terminal["pass"];
+								$id_card = array_shift(explode("_", $_REQUEST["Order"]));																							
 								$ip = $this->getIp();
 
 								// Old card data
@@ -896,7 +898,7 @@
 								}
 
 								// Remove old User Card
-								$result= Paytpv::removeCardTokenization($id_card);
+								$result= Paytpv::removeCardTokenization($id_card, $user_id);
 
 								// Save new User Card
 								$result = $this->saveCard(null, $user_id, $_REQUEST[ 'IdUser' ], $_REQUEST[ 'TokenUser' ], 107, 1);
