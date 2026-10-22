@@ -198,10 +198,9 @@
 			return $saved_card;
 		}
 
-		public static function removeCardTokenization($id_card){
+		public static function removeCardTokenization($id_card, $user_id){
 			global $wpdb;
-
-			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id = %d", $id_card ), ARRAY_A );
+			$saved_card = $wpdb->get_row( $wpdb->prepare( "delete from {$wpdb->prefix}paytpv_customer WHERE id = %d AND id_customer = %d", $id_card, $user_id ), ARRAY_A );
 
 			return $saved_card;
 		}
