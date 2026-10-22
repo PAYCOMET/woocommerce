@@ -208,7 +208,7 @@ if (isset($_POST["paytpvToken"])) {
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
                         <td class="woocommerce-orders-table__cell">
-                            <input type="text" class="card_desc" maxlength="32" id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                            <input type="text" class="card_desc" maxlength="32" id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php echo esc_attr($card['card_desc']); ?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
                         </td>
 
                         <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
@@ -231,7 +231,7 @@ if (isset($_POST["paytpvToken"])) {
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
                         <td class="woocommerce-orders-table__cell">
-                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php echo esc_attr($card['card_desc']); ?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
                         </td>
 
                         <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
@@ -279,7 +279,7 @@ if (isset($_POST["paytpvToken"])) {
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_brand"]?></td>
                         <td class="woocommerce-orders-table__cell"><?php print $card["paytpv_expirydate"]?></td>
                         <td class="woocommerce-orders-table__cell">
-                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php print $card["card_desc"]?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
+                            <input type="text" class="card_desc" maxlength="32"  id="card_desc_<?php print $card["id"]?>" name="card_desc_<?php print $card["id"]?>" value="<?php echo esc_attr($card['card_desc']); ?>" placeholder="<?php print __("Add a description", 'wc_paytpv')?>">
                         </td>
 
                         <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-order-actions">
