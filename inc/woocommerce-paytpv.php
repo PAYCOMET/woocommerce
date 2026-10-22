@@ -1052,7 +1052,9 @@
 
 			// Save Card Description
 			if ( $_REQUEST[ 'tpvLstr' ] == 'saveDesc' ) {//NOTIFICACIÓN
-				$card_desc = $_POST["card_desc"];
+				$card_desc = sanitize_text_field(
+					wp_unslash($_POST['card_desc'])
+				);
 				$id_card = $_GET["id"];
 
 				Paytpv::saveCardDesc($id_card,$card_desc);
@@ -1962,7 +1964,7 @@
 	                        <select name="card" id="card" onChange="checkCard()" class="form-control select2" aria-hidden="true" style="width:100%">';
 
 			foreach ($saved_cards as $card){
-				$card_desc = ($card["card_desc"]!="")?(" - " . $card["card_desc"]):"";
+				$card_desc = ($card["card_desc"]!="")?(" - " . esc_html($card["card_desc"])):"";
 				print 		"<option value='".$card['id']."'>".$card["paytpv_cc"]. $card_desc. "</option>";
 
 			}
