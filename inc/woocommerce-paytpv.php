@@ -888,11 +888,15 @@
 								$old_id_user= $old_saved_card["paytpv_iduser"];
 
 								// Update the parent order token
+								if (!isset($_REQUEST['IdUser']) || !ctype_digit((string) $_REQUEST['IdUser'])) {
+									print "PAYCOMET WC KO";
+									exit;
+								}
 								$subscriptions_with_old_card = PayTPV::subscriptionsWithCard($old_id_user);
 								foreach ($subscriptions_with_old_card as $order) {
 									$result= Paytpv::replaceIdUser($order["order_id"], $_REQUEST[ 'IdUser' ]);
 									$result= Paytpv::replaceTokenUser($order["order_id"], $_REQUEST[ 'TokenUser' ]);
-									print "PAYCOMET OK TOKENIZATION UPDATE ORDER " . $order["order_id"] . ", idUserAnt: " . $old_id_user . ", idUserNew: " . $_REQUEST[ 'IdUser' ];
+									print "PAYCOMET OK TOKENIZATION UPDATE ORDER";
 								}
 
 								// Remove old User Card
