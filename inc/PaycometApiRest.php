@@ -172,6 +172,7 @@ class PaycometApiRest
                 'urlOk'              => (string) $payment['urlOk'],
                 'urlKo'              => (string) $payment['urlKo'],
                 'color'              => (string) $payment['color'],
+                'domain'             => (string) $payment['domain'],
             ],
         ];
 
