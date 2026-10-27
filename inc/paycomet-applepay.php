@@ -192,12 +192,6 @@ class Paycomet_Applepay extends Paycomet_APM
         );
         $urlKo = add_query_arg( $paramsUrl, wc_get_checkout_url() );
 
-        $host = isset( $_SERVER['HTTP_HOST'] ) ? wp_unslash( $_SERVER['HTTP_HOST'] ) : '';
-        if ( ! is_string( $host ) || $host === '' ) {
-            $host = (string) wp_parse_url( home_url(), PHP_URL_HOST );
-        }
-        $domain = strtolower( preg_replace( '/:\d+$/', '', $host ) );
-    
         $payment = array(
             'terminal'           => $terminal,
             'methodId'           => (int) $methodId,
@@ -213,7 +207,6 @@ class Paycomet_Applepay extends Paycomet_APM
             'width'              => (int) $width,
             'height'             => (int) $height,
             'color'              => (string) $color,
-            'domain'             => (string) $domain,
         );        
 
         $apiRest     = new PaycometApiRest( $paytpvBase->settings['apikey'] );
