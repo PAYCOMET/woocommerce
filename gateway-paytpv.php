@@ -5,15 +5,18 @@
  * Description: The PAYCOMET payment gateway for WooCommerce
  * Author: PAYCOMET
  * Author URI: https://www.paycomet.com
- * Version: 5.47
+ * Version: 5.48
  * Tested up to: 7.0
  * WC tested up to: 11.0.1
  * Text Domain: wc_paytpv
  * Domain Path: /languages
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-define( 'PAYTPV_VERSION', '5.47' );
+define( 'PAYTPV_VERSION', '5.48' );
 
 define( 'PAYTPV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'PAYTPV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -53,42 +56,44 @@ function woocommerce_paytpv_init() {
 	/**
 	 * Required functions
 	 */
-	if ( !class_exists( 'WC_Payment_Gateway' ) || !WC_PayTpv_Dependencies::woocommerce_active_check() )
+	if ( ! class_exists( 'WC_Payment_Gateway' ) || ! WC_PayTpv_Dependencies::woocommerce_active_check() ) {
 		return;
+	}
 
 	load_plugin_textdomain( 'wc_paytpv', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	add_filter( 'woocommerce_payment_gateways', 'add_paytpv_gateway' );
 
 	register_activation_hook( __FILE__, 'paytpv_install' );
 
-	require PAYTPV_PLUGIN_DIR . '/inc/woocommerce-paytpv.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-apm.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bizum.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-ideal.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarna.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-klarnapayments.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-giropay.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mybank.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-multibanco.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mbway.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-trustly.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-przelewy.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-bancontact.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-eps.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-tele2.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paypal.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysera.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-postfinance.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-qiwi.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-yandex.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-mts.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-beeline.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-paysafecard.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-skrill.php';
-	//require PAYTPV_PLUGIN_DIR . '/inc/paycomet-webmoney.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-waylet.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-instantcredit.php';
-	require PAYTPV_PLUGIN_DIR . '/inc/paycomet-applepay.php';
+	$includes = [
+		'woocommerce-paytpv.php',
+		'paycomet-apm.php',
+		'paycomet-bizum.php',
+		'paycomet-ideal.php',
+		'paycomet-klarna.php',
+		'paycomet-klarnapayments.php',
+		'paycomet-giropay.php',
+		'paycomet-mybank.php',
+		'paycomet-multibanco.php',
+		'paycomet-mbway.php',
+		'paycomet-trustly.php',
+		'paycomet-przelewy.php',
+		'paycomet-bancontact.php',
+		'paycomet-eps.php',
+		'paycomet-paypal.php',
+		'paycomet-paysera.php',
+		'paycomet-postfinance.php',
+		'paycomet-qiwi.php',
+		'paycomet-paysafecard.php',
+		'paycomet-skrill.php',
+		'paycomet-waylet.php',
+		'paycomet-instantcredit.php',
+		'paycomet-applepay.php',
+	];
+
+	foreach ( $includes as $file ) {
+		require_once PAYTPV_PLUGIN_DIR . 'inc/' . $file;
+	}
 }
 
 
@@ -97,54 +102,64 @@ function woocommerce_paytpv_init() {
  * Add the gateway to woocommerce
  * */
 function add_paytpv_gateway( $methods ) {
-	$methods[] = 'woocommerce_paytpv';
-	
-	// APMs
-	$methods[] = 'Paycomet_Bizum';
-	$methods[] = 'Paycomet_Klarna';
-	$methods[] = 'Paycomet_Klarnapayments';
-	$methods[] = 'Paycomet_Ideal';
-	$methods[] = 'Paycomet_Giropay';
-	$methods[] = 'Paycomet_Mybank';
-	$methods[] = 'Paycomet_Multibanco';
-	$methods[] = 'Paycomet_Mbway';
-	$methods[] = 'Paycomet_Trustly';
-	$methods[] = 'Paycomet_Przelewy';
-	$methods[] = 'Paycomet_Bancontact';
-	$methods[] = 'Paycomet_Eps';
-	$methods[] = 'Paycomet_Tele2';
-	$methods[] = 'Paycomet_Paypal';
-	$methods[] = 'Paycomet_Paysera';
-	$methods[] = 'Paycomet_Postfinance';
-	$methods[] = 'Paycomet_Qiwi';
-	$methods[] = 'Paycomet_Yandex';
-	$methods[] = 'Paycomet_Mts';
-	$methods[] = 'Paycomet_Beeline';
-	$methods[] = 'Paycomet_Paysafecard';
-	$methods[] = 'Paycomet_Skrill';
-	$methods[] = 'Paycomet_Webmoney';
-	$methods[] = 'Paycomet_Waylet';
-	$methods[] = 'Paycomet_Instantcredit';
-	$methods[] = 'Paycomet_Applepay';
+	$gateways = [
+		'woocommerce_paytpv',
+		// APMs
+		'Paycomet_Bizum',
+		'Paycomet_Klarna',
+		'Paycomet_Klarnapayments',
+		'Paycomet_Ideal',
+		'Paycomet_Giropay',
+		'Paycomet_Mybank',
+		'Paycomet_Multibanco',
+		'Paycomet_Mbway',
+		'Paycomet_Trustly',
+		'Paycomet_Przelewy',
+		'Paycomet_Bancontact',
+		'Paycomet_Eps',
+		'Paycomet_Tele2',
+		'Paycomet_Paypal',
+		'Paycomet_Paysera',
+		'Paycomet_Postfinance',
+		'Paycomet_Qiwi',
+		'Paycomet_Yandex',
+		'Paycomet_Mts',
+		'Paycomet_Beeline',
+		'Paycomet_Paysafecard',
+		'Paycomet_Skrill',
+		'Paycomet_Webmoney',
+		'Paycomet_Waylet',
+		'Paycomet_Instantcredit',
+		'Paycomet_Applepay',
+	];
 
-	return $methods;
+	return array_merge( $methods, $gateways );
 }
 
 add_action( 'admin_init', 'wppaytpv_upgrade' );
 
-function getUserPaymentMethods($userTerminal, $apiKey)
-{
+function getUserPaymentMethods( $userTerminal, $apiKey ) {
 	$methods = array();
-	$apiRest = new PaycometApiRest($apiKey);
-	$userPaymentMethods = $apiRest->getUserPaymentMethods($userTerminal);	
+	if ( empty( $apiKey ) || empty( $userTerminal ) ) {
+		return $methods;
+	}
+
 	try {
-		if ($userPaymentMethods) {
-			foreach ($userPaymentMethods as $apm) {
-				$methods[] = preg_replace('/\s+/', '_', 'Paycomet_' . $apm->name);
+		$apiRest = new PaycometApiRest( $apiKey );
+		$userPaymentMethods = $apiRest->getUserPaymentMethods( $userTerminal );
+		if ( ! empty( $userPaymentMethods ) && is_iterable( $userPaymentMethods ) ) {
+			foreach ( $userPaymentMethods as $apm ) {
+				if ( ! empty( $apm->name ) ) {
+					$methods[] = preg_replace( '/\s+/', '_', 'Paycomet_' . $apm->name );
+				}
 			}
 		}
-	}catch (exception $e){}
-	
+	} catch ( \Throwable $e ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( 'PAYCOMET getUserPaymentMethods error: ' . $e->getMessage() );
+		}
+	}
+
 	return $methods;
 }
 
@@ -164,171 +179,125 @@ function wppaytpv_upgrade() {
 	PayTPV::update_option( 'version', $new_ver );
 }
 
-/* Install and default settings */
-/*
-add_action( 'activate_' . PAYTPV_PLUGIN, 'wppaytpv_install' );
-
-function wppaytpv_install() {
-	if ( $opt = get_option( 'paytpv' ) )
-		return;
-
-	wppaytpv_upgrade();
-}
-*/
-
-
 // Notice: Si tiene habilitado el plugin y no ha definido la API KEY.
-if( (isset( get_option('woocommerce_paytpv_settings')['enabled'] ) && get_option('woocommerce_paytpv_settings')['enabled'] == "yes") && 
-	(!isset(get_option('woocommerce_paytpv_settings')['apikey']) || empty( get_option('woocommerce_paytpv_settings')['apikey'] )) ) {
-    add_action( 'admin_notices', 'my_update_notice' );
+add_action( 'admin_notices', 'paycomet_check_api_key_notice' );
+
+function paycomet_check_api_key_notice() {
+	if ( ! is_admin() || ! current_user_can( 'manage_woocommerce' ) ) {
+		return;
+	}
+
+	$settings = get_option( 'woocommerce_paytpv_settings' );
+	if ( ! is_array( $settings ) ) {
+		return;
+	}
+
+	$is_enabled    = isset( $settings['enabled'] ) && 'yes' === $settings['enabled'];
+	$has_no_apikey = empty( $settings['apikey'] );
+
+	if ( $is_enabled && $has_no_apikey ) {
+		my_update_notice();
+	}
 }
 
 function my_update_notice() {
-	$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv');
+	$url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=paytpv' );
 	?>
 	<div class="notice notice-error">
-	
-	   <p><b><?php echo sprintf(__( 'PAYCOMET Error 1004: You must define the API Key <a href="%s">here</a>.', 'wc_paytpv'), $url);?></b></p>
-
+		<p>
+			<b>
+				<?php
+				printf(
+					/* translators: %s: URL to PAYCOMET settings */
+					wp_kses_post( __( 'PAYCOMET Error 1004: You must define the API Key <a href="%s">here</a>.', 'wc_paytpv' ) ),
+					esc_url( $url )
+				);
+				?>
+			</b>
+		</p>
 	</div>
-	<?php 
+	<?php
 }
 
-//Checkout Blocks Compatibility
-
+// Checkout Blocks Compatibility
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
- 
+
 add_action( 'woocommerce_blocks_loaded', function() {
- 
-	if( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+
+	if ( ! class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 		return;
 	}
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paytpv.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-bancontact.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-bizum.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-eps.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-giropay.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-ideal.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-instantcredit.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarna.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-klarnapayments.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-mbway.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-multibanco.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-mybank.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paypal.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paysafecard.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-paysera.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-postfinance.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-przelewy.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-qiwi.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-skrill.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-trustly.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-waylet.php';
-	require PAYTPV_PLUGIN_DIR . 'inc/blocks/paycomet-block-support-applepay.php';
+
+	$block_support_classes = [
+		'inc/blocks/paycomet-block-support-paytpv.php'         => 'Paycomet_Block_Support_Paytpv',
+		'inc/blocks/paycomet-block-support-bancontact.php'     => 'Paycomet_Block_Support_Bancontact',
+		'inc/blocks/paycomet-block-support-bizum.php'          => 'Paycomet_Block_Support_Bizum',
+		'inc/blocks/paycomet-block-support-eps.php'            => 'Paycomet_Block_Support_Eps',
+		'inc/blocks/paycomet-block-support-giropay.php'        => 'Paycomet_Block_Support_Giropay',
+		'inc/blocks/paycomet-block-support-ideal.php'          => 'Paycomet_Block_Support_Ideal',
+		'inc/blocks/paycomet-block-support-instantcredit.php'  => 'Paycomet_Block_Support_Instantcredit',
+		'inc/blocks/paycomet-block-support-klarna.php'         => 'Paycomet_Block_Support_Klarna',
+		'inc/blocks/paycomet-block-support-klarnapayments.php' => 'Paycomet_Block_Support_Klarnapayments',
+		'inc/blocks/paycomet-block-support-mbway.php'          => 'Paycomet_Block_Support_Mbway',
+		'inc/blocks/paycomet-block-support-multibanco.php'     => 'Paycomet_Block_Support_Multibanco',
+		'inc/blocks/paycomet-block-support-mybank.php'         => 'Paycomet_Block_Support_Mybank',
+		'inc/blocks/paycomet-block-support-paypal.php'         => 'Paycomet_Block_Support_Paypal',
+		'inc/blocks/paycomet-block-support-paysafecard.php'    => 'Paycomet_Block_Support_Paysafecard',
+		'inc/blocks/paycomet-block-support-paysera.php'        => 'Paycomet_Block_Support_Paysera',
+		'inc/blocks/paycomet-block-support-postfinance.php'    => 'Paycomet_Block_Support_Postfinance',
+		'inc/blocks/paycomet-block-support-przelewy.php'       => 'Paycomet_Block_Support_Przelewy',
+		'inc/blocks/paycomet-block-support-qiwi.php'           => 'Paycomet_Block_Support_Qiwi',
+		'inc/blocks/paycomet-block-support-skrill.php'         => 'Paycomet_Block_Support_Skrill',
+		'inc/blocks/paycomet-block-support-trustly.php'        => 'Paycomet_Block_Support_Trustly',
+		'inc/blocks/paycomet-block-support-waylet.php'         => 'Paycomet_Block_Support_Waylet',
+		'inc/blocks/paycomet-block-support-applepay.php'       => 'Paycomet_Block_Support_Applepay',
+	];
+
+	foreach ( array_keys( $block_support_classes ) as $file ) {
+		require_once PAYTPV_PLUGIN_DIR . $file;
+	}
 
 	add_action(
 		'woocommerce_blocks_payment_method_type_registration',
-		function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) {
-	
-			$blocks=new Paycomet_Block_Support_Paytpv();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Bancontact();
-			$payment_method_registry->register($blocks);
-			
-			$blocks=new Paycomet_Block_Support_Bizum();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Eps();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Giropay();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Ideal();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Instantcredit();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Klarna();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Klarnapayments();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Mbway();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Multibanco();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Mybank();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Paypal();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Paysafecard();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Paysera();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Postfinance();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Przelewy();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Qiwi();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Skrill();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Trustly();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Waylet();
-			$payment_method_registry->register($blocks);
-
-			$blocks=new Paycomet_Block_Support_Applepay();
-			$payment_method_registry->register($blocks);
-	} );
-
-	
-} );
-function custom_display_checkout_error_message() {
-    if ( isset( $_GET['order'] )) {
-        $order_id=$_GET['order'];
-        $order = wc_get_order( $order_id );
-    }
-
-    if ( isset( $_GET['paycomet_error'] ) && $_GET['paycomet_error'] === 'payment' ) {
-        if ($order->get_meta("ErrorID") == 1004) {
-            $error_txt = __( 'Error: ', 'wc_paytpv' ) . $order->get_meta("ErrorID");
-        }else{
-            $error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
-        }
-        wc_print_notice( $error_txt, 'error' );
-
-		$error_code = $order->get_meta("ErrorID");
-        $error_description = get_error_description($error_code);
-		/**
-		 * Formateamos un mensaje de error descriptivo para guardar en logs
-		 */
-        $error_txt = sprintf(
-            __('Payment error: %s (%d)', 'wc_paytpv'),
-            $error_description,
-            $error_code
-        );
-		if ( true === WP_DEBUG ) {
-			error_log($error_txt);
+		function( Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry ) use ( $block_support_classes ) {
+			foreach ( $block_support_classes as $class_name ) {
+				if ( class_exists( $class_name ) ) {
+					$payment_method_registry->register( new $class_name() );
+				}
+			}
 		}
-		
-    }
-	
+	);
+} );
+
+function custom_display_checkout_error_message() {
+	if ( ! isset( $_GET['paycomet_error'] ) || 'payment' !== sanitize_text_field( wp_unslash( $_GET['paycomet_error'] ) ) ) {
+		return;
+	}
+
+	$order_id = isset( $_GET['order'] ) ? absint( wp_unslash( $_GET['order'] ) ) : 0;
+	$order    = $order_id > 0 ? wc_get_order( $order_id ) : false;
+	$error_id = ( $order && is_a( $order, 'WC_Order' ) ) ? $order->get_meta( 'ErrorID' ) : 0;
+
+	if ( 1004 == $error_id ) {
+		$error_txt = __( 'Error: ', 'wc_paytpv' ) . esc_html( $error_id );
+	} else {
+		$error_txt = __( 'An error has occurred. Please verify the data entered and try again', 'wc_paytpv' );
+	}
+	wc_print_notice( $error_txt, 'error' );
+
+	if ( $error_id ) {
+		$error_description = get_error_description( $error_id );
+		$log_msg           = sprintf(
+			/* translators: 1: error description, 2: error code */
+			__( 'Payment error: %1$s (%2$d)', 'wc_paytpv' ),
+			$error_description,
+			$error_id
+		);
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( $log_msg );
+		}
+	}
 }
 
 /**
@@ -337,15 +306,17 @@ function custom_display_checkout_error_message() {
  * @param int $error_code Código de error.
  * @return string Descripción del error.
  */
-function get_error_description($error_code) {
-	if(!$error_code || !is_numeric($error_code)) {
-		return __('Unknown error', 'wc_paytpv');
+function get_error_description( $error_code ) {
+	if ( ! $error_code || ! is_numeric( $error_code ) ) {
+		return __( 'Unknown error', 'wc_paytpv' );
 	}
 
-	$error_code = intval($error_code);
+	$error_code = intval( $error_code );
 
-	$error_codes = [
-		0 => __( 'No error', 'wc_paytpv' ),
+	static $error_codes = null;
+	if ( null === $error_codes ) {
+		$error_codes = [
+			0 => __( 'No error', 'wc_paytpv' ),
 		1 => __( 'Error', 'wc_paytpv' ),
 		100 => __( 'Expired credit card', 'wc_paytpv' ),
 		101 => __( 'Credit card blacklisted', 'wc_paytpv' ),
@@ -821,8 +792,9 @@ function get_error_description($error_code) {
 		1488 => __( 'TransactionId do not match', 'wc_paytpv' ),
 		1489 => __( 'Card on Black List or suspected of fraud, include in Black List file', 'wc_paytpv' ),
 		1490 => __( 'Blacklisted or suspected fraud card', 'wc_paytpv' ),
-		1495 => __( 'Cancellation not allowed. Authorization already refunded', 'wc_paytpv' )
-	];
-	return $error_codes[$error_code] ??	__( 'Unknown error', 'wc_paytpv' );
+		1495 => __( 'Cancellation not allowed. Authorization already refunded', 'wc_paytpv' ),
+		];
+	}
 
+	return $error_codes[ $error_code ] ?? __( 'Unknown error', 'wc_paytpv' );
 }
