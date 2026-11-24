@@ -1,16 +1,17 @@
 <?php
 
-add_action( 'wppaytpv_upgrade_version', 'payptv_upgrade', 10, 2 );
+add_action('wppaytpv_upgrade_version', 'payptv_upgrade', 10, 2);
 
 
-function payptv_upgrade( $new_ver, $old_ver ) {
+function payptv_upgrade($new_ver, $old_ver)
+{
 	global $wpdb;
 
 	$table_name = $wpdb->prefix . "paytpv_customer";
 	$charset_collate = $wpdb->get_charset_collate();
 
 	// Si no existe la tabla la creamos
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" )==false ) {
+	if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") == false) {
 		$sql = "CREATE TABLE $table_name (
 		`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 		`paytpv_iduser` INT(11) UNSIGNED NOT NULL,
@@ -25,8 +26,8 @@ function payptv_upgrade( $new_ver, $old_ver ) {
 		PRIMARY KEY (`id`)
 		) $charset_collate;";
 
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		$wpdb->query( $sql );
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		$wpdb->query($sql);
 	} else {
 		try {
 			$sql = "ALTER TABLE $table_name
@@ -37,12 +38,10 @@ function payptv_upgrade( $new_ver, $old_ver ) {
 			ADD COLUMN IF NOT EXISTS tokenCOF VARCHAR(7) NULL DEFAULT NULL
 			AFTER card_desc;";
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-			$query_result = $wpdb->query( $sql );
-			$query_result = $wpdb->query( $sql1 );
-			
-		} catch (execption $e) {}
+			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+			$query_result = $wpdb->query($sql);
+			$query_result = $wpdb->query($sql1);
+		} catch (\Throwable $e) {
+		}
 	}
 }
-
-?>

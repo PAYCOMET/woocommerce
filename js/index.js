@@ -39,10 +39,18 @@ const PAYMENT_METHODS = [
     'paycomet_applepay_data'
 ];
 
+let paycometMethodsRegistered = false;
+
 /**
  * Función para registrar todos los métodos de pago en WooCommerce Blocks.
  */
 function registerAllPaycometMethods() {
+    if (paycometMethodsRegistered) {
+        return;
+    }
+
+    
+    paycometMethodsRegistered = true;
 
     PAYMENT_METHODS.forEach((key, index) => {
         const settings = window.wc.wcSettings.getSetting(key, {});
@@ -96,6 +104,10 @@ function registerAllPaycometMethods() {
         window.wc.wcBlocksRegistry.registerPaymentMethod(method);
    
     });
+}
+
+if (window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function') {
+    registerAllPaycometMethods();
 }
 
 /**
@@ -361,7 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    setTimeout(registerAllPaycometMethods, 50);
+    // Fallback de registro si por orden de carga aún no se hubiera ejecutado
+    if (!paycometMethodsRegistered && window.wc && window.wc.wcBlocksRegistry && typeof window.wc.wcBlocksRegistry.registerPaymentMethod === 'function') {
+        registerAllPaycometMethods();
+    }
 
     //JET-IFRAME (GENERACIÓN FORM Y EJECUCIÓN DE SCRIPT)
  
