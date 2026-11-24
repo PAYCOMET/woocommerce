@@ -1,10 +1,10 @@
 === PAYCOMET for WooCommerce ===
 Contributors: PAYCOMET
 Tags: woocommerce, payment, payment gateway, pasarela de pago, suscripciones, pago, tarjeta, multibanco, moneda, ecommerce, e-commerce
-Requires at least: 3.0.1
+Requires at least: 4.7
 Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 5.48
+Stable tag: 5.49
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ Funcionalidades del módulo:
 1. Pantalla de configuración
 
 == Changelog ==
+
+= 5.49 =
+Mejoras de código y versionado.
 
 = 5.48 =
 Mejoras de código.
