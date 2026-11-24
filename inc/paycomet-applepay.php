@@ -197,7 +197,7 @@ class Paycomet_Applepay extends Paycomet_APM
             $host = (string) wp_parse_url( home_url(), PHP_URL_HOST );
         }
         $domain = strtolower( preg_replace( '/:\d+$/', '', $host ) );
-    
+
         $payment = array(
             'terminal'           => $terminal,
             'methodId'           => (int) $methodId,
