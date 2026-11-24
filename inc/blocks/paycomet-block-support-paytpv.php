@@ -20,8 +20,8 @@ final class Paycomet_Block_Support_Paytpv extends AbstractPaymentMethodType {
 		wp_register_script(
 			'wc-mygateway-blocks-integration',
 			PAYTPV_PLUGIN_URL . 'js/index.js',
-			['wp-hooks'],
-			1,
+			[ 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-i18n' ],
+			PAYTPV_VERSION,
 			true
 		);
 		return [ 'wc-mygateway-blocks-integration' ];

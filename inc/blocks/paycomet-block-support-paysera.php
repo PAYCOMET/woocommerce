@@ -19,8 +19,8 @@ final class Paycomet_Block_Support_Paysera extends AbstractPaymentMethodType {
 		wp_register_script(
 			'wc-mygateway-blocks-integration',
 			PAYTPV_PLUGIN_URL . 'js/index.js',
-			array(),
-			1,
+			[ 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-i18n' ],
+			PAYTPV_VERSION,
 			true
 		);
 
